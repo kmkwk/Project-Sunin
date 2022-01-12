@@ -81,7 +81,11 @@
     - [유스케이스](/문서/유스케이스/README.md)
     - [IA](/문서/IA/README.md)
   - 1/12
-    - MVP
+    - [MVP](/문서/IA/README.md)
+    - [아키텍처(Architecture)](/문서/아키텍처/readme.md)
+  - 1/13
+    - 화면설계
+    - DB 결정
     - ERD
 
 ### 공통-sub PJT Ⅱ

@@ -9,7 +9,7 @@
 # Architecture
 
 <div align="center">
-<img src="아키텍처.png">
+<img src="image.png">
 <span>이미지를 클릭하면 크게 보입니다.</span>
 </div>
 

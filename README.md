@@ -122,7 +122,7 @@
 |                                                        Docker                                                       |                                                     aws                                                     |
 
 ### **DB**
-| <img src="md-images/mysql.png" width="50" height="50"/> |<img src="md-images/mongodb.png" width="50" height="50"/> |
+| <img src="md-images/mysql.png" width="50" height="50"/> |<img src="md-images/mongoDB.png" width="50" height="50"/> |
 | :---------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------: |
 |                                                        MySQL                                                       |                                                     mongoDB                                                     |
 

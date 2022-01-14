@@ -4,18 +4,133 @@
 
 ## 목차
 
-1. 하지애
-   - React 학습 Part 1
-     1. [React 강의 OT : 왜 리액트가 필요한가](#1-react-강의-ot--왜-리액트가-필요한가)
-     2. [리액트 React 설치와 개발환경 셋팅(2021 ver)](#2-리액트-react-설치와-개발환경-셋팅2021-ver)
-     3. [JSX를 이용해 HTML 페이지 제작해보는 건 처음이겠죠](#3-jsx를-이용해-html-페이지-제작해보는-건-처음이겠죠)
-     4. [중요한 데이터는 변수말고 리액트 state로 만들랬죠](#4-중요한-데이터는-변수말고-리액트-state로-만들랬죠)
-     5. [버튼에 기능개발을 해보자 & 리액트 state 변경하는 법](#5-버튼에-기능개발을-해보자--리액트-state-변경하는-법)
-     6. [숙제 해설 : 블로그 수정버튼 만들기](#6-숙제-해설--블로그-수정버튼-만들기)
-     7. [React Component : 많은 div들을 한 단어로 줄이고 싶은 충동이 들 때](#7-react-component--많은-div들을-한-단어로-줄이고-싶은-충동이-들-때)
-     8. [클릭하면 동작하는 UI(모달창) 만드는 법](#8-클릭하면-동작하는-ui모달창-만드는-법)
-     9. [map : 많은 div들을 반복문으로 줄이고 싶은 충동이 들 때](#9-map--많은-div들을-반복문으로-줄이고-싶은-충동이-들-때)
-     10. [props : 자식이 부모의 state를 가져다쓰고 싶을 땐 말하고 쓰셔야 합니다](#10-props--자식이-부모의-state를-가져다쓰고-싶을-땐-말하고-쓰셔야-합니다)
+1. 손민기
+
+2. 하지애
+
+- React 학습 Part 1
+  1. [React 강의 OT : 왜 리액트가 필요한가](#1-react-강의-ot--왜-리액트가-필요한가)
+  2. [리액트 React 설치와 개발환경 셋팅(2021 ver)](#2-리액트-react-설치와-개발환경-셋팅2021-ver)
+  3. [JSX를 이용해 HTML 페이지 제작해보는 건 처음이겠죠](#3-jsx를-이용해-html-페이지-제작해보는-건-처음이겠죠)
+  4. [중요한 데이터는 변수말고 리액트 state로 만들랬죠](#4-중요한-데이터는-변수말고-리액트-state로-만들랬죠)
+  5. [버튼에 기능개발을 해보자 & 리액트 state 변경하는 법](#5-버튼에-기능개발을-해보자--리액트-state-변경하는-법)
+  6. [숙제 해설 : 블로그 수정버튼 만들기](#6-숙제-해설--블로그-수정버튼-만들기)
+  7. [React Component : 많은 div들을 한 단어로 줄이고 싶은 충동이 들 때](#7-react-component--많은-div들을-한-단어로-줄이고-싶은-충동이-들-때)
+  8. [클릭하면 동작하는 UI(모달창) 만드는 법](#8-클릭하면-동작하는-ui모달창-만드는-법)
+  9. [map : 많은 div들을 반복문으로 줄이고 싶은 충동이 들 때](#9-map--많은-div들을-반복문으로-줄이고-싶은-충동이-들-때)
+  10. [props : 자식이 부모의 state를 가져다쓰고 싶을 땐 말하고 쓰셔야 합니다](#10-props--자식이-부모의-state를-가져다쓰고-싶을-땐-말하고-쓰셔야-합니다)
+
+
+
+## 손민기
+
+## Next.js
+
+```
+프로젝트 생성
+npx create-next-app@latest --ts
+or
+yarn create next-app --typescript
+
+프로젝트 실행
+npm run dev
+```
+
+
+
+## React
+
+```
+프로젝트 생성
+npx create-react-app "앱이름"
+
+프로젝트 실행
+npm start
+```
+
+
+
+## TypeScript
+
+#### 타입 종류
+
+| Type           | Predicate                                                    |
+| -------------- | ------------------------------------------------------------ |
+| string         | 문자열                                                       |
+| number         | 숫자                                                         |
+| boolean        | (True / False)                                               |
+| undefined/Null | undefined / Null                                             |
+| function       | 함수                                                         |
+| array          | 배열 (변수명): number[] = [1, 2, 3]; or (변수명): Array<number> = [1, 2, 3]; |
+
+
+
+#### 타입표기
+
+* 변수의 의도된 계약을 기록하는 방법
+
+
+
+함수 컴포넌트에서 타입표기 예시
+
+```typescript
+function greeter(person: string) {
+    return "Hello, " + person;
+}
+```
+
+
+
+#### 인터페이스
+
+* 객체의 형식을 명시적으로 나타내기 위해 사용
+
+
+
+인터페이스 예시
+
+```typescript
+interface User {
+  name: string;
+  id: number;
+}
+
+const user: User = {
+  name: "Hayes",
+  id: 0,
+};
+```
+
+
+
+#### 클래스
+
+* 인터페이스는 클래스로도 선언할 수 있다.
+
+
+
+클래스 예시
+
+```typescript
+interface User {
+  name: string;
+  id: number;
+}
+
+class UserAccount {
+  name: string;
+  id: number;
+
+  constructor(name: string, id: number) {
+    this.name = name;
+    this.id = id;
+  }
+}
+
+const user: User = new UserAccount("Murphy", 1);
+```
+
+
 
 
 

@@ -97,7 +97,7 @@
 
 
 
-## 🛠 기술 스택
+## 기술 스택
 
 ### **Front-end**
 
@@ -125,6 +125,11 @@
 | <img src="https://profilinator.rishav.dev/skills-assets/git-scm-icon.svg" alt="Git" width="50px" height="50px" /> | <img src="https://profilinator.rishav.dev/skills-assets/gitlab.svg" alt="GitLab" width="50px" height="50px" /> |
 | :---------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------: |
 |                                                        Git                                                        |                                                     GitLab           
+
+### **Issue Tracking System**
+| <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQsDUF0PKgtpJAgkMzi_2BiEwdso_e50rpiR2hORndM4Q8jiKEWNmRfbRG5UxQH-iJ1t_E&usqp=CAU" alt="Jira" width="50px" height="50px" /> |
+| :---------------------------------------------------------------------------------------------------------------: | 
+|                                                        Jira
 
 
 

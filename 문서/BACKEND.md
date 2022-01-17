@@ -47,3 +47,16 @@ persistence Context는 크게
 만약 entity의 내용과 snapshot의 내용이 다른 경우는 update가 필요한 상황으로 인지하게 된다.
 
 쓰기 지연 SQL 저장소는 INSERT , UPDATE, DELETE 쿼리를 DB에 반영하지 않고 저장해두는 영역이다. 여기 저장된 SQL 문장은 트랜잭션이 커밋됐을때 DB에 반영된다.
+
+
+
+
+#### JPA에서 제공하는 어노테이션들
+
+
+1. @Entity : 테이블과 링크될 클래스임을 나타낸다. 기본값으로 언더스코어 네이밍(_)으로 테이블 이름을 매칭한다.
+2. @Id : 해당 테이블의 PK 필드를 나타낸다.
+3. @GeneratedValue : PK의 생성규칙을 나타낸다.
+4. @Column : 테이블의 칼럼을 나타내며 선언하지 않아도 해당 클래스의 필드는 모두 칼럼이 된다.
+5. @NoArgsConstructor : 기본생성자를 자동으로 추가한다.
+6. @Getter : 클래스 내 모든 필드의 Getter 메소드를 자동생성한다.

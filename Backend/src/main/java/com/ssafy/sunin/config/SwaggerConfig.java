@@ -14,6 +14,11 @@ import springfox.documentation.spring.web.plugins.Docket;
 @EnableWebMvc
 public class SwaggerConfig {
 
+    /*
+     Swagger 주소
+     http://localhost:8080/swagger-ui/index.html
+     */
+
 	  /*
 	  * Swagger API 문서
 	  * */

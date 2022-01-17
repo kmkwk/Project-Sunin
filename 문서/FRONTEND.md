@@ -10,15 +10,34 @@
 
 - React 학습 Part 1
   1. [React 강의 OT : 왜 리액트가 필요한가](#1-react-강의-ot--왜-리액트가-필요한가)
+
   2. [리액트 React 설치와 개발환경 셋팅(2021 ver)](#2-리액트-react-설치와-개발환경-셋팅2021-ver)
+
   3. [JSX를 이용해 HTML 페이지 제작해보는 건 처음이겠죠](#3-jsx를-이용해-html-페이지-제작해보는-건-처음이겠죠)
+
   4. [중요한 데이터는 변수말고 리액트 state로 만들랬죠](#4-중요한-데이터는-변수말고-리액트-state로-만들랬죠)
+
   5. [버튼에 기능개발을 해보자 & 리액트 state 변경하는 법](#5-버튼에-기능개발을-해보자--리액트-state-변경하는-법)
+
   6. [숙제 해설 : 블로그 수정버튼 만들기](#6-숙제-해설--블로그-수정버튼-만들기)
+
   7. [React Component : 많은 div들을 한 단어로 줄이고 싶은 충동이 들 때](#7-react-component--많은-div들을-한-단어로-줄이고-싶은-충동이-들-때)
+
   8. [클릭하면 동작하는 UI(모달창) 만드는 법](#8-클릭하면-동작하는-ui모달창-만드는-법)
+
   9. [map : 많은 div들을 반복문으로 줄이고 싶은 충동이 들 때](#9-map--많은-div들을-반복문으로-줄이고-싶은-충동이-들-때)
+
   10. [props : 자식이 부모의 state를 가져다쓰고 싶을 땐 말하고 쓰셔야 합니다](#10-props--자식이-부모의-state를-가져다쓰고-싶을-땐-말하고-쓰셔야-합니다)
+
+  11. [UI 제작 패턴 : props를 응용한 상세페이지 만들기](#11-ui-제작-패턴--props를-응용한-상세페이지-만들기)
+
+  12. [input 다루기 1 : 사용자가 입력한 글을 변수에 저장하는 법](#12-input-다루기-1--사용자가-입력한-글을-변수에-저장하는-법)
+
+  13. [input 다루기 2 : 블로그 글 발행 기능 만들기](#13-input-다루기-2--블로그-글-발행-기능-만들기)
+
+  14. [class를 이용한 옛날 옛적 React 문법](#14-class를-이용한-옛날-옛적-react-문법)
+
+- [Part 2 : 쇼핑몰 프로젝트](#part-2--쇼핑몰-프로젝트)
 
 
 
@@ -1192,3 +1211,697 @@ const user: User = new UserAccount("Murphy", 1);
 
   ![1_10_1](md-images/1_10_1-16421229521935.PNG)
 
+
+
+#### 11. UI 제작 패턴 : props를 응용한 상세페이지 만들기
+
+- 모달창 만드는 법 (지난 강의)
+
+  - 모달창 보이는/안보이는 상태정보를 state에 저장
+  - state가 true면 모달창 보여주고
+  - state가 false면 모달창 숨기고
+
+- 각각 다른 모달창 제목 만드는 법
+
+  - 몇번째 제목 눌렀는지 상태정보를 state에 저장
+  - state에 따라서 UI가 수정되게 만들면 됨
+    - state가 0일 때는 0번째 제목 출력 -> 0번째 버튼을 누르면 props.글제목[0]
+    - state가 1일 때는 1번째 제목 출력 ....
+  - state 변경할 땐 변경함수 사용
+  - 버튼 누르면 누른제목 state가 변경 -> 그럼 ```<Modal>``` 안의 누른제목도 변경됨
+
+  ![1_11_3](md-images/1_11_3-16424096726132.PNG)
+
+- ```<h3>``` 글제목을 누를 때 각각 다른 모달 창이 뜨게
+
+  - i : 반복문 돌 때마다 0,1,2...가 되는 변수
+
+  ```
+  #App.js
+  /* eslint-disable */
+  import React, { useState } from 'react';
+  import logo from './logo.svg';
+  import './App.css';
+  
+  function App() {
+  
+    let [글제목, 글제목변경] = useState(['남자 코트 추천', '강남 우동 맛집', '광주디저트맛집']); 
+    let [따봉, 따봉변경] = useState(0);
+    let [modal, modal변경] = useState(false); //모달창을 켜고 닫는 스위치, 사이트 첫 로드시 모달창은 안보임
+    let [누른제목, 누른제목변경] = useState(0);
+  
+    function 반복된UI(){
+  
+      var 어레이 = [];
+      for (var i = 0; i < 3; i++){
+        어레이.push(<div>안녕</div>);
+      }
+      return 어레이
+    }
+  
+    let posts = '파이썬 독학'
+  
+    return (
+      <div className="App">
+        <div className="black-nav">
+          <div>개발blog</div>
+        </div>
+        
+        {
+          글제목.map(function(글, i){
+            return <div className='list'>
+              <h3 onClick={ ()=>{ 누른제목변경(i) } }> { 글 } <span onClick={ ()=>{ 따봉변경(따봉 + 1) } }>👍</span> {따봉}
+              </h3>
+              <p>1월 14일 발행</p>
+              <hr/>
+              </div>
+          })
+  
+        }
+        
+        {/*<button onClick={ ()=>{ 누른제목변경(0) } }>버튼1</button>
+        <button onClick={ ()=>{ 누른제목변경(1) } }>버튼2</button>
+      <button onClick={ ()=>{ 누른제목변경(2) } }>버튼3</button>*/}
+  
+  
+        <button onClick={ ()=>{ modal변경(!modal) } }> 열고닫는 버튼 </button>
+  
+        {
+          modal === true
+          ? <Modal 글제목={글제목} 누른제목={누른제목} ></Modal>
+          : null
+        }
+  
+      </div>
+    );
+    
+  }
+  
+  //Component 만드는 법
+  function Modal(props){    // 부모에게 전달받은 props는 여기에 다 들어있음
+    return (
+      <div className='modal'>   
+        <h2> { props.글제목[props.누른제목] } </h2>
+        <p>날짜</p>
+        <p>상세내용</p>
+      </div>
+      )
+  }
+  
+  export default App;
+  ```
+
+  ![1_11_4](md-images/1_11_4-16424096726121.PNG)
+
+
+
+#### 12. input 다루기 1 : 사용자가 입력한 글을 변수에 저장하는 법
+
+- 리액트에서 사용자의 input을 받는 법
+
+  - 사용자가 input에 입력한 값을 입력값 state로 저장해보자
+
+  ```
+                    🔽 뭔가 입력될 때 안의 함수가 실행됨
+  <input onChange={ ()=>{} } />
+  ```
+
+  ```
+   <input onChange={ ()=>{ console.log('안녕') } } />  #콘솔창에 안녕 출력
+  ```
+
+  - 사용자가 입력한 값은? ```e.target.value```
+
+    - e.target => 현재 이벤트가 동작하는 곳
+    - value => input에 입력된 값을 가져오세요
+
+  - 콘솔창에 입력값 출력
+
+    ```
+    <input onChange={ (e)=>{ console.log( e.target.value ) } } />
+    ```
+
+  - state에 저장
+
+    ```
+    { 입력값 }
+    <input onChange={ (e)=>{ 입력값변경( e.target.value ) } } />
+    ```
+
+  - 콘솔창에 등장하는 warning : map 반복문으로 돌린 HTMP에는 key={}가 필요 
+
+  ```
+  #App.js
+  /* eslint-disable */
+  import React, { useState } from 'react';
+  import logo from './logo.svg';
+  import './App.css';
+  
+  function App() {
+  
+    let [글제목, 글제목변경] = useState(['남자 코트 추천', '강남 우동 맛집', '광주디저트맛집']); 
+    let [따봉, 따봉변경] = useState(0);
+    let [modal, modal변경] = useState(false); //모달창을 켜고 닫는 스위치, 사이트 첫 로드시 모달창은 안보임
+    let [누른제목, 누른제목변경] = useState(0);
+    let [입력값, 입력값변경] = useState('');
+  
+    function 반복된UI(){
+  
+      var 어레이 = [];
+      for (var i = 0; i < 3; i++){
+        어레이.push(<div>안녕</div>);
+      }
+      return 어레이
+    }
+  
+    let posts = '파이썬 독학'
+  
+    return (
+      <div className="App">
+        <div className="black-nav">
+          <div>개발blog</div>
+        </div>
+        
+        {
+          글제목.map(function(글, i){
+            return (
+            <div className='list' key={i}>
+              <h3 onClick={ ()=>{ 누른제목변경(i) } }> { 글 } <span onClick={ ()=>{ 따봉변경(따봉 + 1) } }>👍</span> {따봉}
+              </h3>
+              <p>1월 14일 발행</p>
+              <hr/>
+            </div>
+            )
+          })
+  
+        }
+        
+        
+        { 입력값 }
+        <input onChange={ (e)=>{ 입력값변경( e.target.value ) } } />
+  
+        <button onClick={ ()=>{ modal변경(!modal) } }> 열고닫는 버튼 </button>
+  
+        {
+          modal === true
+          ? <Modal 글제목={글제목} 누른제목={누른제목} ></Modal>
+          : null
+        }
+  
+      </div>
+    );
+    
+  }
+  
+  //Component 만드는 법
+  function Modal(props){    // 부모에게 전달받은 props는 여기에 다 들어있음
+    return (
+      <div className='modal'>   
+        <h2> { props.글제목[props.누른제목] } </h2>
+        <p>날짜</p>
+        <p>상세내용</p>
+      </div>
+      )
+  }
+  
+  
+  
+  export default App;
+  ```
+
+  
+
+  ![1_12_1](md-images/1_12_1-16424096726136.PNG)
+
+
+
+#### 13. input 다루기 2 : 블로그 글 발행 기능 만들기
+
+- 블로그 글 발행기능 제작
+
+  - ```
+        🔽새 글은 여기에 저장
+    let [글제목, 글제목변경] = useState(['남자 코트 추천', '강남 우동 맛집', '광주디저트맛집']); 
+    ```
+
+  - 글발행기능 만들기 : 글적고 저장버튼 누르면 글이 위에 하나 더 떠야함
+
+    - 사용자가 입력한 글 state로 저장하기
+    - 저장버튼 누르면 입력한 글 state를  글제목 state에 추가함
+
+    ```
+    이렇게 해도 되지만.....
+    <div className='publish'>
+          <input onChange={ (e)=>{ 입력값변경(e.target.value) } } />
+          <button onClick={ ()=>{
+            글제목변경( [입력값, '남자 코트 추천', '강남 우동 맛집', '광주디저트맛집'] )
+          } }>저장</button>
+        </div>
+    ```
+
+    - state 데이터는 = 등호로 직접 수정X, 사본을 만들어서 수정
+
+    ```
+    #App.js
+    /* eslint-disable */
+    import React, { useState } from 'react';
+    import logo from './logo.svg';
+    import './App.css';
+    
+    function App() {
+    
+      let [글제목, 글제목변경] = useState(['남자 코트 추천', '강남 우동 맛집', '광주디저트맛집']); 
+      let [따봉, 따봉변경] = useState(0);
+      let [modal, modal변경] = useState(false); //모달창을 켜고 닫는 스위치, 사이트 첫 로드시 모달창은 안보임
+      let [누른제목, 누른제목변경] = useState(0);
+      let [입력값, 입력값변경] = useState('');
+    
+      function 반복된UI(){
+    
+        var 어레이 = [];
+        for (var i = 0; i < 3; i++){
+          어레이.push(<div>안녕</div>);
+        }
+        return 어레이
+      }
+    
+      let posts = '파이썬 독학'
+    
+      return (
+        <div className="App">
+          <div className="black-nav">
+            <div>개발blog</div>
+          </div>
+          
+          {
+            글제목.map(function(글, i){
+              return (
+              <div className='list' key={i}>
+                <h3 onClick={ ()=>{ 누른제목변경(i) } }> { 글 } <span onClick={ ()=>{ 따봉변경(따봉 + 1) } }>👍</span> {따봉}
+                </h3>
+                <p>1월 14일 발행</p>
+                <hr/>
+              </div>
+              )
+            })
+    
+          }
+         
+    
+        <div className='publish'>
+          <input onChange={ (e)=>{ 입력값변경(e.target.value) } } />
+          <button onClick={ ()=>{
+            var arrayCopy = [...글제목];
+            arrayCopy.unshift(입력값);
+            글제목변경( arrayCopy );
+          } }>저장</button>
+        </div>
+    
+    
+          <button onClick={ ()=>{ modal변경(!modal) } }> 열고닫는 버튼 </button>
+    
+          {
+            modal === true
+            ? <Modal 글제목={글제목} 누른제목={누른제목} ></Modal>
+            : null
+          }
+    
+        </div>
+      );
+      
+    }
+    
+    //Component 만드는 법
+    function Modal(props){    // 부모에게 전달받은 props는 여기에 다 들어있음
+      return (
+        <div className='modal'>   
+          <h2> { props.글제목[props.누른제목] } </h2>
+          <p>날짜</p>
+          <p>상세내용</p>
+        </div>
+        )
+    }
+    
+    
+    
+    export default App;
+    ```
+
+    ![1_13_1](md-images/1_13_1-16424096726133.PNG)
+
+
+
+#### 14. class를 이용한 옛날 옛적 React 문법 
+
+- 예전 리액트 문법 : 실제 개발 시 예전 코드 수정할 일도 있기에...
+
+  - component 만드는 기본 문법
+
+  ```
+  <Profile />
+  
+  
+  class Profile extends React.Component {
+  	constructor(){
+  		super();
+  		this.state = { name : 'Kim', age : 30 }
+  	}
+  	
+  	render(){
+  		return(
+  			<div>
+  				<h3>프로필입니다</h3>
+  				<p>저는 { this.state.name }입니다.</p>
+  			</div>
+  		)
+  	}
+  }
+  ```
+
+  - class : 변수 / 함수 보관하는 덩어리
+  - extends : 오른쪽에 있는 것의 성질을 물려받겠습니다
+  - state는 constructor 안에 작성. 
+  - state 꺼내쓰려면 this.state.state명
+  - constructor : class의 변수/초기값 저장할 때 씀
+
+- 버튼을 누르면 state를 변경해보자
+
+  ```
+  class Profile extends React.Component {
+  	constructor(){
+  		super();
+  		this.state = { name : 'Kim', age : 30 }
+  	}
+  		
+  	render(){
+  		return(
+  			<div>
+  				<h3>프로필입니다</h3>
+  				<p>저는 { this.state.name }입니다.</p>
+  				<button onClick={ ()=>{ this.setState( {name:'Park'} ) } }>버튼</button>
+  			</div>
+  		)
+  	}
+  }
+  ```
+
+  - setState(변경할state)
+  - 함수 만들기
+
+  ```
+  class Profile extends React.Component {
+  	constructor(){
+  		super();
+  		this.state = { name : 'Kim', age : 30 }
+  	}
+  	
+  	changeName() => {
+  		this.setState( {name:'Park'} )
+  	}
+  	
+  	render(){
+  		return(
+  			<div>
+  				<h3>프로필입니다</h3>
+  				<p>저는 { this.state.name }입니다.</p>
+  				<button onClick={ this.changeName }>버튼</button>
+  			</div>
+  		)
+  	}
+  }
+  ```
+
+  
+
+### Part 2 : 쇼핑몰 프로젝트
+
+#### 1. 쇼핑몰 프로젝트 : 프로젝트 생성 & Bootstrap 설치
+
+- 프로젝트 새로 만들기
+
+  - 작업폴더 에디터로 오픈
+  - 터미널에 npx create-react-app shop
+  - yarn 이용하기
+  - shop 이라는 프로젝트 에디터로 오픈
+  - npm run start 혹은 yarn start(yarn 설치 후 프로젝트를 만들었다면)
+
+- HTML/CSS 디자인 쌩코딩이 싫다면 Bootstrap 이용
+
+  - https://getbootstrap.com/docs/5.1/getting-started/introduction/
+  - https://react-bootstrap.github.io/
+
+  ```
+  npm install react-bootstrap bootstrap
+  yarn add react-bootstrap bootstrap
+  ```
+
+  - react bootstrap 사이트의 CSS link 태그해서 index.html에 복붙
+
+
+
+#### 2. 평화로운 쇼핑몰 레이아웃 디자인 시간
+
+- src 안에 있는 파일은 경로를 무조건 ./부터 -> src에 넣은 파일은 파일명 변경 + 압축됨
+- public에도 저장가능 -> public에 넣은 파일은 보존됨
+- 상품 레이아웃 만들기
+  - 가로로 3분할
+    - ```<div className='col-md-4'>상품</div>```
+
+```
+#App.js
+import React from 'react';
+import { Navbar,Container,Nav,NavDropdown } from 'react-bootstrap';
+import './App.css';
+
+function App() {
+  return (
+    <div className="App">
+
+
+<Navbar bg="light" expand="lg">
+  <Container>
+    <Navbar.Brand href="#home">쇼핑몰</Navbar.Brand>
+    <Navbar.Toggle aria-controls="basic-navbar-nav" />
+    <Navbar.Collapse id="basic-navbar-nav">
+      <Nav className="me-auto">
+        <Nav.Link href="#home">Home</Nav.Link>
+        <Nav.Link href="#link">Link</Nav.Link>
+        <NavDropdown title="Dropdown" id="basic-nav-dropdown">
+          <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
+          <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
+          <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
+          <NavDropdown.Divider />
+          <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
+        </NavDropdown>
+      </Nav>
+    </Navbar.Collapse>
+  </Container>
+</Navbar>
+
+<div class="container2">
+      <div class="jumbotron">
+        <h1 class="text-center">20% SALE</h1>
+        <p class="text-center">해당 품목 20% 세일 중입니다.</p>
+        <p class="text-center"><a class="btn btn-primary btn-lg" href="#" role="button">구매</a></p>
+      </div>
+    </div>
+
+<div className="container">
+  <div className="row">
+    <div className="col-md-4">
+      <img src="https://codingapple1.github.io/shop/shoes1.jpg" width="100%"/>
+      <h4>상품명</h4>
+      <p>상품설명 & 가격</p>
+    </div>
+      
+    <div className="col-md-4">
+    <img src="https://codingapple1.github.io/shop/shoes2.jpg" width="100%"/>
+      <h4>상품명</h4>
+      <p>상품설명 & 가격</p>
+    </div>
+    <div className="col-md-4">
+    <img src="https://codingapple1.github.io/shop/shoes3.jpg" width="100%"/>
+      <h4>상품명</h4>
+      <p>상품설명 & 가격</p>
+    </div>
+  </div>
+</div>
+
+    </div>
+  );
+}
+
+export default App;
+
+```
+
+```
+#App.css
+
+.container2 {
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+
+}
+
+.jumbotron {
+  padding: 30px 15px;
+  margin-bottom: 30px;
+  color: inherit;
+  background-image: url('./disney.PNG');
+  background-size: cover;
+  color: white;
+}
+```
+
+![2_2_1](md-images/2_2_1-16424096726134.PNG)
+
+![2_2_2](md-images/2_2_2-16424096726135.PNG)
+
+
+
+#### 3. 코드가 길어진다면 import/export 사용해보기
+
+- 파일 쪼갤 때 활용하는 import / export
+
+  - 내보내기 : export default 변수명
+
+    - export {변수1,변수2}
+
+    ```
+    #data.js
+    var name = 'Kim';
+    var name = 'Park';
+    
+    export { name, name2 }
+    ```
+
+    ```
+    #App.js
+    import { name, name2 } from './data.js';
+    ```
+
+    
+
+  - 가져오기 : import 변수명 from 경로
+
+- data.js -> App.js 보내기
+
+  - src 폴더 내에서 data.js 생성
+  - export default 적고 array 생성
+  - data.js에서 원하는 데이터를 export
+  - App.js에서는 data.js를 import
+
+- data.js에 보관한 뒤 App.js로 보내려면?
+
+  ```
+  #data.js
+  export default [
+  
+  {
+      id : 0,
+      title : "White and Black",
+      content : "Born in France",
+      price : 120000
+  },
+  
+  {
+      id : 1,
+      title : "Red knit",
+      content : "Born in Seoul",
+      price : 110000
+  },
+  
+  {
+      id : 2,
+      title : "Grey Yordan",
+      content : "Born in the States",
+      price : 130000
+  }
+  ]
+  ```
+
+  - import해온 데이터로 상품명 데이터바인딩
+
+  ```
+  #App.js
+  import React, { useState } from 'react';
+  import { Navbar,Container,Nav,NavDropdown } from 'react-bootstrap';
+  import './App.css';
+  import Data from './data.js';
+  
+  function App() {
+  
+    let [shoes, shoes변경] = useState(Data);
+  
+    return (
+      <div className="App">
+  
+  
+  <Navbar bg="light" expand="lg">
+    <Container>
+      <Navbar.Brand href="#home">쇼핑몰</Navbar.Brand>
+      <Navbar.Toggle aria-controls="basic-navbar-nav" />
+      <Navbar.Collapse id="basic-navbar-nav">
+        <Nav className="me-auto">
+          <Nav.Link href="#home">Home</Nav.Link>
+          <Nav.Link href="#link">Link</Nav.Link>
+          <NavDropdown title="Dropdown" id="basic-nav-dropdown">
+            <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
+            <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
+            <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
+            <NavDropdown.Divider />
+            <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
+          </NavDropdown>
+        </Nav>
+      </Navbar.Collapse>
+    </Container>
+  </Navbar>
+  
+  <div class="container2">
+        <div class="jumbotron">
+          <h1 class="text-center">20% SALE</h1>
+          <p class="text-center">해당 품목 20% 세일 중입니다.</p>
+          <p class="text-center"><a class="btn btn-primary btn-lg" href="#" role="button">구매</a></p>
+        </div>
+      </div>
+  
+  <div className="container">
+    <div className="row">
+      <div className="col-md-4">
+        <img src="https://codingapple1.github.io/shop/shoes1.jpg" width="100%"/>
+        <h4>{ shoes[0].title }</h4>
+        <p>{ shoes[0].content } & { shoes[0].price }</p>
+      </div>
+        
+      <div className="col-md-4">
+        <img src="https://codingapple1.github.io/shop/shoes2.jpg" width="100%"/>
+        <h4>{ shoes[1].title }</h4>
+        <p>{ shoes[1].content } & { shoes[1].price }</p>
+      </div>
+      <div className="col-md-4">
+        <img src="https://codingapple1.github.io/shop/shoes3.jpg" width="100%"/>
+        <h4>{ shoes[2].title }</h4>
+        <p>{ shoes[2].content } & { shoes[2].price }</p>
+      </div>
+    </div>
+  </div>
+  
+      </div>
+    );
+  }
+  
+  export default App;
+  ```
+
+  ![2_3_1](md-images/2_3_1-16424096726147.PNG)
+
+
+
+#### 4. 상품목록 Component화 + 반복문
+
+- component로 만들어 첨부하기
+- component에 데이터바인딩 완료하기
+- component를 반복문 돌리기

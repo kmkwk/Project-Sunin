@@ -1,8 +1,11 @@
 import React from 'react'
 import {  Checkbox, Input, Form, Divider, Grid, Image, Segment, Container, Button } from 'semantic-ui-react'
 import '../styles/signup.module.css';
+import Navbar from '../src/component/Navbar'
 
 const DividerExampleVertical = () => (
+  <>
+  <Navbar />
   <Segment placeholder>
     <Grid columns={2} relaxed='very'>
       
@@ -52,6 +55,7 @@ const DividerExampleVertical = () => (
 
    <Divider vertical></Divider>
   </Segment>
+  </>
 )
 
 export default DividerExampleVertical

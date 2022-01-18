@@ -1,0 +1,57 @@
+import React from 'react'
+import {  Checkbox, Input, Form, Divider, Grid, Image, Segment, Container, Button } from 'semantic-ui-react'
+import '../styles/signup.module.css';
+
+const DividerExampleVertical = () => (
+  <Segment placeholder>
+    <Grid columns={2} relaxed='very'>
+      
+      <Grid.Column>
+        
+        <img src='./images/로고.png' />
+        
+      </Grid.Column>
+     
+      <Grid.Column>
+       
+    <Form>
+    <Form.Field required>
+      <label>이메일</label>
+      <input placeholder='Email' />
+    </Form.Field>
+    <Form.Field required>
+      <label>비밀번호</label>
+      <input placeholder='Password' />
+    </Form.Field>
+    <Form.Field required>
+      <label>비밀번호 확인</label>
+      <input placeholder='Password' />
+    </Form.Field>
+    <Form.Field required>
+      <label>이름</label>
+      <input placeholder='Name' />
+    </Form.Field>
+    <Form.Field required>
+      <label>닉네임</label>
+      <input placeholder='Nickname' />
+    </Form.Field>
+    <Form.Field required>
+      <label>전화번호</label>
+      <input placeholder='Tel. ex) 01012345678' />
+    </Form.Field>
+    <Form.Field>
+      <label>주소</label>
+      <input placeholder='Address' />
+    </Form.Field >
+    <Button type='submit'>RESISTER</Button>
+  </Form>
+
+       
+      </Grid.Column>
+    </Grid>
+
+   <Divider vertical></Divider>
+  </Segment>
+)
+
+export default DividerExampleVertical

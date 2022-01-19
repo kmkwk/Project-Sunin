@@ -1,14 +1,14 @@
 
 .login_content h3 {
-    margin-top: 100px;
-    text-align: center;
-}
-
-.Img.align img {
+    margin-top: 12%;
     text-align: center;
 }
 
 .box_align {
     margin-top: 60px;
     margin-bottom: 30px;
+}
+
+.infoedit {
+    margin: 10px;
 }

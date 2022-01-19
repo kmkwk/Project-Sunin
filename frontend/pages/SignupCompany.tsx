@@ -1,5 +1,6 @@
 import React from 'react'
-import {  Checkbox, Input, Form, Divider, Grid, Image, Segment, Container, Button } from 'semantic-ui-react'
+import Link from 'next/link'
+import { Form, Image, Divider, Grid, Segment, Button } from 'semantic-ui-react'
 import '../styles/signup.module.css';
 import Navbar from '../src/component/Navbar'
 
@@ -7,11 +8,11 @@ const DividerExampleVertical = () => (
   <>
   <Navbar />
   <Segment placeholder>
-    <Grid columns={2} relaxed='very'>
+    <Grid columns={2} relaxed='very' stackable>
       
       <Grid.Column>
         
-        <img src='./images/로고.png' />
+        <Image src='./images/로고.png' size='huge' />
         
       </Grid.Column>
      
@@ -31,7 +32,7 @@ const DividerExampleVertical = () => (
       <input placeholder='Password' />
     </Form.Field>
     <Form.Field required>
-      <label>이름</label>
+      <label>기업명</label>
       <input placeholder='Name' />
     </Form.Field>
     <Form.Field required>
@@ -46,14 +47,18 @@ const DividerExampleVertical = () => (
       <label>주소</label>
       <input placeholder='Address' />
     </Form.Field >
+    <Button.Group widths='2'>
     <Button type='submit'>RESISTER</Button>
+    <Link href='/Signup'>
+    <Button type='submit'>Back</Button>
+    </Link>
+    </Button.Group>
   </Form>
 
        
       </Grid.Column>
     </Grid>
 
-   <Divider vertical></Divider>
   </Segment>
   </>
 )

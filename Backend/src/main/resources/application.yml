@@ -1,21 +1,22 @@
 spring:
-  security:
-    user:
-      name: ssafy
-      password: ssafy
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  application:
+    name: oauth2
+  jpa:
+    hibernate:
+      ddl-auto: create # 유의해주세요!!
+      use-new-id-generator-mappings: true
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
   datasource:
     url: jdbc:mysql://localhost:3306/sunin?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
     username: ssafy
     password: ssafy
-  jpa:
-    hibernate:
-      ddl-auto: create # 유의해주세요!!
-    properties:
-      hibernate:
-        show_sql: true
-        format_sql: true
-logging.level:
-  org.springframework: debug
-  org.springframework.web: debug
-  org.hibernate.SQL: debug
-  org.hibernate.type: trace
+  thymeleaf:
+    cache: false
+  profiles:
+    include: oauth

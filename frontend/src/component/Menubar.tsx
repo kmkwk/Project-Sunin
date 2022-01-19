@@ -18,22 +18,25 @@ export default function Menuvar(){
         </Menu.Item>
 
         <Menu.Item
-          name='coupons'
-          
+          name='company'
         >
           <Header as='h4'><Link href="/Company"><a>기업</a></Link></Header>
         </Menu.Item>
 
         <Menu.Item
-          name='rebates'
-          
+          name='rank'
         >
           <Header as='h4'><Link href="/Rank"><a>랭킹</a></Link></Header>
         </Menu.Item>
 
         <Menu.Item
-          name='rebates'
-          
+          name='createfeed'
+        >
+          <Header as='h4'><Link href="/CreateFeed"><a>피드 작성하기</a></Link></Header>
+        </Menu.Item>
+
+        <Menu.Item
+          name='chat'
         >
           <Header as='h4'>채팅</Header>
         </Menu.Item>

@@ -1,6 +1,6 @@
 import Navbar from "../src/component/Navbar";
 import Link from 'next/link'
-import { Button, Divider, Form, Grid, Segment } from 'semantic-ui-react'
+import { Button, Divider, Form, Grid, Segment, Image } from 'semantic-ui-react'
 import { useEffect, useState } from "react";
 import styles from "../styles/Login.module.css"
 
@@ -20,15 +20,15 @@ export default function Login() {
   return (
     <>
       <Navbar />
-      <div className={ styles.location }>
+      <div>
       <Segment placeholder >
         <br /><br /><br />
     <Grid columns={2} relaxed='very' stackable>
     <Grid.Column verticalAlign='middle'>
-        <Button content='로고자리' icon='signup' size='big' />
+      <Image src='/images/로고.png' size='huge' />
       </Grid.Column>
 
-      <Grid.Column>
+      <Grid.Column className={ styles.location }>
         <Form>
           <Form.Input
             icon='user'
@@ -56,8 +56,6 @@ export default function Login() {
       </Grid.Column>
 
     </Grid>
-
-    <Divider vertical></Divider>
   </Segment>
       </div>
       

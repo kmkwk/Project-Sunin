@@ -1,6 +1,6 @@
 import { Menu } from 'semantic-ui-react'
 import Link from 'next/link'
-import styles from './Nav.module.css'
+import styles from '../../styles/Navbar.module.css'
 
 // import React, { Component } from 'react'
 // import { Input, Menu } from 'semantic-ui-react'
@@ -62,9 +62,7 @@ export default function Navbar() {
     <>
       <Menu stackable>
         <Menu.Item>
-        {/* <img src='/images/로고.jpg' /> */}
-        로고자리
-        {/* <Link href="/"><a><img className={ styles.logo_size } src='/images/로고.jpg' /></a></Link> */}
+        <Link href="/"><a><img className={ styles.logo_size } src='/images/로고만.png' /></a></Link>
         </Menu.Item>
 
         <Menu.Item

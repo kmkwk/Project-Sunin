@@ -32,5 +32,4 @@ public class UserController {
         return "/user.html";
     }
 
-
 }

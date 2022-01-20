@@ -7,9 +7,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface FeedService {
-//    String writeFeed(MultipartFile files, FeedCollections feedCollections);
-    String writeFeed(FeedCollections feedCollections);
-    List<FeedDto> listFeed();
+    FeedDto writeFeedFile(MultipartFile files, FeedCollections feedCollections);
+    FeedDto writeFeed(FeedCollections feedCollections);
+    List<FeedDto> getListFeed();
     FeedDto getFeed(String id);
     FeedDto updateFeed(FeedCollections feedCollections);
     void deleteFeed(String id);

@@ -2,6 +2,7 @@ package com.ssafy.sunin.service;
 
 import com.ssafy.sunin.domain.FeedCollections;
 import com.ssafy.sunin.dto.FeedDto;
+import com.ssafy.sunin.service.FeedServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,8 +26,9 @@ class FeedServiceImplTest {
         list.add("2번");
         list.add("3번");
         FeedCollections feedCollections = FeedCollections.builder()
+                .id("sdfs")
                 .userId("asdf")
-                .likes(0)
+                .likes(1)
                 .hashtags(list)
                 .content("안녕하세요2")
                 .build();
@@ -44,7 +46,7 @@ class FeedServiceImplTest {
 
     @Test
     void listFeed() {
-        List<FeedDto> feedCollections = feedService.listFeed();
+        List<FeedDto> feedCollections = feedService.getListFeed();
         System.out.println(feedCollections);
     }
 
@@ -56,9 +58,9 @@ class FeedServiceImplTest {
     @Test
     void updateFeed() {
         List<String> list = new ArrayList<>();
-        list.add("1번");
-        list.add("2번");
-        list.add("3번");
+        list.add("1");
+        list.add("2");
+        list.add("3");
         FeedCollections feedCollections = FeedCollections.builder()
                 .userId("asdf")
                 .likes(0)

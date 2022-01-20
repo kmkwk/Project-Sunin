@@ -1,61 +1,59 @@
 package com.ssafy.sunin.domain;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
-//import javax.persistence.Column;
-//import javax.persistence.Id;
+import javax.persistence.Column;
+import javax.persistence.Id;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Document("feed")
+@ApiModel(value = "피드", description = "피드 정보 클래스")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class FeedCollections {
+public class FeedCollections{
 
-//    @Id
-//    @Column(name = "_id")
-    private String _id;
+    @Id
+    @Column(name = "_id")
+    private String id;
 
-//    @Column(name = "userid")
+    @Column(name = "userid")
     private String userId;
 
     private String content;
 
     private List<String> hashtags = new ArrayList<>();
 
-//    @Column(name = "likes")
+    @Column(name = "likes")
     private int likes;
 
-    private String fileName;
+    @CreatedDate
+    private LocalDateTime createdDate;
 
-    private String filePath;
+    @LastModifiedDate
+    private LocalDateTime lastModifiedDate;
 
-    private Long fileSize;
+//    private String fileName;
+//
+//    private String filePath;
+//
+//    private Long fileSize;
+
+    private boolean flag;
 
     @Builder
-    public FeedCollections(String _id, String userId, String content, List<String> hashtags, int likes, String fileName, String filePath, Long fileSize) {
-        this._id = _id;
+    public FeedCollections(String id, String userId, String content, List<String> hashtags, int likes) {
+        this.id = id;
         this.userId = userId;
         this.content = content;
         this.hashtags = hashtags;
         this.likes = likes;
-        this.fileName = fileName;
-        this.filePath = filePath;
-        this.fileSize = fileSize;
-    }
-
-    @Builder
-    public FeedCollections(String _id, String userId, String content, List<String> hashtags, int likes) {
-        this._id = _id;
-        this.userId = userId;
-        this.content = content;
-        this.hashtags = hashtags;
-        this.likes = likes;
-    }
-
-    public FeedCollections(String fileName, String filePath, Long fileSize) {
-        this.fileName = fileName;
-        this.filePath = filePath;
-        this.fileSize = fileSize;
     }
 }

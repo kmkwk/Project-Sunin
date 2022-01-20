@@ -6,45 +6,38 @@ import com.ssafy.sunin.service.FeedServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/feed")
+@CrossOrigin("*")
 @Slf4j
 public class FeedController {
 
     private final FeedServiceImpl feedService;
 
-//    // 피드 작성
-//    @ApiOperation(value = "피드 작성")
-//    @PostMapping("/")
-//    public String writeFeed(
-//            @RequestPart(value = "file", required = false) MultipartFile files,
-//            @RequestPart(value = "feedCollections") FeedCollections feedCollections) throws FileNotFoundException {
-//        log.debug("files");
-//        return feedService.writeFeed(files,feedCollections);
-//    }
-
     // 피드 작성
     @ApiOperation(value = "피드 작성")
-    @PostMapping("/")
-    public String writeFeed(@RequestBody FeedCollections feedCollections){
-        log.debug("files");
-        return feedService.writeFeed(feedCollections);
+    @PostMapping
+    public ResponseEntity<FeedDto> writeFeed(@RequestBody FeedCollections feedCollections){
+        log.info("writeFeed method start");
+        FeedDto feedDto = feedService.writeFeed(feedCollections);
+        if(ObjectUtils.isEmpty(feedCollections)){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(feedDto);
     }
 
     // 모든 피드 조회
     @ApiOperation(value = "모든 피드 조회")
     @GetMapping("/allList")
-    public List<FeedDto> listFeed(){
-        return feedService.listFeed();
+    public ResponseEntity<List<FeedDto>> getListFeed(){
+        return new ResponseEntity<List<FeedDto>>(feedService.getListFeed(), HttpStatus.OK);
     }
 
     // 최근 피드 조회
@@ -59,15 +52,23 @@ public class FeedController {
 
 
     // 피드 수정
-    @PutMapping("")
-    public FeedDto updateFeed(@RequestBody FeedCollections feedCollections){
+    @ApiOperation(value = "피드 수정")
+    @PutMapping
+    public ResponseEntity<FeedDto> updateFeed(@RequestBody FeedCollections feedCollections){
+        log.info("updateFeed methods start");
         FeedDto feedDto = feedService.updateFeed(feedCollections);
-        return feedDto;
+        if(ObjectUtils.isEmpty(feedCollections)){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(feedDto);
+
     }
 
     // 피드 삭제
-    @DeleteMapping("/{feedId}")
-    public void deleteFeed(@PathVariable("feedId") String feedId ) {
-        feedService.deleteFeed(feedId);
+    @ApiOperation(value = "피드 삭제")
+    @DeleteMapping
+    public ResponseEntity<String> deleteFeed(@RequestParam String id) {
+        log.debug("deleteFeed methods start");
+        return new ResponseEntity<>("success",HttpStatus.OK);
     }
 }

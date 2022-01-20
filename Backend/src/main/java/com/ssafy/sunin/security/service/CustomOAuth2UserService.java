@@ -1,8 +1,8 @@
 package com.ssafy.sunin.security.service;
 
 
-import com.ssafy.sunin.domain.user.User;
-import com.ssafy.sunin.repository.UserRepository;
+import com.ssafy.sunin.domain.user.SocialUser;
+import com.ssafy.sunin.repository.SocialUserRepository;
 import com.ssafy.sunin.security.dto.OAuthAttributes;
 import com.ssafy.sunin.security.dto.SessionUser;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ import java.util.Collections;
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User>{
     // 소셜 로그인 이후 가져온 사용자의 정보들을 기반으로 가입 및 정보수정, 세션 저장 등의 기능 구현
 
-    private final UserRepository userRepository; //소셜로그인Repository
+    private final SocialUserRepository socialUserRepository; //소셜로그인Repository
     private final HttpSession httpSession; //로그인되면 세션에 넣어야함
 
     @Override
@@ -44,7 +44,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         // OAuth2UserService를 통해 가져온 OAuth2User의 attribute를 담을 클래스
         OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
 
-        User user = saveOrUpdate(attributes);
+        SocialUser user = saveOrUpdate(attributes);
 
         //세션에 사용자 정보를 저장하기 위한 dto 클래스
         httpSession.setAttribute("user", new SessionUser(user));
@@ -58,10 +58,10 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
     //이메일을 키로 잡음
     //소셜로그인한 사용자 정보가 업데이트 되면 Member엔티티에도 반영
-    private User saveOrUpdate(OAuthAttributes attributes) {
-        User member = userRepository.findByUserEmail(attributes.getEmail())
+    private SocialUser saveOrUpdate(OAuthAttributes attributes) {
+        SocialUser member = socialUserRepository.findByUserEmail(attributes.getEmail())
                 .map(entity -> entity.update(attributes.getName(), attributes.getPicture()))
                 .orElse(attributes.toEntity());
-        return userRepository.save(member);
+        return socialUserRepository.save(member);
     }
 }

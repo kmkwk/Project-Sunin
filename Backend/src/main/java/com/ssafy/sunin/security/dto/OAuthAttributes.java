@@ -3,7 +3,7 @@ package com.ssafy.sunin.security.dto;
 
 import com.ssafy.sunin.domain.user.Role;
 import com.ssafy.sunin.domain.user.Social;
-import com.ssafy.sunin.domain.user.User;
+import com.ssafy.sunin.domain.user.SocialUser;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -84,7 +84,7 @@ public class OAuthAttributes {
                 .registrationId(registrationId)
                 .build();
     }
-    public User toEntity(){
-        return User.builder().userName(name).userEmail(email).userPicture(picture).role(Role.USER).social(Social.valueOf(registrationId.toUpperCase())).build();
+    public SocialUser toEntity(){
+        return SocialUser.builder().userName(name).userEmail(email).userPicture(picture).role(Role.USER).social(Social.valueOf(registrationId.toUpperCase())).build();
     }
 }

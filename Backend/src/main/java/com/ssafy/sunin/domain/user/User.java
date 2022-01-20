@@ -1,60 +1,44 @@
 package com.ssafy.sunin.domain.user;
 
-import com.ssafy.sunin.domain.BaseTimeEntity;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
-
-@ToString
-@Getter
-@NoArgsConstructor
 @Entity
-public class User extends BaseTimeEntity {
-    //사용자 정보를 담당할 도메인
-    //findBy~를 쓰기위해서는 카멜 케이스가 인지하기 쉽다.
-
+@Getter
+@Setter
+@Table
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="user_id")
-    private Long userId; //id
+    private long no;
 
-    @Column(nullable = false, name="user_name")
-    private String userName; //이름
+    @Column(length =45, unique = true)
+    private String userId;
 
-    @Column(name="user_email")
-    private String userEmail; //이메일
+    @Column(length =45, nullable = false)
+    private String user_password;
 
-    @Column(name="user_picture")
-    private String userPicture; //사진
+    @Column(length =45, nullable = false)
+    private String user_name;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name="user_role")
-    private Role role; //권한
+    @Column(length =45, nullable = false)
+    private String user_nickname;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name="user_social")
-    private Social social; //플랫폼
+    @Column(length =45, nullable = false)
+    private String user_tel;
 
-    @Builder
-    public User(String userName, String userEmail, String userPicture, Role role, Social social){
-        this.userName = userName;
-        this.userEmail = userEmail;
-        this.userPicture = userPicture;
-        this.role = role;
-        this.social = social;
-    }
+    @Column(length =45, nullable = false)
+    private String user_address;
 
-    public User update(String userName, String userPicture){
-        this.userName = userName;
-        this.userPicture = userPicture;
-        return this;
-    }
+    private LocalDateTime created_datetime;
 
-    public String getRoleKey(){
-        return this.role.getKey();
+    @PrePersist //디비에 insert 되기직전에 실행
+    public void created_datetime() {
+        this.created_datetime = LocalDateTime.now();
     }
 }

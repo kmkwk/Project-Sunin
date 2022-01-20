@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @ToString
@@ -19,7 +21,7 @@ public class SocialUser extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="user_id")
+    @Column(name="socialUser_id")
     private Long userId; //id
 
     @Column(nullable = false, name="user_name")
@@ -38,6 +40,13 @@ public class SocialUser extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     @Column(name="user_social")
     private Social social; //플랫폼
+
+    @OneToMany(mappedBy = "socialUser")
+    private List<User> users = new ArrayList<User>();
+
+//    public void addUsers(User user){
+//        this.users.add(user);
+//    }
 
     @Builder
     public SocialUser(String userName, String userEmail, String userPicture, Role role, Social social){

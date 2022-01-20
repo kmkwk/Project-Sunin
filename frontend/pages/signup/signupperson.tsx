@@ -1,8 +1,8 @@
 import React from 'react'
 import Link from 'next/link'
-import { Form, Image, Divider, Grid, Segment, Button } from 'semantic-ui-react'
-import '../styles/signup.module.css';
-import Navbar from '../src/component/Navbar'
+import { Image, Form, Divider, Grid, Segment, Button, GridColumn } from 'semantic-ui-react'
+import '../../styles/signup.module.css';
+import Navbar from '../../src/component/Navbar'
 
 const DividerExampleVertical = () => (
   <>
@@ -12,12 +12,13 @@ const DividerExampleVertical = () => (
       
       <Grid.Column>
         
-        <Image src='./images/로고.png' size='huge' />
+        <Image src='../images/로고.png' size='huge' />
         
       </Grid.Column>
      
       <Grid.Column>
-       
+
+   
     <Form>
     <Form.Field required>
       <label>이메일</label>
@@ -32,7 +33,7 @@ const DividerExampleVertical = () => (
       <input placeholder='Password' />
     </Form.Field>
     <Form.Field required>
-      <label>기업명</label>
+      <label>이름</label>
       <input placeholder='Name' />
     </Form.Field>
     <Form.Field required>
@@ -49,7 +50,7 @@ const DividerExampleVertical = () => (
     </Form.Field >
     <Button.Group widths='2'>
     <Button type='submit'>RESISTER</Button>
-    <Link href='/Signup'>
+    <Link href='/signup'>
     <Button type='submit'>Back</Button>
     </Link>
     </Button.Group>
@@ -58,6 +59,7 @@ const DividerExampleVertical = () => (
        
       </Grid.Column>
     </Grid>
+
 
   </Segment>
   </>

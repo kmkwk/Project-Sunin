@@ -12,3 +12,22 @@
 .infoedit {
     margin: 10px;
 }
+
+.headeralign {
+    margin: 100px 100px 50px 100px;
+    
+  }
+
+.textalign {
+    text-align: center;
+}
+
+.formalign {
+    margin: 30px 150px 30px 150px;
+}
+
+.buttonalign {
+    text-align: center;
+}
+
+

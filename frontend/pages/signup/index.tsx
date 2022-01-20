@@ -1,8 +1,8 @@
 import React from 'react'
 import Link from 'next/link'
 import { Divider,Grid, Image, Segment, Button } from 'semantic-ui-react'
-import styles from '../styles/signup.module.css';
-import Navbar from '../src/component/Navbar'
+import styles from '../../styles/signup.module.css';
+import Navbar from '../../src/component/Navbar'
 
 const DividerExampleVertical = () => (
   <>
@@ -11,7 +11,7 @@ const DividerExampleVertical = () => (
     <Grid columns={2} relaxed='very' stackable>
       
         <Grid.Column>
-        <Image src='./images/로고.png' size='huge' />
+        <Image src='../images/로고.png' size='huge' />
         </Grid.Column>
      
       <Grid.Column>
@@ -20,7 +20,7 @@ const DividerExampleVertical = () => (
             <h3>가입 유형을 선택하세요</h3>
             <div className= { styles.box_align }>
             <Button.Group widths='2' size='large'>
-            <Link href="/SignupPerson">
+            <Link href="signup/signupperson">
              <Button>
                <br/>
                개인회원
@@ -28,7 +28,7 @@ const DividerExampleVertical = () => (
                <br/>
                </Button>
             </Link>
-            <Link href="/SignupCompany">
+            <Link href="signup/signupcompany">
               <Button>
                <br/>
                기업회원

@@ -28,7 +28,14 @@ public class CommentService {
                 .writer(writer)
                 .content(content)
                 .build();
-        return mongoTemplate.insert(comment);
+
+        mongoTemplate.insert(comment);
+
+        Query query = new Query(Criteria.where("_id").is(comment.getId()));
+        Update update = new Update();
+        update.set("comment_group", comment.getId());
+        mongoTemplate.updateFirst(query, update, Comment.class);
+        return null;
     }
 
     public Comment updateComment(String comment_id, String content) {
@@ -43,6 +50,27 @@ public class CommentService {
     public Comment deleteComment(String comment_id) {
         Query query = new Query(Criteria.where("_id").is(comment_id));
         mongoTemplate.remove(query, Comment.class);
+        return null;
+    }
+
+    public Comment writeReply(int feedId, String commentId, String writer, String content) {
+        Comment rootComment = findCommentById(feedId, commentId);
+        Comment comment = Comment.builder()
+                .feedId(feedId)
+                .writer(writer)
+                .content(content)
+                .build();
+
+        comment.setGroup(rootComment.getId());
+
+        mongoTemplate.insert(comment);
+
+        Query query = new Query(Criteria.where("_id").is(comment.getId()));
+        Query query2 = new Query(Criteria.where("comment_group").is(commentId));
+        Update update = new Update();
+        System.out.println("싸이즈 ~~~ ::" + mongoTemplate.find(query2, Comment.class).size());
+        update.set("comment_order", (mongoTemplate.find(query2, Comment.class).size()+1));
+        mongoTemplate.updateFirst(query, update, Comment.class);
         return null;
     }
 
@@ -63,12 +91,7 @@ public class CommentService {
     public List<String> loadAllObjectId() {
         List<Comment> list = mongoTemplate.findAll(Comment.class);
         List<String> result = new ArrayList<>();
-        for(Comment now : list) {
-            result.add("ObjectID : " + now.getId()
-                    + ", 내용 : " + now.getContent()
-                    + ", 작성자 : " + now.getWriter()
-                    + ", 수정여부 : " + now.isUpdated());
-        }
+        for(Comment now : list) result.add(now.toString());
         return result;
     }
 }

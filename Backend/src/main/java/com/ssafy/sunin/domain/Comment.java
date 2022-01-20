@@ -58,6 +58,15 @@ public class Comment {
     @ApiModelProperty(value = "수정여부")
     private boolean updated;
 
+    /*
+     * 계층형 댓글
+     * */
+    @Field("comment_group")
+    private ObjectId group; // 댓글 그룹 ( 루트 댓글과 대댓글들은 같은 댓글 그룹을 가진다 )
+
+    @Field("comment_order")
+    private int order;  // 그룹 내 순서
+
     @Builder
     public Comment(int feedId, String content, String writer) {
         this.feedId = feedId;
@@ -66,6 +75,35 @@ public class Comment {
         this.likes = 0;
         this.date = new Date();
         this.updated = false;
+
+        /*
+         * 계층형 댓글
+         * */
+        this.group = id;
+        this.order = 1;
+    }
+
+    public void setGroup(ObjectId group) {
+        this.group = group;
+    }
+
+    public void setOrder(int order) {
+        this.order = (order+1);
+    }
+
+    @Override
+    public String toString() {
+        return "Comment {" +
+                "_id=" + id +
+                ", feedId=" + feedId +
+                ", content='" + content + '\'' +
+                ", writer='" + writer + '\'' +
+                ", likes=" + likes +
+                ", date=" + date +
+                ", updated=" + updated +
+                ", group=" + group +
+                ", order=" + order +
+                '}';
     }
 
 }

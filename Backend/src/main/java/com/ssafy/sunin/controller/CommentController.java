@@ -59,6 +59,18 @@ public class CommentController {
         return new ResponseEntity<>(commentService.deleteComment(commentId), HttpStatus.OK);
     }
 
+    @PostMapping("/reply")
+    @ApiOperation(value = "대댓글 작성하기")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "feedId", value = "(#개발용#) 피드 ObjectId", required = true),
+            @ApiImplicitParam(name = "commentId", value = "(#개발용#) 루트댓글 ObjectId", required = true),
+            @ApiImplicitParam(name = "writer", value = "작성자", required = true),
+            @ApiImplicitParam(name = "content", value = "내용", required = true)
+    })
+    public ResponseEntity<Comment> writeComment(int feedId, String commentId, String writer, String content) {
+        return new ResponseEntity<>(commentService.writeReply(feedId, commentId, writer, content), HttpStatus.OK);
+    }
+
     @GetMapping("/all")
     @ApiOperation(value = "피드에 달린 댓글 전체 조회")
     @ApiImplicitParam(name = "feedId", value = "피드 ObjectId", required = true)

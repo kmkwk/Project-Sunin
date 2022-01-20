@@ -20,7 +20,7 @@ const DividerExampleVertical = () => (
             <h3>가입 유형을 선택하세요</h3>
             <div className= { styles.box_align }>
             <Button.Group widths='2' size='large'>
-            <Link href="signup/signupperson">
+            <Link href="signup/person">
              <Button>
                <br/>
                개인회원
@@ -28,7 +28,7 @@ const DividerExampleVertical = () => (
                <br/>
                </Button>
             </Link>
-            <Link href="signup/signupcompany">
+            <Link href="signup/company">
               <Button>
                <br/>
                기업회원

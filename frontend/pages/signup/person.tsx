@@ -1,6 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
-import { Form, Image, Divider, Grid, Segment, Button } from 'semantic-ui-react'
+import { Image, Form, Divider, Grid, Segment, Button, GridColumn } from 'semantic-ui-react'
 import '../../styles/signup.module.css';
 import Navbar from '../../src/component/Navbar'
 
@@ -17,7 +17,8 @@ const DividerExampleVertical = () => (
       </Grid.Column>
      
       <Grid.Column>
-       
+
+   
     <Form>
     <Form.Field required>
       <label>이메일</label>
@@ -32,14 +33,14 @@ const DividerExampleVertical = () => (
       <input placeholder='Password' />
     </Form.Field>
     <Form.Field required>
-      <label>기업명</label>
+      <label>이름</label>
       <input placeholder='Name' />
     </Form.Field>
     <Form.Field required>
       <label>닉네임</label>
       <input placeholder='Nickname' />
     </Form.Field>
-    <Form.Field required>
+    <Form.Field>
       <label>전화번호</label>
       <input placeholder='Tel. ex) 01012345678' />
     </Form.Field>
@@ -58,6 +59,7 @@ const DividerExampleVertical = () => (
        
       </Grid.Column>
     </Grid>
+
 
   </Segment>
   </>

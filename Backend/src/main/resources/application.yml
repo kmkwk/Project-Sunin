@@ -4,6 +4,18 @@ spring:
       matching-strategy: ant_path_matcher
   application:
     name: oauth2
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017
+      database: sunin
+  security:
+    user:
+      name: ssafy
+      password: ssafy
+  datasource:
+    url: jdbc:mysql://localhost:3306/sunin?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
+    username: ssafy
+    password: ssafy
   jpa:
     hibernate:
       ddl-auto: create # 유의해주세요!!

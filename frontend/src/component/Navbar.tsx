@@ -74,23 +74,23 @@ export default function Navbar() {
         <Menu.Item
           name='personal'
         >
-          <Link href="/Personal"><a>Perosnal</a></Link>
+          <Link href="/feed/personal"><a>Perosnal</a></Link>
         </Menu.Item>
 
         <Menu.Item
           name='company'
         >
-          <Link href="/Company"><a>Company</a></Link>
+          <Link href="/feed/company"><a>Company</a></Link>
         </Menu.Item>
         <Menu.Item
           name='login'
         >
-          <Link href="/Login"><a>Login</a></Link>
+          <Link href="/login"><a>Login</a></Link>
         </Menu.Item>
         <Menu.Item
           name='signup'
         >
-          <Link href="/Signup"><a>Signup</a></Link>
+          <Link href="/signup"><a>Signup</a></Link>
         </Menu.Item>
       </Menu>
     </>

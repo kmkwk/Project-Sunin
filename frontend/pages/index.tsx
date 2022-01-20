@@ -5,8 +5,27 @@ import Menuvar from '../src/component/Menubar'
 import Navbar from '../src/component/Navbar'
 import styles from '../styles/Home.module.css'
 import { Header, Menu, Grid } from 'semantic-ui-react'
+import Axios from "axios"
+import { useEffect, useState } from 'react';
+import SampleFeedList from '../src/component/SampleFeedList'
 
 const Home: NextPage = () => {
+  const [list, setList] = useState([]);
+
+  const API_URL = "http://makeup-api.herokuapp.com/api/v1/products.json?brand=maybelline";
+
+  function getData() {
+    Axios.get(API_URL)
+    .then(res => {
+      console.log(res.data)
+      setList(res.data)
+    })
+  }
+
+  useEffect(()=>{
+    getData();
+  }, []);
+
   return (
     <>
       <Navbar />
@@ -15,13 +34,16 @@ const Home: NextPage = () => {
         <Menuvar />
       </Grid.Column>
       <Grid.Column>
-        Recent
+        <b>Recent</b>
+        <SampleFeedList list={list.slice(0,3)} />
       </Grid.Column>
       <Grid.Column>
-        Personal
+        <b>Personal</b>
+        <SampleFeedList list={list.slice(3,6)} />
       </Grid.Column>
       <Grid.Column>
-        Company
+        <b>Company</b>
+        <SampleFeedList list={list.slice(6,9)} />
       </Grid.Column>
     </Grid>
     </>

@@ -1,7 +1,21 @@
+buildscript {
+	ext {
+		springBootVer = '2.6.2'
+		springDepenManaVer = '1.0.11.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVer}")
+	}
+}
 plugins {
-	id 'org.springframework.boot' version '2.6.2'
-	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'org.springframework.boot' version "${springBootVer}"
+	id 'io.spring.dependency-management' version "${springDepenManaVer}"
 	id 'java'
+	id 'eclipse'
+	id 'idea'
 }
 
 group = 'com.ssafy'
@@ -31,6 +45,14 @@ dependencies {
 
 	// Swagger
 	implementation group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
+
+	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+
+	//추가
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	testImplementation 'org.springframework.security:spring-security-test'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 }
 
 test {

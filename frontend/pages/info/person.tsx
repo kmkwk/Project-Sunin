@@ -13,7 +13,6 @@ const HeaderExampleContent = () => (
     <Divider />
     </div>
     <div className={ styles.formalign }>
-
     <Form>
     <Form.Field>
       <label>이메일</label>
@@ -23,8 +22,8 @@ const HeaderExampleContent = () => (
       <label>비밀번호</label>
       <Form.Group inline>
       <input placeholder='Password' />
-      <Link href="passwordedit">
-      <Button basic color='grey'>변경</Button>
+      <Link href="passwordperson">
+      <Button basic color='grey'>변&nbsp;경</Button>
     </Link>
     </Form.Group>
     </Form.Field>
@@ -34,7 +33,7 @@ const HeaderExampleContent = () => (
       <Form.Group inline>
       <input placeholder='Name' />
       <Button basic color='grey'>
-      변경
+      변&nbsp;경
     </Button>
     </Form.Group>
     </Form.Field>
@@ -44,7 +43,7 @@ const HeaderExampleContent = () => (
       <input placeholder='Nickname' />
  
       <Button basic color='grey'>
-      변경
+      변&nbsp;경
     </Button>
     </Form.Group>
     </Form.Field>
@@ -53,7 +52,7 @@ const HeaderExampleContent = () => (
       <Form.Group inline>
       <input placeholder='Tel' />
       <Button basic color='grey'>
-      변경
+      변&nbsp;경
     </Button>
     </Form.Group>
     </Form.Field>
@@ -62,7 +61,7 @@ const HeaderExampleContent = () => (
       <Form.Group inline>
       <input placeholder='Address' />
       <Button basic color='grey'>
-      변경
+      변&nbsp;경
     </Button>
     </Form.Group>
     </Form.Field >

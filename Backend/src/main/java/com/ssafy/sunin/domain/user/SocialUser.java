@@ -41,12 +41,6 @@ public class SocialUser extends BaseTimeEntity {
     @Column(name="user_social")
     private Social social; //플랫폼
 
-    @OneToMany(mappedBy = "socialUser")
-    private List<User> users = new ArrayList<User>();
-
-//    public void addUsers(User user){
-//        this.users.add(user);
-//    }
 
     @Builder
     public SocialUser(String userName, String userEmail, String userPicture, Role role, Social social){

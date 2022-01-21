@@ -43,11 +43,7 @@ public class User {
     public void created_datetime() {
         this.created_datetime = LocalDateTime.now();
     }
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "socialUser_id")
-    private SocialUser socialUser;
-
+    
 
 
 }

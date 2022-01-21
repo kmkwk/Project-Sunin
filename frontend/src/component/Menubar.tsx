@@ -11,8 +11,7 @@ export default function Menuvar(){
               <img src="/images/디폴트프로필사진.png" alt="프로필사진" width="50px"/>
               <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 회원이름
               <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 썬인등급
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <Link href="/custom"><a><Icon name='cog' size='large' color='grey' circular/></a></Link>
-              
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <Link href="/info"><a><Icon name='cog' size='large' color='grey' circular/></a></Link>
             </GridRow>
           </Grid>
           

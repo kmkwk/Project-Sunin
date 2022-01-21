@@ -1,6 +1,7 @@
 package com.ssafy.sunin.controller;
 
 import com.ssafy.sunin.domain.user.User;
+import com.ssafy.sunin.user.JwtTokenProvider;
 import com.ssafy.sunin.user.UserRequest;
 import com.ssafy.sunin.user.UserService;
 import io.swagger.annotations.ApiOperation;
@@ -10,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +21,11 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class UserController {
 
+
+
+    private static final String SUCCESS = "success";
+    private static final String FAIL = "fail";
+    private final JwtTokenProvider jwtTokenProvider;
     private final UserService userService;
 
     @PostMapping("/signup")
@@ -34,30 +39,34 @@ public class UserController {
 
     @PostMapping("/login")
     @ApiOperation(value="로그인 성고여부 반환")
-    public Map<String,Object> login(@RequestBody UserRequest request, HttpSession session) {
-            Map<String, Object> resultMap = new HashMap<>();
-            User loginuser = userService.login(request.getUserId(), request.getUser_password());
+    public ResponseEntity<Map<String, Object>> login(@RequestBody UserRequest request) {
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = null;
+        try {
+            User loginuser = userService.login(request.getUserId(), request.getUserPassword());
+//            System.out.println(loginuser.getUserId());
             if(loginuser!=null){
-                session.setAttribute("loginUser", loginuser);
-                resultMap.put("status", true);
-                resultMap.put("msg", "로그인성공");
+                String token = jwtTokenProvider.createToken(loginuser.getUserId(), loginuser.getRoles());
+                System.out.println(token);
+                resultMap.put("access-token", token);
+                resultMap.put("message", SUCCESS);
+                status =  HttpStatus.ACCEPTED;
             }
             else{
-                resultMap.put("status", false);
-                resultMap.put("msg", "로그인실패");
+                resultMap.put("message", FAIL);
+                status = HttpStatus.ACCEPTED;
             }
-            return resultMap;
-    }
+        }
+        catch (Exception e){
+            resultMap.put("message", e.getMessage());
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+        return new ResponseEntity<Map<String,Object>>(resultMap, status);
 
-    @GetMapping("/logout")
-    public Map<String, Object> logout(HttpSession session){
-        session.invalidate();
-        Map<String, Object> resultMap = new HashMap<>();
-
-        resultMap.put("status", true);
-        resultMap.put("msg", "로그아웃 성공");
-        return resultMap;
-
+//    	if(userService.login(request.getUserId(), request.getUser_password()).equals("Success")) {
+//    		return new ResponseEntity(HttpStatus.OK);
+//    	}
+//    	return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
     @DeleteMapping("/delete/{userId}")

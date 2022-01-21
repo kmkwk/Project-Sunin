@@ -1,14 +1,20 @@
 import React from 'react'
-import { Image, Header, Divider, Form, Button } from 'semantic-ui-react'
+import { Grid, Image, Header, Divider, Form, Button } from 'semantic-ui-react'
 import styles from "../../styles/signup.module.css"
 import Navbar from '../../src/component/Navbar'
+import Menubar from '../../src/component/Menubar'
 import Link from 'next/link'
 
 
 const HeaderExampleContent = () => (
   <>
   <Navbar/>
-  <div className={ styles.headeralign }>
+  <Grid columns={2} padded>
+        <Grid.Column width={3}>
+          <Menubar />
+        </Grid.Column>
+        <Grid.Column width={13}>
+        <div className={ styles.headeralign }>
     <Header size='huge'>회원정보 수정</Header>
     <Divider />
     </div>
@@ -77,6 +83,12 @@ const HeaderExampleContent = () => (
   </Form>
   </div>
   <br/>
+
+        </Grid.Column>
+      </Grid>  
+
+
+ 
  </>
 )
 

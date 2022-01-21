@@ -1,19 +1,33 @@
 import React from 'react'
-import { Header, Divider, Form, Button } from 'semantic-ui-react'
+import { Grid, Header, Divider, Form, Button,Image } from 'semantic-ui-react'
 import styles from "../../styles/signup.module.css"
 import Navbar from '../../src/component/Navbar'
+import Menubar from '../../src/component/Menubar'
 import Link from 'next/link'
 
 
 const HeaderExampleContent = () => (
   <>
   <Navbar/>
-  <div className={ styles.headeralign }>
+
+  <Grid columns={2} padded>
+        <Grid.Column width={3}>
+          <Menubar />
+        </Grid.Column>
+        <Grid.Column width={13}>
+        <div className={ styles.headeralign }>
     <Header size='huge'>회원정보 수정</Header>
     <Divider />
     </div>
     <div className={ styles.formalign }>
     <Form>
+    <Form.Field>
+      <label>프로필 사진</label>
+      <div>
+      <Image src='https://react.semantic-ui.com/images/wireframe/image.png' size='small' verticalAlign='bottom' />{' '}
+      <Button basic color='grey'>변&nbsp;경</Button>
+      </div>
+    </Form.Field>
     <Form.Field>
       <label>이메일</label>
       <input disabled placeholder='Email' />
@@ -69,7 +83,12 @@ const HeaderExampleContent = () => (
   </Form>
   </div>
   <br/>
- </>
+         
+        </Grid.Column>
+      </Grid>  
+      </> 
+
+  
 )
 
 export default HeaderExampleContent

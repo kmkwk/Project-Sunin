@@ -1,11 +1,10 @@
-import React from 'react'
-import { Grid, Divider, Button, Icon, Image, Item, Label } from 'semantic-ui-react'
+import { useEffect, useState } from 'react'
+import { Grid, Divider, Button, Icon, Image, Item } from 'semantic-ui-react'
 import Navbar from '../../src/component/Navbar'
 import Menubar from '../../src/component/Menubar';
 import Axios from "axios"
-import { useEffect, useState } from 'react';
 import styles from "../../styles/signup.module.css"
-import FeedList from '../../src/component/FeedList';
+import ProfileList from '../../src/component/ProfileList'
 
 export default function profileperson() {
 
@@ -65,7 +64,7 @@ return (
     </Item.Group>
     </div>
     <Divider />
-      <FeedList list={list} />
+      <ProfileList list={list} />
     </Grid.Column>
   </Grid>
 

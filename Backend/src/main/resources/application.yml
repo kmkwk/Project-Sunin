@@ -27,8 +27,11 @@ spring:
   thymeleaf:
     cache: false
   profiles:
-    include: oauth
+    include:
+      - oauth
+      - aws
+      - credentials
 
-logging:
-  level.org.springframework: debug
-  level.org.springframework.web: debug
+#logging:
+#  level.org.springframework: debug
+#  level.org.springframework.web: debug

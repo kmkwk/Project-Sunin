@@ -16,6 +16,9 @@ plugins {
 	id 'java'
 	id 'eclipse'
 	id 'idea'
+
+	//Querydsl
+	id "com.ewerk.gradle.plugins.querydsl" version '1.0.10'
 }
 
 group = 'com.ssafy'
@@ -60,8 +63,55 @@ dependencies {
 	implementation 'com.querydsl:querydsl-jpa:5.0.0'
 	implementation 'com.querydsl:querydsl-apt:5.0.0'
 	implementation 'com.querydsl:querydsl-mongodb:5.0.0'
+
+	// aws
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
+	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-validation
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '2.6.2'
+
 }
 
 test {
 	useJUnitPlatform()
+}
+
+//Querydsl
+def querydslSrcDir = "$buildDir/generated/querydsl"
+//def querydslSrcDir = 'src/main/generated'
+
+querydsl {
+	springDataMongo = true
+	library = "com.querydsl:querydsl-apt"
+//    jpa = true
+	querydslSourcesDir = querydslSrcDir
+}
+
+compileQuerydsl {
+	options.annotationProcessorPath = configurations.querydsl
+}
+
+configurations {
+	querydsl.extendsFrom compileClasspath
+}
+
+sourceSets {
+	main {
+		java {
+			srcDirs = ['src/main/java', querydslSrcDir]
+		}
+	}
+}
+
+task deleteGeneratedSources(type: Delete) {
+	delete file(querydslSrcDir)
+}
+
+tasks.withType(JavaCompile) { it.dependsOn('deleteGeneratedSources') }
+
+// 빌드할때마다 complieQuerydsl 작업 전에 generated/querydsl package를 삭제하고
+// 다시 컴파일
+compileQuerydsl {
+	if(file(querydslSrcDir).exists() )
+		delete(file(querydslSrcDir))
 }

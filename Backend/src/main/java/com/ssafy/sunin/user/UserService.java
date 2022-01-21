@@ -41,17 +41,6 @@ public class UserService{
         return null;
     }
 
-    @GetMapping("/logout")
-    public Map<String, Object> logout(HttpSession session){
-        session.invalidate();
-        Map<String, Object> resultMap = new HashMap<>();
-
-        resultMap.put("status", true);
-        resultMap.put("msg", "로그아웃 성공");
-        return resultMap;
-
-    }
-    
     public String deleteUser(String userId) {
         UserRepository.delete(UserRepository.findByUserId(userId).orElseThrow(RuntimeException::new));
         return "Success";

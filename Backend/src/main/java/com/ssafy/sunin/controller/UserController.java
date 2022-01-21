@@ -49,6 +49,17 @@ public class UserController {
             return resultMap;
     }
 
+    @GetMapping("/logout")
+    public Map<String, Object> logout(HttpSession session){
+        session.invalidate();
+        Map<String, Object> resultMap = new HashMap<>();
+
+        resultMap.put("status", true);
+        resultMap.put("msg", "로그아웃 성공");
+        return resultMap;
+
+    }
+
     @DeleteMapping("/delete/{userId}")
     @ApiOperation(value="회원탈퇴")
     public ResponseEntity deleteUser(@PathVariable String userId) {

@@ -21,41 +21,50 @@ const HeaderExampleContent = () => (
     </Form.Field>
     <Form.Field>
       <label>비밀번호</label>
-      <input placeholder='First Name' />
-      <Link href="info/passwordedit">
-      <Button basic color='grey'>
-      변경하기
-    </Button>
+      <Form.Group inline>
+      <input placeholder='Password' />
+      <Link href="passwordedit">
+      <Button basic color='grey'>변경</Button>
     </Link>
+    </Form.Group>
     </Form.Field>
 
     <Form.Field>
       <label>이름</label>
-      <input placeholder='First Name' />
+      <Form.Group inline>
+      <input placeholder='Name' />
       <Button basic color='grey'>
-      변경하기
+      변경
     </Button>
+    </Form.Group>
     </Form.Field>
     <Form.Field>
       <label>닉네임</label>
-      <input placeholder='First Name' />
+      <Form.Group inline>
+      <input placeholder='Nickname' />
+ 
       <Button basic color='grey'>
-      변경하기
+      변경
     </Button>
+    </Form.Group>
     </Form.Field>
     <Form.Field>
       <label>전화번호</label>
-      <input placeholder='First Name' />
+      <Form.Group inline>
+      <input placeholder='Tel' />
       <Button basic color='grey'>
-      변경하기
+      변경
     </Button>
+    </Form.Group>
     </Form.Field>
     <Form.Field>
       <label>주소</label>
-      <input placeholder='First Name' />
+      <Form.Group inline>
+      <input placeholder='Address' />
       <Button basic color='grey'>
-      변경하기
+      변경
     </Button>
+    </Form.Group>
     </Form.Field >
 
   </Form>

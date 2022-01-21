@@ -16,15 +16,15 @@ const HeaderExampleContent = () => (
     <Form>
     <Form.Field>
       <label>현재 비밀번호</label>
-      <input placeholder='Password' />
+      <input placeholder='Current Password' />
     </Form.Field>
     <Form.Field>
       <label>새 비밀번호</label>
-      <input placeholder='Password' />
+      <input placeholder='New Password' />
     </Form.Field>
     <Form.Field>
       <label>새 비밀번호 확인</label>
-      <input placeholder='Passwrod' />
+      <input placeholder='Confirm New Passwrod' />
     </Form.Field>
 
     <Button type='submit'>비밀번호 변경</Button>

@@ -13,42 +13,57 @@ const HeaderExampleContent = () => (
     <Divider />
     </div>
     <div className={ styles.formalign }>
+
     <Form>
     <Form.Field>
       <label>이메일</label>
-      <br/>
+      <input disabled placeholder='Email' />
     </Form.Field>
     <Form.Field>
       <label>비밀번호</label>
-      <Button basic color='grey'>
-      변경하기
-    </Button>
+      <Form.Group inline>
+      <input placeholder='Password' />
+      <Link href="passwordedit">
+      <Button basic color='grey'>변경</Button>
+    </Link>
+    </Form.Group>
     </Form.Field>
+
     <Form.Field>
-      <label>기업명</label>
+      <label>이름</label>
+      <Form.Group inline>
+      <input placeholder='Name' />
       <Button basic color='grey'>
-      변경하기
+      변경
     </Button>
+    </Form.Group>
     </Form.Field>
     <Form.Field>
       <label>닉네임</label>
+      <Form.Group inline>
+      <input placeholder='Nickname' />
       <Button basic color='grey'>
-      변경하기
+      변경
     </Button>
+    </Form.Group>
     </Form.Field>
     <Form.Field>
       <label>전화번호</label>
-      <Link href="info/passwordedit">
+      <Form.Group inline>
+      <input placeholder='Tel' />
       <Button basic color='grey'>
-      변경하기
+      변경
     </Button>
-    </Link>
+    </Form.Group>
     </Form.Field>
     <Form.Field>
       <label>주소</label>
+      <Form.Group inline>
+      <input placeholder='Address' />
       <Button basic color='grey'>
-      변경하기
+      변경
     </Button>
+    </Form.Group>
     </Form.Field >
 
   </Form>

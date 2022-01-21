@@ -4,8 +4,12 @@ import com.ssafy.sunin.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 
+import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -36,6 +40,18 @@ public class UserService{
         }
         return null;
     }
+
+    @GetMapping("/logout")
+    public Map<String, Object> logout(HttpSession session){
+        session.invalidate();
+        Map<String, Object> resultMap = new HashMap<>();
+
+        resultMap.put("status", true);
+        resultMap.put("msg", "로그아웃 성공");
+        return resultMap;
+
+    }
+    
     public String deleteUser(String userId) {
         UserRepository.delete(UserRepository.findByUserId(userId).orElseThrow(RuntimeException::new));
         return "Success";

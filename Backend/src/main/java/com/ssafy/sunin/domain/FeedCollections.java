@@ -2,6 +2,7 @@ package com.ssafy.sunin.domain;
 
 import io.swagger.annotations.ApiModel;
 import lombok.*;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -19,7 +20,7 @@ public class FeedCollections{
 
     @Id
     @Column(name = "_id")
-    private String id;
+    private ObjectId id;
 
     @Column(name = "userId")
     private String userId;
@@ -54,7 +55,7 @@ public class FeedCollections{
     }
 
     @Builder
-    public FeedCollections(String id, String userId, String content, List<String> hashtags, int likes) {
+    public FeedCollections(ObjectId id, String userId, String content, List<String> hashtags, int likes) {
         this.id = id;
         this.userId = userId;
         this.content = content;

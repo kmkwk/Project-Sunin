@@ -11,6 +11,7 @@ import com.ssafy.sunin.dto.FeedVO;
 import com.ssafy.sunin.repository.FeedRepository;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -139,7 +140,7 @@ public class FeedServiceImpl implements FeedService {
                 .flag(true)
                 .filePath(fileNameList)
                 .build();
-        String id = feedRepository.save(feedCollections).getId();
+        ObjectId id = feedRepository.save(feedCollections).getId();
 
         return FeedDto.builder()
                 .id(id)
@@ -156,7 +157,6 @@ public class FeedServiceImpl implements FeedService {
     @Override
     public FeedCollections getUserListFeed(String userId) {
         return feedRepository.findByUserId(userId);
-//        return feedRepository.findByUserId(userId)
 //                .stream()
 //                .map(feedCollections -> FeedDto.builder()
 //                        .id(feedCollections.getId())

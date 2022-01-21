@@ -3,7 +3,6 @@ package com.ssafy.sunin.controller;
 import com.ssafy.sunin.domain.FeedCollections;
 import com.ssafy.sunin.dto.FeedDto;
 import com.ssafy.sunin.dto.FeedVO;
-import com.ssafy.sunin.predictor.FeedPredictor;
 import com.ssafy.sunin.service.FeedServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -13,8 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.ObjectUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -63,6 +60,7 @@ public class FeedController {
     // Todo : 좋아요순 피드 조회
 
     // Todo : 유저, 기업별 피드 조회
+
     @ApiOperation(value = "유저별 피드 조회")
     @GetMapping("/userList")
     public ResponseEntity<FeedCollections> getUserListFeed(@RequestParam String userId) {

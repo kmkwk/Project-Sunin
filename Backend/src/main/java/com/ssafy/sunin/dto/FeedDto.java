@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.bson.types.ObjectId;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -11,19 +13,17 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 public class FeedDto {
-    private String id;
+    private ObjectId id;
     private String userId;
     private String content;
     private List<String> hashtags;
     private int likes;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
-    private String fileName;
     private List<String> filePath;
-    private Long fileSize;
 
     @Builder
-    public FeedDto(String id, String userId, String content, List<String> hashtags, int likes, LocalDateTime createdDate, LocalDateTime modifiedDate, List<String> filePath) {
+    public FeedDto(ObjectId id, String userId, String content, List<String> hashtags, int likes, LocalDateTime createdDate, LocalDateTime modifiedDate, List<String> filePath) {
         this.id = id;
         this.userId = userId;
         this.content = content;
@@ -35,7 +35,7 @@ public class FeedDto {
     }
 
     @Builder
-    public FeedDto(String id, String userId, String content, List<String> hashtags, int likes, LocalDateTime createdDate, LocalDateTime modifiedDate) {
+    public FeedDto(ObjectId id, String userId, String content, List<String> hashtags, int likes, LocalDateTime createdDate, LocalDateTime modifiedDate) {
         this.id = id;
         this.userId = userId;
         this.content = content;

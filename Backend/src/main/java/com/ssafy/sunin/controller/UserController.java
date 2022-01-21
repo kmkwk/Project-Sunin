@@ -10,7 +10,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -31,12 +34,19 @@ public class UserController {
 
     @PostMapping("/login")
     @ApiOperation(value="로그인 성고여부 반환")
-    public ResponseEntity login(@RequestBody UserRequest request) {
-//    	log.info("userId = {}, password = {}", request.getUser_email(), request.getUser_password());
-        if(userService.login(request.getUserId(), request.getUser_password()).equals("Success")) {
-            return new ResponseEntity(HttpStatus.OK);
-        }
-        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    public Map<String,Object> login(@RequestBody UserRequest request, HttpSession session) {
+            Map<String, Object> resultMap = new HashMap<>();
+            User loginuser = userService.login(request.getUserId(), request.getUser_password());
+            if(loginuser!=null){
+                session.setAttribute("loginUser", loginuser);
+                resultMap.put("status", true);
+                resultMap.put("msg", "로그인성공");
+            }
+            else{
+                resultMap.put("status", false);
+                resultMap.put("msg", "로그인실패");
+            }
+            return resultMap;
     }
 
     @DeleteMapping("/delete/{userId}")

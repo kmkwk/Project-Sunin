@@ -1,6 +1,7 @@
 package com.ssafy.sunin.controller;
 
 import com.ssafy.sunin.domain.user.User;
+import com.ssafy.sunin.user.JwtTokenProvider;
 import com.ssafy.sunin.user.UserRequest;
 import com.ssafy.sunin.user.UserService;
 import io.swagger.annotations.ApiOperation;
@@ -8,9 +9,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -18,6 +23,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController {
 
+
+    private static final String SUCCESS = "success";
+    private static final String FAIL = "fail";
+    private final JwtTokenProvider jwtTokenProvider;
     private final UserService userService;
 
     @PostMapping("/signup")
@@ -30,14 +39,58 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    @ApiOperation(value="로그인 성고여부 반환")
-    public ResponseEntity login(@RequestBody UserRequest request) {
-//    	log.info("userId = {}, password = {}", request.getUser_email(), request.getUser_password());
-        if(userService.login(request.getUserId(), request.getUser_password()).equals("Success")) {
-            return new ResponseEntity(HttpStatus.OK);
+    @ApiOperation(value="로그인 성공여부 반환")
+    public ResponseEntity<Map<String, Object>> login(@RequestBody UserRequest request) {
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = null;
+        try {
+            User loginuser = userService.login(request.getUserId(), request.getUserPassword());
+//            System.out.println(loginuser.getUserId());
+            if(loginuser!=null){
+                String token = jwtTokenProvider.createToken(loginuser.getUserId(), loginuser.getRoles());
+                System.out.println(token);
+                resultMap.put("access-token", token);
+                resultMap.put("message", SUCCESS);
+                status =  HttpStatus.ACCEPTED;
+            }
+            else{
+                resultMap.put("message", FAIL);
+                status = HttpStatus.ACCEPTED;
+            }
         }
-        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        catch (Exception e){
+            resultMap.put("message", e.getMessage());
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+        return new ResponseEntity<Map<String,Object>>(resultMap, status);
+
+//    	if(userService.login(request.getUserId(), request.getUser_password()).equals("Success")) {
+//    		return new ResponseEntity(HttpStatus.OK);
+//    	}
+//    	return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
+
+
+    //소셜로그인 url ->PostMapping?
+
+    //http://localhost:8080/oauth2/authorization/naver
+    //http://localhost:8080/oauth2/authorization/google
+    //http://localhost:8080/oauth2/authorization/kakao
+
+
+    @ApiOperation(value="소셜 로그인 회원 프로필조회", notes="소셜 로그인한 회원의 정보를 조회합니다.")
+    @GetMapping("/profile/social")
+    public String user(Model model, Principal principal){
+
+        if(principal !=null){
+            model.addAttribute("user",principal.getName());
+        }
+
+//        log.info("사용자 이름 : "+principal.getName());
+        return "/user.html";
+    }
+
+
 
     @DeleteMapping("/delete/{userId}")
     @ApiOperation(value="회원탈퇴")

@@ -1,6 +1,9 @@
 package com.ssafy.sunin.config;
 
+import com.ssafy.sunin.user.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -40,6 +43,7 @@ public class SwaggerConfig {
                 .version("1.0.0")
                 .build();
     }
+
 
 
 

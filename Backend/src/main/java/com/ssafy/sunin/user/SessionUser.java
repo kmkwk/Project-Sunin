@@ -1,7 +1,8 @@
-package com.ssafy.sunin.security.dto;
+package com.ssafy.sunin.user;
 
 
-import com.ssafy.sunin.domain.user.SocialUser;
+
+import com.ssafy.sunin.domain.user.User;
 import lombok.Getter;
 
 import java.io.Serializable;
@@ -14,11 +15,9 @@ public class SessionUser implements Serializable {
 
     private String name;
     private String email;
-    private String picture;
 
-    public SessionUser(SocialUser user) {
-        this.name = user.getUserName();
+    public SessionUser(User user) {
+        this.name = user.getUsername();
         this.email = user.getUserEmail();
-        this.picture = user.getUserPicture();
     }
 }

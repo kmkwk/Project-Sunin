@@ -11,9 +11,9 @@ import lombok.Setter;
 @Setter
 public final class UserRequest {
     private String userId;
-    private String user_password;
-    private String user_name;
-    private String user_nickname;
-    private String user_tel;
-    private String user_address;
+    private String userPassword;
+    private String userName;
+    private String userNickname;
+    private String userTel;
+    private String userAddress;
 }

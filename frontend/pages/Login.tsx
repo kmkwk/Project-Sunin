@@ -17,7 +17,7 @@ export default function Login() {
   }
 
   const GoLogin = async() => {
-    const response = await fetch('/api/testpage', {
+    const response = await fetch('http://127.0.0.1:8000/accounts/api-token-auth/', {
       method: 'POST',
       body: JSON.stringify({ email, password }),
       headers: {

@@ -29,7 +29,7 @@ const Home: NextPage = () => {
   return (
     <>
       <Navbar />
-      <Grid columns={4} padded>
+      <Grid columns={4} padded stackable>
       <Grid.Column>
         <Menuvar />
       </Grid.Column>

@@ -1,9 +1,9 @@
-import Navbar from '../../src/component/Navbar';
-import Menubar from '../../src/component/Menubar';
+import Navbar from '../../../src/component/Navbar';
+import Menubar from '../../../src/component/Menubar';
 import { Grid, Image } from 'semantic-ui-react'
 import Axios from "axios"
 import { useEffect, useState } from 'react';
-import FeedList2 from '../../src/component/FeedList2';
+import FeedList2 from '../../../src/component/FeedList2';
 
 export default function company() {
   const [list, setList] = useState([]);
@@ -25,7 +25,7 @@ export default function company() {
   return (
     <>
       <Navbar />
-      <Grid columns={2} padded>
+      <Grid columns={2} padded stackable>
         <Grid.Column width={3}>
           <Menubar />
         </Grid.Column>

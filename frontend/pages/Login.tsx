@@ -5,8 +5,8 @@ import { useState } from "react";
 import styles from "../styles/Login.module.css"
 
 export default function Login() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
 
   const updateEmail = (event) => {
     setEmail(event.target.value)
@@ -17,19 +17,19 @@ export default function Login() {
   }
 
   const GoLogin = async() => {
-    const response = await fetch('http://127.0.0.1:8000/accounts/api-token-auth/', {
+    const response = await fetch('http://localhost:8080/user/login', {
       method: 'POST',
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ userId: email, userPassword: password }),
       headers: {
         'Content-Type': 'application/json'
       }
     })
     const data = await response.json
     console.log(email, password)
-    document.getElementsByTagName('input')[0].value = ''
-    document.getElementsByTagName('input')[1].value = ''
-    setEmail('')
-    setPassword('')
+    document.getElementsByTagName('input')[0].value = ""
+    document.getElementsByTagName('input')[1].value = ""
+    setEmail("")
+    setPassword("")
   }
 
   return (

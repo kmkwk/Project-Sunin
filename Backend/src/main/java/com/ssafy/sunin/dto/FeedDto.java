@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 public class FeedDto {
-    private ObjectId id;
+    private String id;
     private String userId;
     private String content;
     private List<String> hashtags;
@@ -21,9 +21,10 @@ public class FeedDto {
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
     private List<String> filePath;
+    private List<String> likeUser;
 
     @Builder
-    public FeedDto(ObjectId id, String userId, String content, List<String> hashtags, int likes, LocalDateTime createdDate, LocalDateTime modifiedDate, List<String> filePath) {
+    public FeedDto(String id, String userId, String content, List<String> hashtags, int likes, LocalDateTime createdDate, LocalDateTime modifiedDate, List<String> filePath,List<String> likeUser) {
         this.id = id;
         this.userId = userId;
         this.content = content;
@@ -32,10 +33,11 @@ public class FeedDto {
         this.createdDate = createdDate;
         this.modifiedDate = modifiedDate;
         this.filePath = filePath;
+        this.likeUser = likeUser;
     }
 
     @Builder
-    public FeedDto(ObjectId id, String userId, String content, List<String> hashtags, int likes, LocalDateTime createdDate, LocalDateTime modifiedDate) {
+    public FeedDto(String id, String userId, String content, List<String> hashtags, int likes, LocalDateTime createdDate, LocalDateTime modifiedDate) {
         this.id = id;
         this.userId = userId;
         this.content = content;

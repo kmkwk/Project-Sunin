@@ -80,7 +80,6 @@ test {
 def querydslSrcDir = "$buildDir/generated/querydsl"
 
 querydsl {
-	library = 'com.querydsl:querydsl-apt'
 	jpa = true
 	springDataMongo = true
 	querydslSourcesDir = querydslSrcDir

@@ -6,22 +6,20 @@ import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.ssafy.sunin.domain.FeedCollections;
-import com.ssafy.sunin.dto.FeedDto;
-import com.ssafy.sunin.dto.FeedVO;
+import com.ssafy.sunin.dto.*;
 import com.ssafy.sunin.repository.FeedRepository;
-import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
@@ -42,73 +40,6 @@ public class FeedServiceImpl implements FeedService {
     private String bucket;
 
     private final AmazonS3 amazonS3;
-
-    @Override
-    public List<FeedDto> getListFeed() {
-        return feedRepository.findAll()
-                .stream()
-                .map(feedCollections -> FeedDto.builder()
-                        .id(feedCollections.getId())
-                        .userId(feedCollections.getUserId())
-                        .content(feedCollections.getContent())
-                        .hashtags(feedCollections.getHashtags())
-                        .likes(feedCollections.getLikes())
-                        .createdDate(feedCollections.getCreatedDate())
-                        .modifiedDate(feedCollections.getLastModifiedDate())
-                        .build()).collect(Collectors.toList());
-    }
-
-    @Override
-    public FeedDto getFeed(String id) {
-        Optional<FeedCollections> list = feedRepository.findById(id);
-        FeedCollections feedCollections = list.get();
-
-        return FeedDto.builder()
-                .id(feedCollections.getId())
-                .userId(feedCollections.getUserId())
-                .hashtags(feedCollections.getHashtags())
-                .likes(feedCollections.getLikes())
-                .content(feedCollections.getContent())
-                .createdDate(feedCollections.getCreatedDate())
-                .modifiedDate(feedCollections.getLastModifiedDate())
-                .build();
-    }
-
-    @Override
-    public FeedDto updateFeed(FeedCollections feedCollections) {
-
-//        Query query = new Query(Criteria.where("_id").is(feedCollections.getId()));
-//        Update update = new Update();
-//        update.set("content", feedCollections.getContent());
-//        update.set("hashtags", feedCollections.getHashtags());
-//        mongoTemplate.updateFirst(query, update, "FeedCollections");
-        return FeedDto.builder()
-                .id(feedCollections.getId())
-                .userId(feedCollections.getUserId())
-                .hashtags(feedCollections.getHashtags())
-                .likes(feedCollections.getLikes())
-                .content(feedCollections.getContent())
-                .createdDate(feedCollections.getCreatedDate())
-                .modifiedDate(feedCollections.getLastModifiedDate())
-                .build();
-    }
-
-    @Override
-    public void deleteFeed(String id) {
-        Query query = new Query(Criteria.where("_id").is(id));
-        Update update = new Update();
-        update.set("flag", false);
-        mongoTemplate.updateFirst(query, update, "FeedCollections");
-    }
-
-    @Override
-    public FeedDto userFeed(String userId) {
-        return null;
-    }
-
-    /*
-    파일 입출력
-     */
 
     @Override
     public FeedDto writeImageFeed(FeedVO feedVO) {
@@ -143,7 +74,7 @@ public class FeedServiceImpl implements FeedService {
         ObjectId id = feedRepository.save(feedCollections).getId();
 
         return FeedDto.builder()
-                .id(id)
+                .id(id.toString())
                 .userId(feedCollections.getUserId())
                 .content(feedCollections.getContent())
                 .likes(feedCollections.getLikes())
@@ -155,18 +86,182 @@ public class FeedServiceImpl implements FeedService {
     }
 
     @Override
-    public FeedCollections getUserListFeed(String userId) {
-        return feedRepository.findByUserId(userId);
-//                .stream()
-//                .map(feedCollections -> FeedDto.builder()
-//                        .id(feedCollections.getId())
-//                        .userId(feedCollections.getUserId())
-//                        .content(feedCollections.getContent())
-//                        .hashtags(feedCollections.getHashtags())
-//                        .likes(feedCollections.getLikes())
-//                        .createdDate(feedCollections.getCreatedDate())
-//                        .modifiedDate(feedCollections.getLastModifiedDate())
-//                        .build()).collect(Collectors.toList());
+    public FeedDto getDetailFeed(String id) {
+        Optional<FeedCollections> feed = feedRepository.findById(new ObjectId(String.valueOf(id)));
+        FeedCollections feedCollections = feed.get();
+
+        return FeedDto.builder()
+                .id(feedCollections.getId().toString())
+                .userId(feedCollections.getUserId())
+                .hashtags(feedCollections.getHashtags())
+                .likes(feedCollections.getLikes())
+                .createdDate(feedCollections.getCreatedDate())
+                .modifiedDate(feedCollections.getLastModifiedDate())
+                .filePath(feedCollections.getFilePath())
+                .content(feedCollections.getContent())
+                .build();
+    }
+
+    @Override
+    public List<FeedDto> getUserListAllFeed(String userId) {
+        return feedRepository.findAllByUserId(userId)
+                .stream()
+                .map(feedCollections -> FeedDto.builder()
+                        .id(feedCollections.getId().toString())
+                        .userId(feedCollections.getUserId())
+                        .content(feedCollections.getContent())
+                        .hashtags(feedCollections.getHashtags())
+                        .likes(feedCollections.getLikes())
+                        .createdDate(feedCollections.getCreatedDate())
+                        .modifiedDate(feedCollections.getLastModifiedDate())
+                        .build()).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<FeedDto> getCompanyListAllFeed(String companyId) {
+        return feedRepository.findAllByUserId(companyId)
+                .stream()
+                .map(feedCollections -> FeedDto.builder()
+                        .id(feedCollections.getId().toString())
+                        .userId(feedCollections.getUserId())
+                        .content(feedCollections.getContent())
+                        .hashtags(feedCollections.getHashtags())
+                        .likes(feedCollections.getLikes())
+                        .createdDate(feedCollections.getCreatedDate())
+                        .modifiedDate(feedCollections.getLastModifiedDate())
+                        .build()).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<FeedDto> getListAllFeed() {
+        return feedRepository.findAll()
+                .stream()
+                .map(feedCollections -> FeedDto.builder()
+                        .id(feedCollections.getId().toString())
+                        .userId(feedCollections.getUserId())
+                        .content(feedCollections.getContent())
+                        .hashtags(feedCollections.getHashtags())
+                        .likes(feedCollections.getLikes())
+                        .createdDate(feedCollections.getCreatedDate())
+                        .modifiedDate(feedCollections.getLastModifiedDate())
+                        .build()).collect(Collectors.toList());
+    }
+
+    @Override
+    public FeedDto updateFeed(FeedCollections feedCollections) {
+        Query query = new Query(Criteria.where("_id").is(feedCollections.getId()));
+        Update update = new Update();
+        LocalDateTime lt = LocalDateTime.now();
+        update.set("content", feedCollections.getContent());
+        update.set("hashtags", feedCollections.getHashtags());
+        update.set("modifiedDate",lt);
+        mongoTemplate.updateMulti(query, update, FeedCollections.class);
+
+        return FeedDto.builder()
+                .id(feedCollections.getId().toString())
+                .userId(feedCollections.getUserId())
+                .hashtags(feedCollections.getHashtags())
+                .likes(feedCollections.getLikes())
+                .content(feedCollections.getContent())
+                .createdDate(feedCollections.getCreatedDate())
+                .modifiedDate(lt)
+                .build();
+    }
+
+    @Override
+    public void deleteFeed(String id) {
+        Query query = new Query(Criteria.where("_id").is(id));
+        Update update = new Update();
+        update.set("flag", false);
+        update.set("modifiedDate",LocalDateTime.now());
+        mongoTemplate.updateFirst(query, update, FeedCollections.class);
+    }
+
+    // Todo : 나의 팔로워 피드 조회
+    // 내 userid 기준으로 팔로워 되있는 사람들 보여줌
+    @Override
+    public List<FeedDto> getFollwerFeed(String userId) {
+        return null;
+    }
+
+    // Todo : 최신 선택 피드 조회
+    // created 기준으로 내림차순해서 보여줌
+    @Override
+    public List<FeedDto> getLatestFeed(FeedList feedList) {
+        List<FeedCollections> feed = feedRepository.getLatestFeed(feedList);
+        return feed.stream()
+                .map(feedCollections -> FeedDto.builder()
+                        .id(feedCollections.getId().toString())
+                        .userId(feedCollections.getUserId())
+                        .content(feedCollections.getContent())
+                        .likes(feedCollections.getLikes())
+                        .filePath(feedCollections.getFilePath())
+                        .hashtags(feedCollections.getHashtags())
+                        .createdDate(feedCollections.getCreatedDate())
+                        .modifiedDate(feedCollections.getLastModifiedDate())
+                        .build()).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<FeedDto> getPageLatestFeed(Pageable pageable) {
+        Page<FeedCollections> feed = feedRepository.findAll(pageable);
+        return feed.stream()
+                .map(feedCollections -> FeedDto.builder()
+                        .id(feedCollections.getId().toString())
+                        .userId(feedCollections.getUserId())
+                        .content(feedCollections.getContent())
+                        .likes(feedCollections.getLikes())
+                        .filePath(feedCollections.getFilePath())
+                        .hashtags(feedCollections.getHashtags())
+                        .createdDate(feedCollections.getCreatedDate())
+                        .modifiedDate(feedCollections.getLastModifiedDate())
+                        .build()).collect(Collectors.toList());
+    }
+
+    // Todo : 좋아요순 선택 피드 조회
+    // 좋아요 내림차순으로 보여줌
+    @Override
+    public List<FeedDto> getLikeFeed(FeedList feedList) {
+        List<FeedCollections> feed = feedRepository.getLikeFeed(feedList);
+        return feed.stream()
+                .map(feedCollections -> FeedDto.builder()
+                        .id(feedCollections.getId().toString())
+                        .userId(feedCollections.getUserId())
+                        .content(feedCollections.getContent())
+                        .likes(feedCollections.getLikes())
+                        .filePath(feedCollections.getFilePath())
+                        .hashtags(feedCollections.getHashtags())
+                        .createdDate(feedCollections.getCreatedDate())
+                        .modifiedDate(feedCollections.getLastModifiedDate())
+                        .build()).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<FeedDto> getPageLikeFeed(FeedPage feedPage) {
+        Page<FeedCollections> feed = feedRepository.findAll(feedPage.getPageable());
+        return feed.stream()
+                .map(feedCollections -> FeedDto.builder()
+                        .id(feedCollections.getId().toString())
+                        .userId(feedCollections.getUserId())
+                        .content(feedCollections.getContent())
+                        .likes(feedCollections.getLikes())
+                        .filePath(feedCollections.getFilePath())
+                        .hashtags(feedCollections.getHashtags())
+                        .createdDate(feedCollections.getCreatedDate())
+                        .modifiedDate(feedCollections.getLastModifiedDate())
+                        .build()).collect(Collectors.toList());
+    }
+
+    @Override
+    public FeedDto likeFeed(FeedLike feedLike) {
+        return null;
+    }
+
+    @Override
+    public String commitSunin(String userId) {
+        Query query = new Query(Criteria.where("userId").is(userId));
+        Update update = new Update();
+        return null;
     }
 
     @Override

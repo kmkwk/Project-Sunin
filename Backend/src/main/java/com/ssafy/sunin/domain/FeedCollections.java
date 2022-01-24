@@ -32,6 +32,8 @@ public class FeedCollections{
     @Column(name = "likes")
     private int likes;
 
+    private List<String> likeUser = new ArrayList<>();
+
     @CreatedDate
     private LocalDateTime createdDate;
 

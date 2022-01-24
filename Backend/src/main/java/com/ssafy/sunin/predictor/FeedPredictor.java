@@ -18,6 +18,13 @@ public class FeedPredictor {
         return this;
     }
 
+    public FeedPredictor id(String id){
+        if(!ObjectUtils.isEmpty(id)){
+            builder.and(feedCollections.userId.eq(id));
+        }
+        return this;
+    }
+
     public Predicate values(){
         return (Predicate) builder.getValue();
     }

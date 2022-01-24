@@ -1,6 +1,5 @@
 package com.ssafy.sunin.config;
 
-
 import com.ssafy.sunin.domain.user.Role;
 import com.ssafy.sunin.security.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
@@ -8,7 +7,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-
 
 @RequiredArgsConstructor
 @EnableWebSecurity
@@ -37,6 +35,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity webSecurity) {
-        webSecurity.ignoring().mvcMatchers("/feed/**");
+//        webSecurity.ignoring().mvcMatchers("/feed/**");
     }
 }

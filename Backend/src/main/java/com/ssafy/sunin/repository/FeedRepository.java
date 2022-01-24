@@ -1,10 +1,14 @@
 package com.ssafy.sunin.repository;
 
 import com.ssafy.sunin.domain.FeedCollections;
-import com.ssafy.sunin.dto.FeedDto;
+import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.mongodb.repository.Query;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 
-public interface FeedRepository extends MongoRepository<FeedCollections,String>{
+import java.util.List;
+import java.util.Optional;
 
+public interface FeedRepository extends MongoRepository<FeedCollections,String>,
+                                        QuerydslPredicateExecutor<FeedCollections>,
+                                        FeedRepositoryWrapper{
 }

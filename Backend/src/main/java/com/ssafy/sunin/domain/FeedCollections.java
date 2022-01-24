@@ -20,9 +20,9 @@ public class FeedCollections{
 
     @Id
     @Column(name = "_id")
-    private String id;
+    private ObjectId id;
 
-    @Column(name = "userid")
+    @Column(name = "userId")
     private String userId;
 
     private String content;
@@ -38,16 +38,24 @@ public class FeedCollections{
     @LastModifiedDate
     private LocalDateTime lastModifiedDate;
 
-//    private String fileName;
-//
-//    private String filePath;
-//
-//    private Long fileSize;
+    private List<String> filePath;
 
     private boolean flag;
 
     @Builder
-    public FeedCollections(String id, String userId, String content, List<String> hashtags, int likes) {
+    public FeedCollections(String userId, String content, List<String> hashtags, int likes, LocalDateTime createdDate, LocalDateTime lastModifiedDate, List<String> filePath, boolean flag) {
+        this.userId = userId;
+        this.content = content;
+        this.hashtags = hashtags;
+        this.likes = likes;
+        this.createdDate = createdDate;
+        this.lastModifiedDate = lastModifiedDate;
+        this.filePath = filePath;
+        this.flag = flag;
+    }
+
+    @Builder
+    public FeedCollections(ObjectId id, String userId, String content, List<String> hashtags, int likes) {
         this.id = id;
         this.userId = userId;
         this.content = content;

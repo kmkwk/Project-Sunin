@@ -5,6 +5,7 @@ import com.ssafy.sunin.domain.user.Role;
 import com.ssafy.sunin.security.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
@@ -22,7 +23,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //cross site를 disable처리
                 //authorizeRequests -> URL별 권한 관리 설정 옵션 시작점
                 //permitAll()은 antMatchers에 지정된 url들은 모두 열람할 수 있도록 권한 부여
-                .authorizeRequests().antMatchers("/", "/css/**", "/img/**", "/js/**", "/h2-console/**", "/api/v2/**","/swagger-ui.html").permitAll()
+                .authorizeRequests().antMatchers("/", "/css/**", "/img/**", "/js/**", "/h2-console/**", "/api/v2/**", "/swagger-ui.html").permitAll()
                 .antMatchers("/user.html").hasRole(Role.USER.name())
                 .anyRequest().authenticated().and()
                 //user라는 곳은 USER라는 권한이 있어야함
@@ -31,6 +32,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .oauth2Login()
                 .userInfoEndpoint()
                 .userService(customOAuth2UserService); //로그인 기능 설정 진입점, 소셜 로그인 성공 시 후속 조치 진행 Service 인터페이스 구현체 등록
+
     }
 
+    @Override
+    public void configure(WebSecurity webSecurity) {
+        webSecurity.ignoring().mvcMatchers("/feed/**");
+    }
 }

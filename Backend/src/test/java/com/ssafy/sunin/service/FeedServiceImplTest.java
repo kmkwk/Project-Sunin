@@ -26,7 +26,7 @@
 //        list.add("2번");
 //        list.add("3번");
 //        FeedCollections feedCollections = FeedCollections.builder()
-//                .id("sdfs")
+////                .id("sdfs")
 //                .userId("asdf")
 //                .likes(1)
 //                .hashtags(list)
@@ -37,7 +37,7 @@
 ////                .fileSize(10001)
 ////                .filePath("apㅁ")
 ////                .build();
-//        feedService.writeFeed(feedCollections);
+////        feedService.writeFeed(feedCollections);
 ////        feedService.writeFeed(feedCollections);
 ////        Optional<String> op = Optional.ofNullable(feedService.writeFeed(feedCollections));
 ////        System.out.println(op);

@@ -82,17 +82,33 @@ def querydslSrcDir = "$buildDir/generated/querydsl"
 querydsl {
 	jpa = true
 	springDataMongo = true
+	library = "com.querydsl:querydsl-apt"
 	querydslSourcesDir = querydslSrcDir
 }
 
-sourceSets {
-	main.java.srcDirs querydslSrcDir
+compileQuerydsl {
+	options.annotationProcessorPath = configurations.querydsl
 }
 
 configurations {
 	querydsl.extendsFrom compileClasspath
 }
 
-compileQuerydsl{
-	options.annotationProcessorPath = configurations.querydsl
+sourceSets {
+	main {
+		java {
+			srcDirs = ['src/main/java', querydslSrcDir]
+		}
+	}
+}
+
+task deleteGeneratedSources(type: Delete) {
+	delete file(querydslSrcDir)
+}
+
+tasks.withType(JavaCompile) { it.dependsOn('deleteGeneratedSources') }
+
+compileQuerydsl {
+	if(file(querydslSrcDir).exists() )
+		delete(file(querydslSrcDir))
 }

@@ -254,28 +254,7 @@ public class FeedServiceImpl implements FeedService {
 
     @Override
     public FeedDto likeFeed(FeedLike feedLike) {
-        Query query = new Query(Criteria.where("_id").is(feedLike.getId()));
-        Update update = new Update();
-        Optional<FeedCollections> list = feedRepository.findById(new ObjectId(String.valueOf(feedLike.getId())));
-        FeedCollections feedCollections = list.get();
-        int like = feedCollections.getLikes();
-        feedCollections.getLikeUser().add(feedLike.getUserId());
-        if (!feedLike.getUserId().contains(CharSequence.feedCollections.getLikeUser())){
-            update.set("likes", ++like);
-            update.set("likeUser",feedCollections.getLikeUser());
-        }else{
-            update.set("likes", --like);
-            feedCollections.getLikeUser().remove(feedLike.getUserId());
-            update.set("likeUser",feedCollections.getLikeUser());
-        }
-
-        mongoTemplate.updateFirst(query, update, FeedCollections.class);
-
-        return FeedDto.builder()
-                .id(feedLike.getId())
-                .userId(feedLike.getUserId())
-                .likeUser(feedCollections.getLikeUser())
-                .likes(like).build();
+        return null;
     }
 
     @Override

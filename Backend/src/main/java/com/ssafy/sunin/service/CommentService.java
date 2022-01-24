@@ -1,11 +1,12 @@
 package com.ssafy.sunin.service;
 
 import com.ssafy.sunin.domain.Comment;
+import com.ssafy.sunin.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
+import org.bson.types.ObjectId;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Order;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,11 +16,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CommentService {
 
-    private final MongoTemplate mongoTemplate;
+    private final CommentRepository commentRepository;
 
     public Comment findCommentById(int feedId, String commentId) {
-        Query query = new Query(Criteria.where("comment_feed_id").is(feedId).and("_id").is(commentId));
-        return mongoTemplate.findOne(query, Comment.class);
+        return commentRepository.findByFeedIdAndId(feedId, new ObjectId(commentId));
     }
 
     public Comment writeComment(int feedId, String writer, String content) {
@@ -28,47 +28,71 @@ public class CommentService {
                 .writer(writer)
                 .content(content)
                 .build();
-        return mongoTemplate.insert(comment);
-    }
+        commentRepository.insert(comment);
 
-    public Comment updateComment(String comment_id, String content) {
-        Query query = new Query(Criteria.where("_id").is(comment_id));
-        Update update = new Update();
-        update.set("comment_content", content);
-        update.set("comment_updated", true);
-        mongoTemplate.updateFirst(query, update, Comment.class);
+        comment.setGroup(comment.getId());
+        commentRepository.save(comment);
         return null;
     }
 
-    public Comment deleteComment(String comment_id) {
-        Query query = new Query(Criteria.where("_id").is(comment_id));
-        mongoTemplate.remove(query, Comment.class);
+    public Comment updateComment(String commentId, String content) {
+        Comment comment = commentRepository.findById(new ObjectId(commentId));
+        comment.setUpdated(true);
+        comment.setContent(content);
+        commentRepository.save(comment);
+        return null;
+    }
+
+    public Comment deleteComment(String commentId) {
+        Comment comment = commentRepository.findById(new ObjectId(commentId));
+        comment.setDeleted(true);
+        commentRepository.save(comment);
+        return null;
+    }
+
+    public Comment writeReply(int feedId, String commentId, String writer, String content) {
+        Comment rootComment = commentRepository.findByFeedIdAndId(feedId, new ObjectId(commentId));
+        Comment comment = Comment.builder()
+                .feedId(feedId)
+                .writer(writer)
+                .content(content)
+                .build();
+
+        comment.setGroup(rootComment.getGroup());
+        comment.setOrder(comment.getOrder()+1);
+
+        commentRepository.save(comment);
         return null;
     }
 
     public List<Comment> findCommentsByFeed(int feedId) {
-        Query query = new Query(Criteria.where("comment_feed_id").is(feedId));
-        return mongoTemplate.find(query, Comment.class);
+        List<Order> orders = new ArrayList<>();
+        orders.add(new Order(Direction.ASC, "group"));
+        orders.add(new Order(Direction.ASC, "order"));
+        List<Comment> list = commentRepository.findByFeedId(feedId, Sort.by(orders));
+
+        return list;
     }
 
-    public int countCommentsByFeed(int feedId) {
-        Query query = new Query(Criteria.where("comment_feed_id").is(feedId));
-        return mongoTemplate.find(query, Comment.class).size();
+    public long countCommentsByFeed(int feedId) {
+        return commentRepository.countByFeedId(feedId);
     }
 
-    public List<Comment> loadAllComment() {
-        return mongoTemplate.findAll(Comment.class);
-    }
+    /*
+    * 개발용
+    * */
+    public List<String> loadAllComment() {
+        List<Order> orders = new ArrayList<>();
+        orders.add(new Order(Direction.ASC, "group"));
+        orders.add(new Order(Direction.ASC, "order"));
+        List<Comment> list = commentRepository.findAll(Sort.by(orders));
 
-    public List<String> loadAllObjectId() {
-        List<Comment> list = mongoTemplate.findAll(Comment.class);
         List<String> result = new ArrayList<>();
-        for(Comment now : list) {
-            result.add("ObjectID : " + now.getId()
-                    + ", 내용 : " + now.getContent()
-                    + ", 작성자 : " + now.getWriter()
-                    + ", 수정여부 : " + now.isUpdated());
-        }
+        for(Comment now : list) result.add(now.toString());
         return result;
+    }
+
+    public void resetComments() {
+        commentRepository.deleteAll();
     }
 }

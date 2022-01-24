@@ -4,8 +4,12 @@ import com.ssafy.sunin.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 
+import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -27,14 +31,16 @@ public class UserService{
         return "Success";
     }
 
-    public String login(String userId, String user_password) {
-        Optional<User> user = UserRepository.findByUserId(userId);
+    public User login(String userId, String user_password) {
+        Optional<User> userfind = UserRepository.findByUserId(userId);
 //    	log.info("db password = {}, input password = {}", user.get().getUser_password(), user_password);
-        if(user.get().getUser_password().equals(user_password)) {
-            return "Success";
+        if(userfind.get().getUser_password().equals(user_password)) {
+            User user = UserRepository.findByUserId(userId).orElseThrow();
+            return user;
         }
-        return "Failed";
+        return null;
     }
+
     public String deleteUser(String userId) {
         UserRepository.delete(UserRepository.findByUserId(userId).orElseThrow(RuntimeException::new));
         return "Success";

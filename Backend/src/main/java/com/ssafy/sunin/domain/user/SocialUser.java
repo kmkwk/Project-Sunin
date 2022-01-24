@@ -20,6 +20,7 @@ public class SocialUser extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="user_id")
+
     private Long userId; //id
 
     @Column(nullable = false, name="user_name")
@@ -38,6 +39,7 @@ public class SocialUser extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     @Column(name="user_social")
     private Social social; //플랫폼
+
 
     @Builder
     public SocialUser(String userName, String userEmail, String userPicture, Role role, Social social){

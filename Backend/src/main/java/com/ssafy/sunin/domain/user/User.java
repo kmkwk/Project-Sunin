@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long no;
+    private long incre;
 
     @Column(length =45, unique = true)
     private String userId;

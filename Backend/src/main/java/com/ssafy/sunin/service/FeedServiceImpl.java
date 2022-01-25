@@ -23,11 +23,10 @@ import org.springframework.web.server.ResponseStatusException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.ssafy.sunin.domain.user.QUser.user;
 
 @Service
 @RequiredArgsConstructor
@@ -254,7 +253,30 @@ public class FeedServiceImpl implements FeedService {
 
     @Override
     public FeedDto likeFeed(FeedLike feedLike) {
-        return null;
+        Query query = new Query(Criteria.where("_id").is(feedLike.getId()));
+        Update update = new Update();
+        Optional<FeedCollections> user = feedRepository.findById(new ObjectId(String.valueOf(feedLike.getId())));
+        FeedCollections feedCollections = user.get();
+        Map<String,Object> users = new HashMap<>();
+        users.putAll(feedCollections.getLikeUser());
+        int like = feedLike.getLikes();
+        // 좋아요 누른상태
+        if(users.containsKey(feedLike.getUser())){
+            users.remove(feedLike.getUser());
+            update.set("likes", --like);
+        }else{
+            users.put(feedLike.getUser(),true);
+            update.set("likes", ++like);
+        }
+        update.set("likeUser",users);
+
+        mongoTemplate.upsert(query,update,FeedCollections.class);
+
+        return FeedDto.builder()
+                .id(feedLike.getId())
+                .userId(feedLike.getUser())
+                .likeUser(users)
+                .likes(like).build();
     }
 
     @Override

@@ -19,36 +19,37 @@ import java.util.stream.Collectors;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class User implements UserDetails {
+public class CompanyUser implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long no;
 
-    @Column(length =45, unique = false)
-    private String userEmail;
+    @Column(length =45, unique = true)
+    private String companyId;
 
-    @Column(length =1000, nullable = true)
-    private String userPassword;
+    @Column(length =1000, nullable = false)
+    private String companyPassword;
 
-    @Column(length =45, nullable = true)
-    private String userName;
+    @Column(length =45, nullable = false)
+    private String companyName;
 
-    @Column(length =45, nullable = true)
-    private String userNickname;
+    @Column(length =45, nullable = false)
+    private String companyNickname;
 
-    @Column(length =45, nullable = true)
-    private String userTel;
+    @Column(length =45, nullable = false)
+    private String companyTel;
 
-    @Column(length =45, nullable = true)
-    private String userAddress;
-
+    @Column(length =45, nullable = false)
+    private String companyAddress;
 
     @Enumerated(EnumType.STRING)
     @Column(name="user_role")
     private Role role; //권한
 
-
     private LocalDateTime createdDatetime;
+
+    @Column()
+    private boolean approval;
 
     @PrePersist //디비에 insert 되기직전에 실행
     public void created_datetime() {
@@ -71,12 +72,12 @@ public class User implements UserDetails {
 
     @Override
     public String getPassword() {
-        return userPassword;
+        return companyPassword;
     }
 
     @Override
     public String getUsername() {
-        return userEmail;
+        return companyId;
     }
 
     @Override
@@ -98,13 +99,5 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-    public User update(String userName){
-        this.userName = userName;
-        return this;
-    }
-    public String getRoleKey(){
-        return this.role.getKey();
-    }
-
 
 }

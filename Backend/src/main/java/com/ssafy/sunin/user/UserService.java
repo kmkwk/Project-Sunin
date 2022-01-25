@@ -1,5 +1,6 @@
 package com.ssafy.sunin.user;
 
+import com.ssafy.sunin.domain.user.Role;
 import com.ssafy.sunin.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,31 +21,32 @@ public class UserService{
 
     public String signup(UserRequest request){
         userRepository.save(User.builder()
-                .userId(request.getUserId())
+                .userEmail(request.getUserEmail())
 //				.userPassword(passwordEncoder.encode(request.getUserPassword()))
                 .userPassword(request.getUserPassword())
                 .userName(request.getUserName())
                 .userNickname(request.getUserNickname())
                 .userTel(request.getUserTel())
                 .userAddress(request.getUserAddress())
+                .role(Role.USER)
                 .build());
         return "Success";
     }
 
     public User login(String userId, String user_password) {
-        Optional<User> userfind = userRepository.findByUserId(userId);
+        Optional<User> userfind = userRepository.findByUserEmail(userId);
 //    	log.info("db password = {}, input password = {}", user.get().getUser_password(), user_password);
         if(userfind.get().getUserPassword().equals(user_password))
 //		if(!passwordEncoder.matches(userfind.get().getUserPassword(),(user_password)))
         {
-            User user = userRepository.findByUserId(userId).orElseThrow();
+            User user = userRepository.findByUserEmail(userId).orElseThrow();
             return user;
         }
         return null;
     }
 
     public String deleteUser(String userId) {
-        userRepository.delete(userRepository.findByUserId(userId).orElseThrow(RuntimeException::new));
+        userRepository.delete(userRepository.findByUserEmail(userId).orElseThrow(RuntimeException::new));
         return "Success";
     }
 
@@ -53,12 +55,12 @@ public class UserService{
     }
 
     public User detailUser(String userId) {
-        User user = userRepository.findByUserId(userId).orElseThrow();
+        User user = userRepository.findByUserEmail(userId).orElseThrow();
         return user;
     }
 
     public String updateUser(UserRequest request) {
-        Optional<User> user = userRepository.findByUserId(request.getUserId());
+        Optional<User> user = userRepository.findByUserEmail(request.getUserEmail());
         user.ifPresent(selectUser->{
             selectUser.setUserPassword(request.getUserPassword());
             selectUser.setUserName(request.getUserName());

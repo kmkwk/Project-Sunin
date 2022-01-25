@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { Grid, Divider, Button, Icon, Image, Item } from 'semantic-ui-react'
+import React, { useEffect, useState } from 'react'
+import { Grid, Divider, Button, Icon, Image, Item, Modal, Header } from 'semantic-ui-react'
 import Navbar from '../../src/component/Navbar'
 import Menubar from '../../src/component/Menubar';
 import Axios from "axios"
@@ -8,9 +8,13 @@ import ProfileList from '../../src/component/ProfileList'
 
 export default function profileperson() {
 
+  let [글제목, 글제목변경] = useState([]); 
+  let [입력값, 입력값변경] = useState('');
+
 const [list, setList] = useState([]);
 const paragraph = <Image src='https://react.semantic-ui.com/images/wireframe/short-paragraph.png' />;
 const API_URL = "http://makeup-api.herokuapp.com/api/v1/products.json?brand=maybelline";
+const [open, setOpen] = React.useState(false)
 
 function getData() {
   Axios.get(API_URL)
@@ -19,6 +23,7 @@ function getData() {
     setList(res.data)
   })
 }
+
 
 
 useEffect(()=>{
@@ -50,9 +55,42 @@ return (
         
         <Item.Description>{paragraph}</Item.Description>
         <Item.Extra>
-          <Button basic floated='right'>
-            Edit
-          </Button>
+        <Modal 
+      onClose={() => setOpen(false)}
+      onOpen={() => setOpen(true)}
+      open={open}
+      trigger={<Button>Edit</Button>}
+    >
+      <Modal.Header>My Profile</Modal.Header>
+      <Modal.Content image>
+        <Image size='medium' src='https://react.semantic-ui.com/images/wireframe/image.png' wrapped />
+        <Modal.Description>
+          <Header>프로필을 저장하시겠습니까?</Header>
+          <div className='publish'>
+      <input onChange={ (e)=>{ 입력값변경(e.target.value) } } />
+      <button onClick={ ()=>{
+        var arrayCopy = [...글제목];
+        arrayCopy.unshift(입력값);
+        글제목변경( arrayCopy );
+      } }>저장</button>
+    </div>
+         
+        </Modal.Description>
+      </Modal.Content>
+      <Modal.Actions>
+
+      <Button color='grey' onClick={() => setOpen(false)}>
+          취소
+        </Button>
+          <Button
+          content="저장"
+          labelPosition='취소'
+          icon='checkmark'
+          onClick={() => setOpen(false)}
+          positive
+        />
+      </Modal.Actions>
+    </Modal>
           
         </Item.Extra>
         <span className='cinema'>
@@ -63,6 +101,7 @@ return (
     </Item>
     </Item.Group>
     </div>
+    
     <Divider />
       <ProfileList list={list} />
     </Grid.Column>

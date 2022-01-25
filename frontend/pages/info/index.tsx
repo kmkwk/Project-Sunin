@@ -3,6 +3,7 @@ import { Grid, Header, Divider, Form, Button } from 'semantic-ui-react'
 import styles from "../../styles/signup.module.css"
 import Navbar from '../../src/component/Navbar'
 import Menubar from '../../src/component/Menubar'
+import Link from 'next/link'
 
 
 const HeaderExampleContent = () => (
@@ -32,7 +33,9 @@ const HeaderExampleContent = () => (
     </Form>
     </div>
     <div className={ styles.buttonalign }>
+    <Link href="info/person">
     <Button type='submit'>확인</Button>
+    </Link>
     </div>          
         </Grid.Column>
       </Grid>

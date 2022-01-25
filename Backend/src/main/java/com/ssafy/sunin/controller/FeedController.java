@@ -18,6 +18,7 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -155,11 +156,11 @@ public class FeedController {
     }
 
     // Todo : 좋아요 기능
-    @ApiOperation(value = "좋아요 증가")
+    @ApiOperation(value = "좋아요 증가 감소")
     @PutMapping("/like")
     public ResponseEntity<FeedDto> likeFeed(FeedLike feedLike){
         log.debug("likeFeed");
-        feedService.likeFeed(feedLike);
+        System.out.println("좋아요 누른 사람"+ feedLike.getUser());
 
         return ResponseEntity.ok(feedService.likeFeed(feedLike));
     }

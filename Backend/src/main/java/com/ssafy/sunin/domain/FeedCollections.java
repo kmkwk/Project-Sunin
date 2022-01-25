@@ -8,9 +8,12 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
 import javax.persistence.Column;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Document("feed")
 @ApiModel(value = "피드", description = "피드 정보 클래스")
@@ -32,7 +35,8 @@ public class FeedCollections{
     @Column(name = "likes")
     private int likes;
 
-    private List<String> likeUser = new ArrayList<>();
+    @NotNull
+    private Map<String,Object> likeUser;
 
     @CreatedDate
     private LocalDateTime createdDate;

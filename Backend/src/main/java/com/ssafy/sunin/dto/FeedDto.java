@@ -8,6 +8,7 @@ import org.bson.types.ObjectId;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @NoArgsConstructor
@@ -21,10 +22,10 @@ public class FeedDto {
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
     private List<String> filePath;
-    private List<String> likeUser;
+    private Map<String,Object> likeUser;
 
     @Builder
-    public FeedDto(String id, String userId, String content, List<String> hashtags, int likes, LocalDateTime createdDate, LocalDateTime modifiedDate, List<String> filePath,List<String> likeUser) {
+    public FeedDto(String id, String userId, String content, List<String> hashtags, int likes, LocalDateTime createdDate, LocalDateTime modifiedDate, List<String> filePath,Map<String,Object> likeUser) {
         this.id = id;
         this.userId = userId;
         this.content = content;

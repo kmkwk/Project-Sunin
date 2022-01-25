@@ -1,7 +1,6 @@
 package com.ssafy.sunin.config;
 
 
-
 import com.ssafy.sunin.user.CustomOAuth2UserService;
 import com.ssafy.sunin.user.JwtAuthenticationFilter;
 import com.ssafy.sunin.user.JwtTokenProvider;
@@ -24,9 +23,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final CustomOAuth2UserService customOAuth2UserService; //만들어둔 customOAuth2UserService을 연결
 
 
-
     private final JwtTokenProvider jwtTokenProvider;
-
 
 
 //    @Bean
@@ -62,7 +59,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //    }
 
 
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
@@ -86,5 +82,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         webSecurity.ignoring().mvcMatchers("/user/**");
     }
 
-    }
 }
+

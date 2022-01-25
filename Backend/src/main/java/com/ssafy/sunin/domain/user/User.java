@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Entity
@@ -21,14 +20,9 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @NoArgsConstructor
 public class User implements UserDetails {
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long incre;
-
-    @Column(length =45)
-    private String userId;
+    private long no;
 
     @Column(length =45, unique = false)
     private String userEmail;
@@ -82,7 +76,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return userId;
+        return userEmail;
     }
 
     @Override

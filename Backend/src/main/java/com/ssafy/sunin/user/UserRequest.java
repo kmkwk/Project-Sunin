@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public final class UserRequest {
-    private String userId;
+    private String userEmail;
     private String userPassword;
     private String userName;
     private String userNickname;

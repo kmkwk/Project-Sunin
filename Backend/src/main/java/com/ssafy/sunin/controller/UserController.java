@@ -44,10 +44,10 @@ public class UserController {
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
         try {
-            User loginuser = userService.login(request.getUserId(), request.getUserPassword());
+            User loginuser = userService.login(request.getUserEmail(), request.getUserPassword());
 //            System.out.println(loginuser.getUserId());
             if(loginuser!=null){
-                String token = jwtTokenProvider.createToken(loginuser.getUserId(), loginuser.getRoles());
+                String token = jwtTokenProvider.createToken(loginuser.getUserEmail(), loginuser.getRoles());
                 System.out.println(token);
                 resultMap.put("access-token", token);
                 resultMap.put("message", SUCCESS);

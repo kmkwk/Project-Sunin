@@ -1,6 +1,8 @@
 package com.ssafy.sunin.user;
 
 import com.ssafy.sunin.domain.user.CompanyUser;
+import com.ssafy.sunin.domain.user.Role;
+import com.ssafy.sunin.repository.CompanyUserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,6 +27,7 @@ public class CompanyUserService {
                 .companyNickname(request.getCompanyNickname())
                 .companyTel(request.getCompanyTel())
                 .companyAddress(request.getCompanyAddress())
+                .role(Role.USER)
                 .build());
         return "Success";
     }

@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @NoArgsConstructor
 public class User implements UserDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long no;

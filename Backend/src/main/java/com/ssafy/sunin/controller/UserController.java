@@ -73,50 +73,12 @@ public class UserController {
 //    	return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
-//    @ApiOperation(value = "회원반환", notes = "회원 정보를 담은 Token을 반환한다.", response = Map.class)
-//    @GetMapping("/info/{userid}")
-//    public ResponseEntity<Map<String, Object>> getInfo(
-//            @PathVariable("userid") @ApiParam(value = "인증할 회원의 아이디.", required = true) String userid, HttpServletRequest request) {
-////        logger.debug("userid : {} ", userid);
-//        Map<String, Object> resultMap = new HashMap<>();
-//        HttpStatus status = HttpStatus.ACCEPTED;
-//        if(jwtTokenProvider.getUserPk(request.getHeader("access-token"))!=null){
-//            try {
-////                로그인 사용자 정보.
-//                User loginuser = userService.userInfo(userid);
-//                //MemberDto memberDto = memberService.userInfo(userid);
-//                resultMap.put("userInfo", loginuser);
-//                resultMap.put("message", SUCCESS);
-//                status = HttpStatus.ACCEPTED;
-//            } catch (Exception e) {
-//                resultMap.put("message", e.getMessage());
-//                status = HttpStatus.INTERNAL_SERVER_ERROR;
-//            }
-//        }else {
-//            resultMap.put("message", FAIL);
-//            status = HttpStatus.ACCEPTED;
-//        }
-//        return new ResponseEntity<Map<String, Object>>(resultMap, status);
-//    }
-
-
-
-
-
 
     //소셜로그인 url ->PostMapping?
 
     //http://localhost:8080/oauth2/authorization/naver
     //http://localhost:8080/oauth2/authorization/google
     //http://localhost:8080/oauth2/authorization/kakao
-
-
-//    @PostMapping("/social/singup/google")
-//    public ResponseEntity signup(@RequestBody UserRequest request){
-//       // 로그인했을대 토큰찍은걸 db에 넣고,,토큰을 들고다니면서 정보를
-//       //contextHolder에 넣어두고,, jwtToken ㄱ
-//    }
-
 
 
 

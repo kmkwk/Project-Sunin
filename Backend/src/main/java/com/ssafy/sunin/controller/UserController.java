@@ -22,7 +22,6 @@ import java.util.Map;
 public class UserController {
 
 
-
     private static final String SUCCESS = "success";
     private static final String FAIL = "fail";
     private final JwtTokenProvider jwtTokenProvider;

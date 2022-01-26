@@ -2,9 +2,9 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Card, CardContent, Icon, Grid, Image, Container, Header, Modal, Button } from 'semantic-ui-react'
-import Navbar from "../../../src/component/Navbar";
-import styles from '../../../styles/FeedPersonalDetail.module.css'
-import Menubar from "../../../src/component/Menubar"
+import Navbar from "../../../../src/component/Navbar";
+import styles from '../../../../styles/FeedPersonalDetail.module.css'
+import Menubar from "../../../../src/component/Menubar"
 import React from 'react'
 
 export default function Detail() {
@@ -33,6 +33,9 @@ export default function Detail() {
 
   function backToList() {
     return router.push('/feed/personal')
+  }
+  function changeContent() {
+    return router.push(`/feed/personal/${feedid}/edit`)
   }
 
   return (
@@ -100,6 +103,7 @@ export default function Detail() {
           </Grid.Column>
           <Grid.Column width={3}>
             <Button onClick={backToList}>뒤로가기</Button>
+            <Button onClick={changeContent}>글 수정하기</Button>
           </Grid.Column>
         </Grid.Row>
       </Grid>

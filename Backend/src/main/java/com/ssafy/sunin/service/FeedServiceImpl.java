@@ -6,8 +6,11 @@ import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.ssafy.sunin.domain.FeedCollections;
+import com.ssafy.sunin.domain.Follower;
 import com.ssafy.sunin.dto.*;
 import com.ssafy.sunin.repository.FeedRepository;
+import com.ssafy.sunin.repository.FollowerRepository;
+import com.ssafy.sunin.repository.FollowerRepositoryCustom;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,14 +29,13 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.ssafy.sunin.domain.user.QUser.user;
-
 @Service
 @RequiredArgsConstructor
 public class FeedServiceImpl implements FeedService {
 
     private final FeedRepository feedRepository;
     private final MongoTemplate mongoTemplate;
+    private final FollowerRepository followerRepository;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
@@ -147,12 +149,14 @@ public class FeedServiceImpl implements FeedService {
     }
 
     @Override
-    public FeedDto updateFeed(FeedCollections feedCollections) {
-        Query query = new Query(Criteria.where("_id").is(feedCollections.getId()));
+    public FeedDto updateFeed(FeedUpdate feedUpdate) {
+        Query query = new Query(Criteria.where("_id").is(feedUpdate.getId()));
         Update update = new Update();
+        Optional<FeedCollections> list = feedRepository.findById(feedUpdate.getId());
+        FeedCollections feedCollections  = list.get();
         LocalDateTime lt = LocalDateTime.now();
-        update.set("content", feedCollections.getContent());
-        update.set("hashtags", feedCollections.getHashtags());
+        update.set("content", feedUpdate.getContent());
+        update.set("hashtags", feedUpdate.getHashtags());
         update.set("modifiedDate",lt);
         mongoTemplate.updateMulti(query, update, FeedCollections.class);
 
@@ -161,7 +165,7 @@ public class FeedServiceImpl implements FeedService {
                 .userId(feedCollections.getUserId())
                 .hashtags(feedCollections.getHashtags())
                 .likes(feedCollections.getLikes())
-                .content(feedCollections.getContent())
+                .content(feedUpdate.getContent())
                 .createdDate(feedCollections.getCreatedDate())
                 .modifiedDate(lt)
                 .build();
@@ -179,7 +183,17 @@ public class FeedServiceImpl implements FeedService {
     // Todo : 나의 팔로워 피드 조회
     // 내 userid 기준으로 팔로워 되있는 사람들 보여줌
     @Override
-    public List<FeedDto> getFollwerFeed(String userId) {
+    public List<FeedDto> getFollwerFeed(Long id) {
+        // 나의 팔로워 리스트
+        // 현재 팔로워들의 닉네임 값들이 저장되어 있음
+        List<String> followers = followerRepository.getFollowingList(id);
+        System.out.println(followers);
+        // 이걸 가지고 몽고에서 게시글 조회하면됨
+        // 1. for문으로 할지?
+        // 2.
+        // 기준점을 만들어야될지? ex) 가장 최근에 팔로우 한 사람들 중 3명꺼만 - 어짜피 동일
+        List<FeedCollections> feedCollections = feedRepository.getFollowerFeed(followers);
+        System.out.println(feedCollections);
         return null;
     }
 

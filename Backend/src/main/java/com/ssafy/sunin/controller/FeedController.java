@@ -89,13 +89,12 @@ public class FeedController {
     // Todo : 피드 수정
     @ApiOperation(value = "피드 수정")
     @PutMapping
-    public ResponseEntity<FeedDto> updateFeed(@RequestBody FeedCollections feedCollections){
+    public ResponseEntity<FeedDto> updateFeed(@RequestBody FeedUpdate feedUpdate){
         log.info("updateFeed");
-        System.out.println(feedCollections);
-        if(ObjectUtils.isEmpty(feedCollections)){
+        if(ObjectUtils.isEmpty(feedUpdate)){
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(feedService.updateFeed(feedCollections));
+        return ResponseEntity.ok(feedService.updateFeed(feedUpdate));
 
     }
 

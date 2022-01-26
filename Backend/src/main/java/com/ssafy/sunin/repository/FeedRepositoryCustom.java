@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface FeedRepositoryCustom {
     // Todo: 나의 팔로워 피드 조회
-    List<FeedCollections> getFollowerFeed(String userId);
+    List<FeedCollections> getFollowerFeed(List<String> list);
 
     // Todo: 최근순 피드 조회
     List<FeedCollections> getLatestFeed(FeedList feedList);

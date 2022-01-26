@@ -8,6 +8,7 @@ import { Header, Menu, Grid } from 'semantic-ui-react'
 import Axios from "axios"
 import { useEffect, useState } from 'react';
 import SampleFeedList from '../src/component/SampleFeedList'
+import Searchbar from '../src/component/searchbar'
 
 const Home: NextPage = () => {
   const [list, setList] = useState([]);
@@ -17,7 +18,7 @@ const Home: NextPage = () => {
   function getData() {
     Axios.get(API_URL)
     .then(res => {
-      console.log(res.data)
+      // console.log(res.data)
       setList(res.data)
     })
   }
@@ -29,6 +30,7 @@ const Home: NextPage = () => {
   return (
     <>
       <Navbar />
+      <Searchbar />
       <Grid columns={4} padded stackable>
       <Grid.Column>
         <Menuvar />

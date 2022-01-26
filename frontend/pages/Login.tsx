@@ -3,10 +3,12 @@ import Link from 'next/link'
 import { Button, Form, Grid, Segment, Image } from 'semantic-ui-react'
 import { useState } from "react";
 import styles from "../styles/Login.module.css"
+import axios from "axios";
 
-export default function Login() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+export default function Login( props ) {
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  console.log(props)
 
   const updateEmail = (event) => {
     setEmail(event.target.value)
@@ -16,20 +18,34 @@ export default function Login() {
     setPassword(event.target.value)
   }
 
-  const GoLogin = async() => {
-    const response = await fetch('http://127.0.0.1:8000/accounts/api-token-auth/', {
-      method: 'POST',
-      body: JSON.stringify({ email, password }),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-    const data = await response.json
-    console.log(email, password)
-    document.getElementsByTagName('input')[0].value = ''
-    document.getElementsByTagName('input')[1].value = ''
-    setEmail('')
-    setPassword('')
+  // const GoLogin = async() => {
+  //   const response = await fetch('http://localhost:8080/user/login', {
+  //     method: 'POST',
+  //     body: JSON.stringify({ userId: email, userPassword: password }),
+  //     headers: {
+  //       'Content-Type': 'application/json'
+  //     }
+  //   })
+  //   const data = await response.json
+  //   console.log(email, password)
+  //   document.getElementsByTagName('input')[0].value = ""
+  //   document.getElementsByTagName('input')[1].value = ""
+  //   setEmail("")
+  //   setPassword("")
+  // }
+
+  function GoLogin() {
+    axios
+      .post("http://localhost:8080/user/login", {
+        userEmail: email,
+        userPassword: password,
+      })
+      .then(({ data }) => {
+        console.log(data);
+      })
+      .catch(() => {
+        console.warn("실패");
+      });
   }
 
   return (

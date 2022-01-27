@@ -33,7 +33,7 @@ public class UserService{
 
     public User login(String userId, String user_password) {
         Optional<User> userfind = UserRepository.findByUserId(userId);
-//    	log.info("db password = {}, input password = {}", user.get().getUser_password(), user_password);
+
         if(userfind.get().getUser_password().equals(user_password)) {
             User user = UserRepository.findByUserId(userId).orElseThrow();
             return user;

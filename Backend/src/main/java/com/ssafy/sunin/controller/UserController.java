@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("user")
 @RequiredArgsConstructor
@@ -24,29 +25,21 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/signup")
-    @ApiOperation(value="가입성공 여부에 따라 http상태로 반환해서 알려줌")
-    public ResponseEntity signup(@RequestBody UserRequest request) {
+    @ApiOperation(value="회원가입", notes="가입성공 여부에 따라 http상태로 반환해서 알려줌")
+    public ResponseEntity<String> signup(@RequestBody UserRequest request) {
         if(userService.signup(request).equals("Success")) {
-            return new ResponseEntity(HttpStatus.CREATED);
+            return new ResponseEntity<>("회원가입 성공", HttpStatus.CREATED);
         }
-        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("회원가입 실패", HttpStatus.OK);
     }
 
     @PostMapping("/login")
-    @ApiOperation(value="로그인 성고여부 반환")
-    public Map<String,Object> login(@RequestBody UserRequest request, HttpSession session) {
-            Map<String, Object> resultMap = new HashMap<>();
+    @ApiOperation(value="로그인", notes = "이메일과 비밀번호로 로그인을 시도합니다.")
+    public ResponseEntity<User> login(@RequestBody UserRequest request) {
             User loginuser = userService.login(request.getUserId(), request.getUser_password());
-            if(loginuser!=null){
-                session.setAttribute("loginUser", loginuser);
-                resultMap.put("status", true);
-                resultMap.put("msg", "로그인성공");
-            }
-            else{
-                resultMap.put("status", false);
-                resultMap.put("msg", "로그인실패");
-            }
-            return resultMap;
+
+            if(loginuser != null) return new ResponseEntity<>(loginuser, HttpStatus.OK);
+            return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
     @GetMapping("/logout")

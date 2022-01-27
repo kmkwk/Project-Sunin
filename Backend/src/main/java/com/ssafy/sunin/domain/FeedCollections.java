@@ -47,6 +47,10 @@ public class FeedCollections{
 
     private boolean flag;
 
+    public void setFilePath(List<String> filePath) {
+        this.filePath = filePath;
+    }
+
     public void setContent(String content) {
         this.content = content;
     }

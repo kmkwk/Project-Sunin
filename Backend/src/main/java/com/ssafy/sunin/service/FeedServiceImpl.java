@@ -16,7 +16,6 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
@@ -45,21 +44,23 @@ public class FeedServiceImpl implements FeedService {
     @Override
     public FeedDto writeImageFeed(FeedVO feedVO) {
         List<String> fileNameList = new ArrayList<>();
-        feedVO.getFiles().forEach(file -> {
-            String fileName = createFileName(file.getOriginalFilename());
-            ObjectMetadata objectMetadata = new ObjectMetadata();
-            objectMetadata.setContentLength(file.getSize());
-            objectMetadata.setContentType(file.getContentType());
+        if(feedVO.getFiles() != null){
+            feedVO.getFiles().forEach(file -> {
+                String fileName = createFileName(file.getOriginalFilename());
+                ObjectMetadata objectMetadata = new ObjectMetadata();
+                objectMetadata.setContentLength(file.getSize());
+                objectMetadata.setContentType(file.getContentType());
 
-            try(InputStream inputStream = file.getInputStream()) {
-                amazonS3.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
-                        .withCannedAcl(CannedAccessControlList.PublicRead));
-            } catch(IOException e) {
-                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패했습니다.");
-            }
+                try(InputStream inputStream = file.getInputStream()) {
+                    amazonS3.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
+                            .withCannedAcl(CannedAccessControlList.PublicRead));
+                } catch(IOException e) {
+                    throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패했습니다.");
+                }
 
-            fileNameList.add(String.format("https://sunin-bucket.s3.ap-northeast-2.amazonaws.com/%s",fileName));
-        });
+                fileNameList.add(String.format("https://sunin-bucket.s3.ap-northeast-2.amazonaws.com/%s",fileName));
+            });
+        }
 
         FeedCollections feedCollections = FeedCollections.builder()
                 .userId(feedVO.getUserId())
@@ -72,8 +73,10 @@ public class FeedServiceImpl implements FeedService {
                 .likeUser(new HashMap<>())
                 .filePath(fileNameList)
                 .build();
+
         ObjectId id = feedRepository.save(feedCollections).getId();
         suninDays(feedVO.getUserId());
+
         return FeedDto.builder()
                 .id(id.toString())
                 .userId(feedCollections.getUserId())
@@ -119,6 +122,7 @@ public class FeedServiceImpl implements FeedService {
         feedCollections.setContent(feedUpdate.getContent());
         feedCollections.setHashtags(feedUpdate.getHashtags());
         feedCollections.setLastModifiedDate(time);
+        feedCollections.setFilePath(feedCollections.getFilePath());
         feedRepository.save(feedCollections);
 
         return FeedDto.builder()

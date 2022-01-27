@@ -18,7 +18,6 @@ import java.util.List;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "incre")
     private long no;
 
     @Column(length =45, unique = true)
@@ -49,4 +48,3 @@ public class User {
         this.created_datetime = LocalDateTime.now();
     }
 }
-

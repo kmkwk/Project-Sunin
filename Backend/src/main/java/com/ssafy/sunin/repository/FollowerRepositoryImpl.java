@@ -3,6 +3,8 @@ package com.ssafy.sunin.repository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.sunin.domain.QFollower;
 import com.ssafy.sunin.domain.user.QUser;
+import com.ssafy.sunin.dto.FollowerRequest;
+
 import javax.persistence.EntityManager;
 import java.util.List;
 
@@ -17,17 +19,21 @@ public class FollowerRepositoryImpl implements FollowerRepositoryCustom {
     }
 
     @Override
+    public Long deleteFollower(FollowerRequest followerRequest) {
+        return null;
+    }
+
+    @Override
     public List<String> getFollowingList(Long id) {
         /*
         select user.user_nickname from follower
         join user on follower.follower_member = user.incre
         where follower.user_id = 1;
          */
-            return queryFactory
-                .select(qUser.user_nickname)
+        return queryFactory
+                .select(qUser.userNickname)
                 .from(qFollower)
                 .join(qFollower.followerMember, qUser)
-//                    .fetchJoin()
                 .where(qFollower.user.no.eq(id))
                 .distinct()
                 .fetch();

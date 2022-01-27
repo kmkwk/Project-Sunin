@@ -27,6 +27,15 @@ public class FollowerController {
         return ResponseEntity.ok(followerService.addFollower(followerRequest));
     }
 
+    @ApiOperation(value = "팔로워 삭제", notes = "userId: 현재 로그인중인 유저 id, follower_member: 팔로워할 멤버 id")
+    @DeleteMapping("/delete")
+    public ResponseEntity<Long> deleteFollower(FollowerRequest followerRequest){
+        log.debug("deleteFollower");
+        if(ObjectUtils.isEmpty(followerRequest)){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(followerService.deleteFollower(followerRequest));
+    }
     @ApiOperation(value = "팔로워 수 조회", notes = "유저 userId, 나의 팔로워 수 조회")
     @GetMapping("/follower")
     public ResponseEntity<Long> getFollowerCount(@RequestParam Long id){

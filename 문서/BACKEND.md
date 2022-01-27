@@ -60,3 +60,48 @@ persistence Context는 크게
 4. @Column : 테이블의 칼럼을 나타내며 선언하지 않아도 해당 클래스의 필드는 모두 칼럼이 된다.
 5. @NoArgsConstructor : 기본생성자를 자동으로 추가한다.
 6. @Getter : 클래스 내 모든 필드의 Getter 메소드를 자동생성한다.
+
+
+
+### Springboot OAuth2 소셜로그인 구현
+
+스프링 시큐리티는 인증과 인가 기능을 가진 프레임워크이다.
+
+1. 구글 서비스 or 네이버 서비스 등록
+- 신규서비스를 생성하고 발급된 인증 정보를 활용한다.
+
+2. User 정보가 들어가는 Dao 만들기
+- 사용자 정보를 담당할 도메인을 생성한다.
+
+2-1) application.yml 설정
+
+
+```
+> spring:
+>   application:
+>     name: oauth2
+>   jpa:
+>     hibernate:
+>       use-new-id-generator-mappings: true
+>     properties:
+>       hibernate:
+>         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+>         show_sql: true
+>         format_sql: true
+>     show-sql: true
+```
+
+
+2-2) build.gradle에 스프링 시큐리티 관련 의존성을 추가한다.
+
+`implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'`
+
+
+3. OAuth2 서비스 만들기
+
+- CustomOAuth2UserService 클래스를 생성한다. 로그인 이후 가져온 사용자의 정보들을 기반으로 가입 및 세션저장을 지원한다.
+
+4. SpringSecurity 설정
+5. application.yml에서 oauth설정
+
+

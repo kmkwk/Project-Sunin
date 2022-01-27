@@ -1,4 +1,13 @@
 spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  application:
+    name: oauth2
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017
+      database: sunin
   security:
     user:
       name: ssafy
@@ -9,13 +18,20 @@ spring:
     password: ssafy
   jpa:
     hibernate:
-      ddl-auto: create # 유의해주세요!!
+      ddl-auto: none # 유의해주세요!!
+      use-new-id-generator-mappings: true
+    show-sql: true
     properties:
       hibernate:
-        show_sql: true
-        format_sql: true
-logging.level:
-  org.springframework: debug
-  org.springframework.web: debug
-  org.hibernate.SQL: debug
-  org.hibernate.type: trace
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+  thymeleaf:
+    cache: false
+  profiles:
+    include:
+      - oauth
+      - aws
+      - credentials
+
+logging:
+  level.org.springframework: debug
+  level.org.springframework.web: debug

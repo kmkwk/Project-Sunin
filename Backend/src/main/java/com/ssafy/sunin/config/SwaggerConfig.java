@@ -1,8 +1,6 @@
 package com.ssafy.sunin.config;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -10,18 +8,16 @@ import springfox.documentation.service.ApiInfo;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
-@Configuration
-@EnableWebMvc
 public class SwaggerConfig {
 
-    /*
+      /*
      Swagger 주소
      http://localhost:8080/swagger-ui/index.html
      */
 
-	  /*
-	  * Swagger API 문서
-	  * */
+    /*
+     * Swagger API 문서
+     * */
     @Bean
     public Docket swaggerAPI() {
         return new Docket(DocumentationType.SWAGGER_2)
@@ -34,8 +30,8 @@ public class SwaggerConfig {
     }
 
     /*
-    * Swagger 정보
-    * */
+     * Swagger 정보
+     * */
     private ApiInfo swaggerInfo() {
         return new ApiInfoBuilder()
                 .title("써닌(SUN-IN) - 선한 영향력 프로젝트")
@@ -43,5 +39,7 @@ public class SwaggerConfig {
                 .version("1.0.0")
                 .build();
     }
+
+
 
 }

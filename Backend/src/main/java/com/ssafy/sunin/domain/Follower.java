@@ -24,8 +24,9 @@ public class Follower{
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "follower_member")
-    private Long followerMember;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "follower_member")
+    private User followerMember;
 
 
     @CreatedDate //entity가 생성되어 저장될 때 시간이 자동 저장됨
@@ -33,7 +34,7 @@ public class Follower{
     private LocalDateTime createDate = LocalDateTime.now();
 
     @Builder
-    public Follower(Long id, User user, Long followerMember, LocalDateTime createDate) {
+    public Follower(Long id, User user, User followerMember, LocalDateTime createDate) {
         this.id = id;
         this.user = user;
         this.followerMember = followerMember;

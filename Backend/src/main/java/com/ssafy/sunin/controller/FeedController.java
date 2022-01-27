@@ -114,6 +114,12 @@ public class FeedController {
 
     // Todo : 나의 팔로워 피드 조회
     // 내 userid 기준으로 팔로워 되있는 사람들 보여줌
+    @ApiOperation(value = "나의 팔로워 피드 조회", notes = "우선 나의 id 값 전달")
+    @GetMapping("/followerFeed")
+    public ResponseEntity<List<FeedDto>> getFollowerFeed(@RequestParam Long id){
+        log.debug("getFollowerFeed");
+        return ResponseEntity.ok(feedService.getFollowerFeed(id));
+    }
 
 
     // Todo : 최신순 피드 조회

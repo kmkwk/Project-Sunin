@@ -183,18 +183,29 @@ public class FeedServiceImpl implements FeedService {
     // Todo : 나의 팔로워 피드 조회
     // 내 userid 기준으로 팔로워 되있는 사람들 보여줌
     @Override
-    public List<FeedDto> getFollwerFeed(Long id) {
+    public List<FeedDto> getFollowerFeed(Long id) {
         // 나의 팔로워 리스트
         // 현재 팔로워들의 닉네임 값들이 저장되어 있음
+//        List<String> followers = followerRepository.getFollowingList(id);
+//        System.out.println(followers);
         List<String> followers = followerRepository.getFollowingList(id);
-        System.out.println(followers);
         // 이걸 가지고 몽고에서 게시글 조회하면됨
         // 1. for문으로 할지?
         // 2.
         // 기준점을 만들어야될지? ex) 가장 최근에 팔로우 한 사람들 중 3명꺼만 - 어짜피 동일
-        List<FeedCollections> feedCollections = feedRepository.getFollowerFeed(followers);
-        System.out.println(feedCollections);
-        return null;
+//        List<FeedCollections> feedCollections = feedRepository.findAllByUserIdIn(followers);
+//        System.out.println(feedCollections);
+        return feedRepository.getFollowerFeed(followers)
+                .stream()
+                .map(feedCollections -> FeedDto.builder()
+                        .id(feedCollections.getId().toString())
+                        .userId(feedCollections.getUserId())
+                        .content(feedCollections.getContent())
+                        .hashtags(feedCollections.getHashtags())
+                        .likes(feedCollections.getLikes())
+                        .createdDate(feedCollections.getCreatedDate())
+                        .modifiedDate(feedCollections.getLastModifiedDate())
+                        .build()).collect(Collectors.toList());
     }
 
     // Todo : 최신 선택 피드 조회

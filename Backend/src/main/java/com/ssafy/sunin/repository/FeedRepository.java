@@ -11,5 +11,5 @@ public interface FeedRepository extends MongoRepository<FeedCollections, ObjectI
         FeedRepositoryCustom {
 
     List<FeedCollections> findAllByUserId(String userId);
-
+//    List<FeedCollections> findAllByUserIdIn(List<String> userIdList);
 }

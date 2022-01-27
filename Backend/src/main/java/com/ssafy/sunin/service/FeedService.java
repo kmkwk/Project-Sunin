@@ -9,6 +9,8 @@ public interface FeedService {
 
     FeedDto writeImageFeed(FeedVO feedVO);
 
+    List<String> downloadFileFeed(String fileNames);
+
     FeedDto getDetailFeed(String id);
 
     FeedDto updateFeed(FeedUpdate feedUpdate);
@@ -26,6 +28,4 @@ public interface FeedService {
     List<FeedDto> getPageLikeFeed(FeedPage feedPage);
 
     FeedDto likeFeed(FeedLike feedLike);
-
-    String commitSunin(String userId);
 }

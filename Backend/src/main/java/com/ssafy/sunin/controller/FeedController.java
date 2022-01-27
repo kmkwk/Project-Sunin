@@ -4,6 +4,7 @@ import com.ssafy.sunin.dto.*;
 import com.ssafy.sunin.service.FeedServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -13,7 +14,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,6 +37,13 @@ public class FeedController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(feedService.writeImageFeed(feedVO));
+    }
+
+    @ApiOperation(value = "file 다운로드")
+    @GetMapping("/download")
+    public ResponseEntity<List<String>> downloadFiles(@RequestParam String fileName){
+        log.debug("downloadFiles");
+        return ResponseEntity.ok(feedService.downloadFileFeed(fileName));
     }
 
     @ApiOperation(value = "Amazon S3에 업로드 된 파일을 삭제", notes = "Amazon S3에 업로드된 파일 삭제")

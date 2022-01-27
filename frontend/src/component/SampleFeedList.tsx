@@ -1,15 +1,13 @@
 import { Grid } from 'semantic-ui-react'
 import { Feed, Icon } from 'semantic-ui-react'
 
-export default function BoardList ({ list }) {
+export default function SampleFeedList ({ list }: any) {
   return (
     <>
       <Grid columns={1}>
         <Grid.Row>
-          {list.map((item) => (
-            <Grid.Column>
-              {/* <img src={item.image_link} alt={item.name} width="100px"/>
-              <p>{ item.name }</p> */}
+          {list.map((item: any) => (
+            <Grid.Column key={item.id}>
               <Feed>
                 <Feed.Event>
                   <Feed.Label image='/images/디폴트프로필사진.png' />

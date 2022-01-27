@@ -1,10 +1,9 @@
 import Navbar from '../../../src/component/Navbar';
 import Menubar from '../../../src/component/Menubar';
-import { Grid, Image } from 'semantic-ui-react'
+import { Grid } from 'semantic-ui-react'
 import Axios from "axios"
 import { useEffect, useState } from 'react';
 import FeedList from '../../../src/component/FeedList';
-import Link from 'next/link';
 
 export default function personal() {
   const [list, setList] = useState([]);
@@ -14,7 +13,6 @@ export default function personal() {
   function getData() {
     Axios.get(API_URL)
     .then(res => {
-      console.log(res.data)
       setList(res.data)
     })
   }

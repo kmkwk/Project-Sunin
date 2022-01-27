@@ -1,14 +1,14 @@
 import type { NextPage } from 'next'
-import Head from 'next/head'
-import Image from 'next/image'
+// import Head from 'next/head'
+// import Image from 'next/image'
 import Menuvar from '../src/component/Menubar'
 import Navbar from '../src/component/Navbar'
-import styles from '../styles/Home.module.css'
-import { Header, Menu, Grid } from 'semantic-ui-react'
+// import styles from '../styles/Home.module.css'
+import { Grid } from 'semantic-ui-react'
 import Axios from "axios"
 import { useEffect, useState } from 'react';
 import SampleFeedList from '../src/component/SampleFeedList'
-import Searchbar from '../src/component/searchbar'
+import Searchbar from '../src/component/Searchbar'
 
 const Home: NextPage = () => {
   const [list, setList] = useState([]);
@@ -18,7 +18,6 @@ const Home: NextPage = () => {
   function getData() {
     Axios.get(API_URL)
     .then(res => {
-      // console.log(res.data)
       setList(res.data)
     })
   }

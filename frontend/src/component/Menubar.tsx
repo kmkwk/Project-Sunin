@@ -15,9 +15,6 @@ export default function Menuvar(){
             </GridRow>
           </Grid>
           
-          
-          
-          
         </MenuItem>
         <Menu.Item
           name='personal'

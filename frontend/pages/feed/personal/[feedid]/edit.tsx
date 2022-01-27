@@ -8,7 +8,7 @@ import styles from '../../../../styles/edit.module.css'
 export default function Edit() {
   const [content, setContent] = useState('');
   const [tag, setTag] = useState('');
-  const [image, setImage] = useState(null);
+  const [image, setImage]: any = useState();
   const [createObjectURL, setCreateObjectURL] = useState(null);
 
   const router = useRouter()
@@ -20,7 +20,6 @@ export default function Edit() {
 
   function getData() {
     axios.get(API_URL).then((res) => {
-      console.log(res.data)
       setFeed(res.data)
       document.getElementsByTagName('input')[1].value = '#tag'
       document.getElementsByTagName('textarea')[0].value = res.data.description
@@ -35,35 +34,32 @@ export default function Edit() {
     }
   }, [feedid]);
 
-  const updateContent = (event) => {
+  const updateContent = (event: any) => {
     setContent(event.target.value)
   }
 
-  const updateTag = (event) => {
+  const updateTag = (event: any) => {
     setTag(event.target.value)
   }
 
-  const uploadToClient = (event) => {
+  const uploadToClient = (event: any) => {
     if (event.target.files && event.target.files[0]) {
       const i = event.target.files[0];
 
       setImage(i);
       setCreateObjectURL(URL.createObjectURL(i));
-      console.log(i)
     }
   };
 
-  const uploadToServer = async (event) => {
+  const uploadToServer = async (event: any) => {
     const body = new FormData();
     body.append("file", image);
     body.append("text", content);
     body.append("text", tag);
-    console.log(body)
     const response = await fetch("/api/testpage", {
       method: "PUT",
       body
     });
-    console.log(content, image, tag)
   };
 
   function backToDetail() {
@@ -86,8 +82,8 @@ export default function Edit() {
               <textarea 
                 name="feedcontent" 
                 id="feedcontent" 
-                cols="30" 
-                rows="10" 
+                cols={30} 
+                rows={10} 
                 placeholder='내용을 작성하세요...'
                 onChange={updateContent}
               ></textarea>

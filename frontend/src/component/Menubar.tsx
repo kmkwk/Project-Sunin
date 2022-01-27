@@ -1,6 +1,7 @@
 import { Header, Menu, MenuItem, Icon, Divider, Grid, GridRow } from 'semantic-ui-react'
 import Link from 'next/link'
 
+
 export default function Menuvar(){
   return (
     <>

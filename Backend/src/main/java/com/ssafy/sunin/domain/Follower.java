@@ -28,7 +28,7 @@ public class Follower{
     @JoinColumn(name = "follower_member",referencedColumnName = "no")
     private User followerMember;
 
-    @CreatedDate //entity가 생성되어 저장될 때 시간이 자동 저장됨
+    @CreatedDate
     @Column(name = "created_datetime")
     private LocalDateTime createDate = LocalDateTime.now();
 

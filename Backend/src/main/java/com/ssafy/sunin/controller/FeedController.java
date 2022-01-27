@@ -54,7 +54,7 @@ public class FeedController {
 
     @ApiOperation(value = "피드 수정")
     @PutMapping
-    public ResponseEntity<FeedDto> updateFeed(@RequestBody FeedUpdate feedUpdate){
+    public ResponseEntity<FeedDto> updateFeed(FeedUpdate feedUpdate){
         log.info("updateFeed");
         if(ObjectUtils.isEmpty(feedUpdate)){
             return ResponseEntity.notFound().build();
@@ -110,18 +110,10 @@ public class FeedController {
 
     @ApiOperation(value = "좋아요 증가 감소")
     @PutMapping("/like")
-    public ResponseEntity<FeedDto> likeFeed(@RequestBody FeedLike feedLike){
+    public ResponseEntity<FeedDto> likeFeed(FeedLike feedLike){
         log.debug("likeFeed");
         System.out.println("좋아요 누른 사람"+ feedLike.getUser());
 
         return ResponseEntity.ok(feedService.likeFeed(feedLike));
     }
-
-    // Todo : sun-in 일수
-//    @ApiOperation(value = "sun-in")
-//    @PutMapping("/sunin")
-//    public ResponseEntity<String> commitSunin(String userId){
-//        log.debug("commitSunin");
-//        return ResponseEntity.ok(feedService.commitSunin(userId));
-//    }
 }

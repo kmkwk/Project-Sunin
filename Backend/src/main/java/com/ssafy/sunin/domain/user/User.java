@@ -1,9 +1,12 @@
 package com.ssafy.sunin.domain.user;
 
+import com.ssafy.sunin.domain.Follower;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -15,6 +18,7 @@ import java.time.LocalDateTime;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "incre")
     private long no;
 
     @Column(length =45, unique = true)
@@ -37,8 +41,12 @@ public class User {
 
     private LocalDateTime created_datetime;
 
+    @OneToMany(mappedBy = "user")
+    private List<Follower> follower = new ArrayList<>();
+
     @PrePersist //디비에 insert 되기직전에 실행
     public void created_datetime() {
         this.created_datetime = LocalDateTime.now();
     }
 }
+

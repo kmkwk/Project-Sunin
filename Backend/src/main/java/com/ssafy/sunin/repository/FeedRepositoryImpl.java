@@ -5,8 +5,7 @@ import com.ssafy.sunin.domain.QFeedCollections;
 import com.ssafy.sunin.dto.FeedList;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.repository.support.QuerydslRepositorySupport;
-
-import java.util.List;
+import java.util.*;
 
 public class FeedRepositoryImpl extends QuerydslRepositorySupport implements FeedRepositoryCustom {
 
@@ -17,8 +16,12 @@ public class FeedRepositoryImpl extends QuerydslRepositorySupport implements Fee
     }
 
     @Override
-    public List<FeedCollections> getFollowerFeed(String userId) {
-        return null;
+    public List<FeedCollections> getFollowerFeed(List<String> followList) {
+        // db.feed.find({userId:{$in:["qweqwe","asdf"]}});
+        return from(qfeed)
+                .where(qfeed.userId.in(followList))
+                .orderBy(qfeed.createdDate.desc())
+                .fetch();
     }
 
     @Override

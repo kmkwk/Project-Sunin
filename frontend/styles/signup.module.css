@@ -1,0 +1,33 @@
+
+.login_content h3 {
+    margin-top: 12%;
+    text-align: center;
+}
+
+.box_align {
+    margin-top: 60px;
+    margin-bottom: 30px;
+}
+
+.infoedit {
+    margin: 10px;
+}
+
+.headeralign {
+    margin: 30px 100px 50px 100px;
+    
+  }
+
+.textalign {
+    text-align: center;
+}
+
+.formalign {
+    margin: 30px 30% 30px 30%;
+}
+
+.buttonalign {
+    text-align: center;
+}
+
+

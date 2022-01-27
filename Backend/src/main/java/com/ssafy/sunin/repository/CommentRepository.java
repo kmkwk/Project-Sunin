@@ -12,12 +12,12 @@ public interface CommentRepository
         extends MongoRepository<Comment, String>,
         QuerydslPredicateExecutor<Comment> {
 
-    Comment findByFeedIdAndId(int feedId, ObjectId id);
+    Comment findByFeedIdAndId(ObjectId feedId, ObjectId id);
 
     Comment findById(ObjectId id);
 
-    List<Comment> findByFeedId(int feedId, Sort sort);
+    List<Comment> findByFeedId(ObjectId feedId, Sort sort);
 
-    long countByFeedId(int feedId);
+    long countByFeedId(ObjectId feedId);
 
 }

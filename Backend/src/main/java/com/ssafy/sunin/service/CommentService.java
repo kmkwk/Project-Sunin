@@ -19,18 +19,11 @@ public class CommentService {
     private final CommentRepository commentRepository;
 
     /*
-    * 피드에서 댓글 ObjectId로 찾기
-    * */
-    public Comment findCommentByID(int feedId, String commentId) {
-        return commentRepository.findByFeedIdAndId(feedId, new ObjectId(commentId));
-    }
-
-    /*
     * 댓글 작성하기
     * */
-    public Comment writeComment(int feedId, String writer, String content) {
+    public Comment writeComment(String feedId, String writer, String content) {
         Comment comment = Comment.builder()
-                .feedId(feedId)
+                .feedId(new ObjectId(feedId))
                 .writer(writer)
                 .content(content)
                 .build();
@@ -61,10 +54,10 @@ public class CommentService {
     /*
     * 대댓글 작성하기
     * */
-    public Comment writeReply(int feedId, String commentId, String writer, String content) {
-        Comment rootComment = commentRepository.findByFeedIdAndId(feedId, new ObjectId(commentId));
+    public Comment writeReply(String commentId, String writer, String content) {
+        Comment rootComment = commentRepository.findById(new ObjectId(commentId));
         Comment comment = Comment.builder()
-                .feedId(feedId)
+                .feedId(rootComment.getFeedId())
                 .writer(writer)
                 .content(content)
                 .build();
@@ -76,18 +69,18 @@ public class CommentService {
     /*
     * 피드에 달린 댓글 리스트
     * */
-    public List<Comment> findCommentsByFeed(int feedId) {
+    public List<Comment> findCommentsByFeed(String feedId) {
         List<Order> orders = new ArrayList<>();
         orders.add(new Order(Direction.ASC, "group"));
         orders.add(new Order(Direction.ASC, "order"));
-        return commentRepository.findByFeedId(feedId, Sort.by(orders));
+        return commentRepository.findByFeedId(new ObjectId(feedId), Sort.by(orders));
     }
 
     /*
     * 피드에 달린 댓글 갯수
     * */
-    public long countCommentsByFeed(int feedId) {
-        return commentRepository.countByFeedId(feedId);
+    public long countCommentsByFeed(String feedId) {
+        return commentRepository.countByFeedId(new ObjectId(feedId));
     }
 
     /*

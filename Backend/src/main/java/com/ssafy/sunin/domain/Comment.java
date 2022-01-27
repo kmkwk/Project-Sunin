@@ -23,8 +23,8 @@ public class Comment {
     private ObjectId id;
 
     @Field("comment_feed_id")
-    @ApiModelProperty(value = "댓글이 작성된 피드의 ObjectId (int -> ObjectId 변경 예정)")
-    private int feedId;
+    @ApiModelProperty(value = "댓글이 작성된 피드의 ObjectId")
+    private ObjectId feedId;
 
     @Field("comment_content")
     @ApiModelProperty(value = "내용")
@@ -65,7 +65,7 @@ public class Comment {
     private int depth;
 
     @Builder
-    public Comment(int feedId, String content, String writer) {
+    public Comment(ObjectId feedId, String content, String writer) {
         this.feedId = feedId;
         this.content = content;
         this.writer = writer;

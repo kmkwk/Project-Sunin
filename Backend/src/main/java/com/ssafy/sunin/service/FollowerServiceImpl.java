@@ -2,15 +2,12 @@ package com.ssafy.sunin.service;
 
 import com.ssafy.sunin.domain.Follower;
 import com.ssafy.sunin.domain.user.User;
-import com.ssafy.sunin.dto.FeedDto;
 import com.ssafy.sunin.dto.FollowerRequest;
 import com.ssafy.sunin.repository.FollowerRepository;
 import com.ssafy.sunin.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import javax.persistence.EntityManager;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -23,16 +20,18 @@ public class FollowerServiceImpl implements FollowerService{
 
     @Override
     public Long addFollower(FollowerRequest followerRequest) {
-        // userid랑 follower 할 멤버 userid 필요 저장
-        Optional<User> list = userRepository.findById(followerRequest.getId());
-        Long count = list.stream().count();
+//         userid랑 follower 할 멤버 userid 필요 저장
+        Optional<User> user = userRepository.findById(followerRequest.getId());
+        Long count = user.stream().count();
         count++;
-        User user = list.get();
+
+        Optional<User> followerMember = userRepository.findById(followerRequest.getFollowerMember());
         // Todo: 이미 팔로워한 유저인지 체크해야함
         Follower follower = Follower.builder()
-                .user(user)
-                .followerMember(followerRequest.getFollowerMember())
+                .user(user.get())
+                .followerMember(followerMember.get())
                 .build();
+
         followerRepository.save(follower);
         return count;
     }
@@ -41,13 +40,6 @@ public class FollowerServiceImpl implements FollowerService{
     public void deleteFollower(FollowerRequest followerRequest) {
 //        Long id = followerRepository.findByUserIdAndFollwerMember(followerRequest);
 //        followerRepository.deleteById(id);
-    }
-
-    // Todo: 나의 팔로워 피드 조회
-    @Override
-    public List<Follower> getFollowerFeed(Long id) {
-//        = followerRepository.getFollowingList(id);
-        return null;
     }
 
     // Todo: 나의 팔로워 수 조회
@@ -60,10 +52,5 @@ public class FollowerServiceImpl implements FollowerService{
     @Override
     public Long countFollowing(Long id) {
         return followerRepository.getFollowingCount(id);
-    }
-
-    // 팔로워 조회
-    private List<Follower> getFloower(Long id){
-        return null;
     }
 }

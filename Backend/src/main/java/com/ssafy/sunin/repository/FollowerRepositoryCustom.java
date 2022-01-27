@@ -11,5 +11,5 @@ public interface FollowerRepositoryCustom {
     // Todo : 팔로워 카운트
     Long getFollowerCount(Long id);
     // Todo : 팔로잉 카운트
-    Long getFollowingCount(Long id);
+    Long getFollowingCount(Long followerMember);
 }

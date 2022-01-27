@@ -1,19 +1,13 @@
 package com.ssafy.sunin.controller;
 
-import com.ssafy.sunin.domain.Follower;
-import com.ssafy.sunin.dto.FeedDto;
 import com.ssafy.sunin.dto.FollowerRequest;
 import com.ssafy.sunin.service.FollowerService;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/follower")
@@ -46,5 +40,4 @@ public class FollowerController {
         log.debug("getFollowingCount");
         return ResponseEntity.ok(followerService.countFollowing(id));
     }
-
 }

@@ -17,7 +17,12 @@ public class FeedRepositoryImpl extends QuerydslRepositorySupport implements Fee
     }
 
     @Override
-    public List<FeedCollections> getFollowerFeed(String userId) {
+    public List<FeedCollections> getFollowerFeed(List<String> list) {
+        List<FeedCollections> list2 = from(qfeed)
+                .where(qfeed.userId.in(list))
+                .orderBy(qfeed.createdDate.desc())
+                .fetch();
+        System.out.println(list2);
         return null;
     }
 

@@ -17,12 +17,12 @@ public interface FeedService {
     List<FeedDto> getUserListAllFeed(String userId);
     // Todo : 기업 글 - 최신 순, 좋아요 순, select 박스 연동되는 식으로
     List<FeedDto> getCompanyListAllFeed(String companyId);
-    FeedDto updateFeed(FeedCollections feedCollections);
+    FeedDto updateFeed(FeedUpdate feedUpdate);
     void deleteFeed(String id);
 
     // Todo : 나의 팔로워 피드 조회
     // 내 userid 기준으로 팔로워 되있는 사람들 보여줌
-    List<FeedDto> getFollwerFeed(String userId);
+    List<FeedDto> getFollwerFeed(Long id);
 
     // Todo : 최신 피드 조회
     // created 기준으로 내림차순해서 보여줌

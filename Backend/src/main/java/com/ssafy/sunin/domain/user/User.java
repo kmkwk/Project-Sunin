@@ -43,6 +43,8 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Follower> follower = new ArrayList<>();
 
+    private Integer suninDays;
+
     @PrePersist //디비에 insert 되기직전에 실행
     public void created_datetime() {
         this.created_datetime = LocalDateTime.now();

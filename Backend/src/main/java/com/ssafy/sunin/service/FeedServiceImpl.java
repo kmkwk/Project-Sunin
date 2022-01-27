@@ -13,11 +13,9 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,12 +34,16 @@ public class FeedServiceImpl implements FeedService {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
+    @Value("${cloud.aws.s3.url}")
+    private String url;
+
     private final AmazonS3 amazonS3;
 
     @Override
     public FeedDto writeImageFeed(FeedVO feedVO) {
         List<String> fileNameList = new ArrayList<>();
-        if(feedVO.getFiles() != null){
+        List<MultipartFile> files = feedVO.getFiles();
+        if(files != null){
             feedVO.getFiles().forEach(file -> {
                 String fileName = createFileName(file.getOriginalFilename());
                 ObjectMetadata objectMetadata = new ObjectMetadata();
@@ -55,7 +57,7 @@ public class FeedServiceImpl implements FeedService {
                     throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패했습니다.");
                 }
 
-                fileNameList.add(String.format("https://sunin-bucket.s3.ap-northeast-2.amazonaws.com/%s",fileName));
+                fileNameList.add(String.format(url+"/%s",fileName));
             });
         }
 
@@ -100,7 +102,7 @@ public class FeedServiceImpl implements FeedService {
         Date max = Collections.max(arrayModTimeList);
         String fileName = arrayKeyList.get(arrayModTimeList.indexOf(max));
 
-        fileNameList.add(String.format("https://sunin-bucket.s3.ap-northeast-2.amazonaws.com/%s",fileNames));
+        fileNameList.add(String.format(url+"/%s",fileNames));
         return fileNameList;
     }
 

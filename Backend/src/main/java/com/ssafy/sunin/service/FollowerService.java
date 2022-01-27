@@ -1,14 +1,13 @@
 package com.ssafy.sunin.service;
 
-import com.ssafy.sunin.dto.FollowerRequest;
+import com.ssafy.sunin.dto.FollowerVO;
 
 public interface FollowerService {
-    // Todo : 팔로워 추가
-    Long addFollower(FollowerRequest followerRequest);
-    // Todo : 팔로워 삭제
-    Long deleteFollower(FollowerRequest followerRequest);
-    // Todo : 팔로워 카운트
+    Long addFollower(FollowerVO followerVO);
+
+    void deleteFollower(FollowerVO followerVO);
+
     Long countFollower(Long id);
-    // Todo : 팔로잉 카운트
+
     Long countFollowing(Long followerMember);
 }

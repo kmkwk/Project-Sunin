@@ -3,9 +3,9 @@ package com.ssafy.sunin.repository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.sunin.domain.QFollower;
 import com.ssafy.sunin.domain.user.QUser;
-import com.ssafy.sunin.dto.FollowerRequest;
-
+import com.ssafy.sunin.domain.user.User;
 import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
 import java.util.List;
 
 public class FollowerRepositoryImpl implements FollowerRepositoryCustom {
@@ -18,18 +18,26 @@ public class FollowerRepositoryImpl implements FollowerRepositoryCustom {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
+    @Transactional
     @Override
-    public Long deleteFollower(FollowerRequest followerRequest) {
-        return null;
+    public Long deleteFollower(User user, User followerMember) {
+        return queryFactory
+                .delete(qFollower)
+                .where(qFollower.followerMember.eq(followerMember).and(qFollower.user.eq(user)))
+                .execute();
+    }
+
+    @Override
+    public List<Long> getUser(User user, User followerMember) {
+        return queryFactory
+                .select(qFollower.id)
+                .from(qFollower)
+                .where(qFollower.followerMember.eq(followerMember).and(qFollower.user.eq(user)))
+                .fetch();
     }
 
     @Override
     public List<String> getFollowingList(Long id) {
-        /*
-        select user.user_nickname from follower
-        join user on follower.follower_member = user.incre
-        where follower.user_id = 1;
-         */
         return queryFactory
                 .select(qUser.userNickname)
                 .from(qFollower)
@@ -41,8 +49,6 @@ public class FollowerRepositoryImpl implements FollowerRepositoryCustom {
 
     @Override
     public Long getFollowerCount(Long id) {
-        // id 조회로 변경해야함 , 중복 처리 해아함
-        // select * from follower wehere user_id = 1
         return queryFactory
                 .select(qFollower.count())
                 .from(qFollower)
@@ -52,8 +58,6 @@ public class FollowerRepositoryImpl implements FollowerRepositoryCustom {
 
     @Override
     public Long getFollowingCount(Long followerMember) {
-        // id 조회로 변경해야함,  중복 처리 해야함
-        // select user_id from follower where follower_member = 1
         return queryFactory
                 .select(qFollower.count())
                 .from(qFollower)

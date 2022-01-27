@@ -1,18 +1,12 @@
 package com.ssafy.sunin.repository;
 
-import com.ssafy.sunin.dto.FollowerRequest;
-
+import com.ssafy.sunin.domain.user.User;
 import java.util.List;
 
 public interface FollowerRepositoryCustom {
-
-    // Todo : 팔로워 추가
-    // Todo : 팔로워 삭제
-    Long deleteFollower(FollowerRequest followerRequest);
-    // Todo : 팔로잉 조회 - 팔로잉 리스트 가져와서 팔로잉 유저 최신순 피드 가져오기
+    Long deleteFollower(User user, User followerMember);
+    List<Long> getUser(User user, User followerMember);
     List<String> getFollowingList(Long id);
-    // Todo : 팔로워 카운트
     Long getFollowerCount(Long id);
-    // Todo : 팔로잉 카운트
     Long getFollowingCount(Long followerMember);
 }

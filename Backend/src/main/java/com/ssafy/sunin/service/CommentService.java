@@ -18,64 +18,69 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
 
-    public Comment findCommentById(int feedId, String commentId) {
-        return commentRepository.findByFeedIdAndId(feedId, new ObjectId(commentId));
-    }
-
-    public Comment writeComment(int feedId, String writer, String content) {
+    /*
+    * 댓글 작성하기
+    * */
+    public Comment writeComment(String feedId, String writer, String content) {
         Comment comment = Comment.builder()
-                .feedId(feedId)
+                .feedId(new ObjectId(feedId))
                 .writer(writer)
                 .content(content)
                 .build();
         commentRepository.insert(comment);
 
-        comment.setGroup(comment.getId());
-        commentRepository.save(comment);
-        return null;
+        comment.setCommentGroup(comment.getId());
+        return commentRepository.save(comment);
     }
 
+    /*
+    * 댓글 수정하기
+    * */
     public Comment updateComment(String commentId, String content) {
         Comment comment = commentRepository.findById(new ObjectId(commentId));
-        comment.setUpdated(true);
-        comment.setContent(content);
-        commentRepository.save(comment);
-        return null;
+        comment.setCommentModified(content);
+        return commentRepository.save(comment);
     }
 
+    /*
+    * 댓글 삭제하기
+    * */
     public Comment deleteComment(String commentId) {
         Comment comment = commentRepository.findById(new ObjectId(commentId));
-        comment.setDeleted(true);
-        commentRepository.save(comment);
-        return null;
+        comment.setCommentDeleted();
+        return commentRepository.save(comment);
     }
 
-    public Comment writeReply(int feedId, String commentId, String writer, String content) {
-        Comment rootComment = commentRepository.findByFeedIdAndId(feedId, new ObjectId(commentId));
+    /*
+    * 대댓글 작성하기
+    * */
+    public Comment writeReply(String commentId, String writer, String content) {
+        Comment rootComment = commentRepository.findById(new ObjectId(commentId));
         Comment comment = Comment.builder()
-                .feedId(feedId)
+                .feedId(rootComment.getFeedId())
                 .writer(writer)
                 .content(content)
                 .build();
 
-        comment.setGroup(rootComment.getGroup());
-        comment.setOrder(comment.getOrder()+1);
-
-        commentRepository.save(comment);
-        return null;
+        comment.setCommentGroup(rootComment.getGroup());
+        return commentRepository.save(comment);
     }
 
-    public List<Comment> findCommentsByFeed(int feedId) {
+    /*
+    * 피드에 달린 댓글 리스트
+    * */
+    public List<Comment> findCommentsByFeed(String feedId) {
         List<Order> orders = new ArrayList<>();
         orders.add(new Order(Direction.ASC, "group"));
         orders.add(new Order(Direction.ASC, "order"));
-        List<Comment> list = commentRepository.findByFeedId(feedId, Sort.by(orders));
-
-        return list;
+        return commentRepository.findByFeedId(new ObjectId(feedId), Sort.by(orders));
     }
 
-    public long countCommentsByFeed(int feedId) {
-        return commentRepository.countByFeedId(feedId);
+    /*
+    * 피드에 달린 댓글 갯수
+    * */
+    public long countCommentsByFeed(String feedId) {
+        return commentRepository.countByFeedId(new ObjectId(feedId));
     }
 
     /*

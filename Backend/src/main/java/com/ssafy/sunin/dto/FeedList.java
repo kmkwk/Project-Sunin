@@ -1,8 +1,6 @@
 package com.ssafy.sunin.dto;
 
-import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 

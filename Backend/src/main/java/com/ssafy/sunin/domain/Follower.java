@@ -21,13 +21,12 @@ public class Follower{
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", referencedColumnName = "no")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "follower_member")
+    @JoinColumn(name = "follower_member",referencedColumnName = "no")
     private User followerMember;
-
 
     @CreatedDate //entity가 생성되어 저장될 때 시간이 자동 저장됨
     @Column(name = "created_datetime")

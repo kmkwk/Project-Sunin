@@ -47,12 +47,41 @@ public class FeedCollections{
 
     private boolean flag;
 
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public void setHashtags(List<String> hashtags) {
+        this.hashtags = hashtags;
+    }
+
+    public void setFlag(boolean flag) {
+        this.flag = flag;
+    }
+
+    public FeedCollections(LocalDateTime lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
+    }
+
+    public void setLikes(int likes) {
+        this.likes = likes;
+    }
+
+    public void setLikeUser(Map<String, Object> likeUser) {
+        this.likeUser = likeUser;
+    }
+
+    public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
+    }
+
     @Builder
-    public FeedCollections(String userId, String content, List<String> hashtags, int likes, LocalDateTime createdDate, LocalDateTime lastModifiedDate, List<String> filePath, boolean flag) {
+    public FeedCollections(String userId, String content, List<String> hashtags, int likes, Map<String, Object> likeUser, LocalDateTime createdDate, LocalDateTime lastModifiedDate, List<String> filePath, boolean flag) {
         this.userId = userId;
         this.content = content;
         this.hashtags = hashtags;
         this.likes = likes;
+        this.likeUser = likeUser;
         this.createdDate = createdDate;
         this.lastModifiedDate = lastModifiedDate;
         this.filePath = filePath;

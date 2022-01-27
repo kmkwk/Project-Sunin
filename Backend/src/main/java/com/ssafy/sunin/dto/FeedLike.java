@@ -7,6 +7,5 @@ import lombok.Data;
 @AllArgsConstructor
 public class FeedLike {
     private String id;
-    private int likes;
     private String user;
 }

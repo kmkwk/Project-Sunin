@@ -7,7 +7,6 @@ import com.ssafy.sunin.repository.FollowerRepository;
 import com.ssafy.sunin.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import javax.persistence.EntityManager;
 import java.util.Optional;
 
 @Service
@@ -16,12 +15,10 @@ public class FollowerServiceImpl implements FollowerService{
 
     private final FollowerRepository followerRepository;
     private final UserRepository userRepository;
-    private final EntityManager em;
 
     @Override
     public Long addFollower(FollowerRequest followerRequest) {
-//         userid랑 follower 할 멤버 userid 필요 저장
-        Optional<User> user = userRepository.findById(followerRequest.getId());
+        Optional<User> user = userRepository.findById(followerRequest.getUserId());
         Long count = user.stream().count();
         count++;
 
@@ -37,9 +34,10 @@ public class FollowerServiceImpl implements FollowerService{
     }
 
     @Override
-    public void deleteFollower(FollowerRequest followerRequest) {
+    public Long deleteFollower(FollowerRequest followerRequest) {
 //        Long id = followerRepository.findByUserIdAndFollwerMember(followerRequest);
 //        followerRepository.deleteById(id);
+        return null;
     }
 
     // Todo: 나의 팔로워 수 조회

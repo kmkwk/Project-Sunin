@@ -6,11 +6,9 @@ import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.ssafy.sunin.domain.FeedCollections;
-import com.ssafy.sunin.domain.Follower;
 import com.ssafy.sunin.dto.*;
 import com.ssafy.sunin.repository.FeedRepository;
 import com.ssafy.sunin.repository.FollowerRepository;
-import com.ssafy.sunin.repository.FollowerRepositoryCustom;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,7 +32,6 @@ import java.util.stream.Collectors;
 public class FeedServiceImpl implements FeedService {
 
     private final FeedRepository feedRepository;
-    private final MongoTemplate mongoTemplate;
     private final FollowerRepository followerRepository;
 
     @Value("${cloud.aws.s3.bucket}")
@@ -45,7 +42,6 @@ public class FeedServiceImpl implements FeedService {
     @Override
     public FeedDto writeImageFeed(FeedVO feedVO) {
         List<String> fileNameList = new ArrayList<>();
-        // forEach 구문을 통해 multipartFile로 넘어온 파일들 하나씩 fileNameList에 추가
         feedVO.getFiles().forEach(file -> {
             String fileName = createFileName(file.getOriginalFilename());
             ObjectMetadata objectMetadata = new ObjectMetadata();
@@ -70,6 +66,7 @@ public class FeedServiceImpl implements FeedService {
                 .createdDate(LocalDateTime.now())
                 .lastModifiedDate(LocalDateTime.now())
                 .flag(true)
+                .likeUser(new HashMap<>())
                 .filePath(fileNameList)
                 .build();
         ObjectId id = feedRepository.save(feedCollections).getId();
@@ -83,13 +80,13 @@ public class FeedServiceImpl implements FeedService {
                 .createdDate(feedCollections.getCreatedDate())
                 .modifiedDate(feedCollections.getLastModifiedDate())
                 .filePath(feedCollections.getFilePath())
+                .likeUser(feedCollections.getLikeUser())
                 .build();
     }
 
     @Override
     public FeedDto getDetailFeed(String id) {
-        Optional<FeedCollections> feed = feedRepository.findById(new ObjectId(String.valueOf(id)));
-        FeedCollections feedCollections = feed.get();
+        FeedCollections feedCollections =  feedRepository.findByIdAndFlagTrue(new ObjectId(String.valueOf(id)));
 
         return FeedDto.builder()
                 .id(feedCollections.getId().toString())
@@ -100,65 +97,18 @@ public class FeedServiceImpl implements FeedService {
                 .modifiedDate(feedCollections.getLastModifiedDate())
                 .filePath(feedCollections.getFilePath())
                 .content(feedCollections.getContent())
+                .likeUser(feedCollections.getLikeUser())
                 .build();
     }
 
     @Override
-    public List<FeedDto> getUserListAllFeed(String userId) {
-        return feedRepository.findAllByUserId(userId)
-                .stream()
-                .map(feedCollections -> FeedDto.builder()
-                        .id(feedCollections.getId().toString())
-                        .userId(feedCollections.getUserId())
-                        .content(feedCollections.getContent())
-                        .hashtags(feedCollections.getHashtags())
-                        .likes(feedCollections.getLikes())
-                        .createdDate(feedCollections.getCreatedDate())
-                        .modifiedDate(feedCollections.getLastModifiedDate())
-                        .build()).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<FeedDto> getCompanyListAllFeed(String companyId) {
-        return feedRepository.findAllByUserId(companyId)
-                .stream()
-                .map(feedCollections -> FeedDto.builder()
-                        .id(feedCollections.getId().toString())
-                        .userId(feedCollections.getUserId())
-                        .content(feedCollections.getContent())
-                        .hashtags(feedCollections.getHashtags())
-                        .likes(feedCollections.getLikes())
-                        .createdDate(feedCollections.getCreatedDate())
-                        .modifiedDate(feedCollections.getLastModifiedDate())
-                        .build()).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<FeedDto> getListAllFeed() {
-        return feedRepository.findAll()
-                .stream()
-                .map(feedCollections -> FeedDto.builder()
-                        .id(feedCollections.getId().toString())
-                        .userId(feedCollections.getUserId())
-                        .content(feedCollections.getContent())
-                        .hashtags(feedCollections.getHashtags())
-                        .likes(feedCollections.getLikes())
-                        .createdDate(feedCollections.getCreatedDate())
-                        .modifiedDate(feedCollections.getLastModifiedDate())
-                        .build()).collect(Collectors.toList());
-    }
-
-    @Override
     public FeedDto updateFeed(FeedUpdate feedUpdate) {
-        Query query = new Query(Criteria.where("_id").is(feedUpdate.getId()));
-        Update update = new Update();
-        Optional<FeedCollections> list = feedRepository.findById(feedUpdate.getId());
-        FeedCollections feedCollections  = list.get();
-        LocalDateTime lt = LocalDateTime.now();
-        update.set("content", feedUpdate.getContent());
-        update.set("hashtags", feedUpdate.getHashtags());
-        update.set("modifiedDate",lt);
-        mongoTemplate.updateMulti(query, update, FeedCollections.class);
+        FeedCollections feedCollections  = feedRepository.findByIdAndFlagTrue(new ObjectId(feedUpdate.getId()));
+        LocalDateTime time = LocalDateTime.now();
+        feedCollections.setContent(feedUpdate.getContent());
+        feedCollections.setHashtags(feedUpdate.getHashtags());
+        feedCollections.setLastModifiedDate(time);
+        feedRepository.save(feedCollections);
 
         return FeedDto.builder()
                 .id(feedCollections.getId().toString())
@@ -167,34 +117,23 @@ public class FeedServiceImpl implements FeedService {
                 .likes(feedCollections.getLikes())
                 .content(feedUpdate.getContent())
                 .createdDate(feedCollections.getCreatedDate())
-                .modifiedDate(lt)
+                .modifiedDate(time)
+                .likeUser(feedCollections.getLikeUser())
+                .filePath(feedCollections.getFilePath())
                 .build();
     }
 
     @Override
     public void deleteFeed(String id) {
-        Query query = new Query(Criteria.where("_id").is(id));
-        Update update = new Update();
-        update.set("flag", false);
-        update.set("modifiedDate",LocalDateTime.now());
-        mongoTemplate.updateFirst(query, update, FeedCollections.class);
+        FeedCollections feedCollections = feedRepository.findByIdAndFlagTrue(new ObjectId(id));
+        feedCollections.setFlag(false);
+        feedCollections.setLastModifiedDate(LocalDateTime.now());
+        feedRepository.save(feedCollections);
     }
 
-    // Todo : 나의 팔로워 피드 조회
-    // 내 userid 기준으로 팔로워 되있는 사람들 보여줌
     @Override
     public List<FeedDto> getFollowerFeed(Long id) {
-        // 나의 팔로워 리스트
-        // 현재 팔로워들의 닉네임 값들이 저장되어 있음
-//        List<String> followers = followerRepository.getFollowingList(id);
-//        System.out.println(followers);
         List<String> followers = followerRepository.getFollowingList(id);
-        // 이걸 가지고 몽고에서 게시글 조회하면됨
-        // 1. for문으로 할지?
-        // 2.
-        // 기준점을 만들어야될지? ex) 가장 최근에 팔로우 한 사람들 중 3명꺼만 - 어짜피 동일
-//        List<FeedCollections> feedCollections = feedRepository.findAllByUserIdIn(followers);
-//        System.out.println(feedCollections);
         return feedRepository.getFollowerFeed(followers)
                 .stream()
                 .map(feedCollections -> FeedDto.builder()
@@ -205,11 +144,11 @@ public class FeedServiceImpl implements FeedService {
                         .likes(feedCollections.getLikes())
                         .createdDate(feedCollections.getCreatedDate())
                         .modifiedDate(feedCollections.getLastModifiedDate())
+                        .likeUser(feedCollections.getLikeUser())
+                        .filePath(feedCollections.getFilePath())
                         .build()).collect(Collectors.toList());
     }
 
-    // Todo : 최신 선택 피드 조회
-    // created 기준으로 내림차순해서 보여줌
     @Override
     public List<FeedDto> getLatestFeed(FeedList feedList) {
         List<FeedCollections> feed = feedRepository.getLatestFeed(feedList);
@@ -223,6 +162,7 @@ public class FeedServiceImpl implements FeedService {
                         .hashtags(feedCollections.getHashtags())
                         .createdDate(feedCollections.getCreatedDate())
                         .modifiedDate(feedCollections.getLastModifiedDate())
+                        .likeUser(feedCollections.getLikeUser())
                         .build()).collect(Collectors.toList());
     }
 
@@ -239,11 +179,10 @@ public class FeedServiceImpl implements FeedService {
                         .hashtags(feedCollections.getHashtags())
                         .createdDate(feedCollections.getCreatedDate())
                         .modifiedDate(feedCollections.getLastModifiedDate())
+                        .likeUser(feedCollections.getLikeUser())
                         .build()).collect(Collectors.toList());
     }
 
-    // Todo : 좋아요순 선택 피드 조회
-    // 좋아요 내림차순으로 보여줌
     @Override
     public List<FeedDto> getLikeFeed(FeedList feedList) {
         List<FeedCollections> feed = feedRepository.getLikeFeed(feedList);
@@ -257,6 +196,7 @@ public class FeedServiceImpl implements FeedService {
                         .hashtags(feedCollections.getHashtags())
                         .createdDate(feedCollections.getCreatedDate())
                         .modifiedDate(feedCollections.getLastModifiedDate())
+                        .likeUser(feedCollections.getLikeUser())
                         .build()).collect(Collectors.toList());
     }
 
@@ -273,30 +213,28 @@ public class FeedServiceImpl implements FeedService {
                         .hashtags(feedCollections.getHashtags())
                         .createdDate(feedCollections.getCreatedDate())
                         .modifiedDate(feedCollections.getLastModifiedDate())
+                        .likeUser(feedCollections.getLikeUser())
                         .build()).collect(Collectors.toList());
     }
 
     @Override
     public FeedDto likeFeed(FeedLike feedLike) {
-        Query query = new Query(Criteria.where("_id").is(feedLike.getId()));
-        Update update = new Update();
-        Optional<FeedCollections> user = feedRepository.findById(new ObjectId(String.valueOf(feedLike.getId())));
-        FeedCollections feedCollections = user.get();
+        FeedCollections feedCollections = feedRepository.findByIdAndFlagTrue(new ObjectId(feedLike.getId()));
         Map<String,Object> users = new HashMap<>();
         users.putAll(feedCollections.getLikeUser());
-        int like = feedLike.getLikes();
+
+        int like = feedCollections.getLikes();
         // 좋아요 누른상태
         if(users.containsKey(feedLike.getUser())){
             users.remove(feedLike.getUser());
-            update.set("likes", --like);
+            feedCollections.setLikes(--like);
         }else{
             users.put(feedLike.getUser(),true);
-            update.set("likes", ++like);
+            feedCollections.setLikes(++like);
         }
-        update.set("likeUser",users);
 
-        mongoTemplate.upsert(query,update,FeedCollections.class);
-
+        feedCollections.setLikeUser(users);
+        feedRepository.save(feedCollections);
         return FeedDto.builder()
                 .id(feedLike.getId())
                 .userId(feedLike.getUser())
@@ -316,11 +254,11 @@ public class FeedServiceImpl implements FeedService {
         amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName));
     }
 
-    private String createFileName(String fileName) { // 먼저 파일 업로드 시, 파일명을 난수화하기 위해 random으로 돌립니다.
+    private String createFileName(String fileName) {
         return UUID.randomUUID().toString().concat(getFileExtension(fileName));
     }
 
-    private String getFileExtension(String fileName) { // file 형식이 잘못된 경우를 확인하기 위해 만들어진 로직이며, 파일 타입과 상관없이 업로드할 수 있게 하기 위해 .의 존재 유무만 판단하였습니다.
+    private String getFileExtension(String fileName) {
         try {
             return fileName.substring(fileName.lastIndexOf("."));
         } catch (StringIndexOutOfBoundsException e) {

@@ -1,13 +1,38 @@
-import { Button, Form, Input, TextArea, Grid, Image } from 'semantic-ui-react'
-import { useState } from "react";
-import Navbar from '../../src/component/Navbar';
-import styles from '../../styles/CreateFeed.module.css'
+import { useRouter } from "next/router"
+import axios from "axios";
+import { useEffect, useState } from "react";
+import Navbar from "../../../../src/component/Navbar";
+import { Form, Grid, Input, Button } from "semantic-ui-react";
+import styles from '../../../../styles/edit.module.css'
 
-export default function Createfeed() {
+export default function Edit() {
   const [content, setContent] = useState('');
   const [tag, setTag] = useState('');
   const [image, setImage]: any = useState();
   const [createObjectURL, setCreateObjectURL] = useState(null);
+
+  const router = useRouter()
+  const { feedid } = router.query
+
+  const [feed, setFeed] = useState({});
+
+  const API_URL = `http://makeup-api.herokuapp.com/api/v1/products/${ feedid }.json`;
+
+  function getData() {
+    axios.get(API_URL).then((res) => {
+      setFeed(res.data)
+      document.getElementsByTagName('input')[1].value = '#tag'
+      document.getElementsByTagName('textarea')[0].value = res.data.description
+      setContent(res.data.description)
+      setTag('#tag')
+    })
+  }
+
+  useEffect(() => {
+    if (feedid) {
+      getData()
+    }
+  }, [feedid]);
 
   const updateContent = (event: any) => {
     setContent(event.target.value)
@@ -32,20 +57,20 @@ export default function Createfeed() {
     body.append("text", content);
     body.append("text", tag);
     const response = await fetch("/api/testpage", {
-      method: "POST",
+      method: "PUT",
       body
     });
-    document.getElementsByTagName('textarea')[0].value = ''
-    document.getElementsByTagName('input')[0].value = ''
-    document.getElementsByTagName('input')[1].value = ''
-    setContent('')
-    setTag('')
-    setImage(null)
   };
-  
-  return (
+
+  function backToDetail() {
+    router.push(`/feed/personal/${feedid}`)
+  }
+
+  return(
     <>
       <Navbar />
+      <h1>피드 수정 페이지</h1>
+      <p>수정하는 글 번호: {feedid}</p>
       <Grid>
         <Grid.Row>
           <Grid.Column width={3}>
@@ -77,55 +102,13 @@ export default function Createfeed() {
               <br /><br />
               <Form.Field control={Button} onClick={uploadToServer}>저장하기</Form.Field>
             </Form>
+            <Button onClick={backToDetail}>뒤로가기</Button>
           </Grid.Column>
           <Grid.Column width={3}>
+            <Button>글 삭제</Button>
           </Grid.Column>
         </Grid.Row>
       </Grid>
-      
     </>
-  );
+  )
 }
-
-
-// function PrivatePage(props) {
-//   const [image, setImage] = useState(null);
-//   const [createObjectURL, setCreateObjectURL] = useState(null);
-
-//   const uploadToClient = (event) => {
-//     if (event.target.files && event.target.files[0]) {
-//       const i = event.target.files[0];
-
-//       setImage(i);
-//       setCreateObjectURL(URL.createObjectURL(i));
-//       console.log(i)
-//     }
-//   };
-
-//   const uploadToServer = async (event) => {
-//     const body = new FormData();
-//     body.append("file", image);
-//     const response = await fetch("/api/file", {
-//       method: "POST",
-//       body
-//     });
-//   };
-
-//   return (
-//     <div>
-//       <div>
-//         <img src={createObjectURL} />
-//         <h4>Select Image</h4>
-//         <input type="file" name="myImage" onChange={uploadToClient} />
-//         <button
-//           className="btn btn-primary"
-//           type="submit"
-//           // onClick={uploadToServer}
-//         >
-//           Send to server
-//         </button>
-//       </div>
-//     </div>
-//   );
-// }
-

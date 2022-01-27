@@ -1,10 +1,7 @@
 package com.ssafy.sunin.service;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.DeleteObjectRequest;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.*;
 import com.ssafy.sunin.domain.FeedCollections;
 import com.ssafy.sunin.domain.user.User;
 import com.ssafy.sunin.dto.*;
@@ -88,6 +85,23 @@ public class FeedServiceImpl implements FeedService {
                 .filePath(feedCollections.getFilePath())
                 .likeUser(feedCollections.getLikeUser())
                 .build();
+    }
+
+    @Override
+    public List<String> downloadFileFeed(String fileNames) {
+        ObjectListing objectListing = amazonS3.listObjects(bucket);
+        List<String> arrayKeyList = new ArrayList<>();
+        List<Date> arrayModTimeList = new ArrayList<>();
+        List<String> fileNameList = new ArrayList<>();
+        for (S3ObjectSummary s : objectListing.getObjectSummaries()) {
+            arrayKeyList.add(s.getKey());
+            arrayModTimeList.add(s.getLastModified());
+        }
+        Date max = Collections.max(arrayModTimeList);
+        String fileName = arrayKeyList.get(arrayModTimeList.indexOf(max));
+
+        fileNameList.add(String.format("https://sunin-bucket.s3.ap-northeast-2.amazonaws.com/%s",fileNames));
+        return fileNameList;
     }
 
     private void suninDays(String userNickname){
@@ -255,13 +269,6 @@ public class FeedServiceImpl implements FeedService {
                 .userId(feedLike.getUser())
                 .likeUser(users)
                 .likes(like).build();
-    }
-
-    @Override
-    public String commitSunin(String userId) {
-        Query query = new Query(Criteria.where("userId").is(userId));
-        Update update = new Update();
-        return null;
     }
 
     @Override

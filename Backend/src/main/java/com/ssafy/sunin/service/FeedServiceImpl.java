@@ -6,9 +6,11 @@ import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.ssafy.sunin.domain.FeedCollections;
+import com.ssafy.sunin.domain.user.User;
 import com.ssafy.sunin.dto.*;
 import com.ssafy.sunin.repository.FeedRepository;
 import com.ssafy.sunin.repository.FollowerRepository;
+import com.ssafy.sunin.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,6 +35,7 @@ public class FeedServiceImpl implements FeedService {
 
     private final FeedRepository feedRepository;
     private final FollowerRepository followerRepository;
+    private final UserRepository userRepository;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
@@ -70,7 +73,7 @@ public class FeedServiceImpl implements FeedService {
                 .filePath(fileNameList)
                 .build();
         ObjectId id = feedRepository.save(feedCollections).getId();
-
+        suninDays(feedVO.getUserId());
         return FeedDto.builder()
                 .id(id.toString())
                 .userId(feedCollections.getUserId())
@@ -82,6 +85,14 @@ public class FeedServiceImpl implements FeedService {
                 .filePath(feedCollections.getFilePath())
                 .likeUser(feedCollections.getLikeUser())
                 .build();
+    }
+
+    private void suninDays(String userNickname){
+        User user = userRepository.getUser(userNickname);
+        int sunin = user.getSuninDays();
+        sunin++;
+        user.setSuninDays(sunin);
+        userRepository.save(user);
     }
 
     @Override

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Grid, Header, Divider, Form, Button,Image } from 'semantic-ui-react'
+import { Grid, Header, Divider, Form, Button, Image } from 'semantic-ui-react'
 import styles from "../../styles/signup.module.css"
 import Navbar from '../../src/component/Navbar'
 import Menubar from '../../src/component/Menubar'

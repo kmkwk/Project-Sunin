@@ -75,7 +75,6 @@ return (
   
           <Button
           content="저장"
-          labelPosition='취소'
           icon='checkmark'
           onClick={() => setOpen(false)}
           positive

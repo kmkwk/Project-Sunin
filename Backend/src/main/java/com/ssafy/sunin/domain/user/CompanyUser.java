@@ -42,6 +42,10 @@ public class CompanyUser implements UserDetails {
     @Column(length =45, nullable = false)
     private String companyAddress;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name="user_role")
+    private Role role; //권한
+
     private LocalDateTime createdDatetime;
 
     @Column()

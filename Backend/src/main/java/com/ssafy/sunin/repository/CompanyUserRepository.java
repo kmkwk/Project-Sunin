@@ -1,5 +1,4 @@
-package com.ssafy.sunin.user;
-
+package com.ssafy.sunin.repository;
 
 import com.ssafy.sunin.domain.user.CompanyUser;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -5,14 +5,19 @@ import com.ssafy.sunin.user.JwtTokenProvider;
 import com.ssafy.sunin.user.UserRequest;
 import com.ssafy.sunin.user.UserService;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
+=========
+>>>>>>>>> Temporary merge branch 2
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +29,10 @@ import java.util.Map;
 public class UserController {
 
 
+<<<<<<<<< Temporary merge branch 1
+=========
+
+>>>>>>>>> Temporary merge branch 2
     private static final String SUCCESS = "success";
     private static final String FAIL = "fail";
     private final JwtTokenProvider jwtTokenProvider;
@@ -39,15 +48,19 @@ public class UserController {
     }
 
     @PostMapping("/login")
+<<<<<<<<< Temporary merge branch 1
     @ApiOperation(value="로그인 성공여부 반환")
+=========
+    @ApiOperation(value="로그인 성고여부 반환")
+>>>>>>>>> Temporary merge branch 2
     public ResponseEntity<Map<String, Object>> login(@RequestBody UserRequest request) {
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
         try {
-            User loginuser = userService.login(request.getUserId(), request.getUserPassword());
+            User loginuser = userService.login(request.getUserEmail(), request.getUserPassword());
 //            System.out.println(loginuser.getUserId());
             if(loginuser!=null){
-                String token = jwtTokenProvider.createToken(loginuser.getUserId(), loginuser.getRoles());
+                String token = jwtTokenProvider.createToken(loginuser.getUserEmail(), loginuser.getRoles());
                 System.out.println(token);
                 resultMap.put("access-token", token);
                 resultMap.put("message", SUCCESS);
@@ -68,6 +81,7 @@ public class UserController {
 //    		return new ResponseEntity(HttpStatus.OK);
 //    	}
 //    	return new ResponseEntity(HttpStatus.BAD_REQUEST);
+<<<<<<<<< Temporary merge branch 1
     }
 
 
@@ -78,16 +92,23 @@ public class UserController {
     //http://localhost:8080/oauth2/authorization/kakao
 
 
+
+
     @ApiOperation(value="소셜 로그인 회원 프로필조회", notes="소셜 로그인한 회원의 정보를 조회합니다.")
     @GetMapping("/profile/social")
     public String user(Model model, Principal principal){
 
         if(principal !=null){
             model.addAttribute("user",principal.getName());
+            System.out.println("소셜유저");
+            System.out.println(principal.getName());
+
         }
 
 //        log.info("사용자 이름 : "+principal.getName());
         return "/user.html";
+=========
+>>>>>>>>> Temporary merge branch 2
     }
 
 

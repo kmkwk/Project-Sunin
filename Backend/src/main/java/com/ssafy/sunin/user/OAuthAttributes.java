@@ -2,8 +2,7 @@ package com.ssafy.sunin.security.dto;
 
 
 import com.ssafy.sunin.domain.user.Role;
-import com.ssafy.sunin.domain.user.Social;
-import com.ssafy.sunin.domain.user.SocialUser;
+import com.ssafy.sunin.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -17,21 +16,21 @@ import java.util.Map;
 public class OAuthAttributes {
     //스프링 시큐리티 OAuth 인증을 위한 속성 객체
 
-    private Map<String, Object> attributes;
+    private Map<String, Object> attributes; // 플랫폼에서 반환받은 유저 정보
     private String nameAttributeKey;
     private String name;
     private String email;
-    private String picture;
-    private String registrationId; //소셜 타입 네이버, 구글 등
+//    private String picture;
+//    private String registrationId; //소셜 타입 네이버, 구글 등
 
     @Builder
-    public OAuthAttributes(Map<String, Object> attributes, String nameAttributeKey, String name, String email, String picture, String registrationId){
+    public OAuthAttributes(Map<String, Object> attributes, String nameAttributeKey, String name, String email){
         this.attributes = attributes;
         this.nameAttributeKey = nameAttributeKey;
         this.name = name;
         this.email = email;
-        this.picture = picture;
-        this.registrationId = registrationId;
+//        this.picture = picture;
+//        this.registrationId = registrationId;
     }
 
     //인증 객체를 리턴한다.
@@ -56,20 +55,16 @@ public class OAuthAttributes {
         return OAuthAttributes.builder()
                 .name((String) properties.get("nickname"))
                 .email((String) properties.get("email"))
-                .picture((String) properties.get("profile_image"))
                 .attributes(properties)
                 .nameAttributeKey(userNameAttributeName)
-                .registrationId(registrationId)
                 .build();
     }
     private static OAuthAttributes ofGoogle(String registrationId, String userNameAttributeName, Map<String, Object> attributes){
         return OAuthAttributes.builder()
                 .name((String) attributes.get("name"))
                 .email((String) attributes.get("email"))
-                .picture((String) attributes.get("picture"))
                 .attributes(attributes)
                 .nameAttributeKey(userNameAttributeName)
-                .registrationId(registrationId)
                 .build();
     }
     private static OAuthAttributes ofNaver(String registrationId, String userNameAttributeName, Map<String, Object> attributes){
@@ -78,13 +73,11 @@ public class OAuthAttributes {
         return OAuthAttributes.builder()
                 .name((String) response.get("name"))
                 .email((String) response.get("email"))
-                .picture((String) response.get("profileImage"))
                 .attributes(response)
                 .nameAttributeKey(userNameAttributeName)
-                .registrationId(registrationId)
                 .build();
     }
-    public SocialUser toEntity(){
-        return SocialUser.builder().userName(name).userEmail(email).userPicture(picture).role(Role.USER).social(Social.valueOf(registrationId.toUpperCase())).build();
+    public User toEntity(){
+        return User.builder().userName(name).userEmail(email).role(Role.USER).build();
     }
 }

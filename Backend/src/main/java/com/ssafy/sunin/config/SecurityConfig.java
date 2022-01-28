@@ -1,7 +1,7 @@
 package com.ssafy.sunin.config;
 
-import com.ssafy.sunin.domain.user.Role;
 import com.ssafy.sunin.security.service.CustomOAuth2UserService;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -13,7 +13,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final CustomOAuth2UserService customOAuth2UserService; //만들어둔 customOAuth2UserService을 연결
-
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {

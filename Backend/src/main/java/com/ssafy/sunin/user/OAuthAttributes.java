@@ -1,5 +1,4 @@
-package com.ssafy.sunin.user;
-
+package com.ssafy.sunin.security.dto;
 
 
 import com.ssafy.sunin.domain.user.Role;

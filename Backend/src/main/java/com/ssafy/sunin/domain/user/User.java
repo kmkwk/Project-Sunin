@@ -20,27 +20,34 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @NoArgsConstructor
 public class User implements UserDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long incre;
+    private long no;
 
-    @Column(length =45, unique = true)
-    private String userId;
+    @Column(length =45, unique = false)
+    private String userEmail;
 
-    @Column(length =1000, nullable = false)
+    @Column(length =1000, nullable = true)
     private String userPassword;
 
-    @Column(length =45, nullable = false)
+    @Column(length =45, nullable = true)
     private String userName;
 
-    @Column(length =45, nullable = false)
+    @Column(length =45, nullable = true)
     private String userNickname;
 
-    @Column(length =45, nullable = false)
+    @Column(length =45, nullable = true)
     private String userTel;
 
-    @Column(length =45, nullable = false)
+    @Column(length =45, nullable = true)
     private String userAddress;
+
+
+    @Enumerated(EnumType.STRING)
+    @Column(name="user_role")
+    private Role role; //권한
+
 
     private LocalDateTime createdDatetime;
 
@@ -70,7 +77,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return userId;
+        return userEmail;
     }
 
     @Override
@@ -92,5 +99,13 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+    public User update(String userName){
+        this.userName = userName;
+        return this;
+    }
+    public String getRoleKey(){
+        return this.role.getKey();
+    }
+
 
 }

@@ -1,7 +1,6 @@
 package com.ssafy.sunin.security.service;
 
 
-import com.ssafy.sunin.domain.user.SocialUser;
 import com.ssafy.sunin.repository.SocialUserRepository;
 import com.ssafy.sunin.security.dto.OAuthAttributes;
 import com.ssafy.sunin.security.dto.SessionUser;

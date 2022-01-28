@@ -1,6 +1,5 @@
 package com.ssafy.sunin.repository;
 
-import com.ssafy.sunin.domain.user.SocialUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

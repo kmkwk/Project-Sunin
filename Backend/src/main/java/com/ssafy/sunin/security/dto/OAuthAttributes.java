@@ -2,8 +2,6 @@ package com.ssafy.sunin.security.dto;
 
 
 import com.ssafy.sunin.domain.user.Role;
-import com.ssafy.sunin.domain.user.Social;
-import com.ssafy.sunin.domain.user.SocialUser;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;

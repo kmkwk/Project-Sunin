@@ -1,7 +1,6 @@
 package com.ssafy.sunin.security.dto;
 
 
-import com.ssafy.sunin.domain.user.SocialUser;
 import lombok.Getter;
 
 import java.io.Serializable;

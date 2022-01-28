@@ -1,4 +1,13 @@
 spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  application:
+    name: oauth2
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017
+      database: sunin
   security:
     user:
       name: ssafy
@@ -9,13 +18,35 @@ spring:
     password: ssafy
   jpa:
     hibernate:
-      ddl-auto: create # 유의해주세요!!
+      ddl-auto: create-drop # 유의해주세요!!
+      use-new-id-generator-mappings: true
+    show-sql: true
     properties:
       hibernate:
-        show_sql: true
-        format_sql: true
-logging.level:
-  org.springframework: debug
-  org.springframework.web: debug
-  org.hibernate.SQL: debug
-  org.hibernate.type: trace
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+  thymeleaf:
+    cache: false
+  profiles:
+    include:
+      - oauth
+      - aws
+      - credentials
+
+logging:
+  level.org.springframework: debug
+  level.org.springframework.web: debug
+
+cors:
+  allowed-origins: 'http://localhost:3000'
+  allowed-methods: GET,POST,PUT,DELETE,OPTIONS
+  allowed-headers: '*'
+  max-age: 3600
+
+#jwt.secret: '8sknjlO3NPTBqo319DHLNqsQAfRJEdKsETOds' # 토큰 관련 secret Key 및 RedirectUri 설정
+#app:
+#  auth:
+#    tokenSecret: 926D96C90030DD58429D2751AC1BDBBC
+#    tokenExpiry: 1800000
+#    refreshTokenExpiry: 604800000
+#  oauth2:
+#    authorizedRedirectUris: - http://localhost:3000/oauth/redirect

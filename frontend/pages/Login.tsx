@@ -24,11 +24,11 @@ export default function Login() {
         user_password: password,
       })
       .then(({ data }) => {
-        console.log("로그인 성공");
+        alert("로그인 성공");
         console.log(data);
       })
       .catch(() => {
-        console.warn("로그인 성공");
+        alert("로그인 실패");
       });
   }
   return (

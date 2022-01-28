@@ -39,7 +39,7 @@ public class FollowerRepositoryImpl implements FollowerRepositoryCustom {
     @Override
     public List<String> getFollowingList(Long id) {
         return queryFactory
-                .select(qUser.userNickname)
+                .select(qUser.user_nickname)
                 .from(qFollower)
                 .join(qFollower.followerMember, qUser)
                 .where(qFollower.user.no.eq(id))

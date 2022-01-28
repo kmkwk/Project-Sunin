@@ -24,21 +24,25 @@ public class User {
     private String userId;
 
     @Column(length =45, nullable = false)
-    private String user_password;
+    private String userName;
 
     @Column(length =45, nullable = false)
-    private String user_name;
+    private String userPassword;
 
     @Column(length =45, nullable = false)
-    private String user_nickname;
+    private String userNickname;
 
     @Column(length =45, nullable = false)
-    private String user_tel;
+    private String userTel;
 
     @Column(length =45, nullable = false)
-    private String user_address;
+    private String userAddress;
 
-    private LocalDateTime created_datetime;
+    @Enumerated(EnumType.STRING)
+    @Column(name="user_role")
+    private Role role; //권한
+
+    private LocalDateTime createdDatetime;
 
     @OneToMany(mappedBy = "user")
     private List<Follower> follower = new ArrayList<>();
@@ -47,6 +51,6 @@ public class User {
 
     @PrePersist //디비에 insert 되기직전에 실행
     public void created_datetime() {
-        this.created_datetime = LocalDateTime.now();
+        this.createdDatetime = LocalDateTime.now();
     }
 }

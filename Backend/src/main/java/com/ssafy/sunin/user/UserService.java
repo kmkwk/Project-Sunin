@@ -4,12 +4,8 @@ import com.ssafy.sunin.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 
-import javax.servlet.http.HttpSession;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -22,11 +18,11 @@ public class UserService{
     public String signup(UserRequest request){
         UserRepository.save(User.builder()
                 .userId(request.getUserId())
-                .user_password(request.getUser_password())
-                .user_name(request.getUser_name())
-                .user_nickname(request.getUser_nickname())
-                .user_tel(request.getUser_tel())
-                .user_address(request.getUser_address())
+                .userPassword(request.getUserPassword())
+                .userName(request.getUserName())
+                .userNickname(request.getUserNickname())
+                .userTel(request.getUserTel())
+                .userAddress(request.getUserAddress())
                 .build());
         return "Success";
     }
@@ -34,7 +30,7 @@ public class UserService{
     public User login(String userId, String user_password) {
         Optional<User> userfind = UserRepository.findByUserId(userId);
 
-        if(userfind.get().getUser_password().equals(user_password)) {
+        if(userfind.get().getUserPassword().equals(user_password)) {
             User user = UserRepository.findByUserId(userId).orElseThrow();
             return user;
         }
@@ -58,11 +54,11 @@ public class UserService{
     public String updateUser(UserRequest request) {
         Optional<User> user = UserRepository.findByUserId(request.getUserId());
         user.ifPresent(selectUser->{
-            selectUser.setUser_password(request.getUser_password());
-            selectUser.setUser_name(request.getUser_name());
-            selectUser.setUser_nickname(request.getUser_nickname());
-            selectUser.setUser_address(request.getUser_address());
-            selectUser.setUser_tel(request.getUser_tel());
+            selectUser.setUserPassword(request.getUserPassword());
+            selectUser.setUserName(request.getUserName());
+            selectUser.setUserNickname(request.getUserNickname());
+            selectUser.setUserAddress(request.getUserAddress());
+            selectUser.setUserTel(request.getUserTel());
             UserRepository.save(selectUser);
         });
         return "Success";

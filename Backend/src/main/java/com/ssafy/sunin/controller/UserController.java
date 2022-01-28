@@ -36,7 +36,7 @@ public class UserController {
     @PostMapping("/login")
     @ApiOperation(value="로그인", notes = "이메일과 비밀번호로 로그인을 시도합니다.")
     public ResponseEntity<User> login(@RequestBody UserRequest request) {
-            User loginuser = userService.login(request.getUserId(), request.getUser_password());
+            User loginuser = userService.login(request.getUserId(), request.getUserPassword());
 
             if(loginuser != null) return new ResponseEntity<>(loginuser, HttpStatus.OK);
             return new ResponseEntity<>(null, HttpStatus.OK);

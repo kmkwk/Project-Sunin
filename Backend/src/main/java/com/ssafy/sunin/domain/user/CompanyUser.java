@@ -56,9 +56,6 @@ public class CompanyUser implements UserDetails {
         this.createdDatetime = LocalDateTime.now();
     }
 
-
-    //
-
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default
     private List<String> roles = new ArrayList<>();

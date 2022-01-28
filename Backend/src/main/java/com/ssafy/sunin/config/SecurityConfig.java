@@ -1,7 +1,6 @@
 package com.ssafy.sunin.config;
 
-import com.ssafy.sunin.security.service.CustomOAuth2UserService;
-
+import com.ssafy.sunin.user.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;

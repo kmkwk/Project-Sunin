@@ -19,7 +19,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/feed")
-@CrossOrigin("*")
+//@CrossOrigin("*")
 @Slf4j
 public class FeedController {
 

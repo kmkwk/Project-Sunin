@@ -16,7 +16,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .allowedOriginPatterns("*") //자원 공유 오리진 지정
                 .allowedMethods("GET","POST","PUT","PATCH","DELETE","OPTIONS") //요청 허용 메서드
                 .allowedHeaders("*") //요청 허용 헤더
-                .allowCredentials(true) //요청 허용 쿠키
+//                .allowCredentials(true) //요청 허용 쿠키
                 .maxAge(MAX_AGE_SECS);
     }
 }

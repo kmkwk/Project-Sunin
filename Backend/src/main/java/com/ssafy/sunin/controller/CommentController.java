@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin("*")
+//@CrossOrigin("*")
 @RestController
-@RestControllerAdvice
+//@RestControllerAdvice
 @RequestMapping(value = "/comment")
 @RequiredArgsConstructor
 public class CommentController {
@@ -26,11 +26,11 @@ public class CommentController {
     * 이거 ObjectId로 바꿔야함 !!!
     * */
 
-    @ExceptionHandler(value = {IllegalArgumentException.class})
-    public ResponseEntity<String> IllegalArgumentException() {
-        String msg = "예외 발생 !! (IllegalArgumentException)";
-        return new ResponseEntity<>(msg, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+//    @ExceptionHandler(value = {IllegalArgumentException.class})
+//    public ResponseEntity<String> IllegalArgumentException() {
+//        String msg = "예외 발생 !! (IllegalArgumentException)";
+//        return new ResponseEntity<>(msg, HttpStatus.INTERNAL_SERVER_ERROR);
+//    }
 
     @PostMapping
     @ApiOperation(value = "댓글 작성하기", notes = "피드와 상호작용할 댓글을 입력합니다.")

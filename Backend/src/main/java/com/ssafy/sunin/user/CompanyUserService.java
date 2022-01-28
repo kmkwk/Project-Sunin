@@ -5,7 +5,7 @@ import com.ssafy.sunin.domain.user.Role;
 import com.ssafy.sunin.repository.CompanyUserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.password.PasswordEncoder;
+//import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,7 +17,7 @@ import java.util.Optional;
 public class CompanyUserService {
 
     private final CompanyUserRepository companyUserRepository;
-    private final PasswordEncoder passwordEncoder;
+//    private final PasswordEncoder passwordEncoder;
 
     public String signup(CompanyUserRequest request){
         companyUserRepository.save(CompanyUser.builder()
@@ -46,7 +46,7 @@ public class CompanyUserService {
         return "Success";
     }
 
-    public List<CompanyUser> listCompanyUser() throws Exception{
+    public List<CompanyUser> listCompanyUser() throws Exception {
         return companyUserRepository.findAll();
     }
 

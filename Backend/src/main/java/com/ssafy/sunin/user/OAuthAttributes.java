@@ -1,5 +1,4 @@
-package com.ssafy.sunin.security.dto;
-
+package com.ssafy.sunin.user;
 
 import com.ssafy.sunin.domain.user.Role;
 import com.ssafy.sunin.domain.user.User;
@@ -19,16 +18,16 @@ public class OAuthAttributes {
     private Map<String, Object> attributes; // 플랫폼에서 반환받은 유저 정보
     private String nameAttributeKey;
     private String name;
-    private String email;
+    private String id;
 //    private String picture;
 //    private String registrationId; //소셜 타입 네이버, 구글 등
 
     @Builder
-    public OAuthAttributes(Map<String, Object> attributes, String nameAttributeKey, String name, String email){
+    public OAuthAttributes(Map<String, Object> attributes, String nameAttributeKey, String name, String id){
         this.attributes = attributes;
         this.nameAttributeKey = nameAttributeKey;
         this.name = name;
-        this.email = email;
+        this.id = id;
 //        this.picture = picture;
 //        this.registrationId = registrationId;
     }
@@ -54,7 +53,7 @@ public class OAuthAttributes {
         properties.put("id", attributes.get("id"));
         return OAuthAttributes.builder()
                 .name((String) properties.get("nickname"))
-                .email((String) properties.get("email"))
+                .id((String) properties.get("id"))
                 .attributes(properties)
                 .nameAttributeKey(userNameAttributeName)
                 .build();
@@ -62,7 +61,7 @@ public class OAuthAttributes {
     private static OAuthAttributes ofGoogle(String registrationId, String userNameAttributeName, Map<String, Object> attributes){
         return OAuthAttributes.builder()
                 .name((String) attributes.get("name"))
-                .email((String) attributes.get("email"))
+                .id((String) attributes.get("id"))
                 .attributes(attributes)
                 .nameAttributeKey(userNameAttributeName)
                 .build();
@@ -72,12 +71,12 @@ public class OAuthAttributes {
 
         return OAuthAttributes.builder()
                 .name((String) response.get("name"))
-                .email((String) response.get("email"))
+                .id((String) response.get("id"))
                 .attributes(response)
                 .nameAttributeKey(userNameAttributeName)
                 .build();
     }
     public User toEntity(){
-        return User.builder().userName(name).userEmail(email).role(Role.USER).build();
+        return User.builder().userName(name).userId(id).role(Role.USER).build();
     }
 }

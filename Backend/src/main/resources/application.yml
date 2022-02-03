@@ -18,7 +18,7 @@ spring:
     password: ssafy
   jpa:
     hibernate:
-      ddl-auto: none # 유의해주세요!!
+      ddl-auto: create # 유의해주세요!!
       use-new-id-generator-mappings: true
     show-sql: true
     properties:
@@ -32,6 +32,26 @@ spring:
       - aws
       - credentials
 
-logging:
-  level.org.springframework: debug
-  level.org.springframework.web: debug
+#logging:
+#  level.org.springframework: debug
+#  level.org.springframework.web: debug
+
+# cors 설정
+cors:
+  allowed-origins: 'http://localhost:3000'
+  allowed-methods: GET,POST,PUT,DELETE,OPTIONS
+  allowed-headers: '*'
+  max-age: 3600
+
+# jwt secret key 설정
+jwt.secret: '8sknjlO3NPTBqo319DHLNqsQAfRJEdKsETOds'
+
+# 토큰 관련 secret Key 및 RedirectUri 설정
+app:
+  auth:
+    tokenSecret: 926D96C90030DD58429D2751AC1BDBBC
+    tokenExpiry: 1800000
+    refreshTokenExpiry: 604800000
+  oauth2:
+    authorizedRedirectUris:
+      - http://localhost:3000/oauth/redirect

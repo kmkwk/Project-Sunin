@@ -1,9 +1,11 @@
 package com.ssafy.sunin.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.ssafy.sunin.domain.Follower;
 import com.ssafy.sunin.domain.QFollower;
 import com.ssafy.sunin.domain.user.QUser;
-import com.ssafy.sunin.domain.user.User;
+import com.ssafy.sunin.dto.FollowerVO;
+
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.List;
@@ -20,29 +22,22 @@ public class FollowerRepositoryImpl implements FollowerRepositoryCustom {
 
     @Transactional
     @Override
-    public Long deleteFollower(User user, User followerMember) {
+    public Long deleteFollower(Follower follower) {
         return queryFactory
                 .delete(qFollower)
-                .where(qFollower.followerMember.eq(followerMember).and(qFollower.user.eq(user)))
+                .where(qFollower.followerMember.eq(follower.getFollowerMember()).and(qFollower.user.eq(follower.getUser())))
                 .execute();
-    }
-
-    @Override
-    public List<Long> getUser(User user, User followerMember) {
-        return queryFactory
-                .select(qFollower.id)
-                .from(qFollower)
-                .where(qFollower.followerMember.eq(followerMember).and(qFollower.user.eq(user)))
-                .fetch();
     }
 
     @Override
     public List<String> getFollowingList(Long id) {
         return queryFactory
-                .select(qUser.user_nickname)
+//                .select(qUser.user_nickname)
+                .select(qUser.username)
                 .from(qFollower)
                 .join(qFollower.followerMember, qUser)
-                .where(qFollower.user.no.eq(id))
+//                .where(qFollower.user.no.eq(id))
+                .where(qFollower.user.userSeq.eq(id))
                 .distinct()
                 .fetch();
     }
@@ -52,7 +47,8 @@ public class FollowerRepositoryImpl implements FollowerRepositoryCustom {
         return queryFactory
                 .select(qFollower.count())
                 .from(qFollower)
-                .where(qFollower.user.no.eq(id))
+//                .where(qFollower.user.no.eq(id))
+                .where(qFollower.user.userSeq.eq(id))
                 .fetch().get(0);
     }
 
@@ -61,7 +57,20 @@ public class FollowerRepositoryImpl implements FollowerRepositoryCustom {
         return queryFactory
                 .select(qFollower.count())
                 .from(qFollower)
-                .where(qFollower.followerMember.no.eq(followerMember))
+//                .where(qFollower.followerMember.no.eq(followerMember))
+                .where(qFollower.followerMember.userSeq.eq(followerMember))
                 .fetch().get(0);
+    }
+
+    @Override
+    public Follower getUser(FollowerVO followerVO) {
+        return queryFactory
+                .selectFrom(qFollower)
+                .leftJoin(qFollower.user, qUser)
+                .fetchJoin()
+                .leftJoin(qFollower.followerMember, qUser)
+                .where(qFollower.user.userSeq.eq(followerVO.getUserId())
+                        .and(qFollower.followerMember.userSeq.eq(followerVO.getFollowerMember())))
+                .fetchOne();
     }
 }

@@ -47,6 +47,9 @@ public class FeedCollections{
 
     private boolean flag;
 
+    private List<Comment> comments;
+//    private Map<String,Object> comments;
+    
     public void setFilePath(List<String> filePath) {
         this.filePath = filePath;
     }
@@ -79,8 +82,21 @@ public class FeedCollections{
         this.lastModifiedDate = lastModifiedDate;
     }
 
+//    @Builder
+//    public FeedCollections(String userId, String content, List<String> hashtags, int likes, Map<String, Object> likeUser, LocalDateTime createdDate, LocalDateTime lastModifiedDate, List<String> filePath, boolean flag) {
+//        this.userId = userId;
+//        this.content = content;
+//        this.hashtags = hashtags;
+//        this.likes = likes;
+//        this.likeUser = likeUser;
+//        this.createdDate = createdDate;
+//        this.lastModifiedDate = lastModifiedDate;
+//        this.filePath = filePath;
+//        this.flag = flag;
+//    }
+
     @Builder
-    public FeedCollections(String userId, String content, List<String> hashtags, int likes, Map<String, Object> likeUser, LocalDateTime createdDate, LocalDateTime lastModifiedDate, List<String> filePath, boolean flag) {
+    public FeedCollections(String userId, String content, List<String> hashtags, int likes, Map<String, Object> likeUser, LocalDateTime createdDate, LocalDateTime lastModifiedDate, List<String> filePath, boolean flag, List<Comment> comments) {
         this.userId = userId;
         this.content = content;
         this.hashtags = hashtags;
@@ -90,6 +106,7 @@ public class FeedCollections{
         this.lastModifiedDate = lastModifiedDate;
         this.filePath = filePath;
         this.flag = flag;
+        this.comments = comments;
     }
 
     @Builder

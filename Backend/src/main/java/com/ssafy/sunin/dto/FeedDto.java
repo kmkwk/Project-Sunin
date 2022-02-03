@@ -1,5 +1,6 @@
 package com.ssafy.sunin.dto;
 
+import com.ssafy.sunin.domain.Comment;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,9 +24,23 @@ public class FeedDto {
     private LocalDateTime modifiedDate;
     private List<String> filePath;
     private Map<String,Object> likeUser;
+    private List<Comment> comments;
+
+//    @Builder
+//    public FeedDto(String id, String userId, String content, List<String> hashtags, int likes, LocalDateTime createdDate, LocalDateTime modifiedDate, List<String> filePath,Map<String,Object> likeUser) {
+//        this.id = id;
+//        this.userId = userId;
+//        this.content = content;
+//        this.hashtags = hashtags;
+//        this.likes = likes;
+//        this.createdDate = createdDate;
+//        this.modifiedDate = modifiedDate;
+//        this.filePath = filePath;
+//        this.likeUser = likeUser;
+//    }
 
     @Builder
-    public FeedDto(String id, String userId, String content, List<String> hashtags, int likes, LocalDateTime createdDate, LocalDateTime modifiedDate, List<String> filePath,Map<String,Object> likeUser) {
+    public FeedDto(String id, String userId, String content, List<String> hashtags, int likes, LocalDateTime createdDate, LocalDateTime modifiedDate, List<String> filePath, Map<String, Object> likeUser, List<Comment> comments) {
         this.id = id;
         this.userId = userId;
         this.content = content;
@@ -35,6 +50,7 @@ public class FeedDto {
         this.modifiedDate = modifiedDate;
         this.filePath = filePath;
         this.likeUser = likeUser;
+        this.comments = comments;
     }
 
     @Builder

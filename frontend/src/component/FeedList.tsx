@@ -1,7 +1,7 @@
-import Link from 'next/link';
-import { Grid } from 'semantic-ui-react'
+import Link from "next/link";
+import { Grid, Image } from "semantic-ui-react";
 
-export default function FeedList ({ list }: any) {
+export default function FeedList({ list }: any) {
   return (
     <>
       <Grid columns={3} stackable>
@@ -10,15 +10,20 @@ export default function FeedList ({ list }: any) {
             <Grid.Column key={item.id}>
               <Link href={`/feed/personal/${item.id}`}>
                 <a>
-                <img src={item.image_link} alt={item.name} />
-                <p>{ item.name }</p>
+                  <Image src={item.filePath[0]} alt={item.filePath[0]} />
+                  <p className="content">{item.content}</p>
                 </a>
               </Link>
             </Grid.Column>
           ))}
-          
         </Grid.Row>
       </Grid>
+      <style jsx>{`
+        .content {
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      `}</style>
     </>
   );
 }

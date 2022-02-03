@@ -95,7 +95,7 @@ public class FeedController {
 
     @ApiOperation(value = "페이징 최신순 피드 조회")
     @GetMapping("/pageLatest")
-    public ResponseEntity<List<FeedDto>> getPageLatestFeed(@PageableDefault(size = 6, sort="createdDate",
+    public ResponseEntity<List<FeedDto>> getPageLatestFeed(@PageableDefault(size = 12, sort="createdDate",
                                                             direction = Sort.Direction.DESC) Pageable pageable){
         log.debug("getPageLatestFeed");
         return ResponseEntity.ok(feedService.getPageLatestFeed(pageable));

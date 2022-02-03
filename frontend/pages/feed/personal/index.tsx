@@ -8,30 +8,30 @@ import FeedList from "../../../src/component/FeedList";
 export default function personal() {
   const [list, setList] = useState([]);
 
-  const API_URL =
-    "http://makeup-api.herokuapp.com/api/v1/products.json?brand=maybelline";
-
-  function getData() {
-    axios.get(API_URL).then((res) => {
-      setList(res.data);
-    });
-  }
-
   useEffect(() => {
-    getData();
+    axios
+      .get(`http://localhost:8080/feed/pageLatest`, {
+        params: {
+          page: 0,
+        },
+      })
+      .then(({ data }) => {
+        setList(data);
+      });
   }, []);
 
   return (
     <>
       <Navbar />
       <Grid columns={2} padded stackable>
-        <Grid.Column width={3}>
+        <Grid.Column width={4}>
           <Menubar />
         </Grid.Column>
-        <Grid.Column width={13}>
+        <Grid.Column width={10}>
           <h1>this page is personal</h1>
           <FeedList list={list} />
         </Grid.Column>
+        <Grid.Column width={2} />
       </Grid>
     </>
   );

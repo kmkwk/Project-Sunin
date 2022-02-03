@@ -5,6 +5,7 @@ import com.ssafy.sunin.domain.Follower;
 import com.ssafy.sunin.domain.QFollower;
 import com.ssafy.sunin.domain.user.QUser;
 import com.ssafy.sunin.dto.FollowerVO;
+
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.List;
@@ -31,9 +32,11 @@ public class FollowerRepositoryImpl implements FollowerRepositoryCustom {
     @Override
     public List<String> getFollowingList(Long id) {
         return queryFactory
+//                .select(qUser.user_nickname)
                 .select(qUser.username)
                 .from(qFollower)
                 .join(qFollower.followerMember, qUser)
+//                .where(qFollower.user.no.eq(id))
                 .where(qFollower.user.userSeq.eq(id))
                 .distinct()
                 .fetch();
@@ -44,6 +47,7 @@ public class FollowerRepositoryImpl implements FollowerRepositoryCustom {
         return queryFactory
                 .select(qFollower.count())
                 .from(qFollower)
+//                .where(qFollower.user.no.eq(id))
                 .where(qFollower.user.userSeq.eq(id))
                 .fetch().get(0);
     }
@@ -53,6 +57,7 @@ public class FollowerRepositoryImpl implements FollowerRepositoryCustom {
         return queryFactory
                 .select(qFollower.count())
                 .from(qFollower)
+//                .where(qFollower.followerMember.no.eq(followerMember))
                 .where(qFollower.followerMember.userSeq.eq(followerMember))
                 .fetch().get(0);
     }

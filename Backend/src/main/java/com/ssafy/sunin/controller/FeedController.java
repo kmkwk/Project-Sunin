@@ -60,7 +60,6 @@ public class FeedController {
     @ApiOperation(value = "피드 상세 페이지")
     @GetMapping("/detail")
     public ResponseEntity<FeedDto> getDetailFeed(@RequestParam String id) {
-        System.out.println("sdad");
         return ResponseEntity.ok(feedService.getDetailFeed(id));
     }
 

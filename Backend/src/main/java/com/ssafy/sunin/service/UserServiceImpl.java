@@ -1,26 +1,42 @@
-package com.ssafy.sunin.user;
+package com.ssafy.sunin.service;
 
+import com.ssafy.sunin.domain.user.Role;
 import com.ssafy.sunin.domain.user.User;
+import com.ssafy.sunin.dto.UserRegister;
+import com.ssafy.sunin.repository.SocialUserRepository;
+import com.ssafy.sunin.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 
-import javax.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class UserService{
-
-    private final UserRepository UserRepository;
+public class UserServiceImpl implements UserService{
+    private final PasswordEncoder passwordEncoder;
+    private final SocialUserRepository SocialUserRepository;
+    private final UserRepository userRepository;
 
     public User getUser(String userId) {
-        return UserRepository.findByUserId(userId);
+        return SocialUserRepository.findByUserId(userId);
+    }
+
+    @Override
+    public void register(UserRegister userRegisterDto) throws Exception {
+        User user = User.builder()
+                .email(userRegisterDto.getEmail())
+                .password(passwordEncoder.encode(userRegisterDto.getPassword()))
+                .role(Role.USER)
+                .username(userRegisterDto.getUsername())
+                .userNickname(userRegisterDto.getUserNickname())
+                .userAddress(userRegisterDto.getUseraddress())
+                .userTel(userRegisterDto.getUserTel())
+                .createdAt(LocalDateTime.now())
+                .build();
+                userRepository.save(user);
     }
 
 //    public String signup(UserRequest request){

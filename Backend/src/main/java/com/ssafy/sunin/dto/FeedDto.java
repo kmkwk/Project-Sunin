@@ -26,18 +26,18 @@ public class FeedDto {
     private Map<String,Object> likeUser;
     private List<Comment> comments;
 
-    @Builder
-    public FeedDto(String id, String userId, String content, List<String> hashtags, int likes, LocalDateTime createdDate, LocalDateTime modifiedDate, List<String> filePath,Map<String,Object> likeUser) {
-        this.id = id;
-        this.userId = userId;
-        this.content = content;
-        this.hashtags = hashtags;
-        this.likes = likes;
-        this.createdDate = createdDate;
-        this.modifiedDate = modifiedDate;
-        this.filePath = filePath;
-        this.likeUser = likeUser;
-    }
+//    @Builder
+//    public FeedDto(String id, String userId, String content, List<String> hashtags, int likes, LocalDateTime createdDate, LocalDateTime modifiedDate, List<String> filePath,Map<String,Object> likeUser) {
+//        this.id = id;
+//        this.userId = userId;
+//        this.content = content;
+//        this.hashtags = hashtags;
+//        this.likes = likes;
+//        this.createdDate = createdDate;
+//        this.modifiedDate = modifiedDate;
+//        this.filePath = filePath;
+//        this.likeUser = likeUser;
+//    }
 
     @Builder
     public FeedDto(String id, String userId, String content, List<String> hashtags, int likes, LocalDateTime createdDate, LocalDateTime modifiedDate, List<String> filePath, Map<String, Object> likeUser, List<Comment> comments) {

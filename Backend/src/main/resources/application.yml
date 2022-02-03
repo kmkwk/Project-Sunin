@@ -18,11 +18,13 @@ spring:
     password: ssafy
   jpa:
     hibernate:
-      ddl-auto: none # 유의해주세요!!
+      ddl-auto: create # 유의해주세요!!
       use-new-id-generator-mappings: true
     show-sql: true
     properties:
       hibernate:
+        format_sql: true
+        show_sql: true
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
   thymeleaf:
     cache: false
@@ -44,7 +46,11 @@ cors:
   max-age: 3600
 
 # jwt secret key 설정
-jwt.secret: '8sknjlO3NPTBqo319DHLNqsQAfRJEdKsETOds'
+#jwt.secret: '8sknjlO3NPTBqo319DHLNqsQAfRJEdKsETOds'
+jwt:
+  header: Authorization
+  secret: 8sknjlO3NPTBqo319DHLNqsQAfRJEdKsETOds
+  token-validity-in-seconds: 86400 # 60 * 60 * 24
 
 # 토큰 관련 secret Key 및 RedirectUri 설정
 app:

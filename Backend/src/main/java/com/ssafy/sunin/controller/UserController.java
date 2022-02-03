@@ -2,20 +2,27 @@ package com.ssafy.sunin.controller;
 
 import com.ssafy.sunin.common.ApiResponse;
 import com.ssafy.sunin.domain.user.User;
-import com.ssafy.sunin.user.UserRequest;
-import com.ssafy.sunin.user.UserService;
+import com.ssafy.sunin.dto.UserLogin;
+import com.ssafy.sunin.dto.UserRegister;
+import com.ssafy.sunin.jwt.JwtFilter;
+import com.ssafy.sunin.jwt.Token;
+import com.ssafy.sunin.jwt.TokenProvider;
+import com.ssafy.sunin.service.UserService;
+import com.ssafy.sunin.service.UserServiceImpl;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.validation.Valid;
 
 @Slf4j
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -25,17 +32,63 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class UserController {
 
+    private final UserServiceImpl userServiceImpl;
     private final UserService userService;
+    private final TokenProvider tokenProvider;
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
     @GetMapping
     public ApiResponse getUser() {
 
         org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        User user = userService.getUser(principal.getUsername());
+        User user = userServiceImpl.getUser(principal.getUsername());
 
         return ApiResponse.success("user", user);
     }
+
+
+    @ApiOperation(value = "회원 가입을 한다.", response = String.class)
+    @PostMapping()
+    public ResponseEntity<String> register(@Valid @RequestBody UserRegister userRegisterDto) throws Exception {
+        log.info("register user : {}", userRegisterDto);
+        userService.register(userRegisterDto);
+        return new ResponseEntity<String>(HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "로그인", response = Token.class)
+    @PostMapping("/login")
+    public ResponseEntity<Token> login(@Valid @ApiParam(value = "email와 password", required = true) @RequestBody UserLogin userLoginDto) throws Exception{
+        log.info("call login : {}", userLoginDto);
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(userLoginDto.getEmail(), userLoginDto.getPassword());
+        //유저 정보를 조회하여 인증 정보를 생성
+        System.out.println(authenticationToken);
+        System.out.println("0번");
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        //해당 인증 정보를 현재 실행중인 스레드(Security Context)에 저장
+        System.out.println("1번");
+        System.out.println(authenticationManagerBuilder.getObject().authenticate(authenticationToken));
+        System.out.println("2번");
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        //해당 인증 정보를 기반으로 jwt 토큰을 생성
+        System.out.println("3번");
+        String jwt = tokenProvider.createToken(authentication);
+        System.out.println("4번");
+        log.info("로그인 토큰정보 : {}", jwt);
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
+
+        //생성된 Token을 Response Header에 넣고, Token vo 객체를 이용해 Response Body에도 넣어서 리턴
+        return new ResponseEntity<>(new Token(jwt), httpHeaders, HttpStatus.OK);
+    }
+    @GetMapping("/test")
+    public String test(){
+        return "hi";
+    }
+
+
 
 //    @PostMapping("/signup")
 //    @ApiOperation(value="회원가입", notes="가입성공 여부에 따라 http상태로 반환해서 알려줌")

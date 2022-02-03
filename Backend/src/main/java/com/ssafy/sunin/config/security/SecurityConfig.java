@@ -2,6 +2,10 @@ package com.ssafy.sunin.config.security;
 
 import com.ssafy.sunin.config.properties.AppProperties;
 import com.ssafy.sunin.config.properties.CorsProperties;
+import com.ssafy.sunin.jwt.JwtAccessDeniedHandler;
+import com.ssafy.sunin.jwt.JwtAuthenticationEntryPoint;
+import com.ssafy.sunin.jwt.JwtSecurityConfig;
+import com.ssafy.sunin.jwt.TokenProvider;
 import com.ssafy.sunin.oauth.filter.TokenAuthenticationFilter;
 import com.ssafy.sunin.oauth.handler.OAuth2AuthenticationFailureHandler;
 import com.ssafy.sunin.oauth.handler.OAuth2AuthenticationSuccessHandler;
@@ -10,10 +14,11 @@ import com.ssafy.sunin.oauth.repository.OAuth2AuthorizationRequestBasedOnCookieR
 import com.ssafy.sunin.oauth.service.CustomOAuth2UserService;
 import com.ssafy.sunin.oauth.service.CustomUserDetailsService;
 import com.ssafy.sunin.oauth.token.AuthTokenProvider;
-import com.ssafy.sunin.user.UserRefreshTokenRepository;
+import com.ssafy.sunin.repository.UserRefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -33,11 +38,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final CorsProperties corsProperties;
     private final AppProperties appProperties;
-    private final AuthTokenProvider tokenProvider;
+    private final AuthTokenProvider authTokenProvider;
     private final CustomUserDetailsService userDetailsService;
     private final CustomOAuth2UserService oAuth2UserService;
     private final TokenAccessDeniedHandler tokenAccessDeniedHandler;
     private final UserRefreshTokenRepository userRefreshTokenRepository;
+    private final TokenProvider tokenProvider;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
     /*
     * UserDetailsService 설정
@@ -46,6 +54,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService)
                 .passwordEncoder(passwordEncoder());
+
     }
 
     @Override
@@ -55,8 +64,32 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                     .sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+
+                //다운
                 .and()
                     .csrf().disable()
+
+                    .exceptionHandling() //예외처리 기능
+                    .authenticationEntryPoint(jwtAuthenticationEntryPoint) //인증 실패시 (Spring Security에서 인증되지 않은 사용자)
+                    .accessDeniedHandler(jwtAccessDeniedHandler) //인가 실패시 (Spring Security에서 인증되었으나 권한이 없는 사용자)
+
+                .and()
+                    .sessionManagement()
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS) //세션 off
+                    .and()
+                    .authorizeRequests()
+                    .antMatchers(HttpMethod.GET, "/api/users/**").authenticated()
+                    .antMatchers(HttpMethod.POST, "/api/boards", "/api/comments").authenticated()
+                    .antMatchers(HttpMethod.PUT, "/api/boards", "/api/comments", "/api/users").authenticated()
+                    .antMatchers(HttpMethod.DELETE, "/api/boards/**", "/api/comments/**", "/api/users/**").authenticated()
+                    .antMatchers(HttpMethod.GET, "/api/users").hasRole("ADMIN")
+                    .anyRequest().permitAll()
+
+                .and()
+                    .apply(new JwtSecurityConfig(tokenProvider))
+                //
+
+                .and()
                     .formLogin().disable()
                     .httpBasic().disable()
                     .exceptionHandling()
@@ -108,7 +141,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     * */
     @Bean
     public TokenAuthenticationFilter tokenAuthenticationFilter() {
-        return new TokenAuthenticationFilter(tokenProvider);
+        return new TokenAuthenticationFilter(authTokenProvider);
     }
 
     /*
@@ -126,7 +159,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler() {
         return new OAuth2AuthenticationSuccessHandler(
-                tokenProvider,
+                authTokenProvider,
                 appProperties,
                 userRefreshTokenRepository,
                 oAuth2AuthorizationRequestBasedOnCookieRepository()

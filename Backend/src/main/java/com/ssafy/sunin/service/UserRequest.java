@@ -1,4 +1,4 @@
-package com.ssafy.sunin.user;
+package com.ssafy.sunin.service;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

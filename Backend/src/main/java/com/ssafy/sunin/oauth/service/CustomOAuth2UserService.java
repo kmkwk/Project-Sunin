@@ -7,7 +7,7 @@ import com.ssafy.sunin.oauth.entity.UserPrincipal;
 import com.ssafy.sunin.oauth.exception.OAuthProviderMissMatchException;
 import com.ssafy.sunin.oauth.info.OAuth2UserInfo;
 import com.ssafy.sunin.oauth.info.OAuth2UserInfoFactory;
-import com.ssafy.sunin.user.UserRepository;
+import com.ssafy.sunin.repository.SocialUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
-    private final UserRepository userRepository;
+    private final SocialUserRepository userRepository;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {

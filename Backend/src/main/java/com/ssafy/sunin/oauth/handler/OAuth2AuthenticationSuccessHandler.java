@@ -9,7 +9,7 @@ import com.ssafy.sunin.oauth.info.OAuth2UserInfoFactory;
 import com.ssafy.sunin.oauth.repository.OAuth2AuthorizationRequestBasedOnCookieRepository;
 import com.ssafy.sunin.oauth.token.AuthToken;
 import com.ssafy.sunin.oauth.token.AuthTokenProvider;
-import com.ssafy.sunin.user.UserRefreshTokenRepository;
+import com.ssafy.sunin.repository.UserRefreshTokenRepository;
 import com.ssafy.sunin.utils.CookieUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;

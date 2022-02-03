@@ -3,7 +3,7 @@ package com.ssafy.sunin.service;
 import com.ssafy.sunin.domain.Follower;
 import com.ssafy.sunin.dto.FollowerVO;
 import com.ssafy.sunin.repository.FollowerRepository;
-import com.ssafy.sunin.user.UserRepository;
+import com.ssafy.sunin.repository.SocialUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 public class FollowerServiceImpl implements FollowerService{
 
     private final FollowerRepository followerRepository;
-    private final UserRepository userRepository;
+    private final SocialUserRepository userRepository;
 
     @Override
     public Long addFollower(FollowerVO followerVO) {

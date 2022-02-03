@@ -48,17 +48,8 @@ public class FeedCollections{
     private boolean flag;
 
     private List<Comment> comments;
-//    private Map<String,Map<String,Object>> comments;
-
-
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
-    }
-
-//    public void setComments(Map<String, Map<String, Object>> comments) {
-//        this.comments = comments;
-//    }
-
+//    private Map<String,Object> comments;
+    
     public void setFilePath(List<String> filePath) {
         this.filePath = filePath;
     }

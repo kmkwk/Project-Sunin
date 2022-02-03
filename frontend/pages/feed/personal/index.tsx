@@ -4,21 +4,28 @@ import { Grid } from "semantic-ui-react";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import FeedList from "../../../src/component/FeedList";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 export default function personal() {
   const [list, setList] = useState([]);
+  const [pages, setPage] = useState(0);
 
   useEffect(() => {
+    loadFeed();
+  }, []);
+
+  function loadFeed() {
     axios
       .get(`http://localhost:8080/feed/pageLatest`, {
         params: {
-          page: 0,
+          page: pages,
         },
       })
       .then(({ data }) => {
-        setList(data);
+        setList([...list, ...data]);
       });
-  }, []);
+    setPage(pages + 1);
+  }
 
   return (
     <>
@@ -29,7 +36,13 @@ export default function personal() {
         </Grid.Column>
         <Grid.Column width={10}>
           <h1>this page is personal</h1>
-          <FeedList list={list} />
+          <InfiniteScroll
+            style={{ overflow: "hidden" }}
+            dataLength={list.length}
+            next={loadFeed}
+            hasMore={true}>
+            <FeedList list={list} />
+          </InfiniteScroll>
         </Grid.Column>
         <Grid.Column width={2} />
       </Grid>

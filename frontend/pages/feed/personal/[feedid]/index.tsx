@@ -21,8 +21,6 @@ export default function Detail() {
 
   const [feed, setFeed]: any = useState({});
 
-  // const API_URL = `http://makeup-api.herokuapp.com/api/v1/products/${ feedid }.json`;
-
   function getData() {
     axios
       .get(`http://localhost:8080/feed/detail`, {
@@ -31,15 +29,12 @@ export default function Detail() {
         },
       })
       .then(({ data }) => {
-        // setFeed(res.data);
-        console.log(data);
         setFeed(data);
       });
   }
 
   useEffect(() => {
     if (feedid) {
-      console.log(feedid);
       getData();
     }
   }, [feedid]);
@@ -121,7 +116,6 @@ export default function Detail() {
         .content {
           white-space: normal;
           word-break: break-all;
-          /* overflow: scroll; */
         }
       `}</style>
     </>

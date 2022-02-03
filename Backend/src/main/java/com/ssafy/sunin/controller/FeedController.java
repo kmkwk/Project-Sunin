@@ -110,7 +110,7 @@ public class FeedController {
 
     @ApiOperation(value = "페이징 좋아요순 피드 조회")
     @GetMapping("/pageLike")
-    public ResponseEntity<List<FeedDto>> getPageLikesFeed(@PageableDefault(size = 6, sort="likes",
+    public ResponseEntity<List<FeedDto>> getPageLikesFeed(@PageableDefault(size = 12, sort="likes",
             direction = Sort.Direction.DESC) FeedPage feedPage){
         log.debug("getPageLikesFeed");
         return ResponseEntity.ok(feedService.getPageLikeFeed(feedPage));

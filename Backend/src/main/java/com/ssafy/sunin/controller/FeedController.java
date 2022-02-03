@@ -4,6 +4,7 @@ import com.ssafy.sunin.dto.*;
 import com.ssafy.sunin.service.FeedServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -13,13 +14,15 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/feed")
-//@CrossOrigin("*")
+@CrossOrigin("*")
 @Slf4j
 public class FeedController {
 
@@ -57,6 +60,7 @@ public class FeedController {
     @ApiOperation(value = "피드 상세 페이지")
     @GetMapping("/detail")
     public ResponseEntity<FeedDto> getDetailFeed(@RequestParam String id) {
+        System.out.println("sdad");
         return ResponseEntity.ok(feedService.getDetailFeed(id));
     }
 
@@ -95,7 +99,7 @@ public class FeedController {
 
     @ApiOperation(value = "페이징 최신순 피드 조회")
     @GetMapping("/pageLatest")
-    public ResponseEntity<List<FeedDto>> getPageLatestFeed(@PageableDefault(size = 12, sort="createdDate",
+    public ResponseEntity<List<FeedDto>> getPageLatestFeed(@PageableDefault(size = 6, sort="createdDate",
                                                             direction = Sort.Direction.DESC) Pageable pageable){
         log.debug("getPageLatestFeed");
         return ResponseEntity.ok(feedService.getPageLatestFeed(pageable));
@@ -110,7 +114,7 @@ public class FeedController {
 
     @ApiOperation(value = "페이징 좋아요순 피드 조회")
     @GetMapping("/pageLike")
-    public ResponseEntity<List<FeedDto>> getPageLikesFeed(@PageableDefault(size = 12, sort="likes",
+    public ResponseEntity<List<FeedDto>> getPageLikesFeed(@PageableDefault(size = 6, sort="likes",
             direction = Sort.Direction.DESC) FeedPage feedPage){
         log.debug("getPageLikesFeed");
         return ResponseEntity.ok(feedService.getPageLikeFeed(feedPage));

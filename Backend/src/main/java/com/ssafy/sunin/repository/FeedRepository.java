@@ -1,5 +1,6 @@
 package com.ssafy.sunin.repository;
 
+import com.ssafy.sunin.domain.Comment;
 import com.ssafy.sunin.domain.FeedCollections;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;

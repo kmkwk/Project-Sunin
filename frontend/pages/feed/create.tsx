@@ -1,21 +1,22 @@
-import { Button, Form, Input, TextArea, Grid, Image } from 'semantic-ui-react'
+import { Button, Form, Input, TextArea, Grid, Image } from "semantic-ui-react";
 import { useState } from "react";
-import Navbar from '../../src/component/Navbar';
-import styles from '../../styles/CreateFeed.module.css'
+import Navbar from "../../src/component/Navbar";
+import styles from "../../styles/CreateFeed.module.css";
+import axios from "axios";
 
 export default function Createfeed() {
-  const [content, setContent] = useState('');
-  const [tag, setTag] = useState('');
+  const [content, setContent] = useState("");
+  const [tag, setTag] = useState("");
   const [image, setImage]: any = useState();
   const [createObjectURL, setCreateObjectURL] = useState(null);
 
   const updateContent = (event: any) => {
-    setContent(event.target.value)
-  }
+    setContent(event.target.value);
+  };
 
   const updateTag = (event: any) => {
-    setTag(event.target.value)
-  }
+    setTag(event.target.value);
+  };
 
   const uploadToClient = (event: any) => {
     if (event.target.files && event.target.files[0]) {
@@ -26,6 +27,28 @@ export default function Createfeed() {
     }
   };
 
+  const handleSubmit = (event) => {
+    event.preventDefault(); // 새로고침 방지
+
+    const body = new FormData();
+    body.append("content", content);
+    body.append("files", image);
+    body.append("hashtags", tag);
+    body.append("userId", "testsetsetsetsetes");
+
+    axios
+      .post(`http://localhost:8080/feed`, body, {
+        headers: { "Content-Type": "multipart/form-data" },
+      })
+      .then((data) => {
+        console.log(data);
+        alert("성공");
+      })
+      .catch(() => {
+        alert("실패");
+      });
+  };
+
   const uploadToServer = async (event: any) => {
     const body = new FormData();
     body.append("file", image);
@@ -33,60 +56,68 @@ export default function Createfeed() {
     body.append("text", tag);
     const response = await fetch("/api/testpage", {
       method: "POST",
-      body
+      body,
     });
-    document.getElementsByTagName('textarea')[0].value = ''
-    document.getElementsByTagName('input')[0].value = ''
-    document.getElementsByTagName('input')[1].value = ''
-    setContent('')
-    setTag('')
-    setImage(null)
+    document.getElementsByTagName("textarea")[0].value = "";
+    document.getElementsByTagName("input")[0].value = "";
+    document.getElementsByTagName("input")[1].value = "";
+    setContent("");
+    setTag("");
+    setImage(null);
   };
-  
+
   return (
     <>
       <Navbar />
       <Grid>
         <Grid.Row>
-          <Grid.Column width={3}>
-          </Grid.Column>
+          <Grid.Column width={3}></Grid.Column>
           <Grid.Column width={10}>
-            <Form className={ styles.form }>
-              <br /><br />
-              <label htmlFor="feedcontent"><b>피드 내용</b></label>
-              <textarea 
-                name="feedcontent" 
-                id="feedcontent" 
-                cols={30} 
-                rows={10} 
-                placeholder='내용을 작성하세요...'
-                onChange={updateContent}
-              ></textarea>
+            <Form className={styles.form}>
+              <br />
+              <br />
+              <label htmlFor="feedcontent">
+                <b>피드 내용</b>
+              </label>
+              <textarea
+                name="feedcontent"
+                id="feedcontent"
+                cols={30}
+                rows={10}
+                placeholder="내용을 작성하세요..."
+                onChange={updateContent}></textarea>
               <div>
-              <img src={createObjectURL} width="500px" />
-              <h4>이미지 선택</h4>
-              <input type="file" accept="image/*" name="myImage" onChange={uploadToClient} />
-            </div>
-              <br /><br /><br />
-              <Form.Field
-                  control={Input}
-                  label='Tag'
-                  placeholder='원하는 태그를 작성하세요...'
-                  onChange={updateTag}
+                <img src={createObjectURL} width="500px" />
+                <h4>이미지 선택</h4>
+                <input
+                  type="file"
+                  accept="image/*"
+                  name="myImage"
+                  onChange={uploadToClient}
                 />
-              <br /><br />
-              <Form.Field control={Button} onClick={uploadToServer}>저장하기</Form.Field>
+              </div>
+              <br />
+              <br />
+              <br />
+              <Form.Field
+                control={Input}
+                label="Tag"
+                placeholder="원하는 태그를 작성하세요..."
+                onChange={updateTag}
+              />
+              <br />
+              <br />
+              <Form.Field control={Button} onClick={handleSubmit}>
+                저장하기
+              </Form.Field>
             </Form>
           </Grid.Column>
-          <Grid.Column width={3}>
-          </Grid.Column>
+          <Grid.Column width={3}></Grid.Column>
         </Grid.Row>
       </Grid>
-      
     </>
   );
 }
-
 
 // function PrivatePage(props) {
 //   const [image, setImage] = useState(null);
@@ -128,4 +159,3 @@ export default function Createfeed() {
 //     </div>
 //   );
 // }
-

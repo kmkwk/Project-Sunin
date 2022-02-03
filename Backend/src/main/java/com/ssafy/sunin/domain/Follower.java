@@ -21,11 +21,11 @@ public class Follower{
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName = "no")
+    @JoinColumn(name = "user_id", referencedColumnName = "USER_SEQ")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "follower_member",referencedColumnName = "no")
+    @JoinColumn(name = "follower_member",referencedColumnName = "USER_SEQ")
     private User followerMember;
 
     @CreatedDate

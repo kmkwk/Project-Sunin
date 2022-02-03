@@ -71,6 +71,7 @@ public class FeedServiceImpl implements FeedService {
                 .flag(true)
                 .likeUser(new HashMap<>())
                 .filePath(fileNameList)
+                .comments(new ArrayList<>())
                 .build();
 
         ObjectId id = feedRepository.save(feedCollections).getId();
@@ -85,6 +86,7 @@ public class FeedServiceImpl implements FeedService {
                 .createdDate(feedCollections.getCreatedDate())
                 .modifiedDate(feedCollections.getLastModifiedDate())
                 .filePath(feedCollections.getFilePath())
+                .comments(feedCollections.getComments())
                 .likeUser(feedCollections.getLikeUser())
                 .build();
     }
@@ -128,6 +130,7 @@ public class FeedServiceImpl implements FeedService {
                 .filePath(feedCollections.getFilePath())
                 .content(feedCollections.getContent())
                 .likeUser(feedCollections.getLikeUser())
+                .comments(feedCollections.getComments())
                 .build();
     }
 
@@ -151,6 +154,7 @@ public class FeedServiceImpl implements FeedService {
                 .modifiedDate(time)
                 .likeUser(feedCollections.getLikeUser())
                 .filePath(feedCollections.getFilePath())
+//                .comments(feedCollections.getComments())
                 .build();
     }
 

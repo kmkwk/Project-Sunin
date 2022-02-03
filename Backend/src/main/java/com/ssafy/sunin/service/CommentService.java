@@ -19,8 +19,8 @@ public class CommentService {
     private final CommentRepository commentRepository;
 
     /*
-    * 댓글 작성하기
-    * */
+     * 댓글 작성하기
+     * */
     public Comment writeComment(String feedId, String writer, String content) {
         Comment comment = Comment.builder()
                 .feedId(new ObjectId(feedId))
@@ -34,8 +34,8 @@ public class CommentService {
     }
 
     /*
-    * 댓글 수정하기
-    * */
+     * 댓글 수정하기
+     * */
     public Comment updateComment(String commentId, String content) {
         Comment comment = commentRepository.findById(new ObjectId(commentId));
         comment.setCommentModified(content);
@@ -43,8 +43,8 @@ public class CommentService {
     }
 
     /*
-    * 댓글 삭제하기
-    * */
+     * 댓글 삭제하기
+     * */
     public Comment deleteComment(String commentId) {
         Comment comment = commentRepository.findById(new ObjectId(commentId));
         comment.setCommentDeleted();
@@ -52,8 +52,8 @@ public class CommentService {
     }
 
     /*
-    * 대댓글 작성하기
-    * */
+     * 대댓글 작성하기
+     * */
     public Comment writeReply(String commentId, String writer, String content) {
         Comment rootComment = commentRepository.findById(new ObjectId(commentId));
         Comment comment = Comment.builder()
@@ -67,8 +67,8 @@ public class CommentService {
     }
 
     /*
-    * 피드에 달린 댓글 리스트
-    * */
+     * 피드에 달린 댓글 리스트
+     * */
     public List<Comment> findCommentsByFeed(String feedId) {
         List<Order> orders = new ArrayList<>();
         orders.add(new Order(Direction.ASC, "group"));
@@ -77,15 +77,15 @@ public class CommentService {
     }
 
     /*
-    * 피드에 달린 댓글 갯수
-    * */
+     * 피드에 달린 댓글 갯수
+     * */
     public long countCommentsByFeed(String feedId) {
         return commentRepository.countByFeedId(new ObjectId(feedId));
     }
 
     /*
-    * 개발용
-    * */
+     * 개발용
+     * */
     public List<String> loadAllComment() {
         List<Order> orders = new ArrayList<>();
         orders.add(new Order(Direction.ASC, "group"));

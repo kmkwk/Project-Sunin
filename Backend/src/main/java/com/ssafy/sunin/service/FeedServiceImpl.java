@@ -115,6 +115,60 @@ public class FeedServiceImpl implements FeedService {
     }
 
     @Override
+    public FeedDto updateFile(FeedFile feedFile) {
+        Optional<FeedCollections> feed = feedRepository.findByIdAndUserId(new ObjectId(feedFile.getId()),feedFile.getUserId());
+        if(feed.isPresent()){
+            for (String file: feedFile.getFileName()) {
+                amazonS3.deleteObject(new DeleteObjectRequest(bucket, file));
+                feed.get().getFilePath().remove(file);
+            }
+            feed.get().setFileDelete(feed.get().getFilePath());
+            FeedCollections feedCollections = feedRepository.save(feed.get());
+            return FeedDto.builder()
+                    .id(feedCollections.getId().toString())
+                    .userId(feedCollections.getUserId())
+                    .hashtags(feedCollections.getHashtags())
+                    .likes(feedCollections.getLikes())
+                    .createdDate(feedCollections.getCreatedDate())
+                    .modifiedDate(feedCollections.getModifiedDate())
+                    .filePath(feedCollections.getFilePath())
+                    .content(feedCollections.getContent())
+                    .likeUser(feedCollections.getLikeUser())
+//                .comments(feedCollections.getComments())
+                    .build();
+        }
+
+        return null;
+    }
+
+    @Override
+    public FeedDto addFile(FeedFile feedFile) {
+        Optional<FeedCollections> feed = feedRepository.findByIdAndUserId(new ObjectId(feedFile.getId()),feedFile.getUserId());
+        if(feed.isPresent()){
+            for (String file: feedFile.getFileName()) {
+                feed.get().getFilePath().add(String.format(url + "/%s", file));
+            }
+
+            feed.get().setFileDelete(feed.get().getFilePath());
+            FeedCollections feedCollections = feedRepository.save(feed.get());
+            return FeedDto.builder()
+                    .id(feedCollections.getId().toString())
+                    .userId(feedCollections.getUserId())
+                    .hashtags(feedCollections.getHashtags())
+                    .likes(feedCollections.getLikes())
+                    .createdDate(feedCollections.getCreatedDate())
+                    .modifiedDate(feedCollections.getModifiedDate())
+                    .filePath(feedCollections.getFilePath())
+                    .content(feedCollections.getContent())
+                    .likeUser(feedCollections.getLikeUser())
+//                .comments(feedCollections.getComments())
+                    .build();
+        }
+
+        return null;
+    }
+
+    @Override
     public FeedDto getDetailFeed(String id) {
         FeedCollections feedCollections = feedRepository.findByIdAndFlagTrue(new ObjectId(String.valueOf(id)));
 
@@ -202,11 +256,6 @@ public class FeedServiceImpl implements FeedService {
                 .userId(feedLike.getUserId())
                 .likeUser(feedCollections.getLikeUser())
                 .likes(feedCollections.getLikes()).build();
-    }
-
-    @Override
-    public void deleteFile(String fileName) {
-        amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName));
     }
 
     private String createFileName(String fileName) {

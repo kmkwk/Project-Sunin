@@ -1,5 +1,6 @@
 package com.ssafy.sunin.controller;
 
+import com.ssafy.sunin.domain.FeedCollections;
 import com.ssafy.sunin.dto.*;
 import com.ssafy.sunin.service.FeedServiceImpl;
 import io.swagger.annotations.ApiOperation;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ObjectUtils;
@@ -45,16 +47,25 @@ public class FeedController {
         return ResponseEntity.ok(feedService.downloadFileFeed(fileName));
     }
 
-    @ApiOperation(value = "Amazon S3에 업로드 된 파일을 삭제", notes = "Amazon S3에 업로드된 파일 삭제")
-    @DeleteMapping("/file")
-    public ResponseEntity<String> deleteFile(@ApiParam(value="파일 하나 삭제", required = true)
-                                               @RequestParam("fileName") String fileName) {
+    // Todo : 프론트에서 encodeURI로 감싸서 보내는거 테스트해봐야함
+    @ApiOperation(value = "피드 사진 삭제", notes = "사진 여러장 삭제 가능, encodeURI로 감싸서 보내야함")
+    @PutMapping("/file")
+    public ResponseEntity<FeedDto> updateFile(@RequestBody @Valid FeedFile feedFile) {
         log.info("deleteFile");
-        if(ObjectUtils.isEmpty(fileName)){
+        if(ObjectUtils.isEmpty(feedFile)){
             return ResponseEntity.notFound().build();
         }
-        feedService.deleteFile(fileName);
-        return ResponseEntity.ok("성공");
+        return ResponseEntity.ok(feedService.updateFile(feedFile));
+    }
+
+    @ApiOperation(value = "피드 사진 추가", notes = "사진 여러장 추가 가능, encodeURI로 감싸서 보내")
+    @PutMapping("/addFile")
+    public ResponseEntity<FeedDto> addFile(@RequestBody @Valid FeedFile feedFile) {
+        log.info("addFile");
+        if(ObjectUtils.isEmpty(feedFile)){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(feedService.addFile(feedFile));
     }
 
     @ApiOperation(value = "피드 상세 페이지")

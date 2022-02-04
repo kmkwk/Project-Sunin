@@ -2,6 +2,8 @@ package com.ssafy.sunin.config.security;
 
 import com.ssafy.sunin.config.properties.AppProperties;
 import com.ssafy.sunin.config.properties.CorsProperties;
+import com.ssafy.sunin.oauth.entity.RoleType;
+import com.ssafy.sunin.oauth.exception.RestAuthenticationEntryPoint;
 import com.ssafy.sunin.oauth.filter.TokenAuthenticationFilter;
 import com.ssafy.sunin.oauth.handler.OAuth2AuthenticationFailureHandler;
 import com.ssafy.sunin.oauth.handler.OAuth2AuthenticationSuccessHandler;
@@ -10,7 +12,7 @@ import com.ssafy.sunin.oauth.repository.OAuth2AuthorizationRequestBasedOnCookieR
 import com.ssafy.sunin.oauth.service.CustomOAuth2UserService;
 import com.ssafy.sunin.oauth.service.CustomUserDetailsService;
 import com.ssafy.sunin.oauth.token.AuthTokenProvider;
-import com.ssafy.sunin.user.UserRefreshTokenRepository;
+import com.ssafy.sunin.repository.UserRefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +25,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;

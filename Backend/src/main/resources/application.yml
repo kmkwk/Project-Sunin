@@ -18,7 +18,7 @@ spring:
     password: ssafy
   jpa:
     hibernate:
-      ddl-auto: none # 유의해주세요!!
+      ddl-auto: create # 유의해주세요!!
       use-new-id-generator-mappings: true
     show-sql: true
     properties:

@@ -8,7 +8,7 @@ import com.ssafy.sunin.oauth.entity.RoleType;
 import com.ssafy.sunin.oauth.entity.UserPrincipal;
 import com.ssafy.sunin.oauth.token.AuthToken;
 import com.ssafy.sunin.oauth.token.AuthTokenProvider;
-import com.ssafy.sunin.user.UserRefreshTokenRepository;
+import com.ssafy.sunin.repository.UserRefreshTokenRepository;
 import com.ssafy.sunin.utils.CookieUtil;
 import com.ssafy.sunin.utils.HeaderUtil;
 import io.jsonwebtoken.Claims;

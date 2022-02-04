@@ -7,7 +7,7 @@ import com.ssafy.sunin.domain.user.User;
 import com.ssafy.sunin.dto.*;
 import com.ssafy.sunin.repository.FeedRepository;
 import com.ssafy.sunin.repository.FollowerRepository;
-import com.ssafy.sunin.user.UserRepository;
+import com.ssafy.sunin.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Value;

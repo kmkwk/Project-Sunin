@@ -2,20 +2,12 @@ package com.ssafy.sunin.controller;
 
 import com.ssafy.sunin.common.ApiResponse;
 import com.ssafy.sunin.domain.user.User;
-import com.ssafy.sunin.user.UserRequest;
-import com.ssafy.sunin.user.UserService;
+import com.ssafy.sunin.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -27,16 +19,14 @@ public class UserController {
 
     private final UserService userService;
 
+    @ApiOperation(value="user 반환")
     @GetMapping
     public ApiResponse getUser() {
 
         org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
         User user = userService.getUser(principal.getUsername());
-
         return ApiResponse.success("user", user);
     }
-
 //    @PostMapping("/signup")
 //    @ApiOperation(value="회원가입", notes="가입성공 여부에 따라 http상태로 반환해서 알려줌")
 //    public ResponseEntity<String> signup(@RequestBody UserRequest request) {

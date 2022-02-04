@@ -3,9 +3,13 @@ package com.ssafy.sunin.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
+
 @Data
 @AllArgsConstructor
 public class FeedLike {
+    @NotBlank
     private String id;
-    private String user;
+    @NotBlank
+    private String userId;
 }

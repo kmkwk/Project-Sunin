@@ -1,4 +1,4 @@
-package com.ssafy.sunin.repository;
+package com.ssafy.sunin.repository.querydsl;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.sunin.domain.Follower;
@@ -31,7 +31,7 @@ public class FollowerRepositoryImpl implements FollowerRepositoryCustom {
     @Override
     public List<String> getFollowingList(Long id) {
         return queryFactory
-                .select(qUser.username)
+                .select(qUser.userNickname)
                 .from(qFollower)
                 .join(qFollower.followerMember, qUser)
                 .where(qFollower.user.userSeq.eq(id))

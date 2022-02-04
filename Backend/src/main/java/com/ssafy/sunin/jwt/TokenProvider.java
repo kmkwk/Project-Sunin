@@ -56,6 +56,7 @@ public class TokenProvider implements InitializingBean {
                 .setSubject(authentication.getName()) // 토큰 제목 (sub Claim)
                 .claim(AUTHORITIES_KEY, authorities) //사용자 정의 Claim. 권한 설정 (auth Claim)
                 .setExpiration(Validity) //만료기간 (exp Claim)
+//                .signWith(SignatureAlgorithm.HS512, key)
                 .signWith(key, SignatureAlgorithm.HS512) //암호화 알고리즘, signature에 들어갈 secret값 세팅
                 .compact();
     }

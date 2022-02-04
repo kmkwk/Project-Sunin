@@ -8,12 +8,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
+import java.util.Optional;
 
 public interface FeedRepository extends MongoRepository<FeedCollections, ObjectId>,
                                         QuerydslPredicateExecutor<FeedCollections>,
-        FeedRepositoryCustom {
+                        FeedRepositoryCustom {
 
     FeedCollections findByIdAndFlagTrue(ObjectId id);
 
     Page<FeedDto> findAllByUserId(Pageable pageable, String userId);
+
+    Optional<FeedCollections> findByIdAndUserId(ObjectId id, String userId);
 }

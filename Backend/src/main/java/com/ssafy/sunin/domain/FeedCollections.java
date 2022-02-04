@@ -59,9 +59,13 @@ public class FeedCollections{
         this.modifiedDate = LocalDateTime.now();
     }
 
-    public void setLikeModified(int likes,Map<String, Object> likeUser){
+    public void setLikeModified(int likes, Map<String, Object> likeUser){
         this.likes = likes;
         this.likeUser = likeUser;
+    }
+
+    public void setFileDelete(List<String> filePath){
+        this.filePath = filePath;
     }
 
     @Builder

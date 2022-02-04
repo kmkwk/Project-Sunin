@@ -16,13 +16,14 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/feed")
-@CrossOrigin("*")
+@CrossOrigin("*") // delete
 @Slf4j
 public class FeedController {
 
@@ -31,7 +32,7 @@ public class FeedController {
     @ApiOperation(value = "Feed 작성", notes = "성공시 200, 다중 파일 업로드 가능")
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<FeedDto> writeImageFeed(FeedVO feedVO){
-        log.debug("writerImageFeed");
+        log.debug("writerImageFeed"); // log info
 
         if(ObjectUtils.isEmpty(feedVO)){
             return ResponseEntity.notFound().build();
@@ -41,7 +42,7 @@ public class FeedController {
 
     @ApiOperation(value = "file 다운로드")
     @GetMapping("/download")
-    public ResponseEntity<List<String>> downloadFiles(@RequestParam String fileName){
+    public ResponseEntity<List<String>> downloadFiles(@RequestParam(value = "fileName") String fileName){
         log.debug("downloadFiles");
         return ResponseEntity.ok(feedService.downloadFileFeed(fileName));
     }
@@ -60,13 +61,12 @@ public class FeedController {
     @ApiOperation(value = "피드 상세 페이지")
     @GetMapping("/detail")
     public ResponseEntity<FeedDto> getDetailFeed(@RequestParam String id) {
-        System.out.println("sdad");
         return ResponseEntity.ok(feedService.getDetailFeed(id));
     }
 
     @ApiOperation(value = "피드 수정")
     @PutMapping
-    public ResponseEntity<FeedDto> updateFeed(FeedUpdate feedUpdate){
+    public ResponseEntity<FeedDto> updateFeed(@RequestBody FeedUpdate feedUpdate){
         log.info("updateFeed");
         if(ObjectUtils.isEmpty(feedUpdate)){
             return ResponseEntity.notFound().build();
@@ -80,7 +80,7 @@ public class FeedController {
     public ResponseEntity<String> deleteFeed(@RequestParam String id) {
         log.debug("deleteFeed methods start");
         feedService.deleteFeed(id);
-        return ResponseEntity.ok("성공");
+        return ResponseEntity.ok("success");
     }
 
     @ApiOperation(value = "나의 팔로워 피드 조회", notes = "우선 나의 id 값 전달")
@@ -124,8 +124,6 @@ public class FeedController {
     @PutMapping("/like")
     public ResponseEntity<FeedDto> likeFeed(FeedLike feedLike){
         log.debug("likeFeed");
-        System.out.println("좋아요 누른 사람"+ feedLike.getUser());
-
         return ResponseEntity.ok(feedService.likeFeed(feedLike));
     }
 }

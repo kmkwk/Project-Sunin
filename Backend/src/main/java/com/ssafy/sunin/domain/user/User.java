@@ -79,6 +79,10 @@ public class User {
     @NotNull
     private LocalDateTime modifiedAt;
 
+    public void setUserSuninDay(int suninDays){
+        this.suninDays++;
+    }
+
     public User(
             @NotNull @Size(max = 64) String userId,
             @NotNull @Size(max = 100) String username,

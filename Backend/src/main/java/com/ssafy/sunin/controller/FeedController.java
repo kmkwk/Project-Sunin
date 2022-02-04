@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -14,11 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.validation.Valid;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -90,34 +87,22 @@ public class FeedController {
         return ResponseEntity.ok(feedService.getFollowerFeed(id));
     }
 
-    @ApiOperation(value = "최신순 피드 조회")
-    @GetMapping("/latestFeed")
-    public ResponseEntity<List<FeedDto>> getLatestFeed(FeedList feedList){
-        log.debug("getLatestFeed");
-        return ResponseEntity.ok(feedService.getLatestFeed(feedList));
-    }
-
     @ApiOperation(value = "페이징 최신순 피드 조회")
-    @GetMapping("/pageLatest")
-    public ResponseEntity<List<FeedDto>> getPageLatestFeed(@PageableDefault(size = 6, sort="createdDate",
-                                                            direction = Sort.Direction.DESC) Pageable pageable){
+    @GetMapping("/latest")
+    public ResponseEntity<Page<FeedDto>> getLatestFeed(@PageableDefault(size = 6, sort="createdDate",
+                                                            direction = Sort.Direction.DESC) Pageable pageable,
+                                                            @RequestParam String userId){
         log.debug("getPageLatestFeed");
-        return ResponseEntity.ok(feedService.getPageLatestFeed(pageable));
-    }
-
-    @ApiOperation(value = "좋아요순 피드 조회")
-    @GetMapping("/likeFeed")
-    public ResponseEntity<List<FeedDto>> getLikesFeed(FeedList feedList){
-        log.debug("getLikesFeed");
-        return ResponseEntity.ok(feedService.getLikeFeed(feedList));
+        return ResponseEntity.ok(feedService.getLatestFeed(pageable,userId));
     }
 
     @ApiOperation(value = "페이징 좋아요순 피드 조회")
-    @GetMapping("/pageLike")
-    public ResponseEntity<List<FeedDto>> getPageLikesFeed(@PageableDefault(size = 6, sort="likes",
-            direction = Sort.Direction.DESC) FeedPage feedPage){
+    @GetMapping("/like")
+    public ResponseEntity<Page<FeedDto>> getLikesFeed(@PageableDefault(size = 6, sort="likes",
+                                                            direction = Sort.Direction.DESC) Pageable pageable,
+                                                           @RequestParam String userId){
         log.debug("getPageLikesFeed");
-        return ResponseEntity.ok(feedService.getPageLikeFeed(feedPage));
+        return ResponseEntity.ok(feedService.getLikeFeed(pageable,userId));
     }
 
     @ApiOperation(value = "좋아요 증가 감소")

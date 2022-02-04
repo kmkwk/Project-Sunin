@@ -17,7 +17,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
@@ -68,7 +67,7 @@ public class FeedServiceImpl implements FeedService {
                 .hashtags(feedVO.getHashtags())
                 .likes(0)
                 .createdDate(LocalDateTime.now())
-                .lastModifiedDate(LocalDateTime.now())
+                .modifiedDate(LocalDateTime.now())
                 .flag(true)
                 .likeUser(new HashMap<>())
                 .filePath(fileNameList)
@@ -85,7 +84,7 @@ public class FeedServiceImpl implements FeedService {
                 .likes(feedCollections.getLikes())
                 .hashtags(feedCollections.getHashtags())
                 .createdDate(feedCollections.getCreatedDate())
-                .modifiedDate(feedCollections.getLastModifiedDate())
+                .modifiedDate(feedCollections.getModifiedDate())
                 .filePath(feedCollections.getFilePath())
 //                .comments(feedCollections.getComments())
                 .likeUser(feedCollections.getLikeUser())
@@ -94,9 +93,7 @@ public class FeedServiceImpl implements FeedService {
 
     private void suninDays(String userNickname) {
         User user = userRepository.getUser(userNickname);
-        int sunin = user.getSuninDays();
-//        sunin++;
-        user.setUserSuninDay(sunin);
+        user.setSuninDayIncrease();
         userRepository.save(user);
     }
 
@@ -127,7 +124,7 @@ public class FeedServiceImpl implements FeedService {
                 .hashtags(feedCollections.getHashtags())
                 .likes(feedCollections.getLikes())
                 .createdDate(feedCollections.getCreatedDate())
-                .modifiedDate(feedCollections.getLastModifiedDate())
+                .modifiedDate(feedCollections.getModifiedDate())
                 .filePath(feedCollections.getFilePath())
                 .content(feedCollections.getContent())
                 .likeUser(feedCollections.getLikeUser())
@@ -138,11 +135,7 @@ public class FeedServiceImpl implements FeedService {
     @Override
     public FeedDto updateFeed(FeedUpdate feedUpdate) {
         FeedCollections feedCollections = feedRepository.findByIdAndFlagTrue(new ObjectId(feedUpdate.getId()));
-        LocalDateTime time = LocalDateTime.now();
-        feedCollections.setContent(feedUpdate.getContent());
-        feedCollections.setHashtags(feedUpdate.getHashtags());
-        feedCollections.setLastModifiedDate(time);
-        feedCollections.setFilePath(feedCollections.getFilePath());
+        feedCollections.setFeedModified(feedUpdate);
         feedRepository.save(feedCollections);
 
         return FeedDto.builder()
@@ -152,7 +145,7 @@ public class FeedServiceImpl implements FeedService {
                 .likes(feedCollections.getLikes())
                 .content(feedUpdate.getContent())
                 .createdDate(feedCollections.getCreatedDate())
-                .modifiedDate(time)
+                .modifiedDate(feedCollections.getModifiedDate())
                 .likeUser(feedCollections.getLikeUser())
                 .filePath(feedCollections.getFilePath())
 //                .comments(feedCollections.getComments())
@@ -162,8 +155,7 @@ public class FeedServiceImpl implements FeedService {
     @Override
     public void deleteFeed(String id) {
         FeedCollections feedCollections = feedRepository.findByIdAndFlagTrue(new ObjectId(id));
-        feedCollections.setFlag(false);
-        feedCollections.setLastModifiedDate(LocalDateTime.now());
+        feedCollections.setFeedDelete();
         feedRepository.save(feedCollections);
     }
 
@@ -172,105 +164,44 @@ public class FeedServiceImpl implements FeedService {
         List<String> followers = followerRepository.getFollowingList(id);
         return feedRepository.getFollowerFeed(followers)
                 .stream()
-                .map(this::test)
+                .map(FeedDto::feedDto)
                 .collect(Collectors.toList());
     }
 
-    private FeedDto test(FeedCollections feed) {
-        return FeedDto.builder()
-                .id(feed.getId().toString())
-                .userId(feed.getUserId())
-                .content(feed.getContent())
-                .hashtags(feed.getHashtags())
-                .likes(feed.getLikes())
-                .createdDate(feed.getCreatedDate())
-                .modifiedDate(feed.getLastModifiedDate())
-                .likeUser(feed.getLikeUser())
-                .filePath(feed.getFilePath())
-                .build();
+
+    @Override
+    public Page<FeedDto> getLatestFeed(Pageable pageable, String userId) {
+        return feedRepository.findAllByUserId(pageable,userId);
     }
 
     @Override
-    public List<FeedDto> getLatestFeed(FeedList feedList) {
-        List<FeedCollections> feed = feedRepository.getLatestFeed(feedList);
-        return feed.stream()
-                .map(this::test)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<FeedDto> getPageLatestFeed(Pageable pageable) {
-        return feedRepository.findAll(pageable).stream()
-                .map(feedCollections -> FeedDto.builder()
-                        .id(feedCollections.getId().toString())
-                        .userId(feedCollections.getUserId())
-                        .content(feedCollections.getContent())
-                        .likes(feedCollections.getLikes())
-                        .filePath(feedCollections.getFilePath())
-                        .hashtags(feedCollections.getHashtags())
-                        .createdDate(feedCollections.getCreatedDate())
-                        .modifiedDate(feedCollections.getLastModifiedDate())
-                        .likeUser(feedCollections.getLikeUser())
-                        .build()).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<FeedDto> getLikeFeed(FeedList feedList) {
-        List<FeedCollections> feed = feedRepository.getLikeFeed(feedList);
-        return feed.stream()
-                .map(feedCollections -> FeedDto.builder()
-                        .id(feedCollections.getId().toString())
-                        .userId(feedCollections.getUserId())
-                        .content(feedCollections.getContent())
-                        .likes(feedCollections.getLikes())
-                        .filePath(feedCollections.getFilePath())
-                        .hashtags(feedCollections.getHashtags())
-                        .createdDate(feedCollections.getCreatedDate())
-                        .modifiedDate(feedCollections.getLastModifiedDate())
-                        .likeUser(feedCollections.getLikeUser())
-                        .build()).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<FeedDto> getPageLikeFeed(FeedPage feedPage) {
-        Page<FeedCollections> feed = feedRepository.findAll(feedPage.getPageable());
-        return feed.stream()
-                .map(feedCollections -> FeedDto.builder()
-                        .id(feedCollections.getId().toString())
-                        .userId(feedCollections.getUserId())
-                        .content(feedCollections.getContent())
-                        .likes(feedCollections.getLikes())
-                        .filePath(feedCollections.getFilePath())
-                        .hashtags(feedCollections.getHashtags())
-                        .createdDate(feedCollections.getCreatedDate())
-                        .modifiedDate(feedCollections.getLastModifiedDate())
-                        .likeUser(feedCollections.getLikeUser())
-                        .build()).collect(Collectors.toList());
+    public Page<FeedDto> getLikeFeed(Pageable pageable, String userId) {
+        return feedRepository.findAllByUserId(pageable,userId);
     }
 
     @Override
     public FeedDto likeFeed(FeedLike feedLike) {
         FeedCollections feedCollections = feedRepository.findByIdAndFlagTrue(new ObjectId(feedLike.getId()));
-        Map<String, Object> users = new HashMap<>();
-        users.putAll(feedCollections.getLikeUser());
+        Map<String, Object> users = new HashMap<>(feedCollections.getLikeUser());
 
         int like = feedCollections.getLikes();
-        // 좋아요 누른상태
+
         if (users.containsKey(feedLike.getUser())) {
             users.remove(feedLike.getUser());
-            feedCollections.setLikes(--like);
+            like--;
         } else {
             users.put(feedLike.getUser(), true);
-            feedCollections.setLikes(++like);
+            like++;
         }
 
-        feedCollections.setLikeUser(users);
+        feedCollections.setLikeModified(like,users);
+
         feedRepository.save(feedCollections);
         return FeedDto.builder()
                 .id(feedLike.getId())
                 .userId(feedLike.getUser())
-                .likeUser(users)
-                .likes(like).build();
+                .likeUser(feedCollections.getLikeUser())
+                .likes(feedCollections.getLikes()).build();
     }
 
     @Override

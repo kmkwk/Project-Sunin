@@ -10,7 +10,7 @@ export default function Navbar() {
     <>
       <Menu stackable>
         <Menu.Item>
-        <Link href="/"><a><img className={ styles.logo_size } src='/images/로고만.png' /></a></Link>
+        <Link href="/"><a><img className={ styles.logo_size } src='/images/로고center.png' /></a></Link>
         </Menu.Item>
 
         <Menu.Item

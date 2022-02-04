@@ -11,10 +11,10 @@ const HeaderExampleContent = () => (
   <Navbar/>
 
   <Grid columns={2} padded>
-        <Grid.Column width={3}>
+        <Grid.Column width={4}>
           <Menubar />
         </Grid.Column>
-        <Grid.Column width={13}>
+        <Grid.Column width={10}>
         <div className={ styles.headeralign }>
     <Header size='huge'>회원정보 수정</Header>
     <Divider />
@@ -38,6 +38,9 @@ const HeaderExampleContent = () => (
     </Link>
     </div>          
         </Grid.Column>
+        <Grid.Column width={2}>
+         
+         </Grid.Column>
       </Grid>
 
 

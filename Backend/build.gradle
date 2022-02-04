@@ -83,7 +83,7 @@ test {
 /*
  * Querydsl 설정
  * */
-def querydslSrcDir = "$buildDir/generated/querydsl"
+def querydslSrcDir = "src/main/generated"
 
 querydsl {
 	jpa = true

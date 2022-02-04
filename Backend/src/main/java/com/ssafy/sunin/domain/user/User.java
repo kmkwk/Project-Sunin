@@ -79,7 +79,7 @@ public class User {
     @NotNull
     private LocalDateTime modifiedAt;
 
-    public void setUserSuninDay(int suninDays){
+    public void setSuninDayIncrease(){
         this.suninDays++;
     }
 
@@ -110,6 +110,6 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Follower> follower = new ArrayList<>();
 
-    private Integer suninDays;
+    private int suninDays = 0;
 
 }

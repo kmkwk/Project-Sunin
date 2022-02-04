@@ -1,4 +1,4 @@
-package com.ssafy.sunin.repository;
+package com.ssafy.sunin.repository.querydsl;
 
 import com.ssafy.sunin.domain.FeedCollections;
 import java.util.List;

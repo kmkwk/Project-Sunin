@@ -24,10 +24,10 @@ public class FollowerServiceImpl implements FollowerService{
         User followerMember = userRepository.findByUserSeq(followerVO.getFollowerMember());
 
         if(followerRepository.getUser(followerVO) == null){
-            // Todo: 이미 팔로워한 유저인지 체크해야함
             Follower follower = Follower.builder()
                     .user(users)
                     .followerMember(followerMember)
+                    .createDate(followerMember.getCreatedAt())
                     .build();
             count++;
             followerRepository.save(follower);

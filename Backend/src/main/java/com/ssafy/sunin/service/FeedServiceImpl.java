@@ -186,11 +186,11 @@ public class FeedServiceImpl implements FeedService {
 
         int like = feedCollections.getLikes();
 
-        if (users.containsKey(feedLike.getUser())) {
-            users.remove(feedLike.getUser());
+        if (users.containsKey(feedLike.getUserId())) {
+            users.remove(feedLike.getUserId());
             like--;
         } else {
-            users.put(feedLike.getUser(), true);
+            users.put(feedLike.getUserId(), true);
             like++;
         }
 
@@ -199,7 +199,7 @@ public class FeedServiceImpl implements FeedService {
         feedRepository.save(feedCollections);
         return FeedDto.builder()
                 .id(feedLike.getId())
-                .userId(feedLike.getUser())
+                .userId(feedLike.getUserId())
                 .likeUser(feedCollections.getLikeUser())
                 .likes(feedCollections.getLikes()).build();
     }

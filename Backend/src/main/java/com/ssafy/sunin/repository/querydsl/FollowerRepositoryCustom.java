@@ -1,4 +1,4 @@
-package com.ssafy.sunin.repository;
+package com.ssafy.sunin.repository.querydsl;
 
 import com.ssafy.sunin.domain.Follower;
 import com.ssafy.sunin.dto.FollowerVO;

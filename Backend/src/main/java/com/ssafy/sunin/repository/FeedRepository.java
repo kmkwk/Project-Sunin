@@ -2,6 +2,7 @@ package com.ssafy.sunin.repository;
 
 import com.ssafy.sunin.domain.FeedCollections;
 import com.ssafy.sunin.dto.FeedDto;
+import com.ssafy.sunin.repository.querydsl.FeedRepositoryCustom;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

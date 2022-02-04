@@ -1,19 +1,19 @@
-import Navbar from "../src/component/Navbar";
+import Navbar from "../../src/component/Navbar";
 import Link from "next/link";
-import { Button, Form, Grid, Segment, Image } from "semantic-ui-react";
+import { Button, Form, Grid, Segment, Image, Header } from "semantic-ui-react";
 import { useState } from "react";
-import styles from "../styles/Login.module.css";
+import styles from "../../styles/Login.module.css";
 import axios from "axios";
 
-export default function Login() {
+export default function KakaoLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const updateEmail = (event) => {
+  const updateEmail = (event: any) => {
     setEmail(event.target.value);
   };
 
-  const updatePassword = (event) => {
+  const updatePassword = (event: any) => {
     setPassword(event.target.value);
   };
 
@@ -49,46 +49,20 @@ export default function Login() {
                 <Form.Input
                   icon="user"
                   iconPosition="left"
-                  label="User Eamil"
-                  placeholder="User Email"
+                  label="Kakao Eamil"
+                  placeholder="Kakao Email"
                   onChange={updateEmail}
                 />
                 <Form.Input
                   icon="lock"
                   iconPosition="left"
-                  label="Password"
+                  label="Kakao Password"
                   type="password"
                   onChange={updatePassword}
                 />
-                <Button content="Login" onClick={GoLogin} primary />
-              </Form>
-              <br />
-              <br />
-              <br />
-              <hr />
-              <br />
-              <br />
-              <br />
-              <div className={styles.guide_location}>
-                <p>
-                  아이디가 없으신가요?
-                  <Link href="/signup">
-                    <a>--- 회원가입 ---</a>
-                  </Link>
-                </p>
-                <p>
-                  아이디가 기억이 안나요
-                  <Link href="/signup">
-                    <a>--- 아이디 찾기 ---</a>
-                  </Link>
-                </p>
-                <p>
-                  비밀번호가 기억이 안나요
-                  <Link href="/signup">
-                    <a>--- 비밀번호 찾기 ---</a>
-                  </Link>
-                </p>
-              </div>
+                <Button content="Login" onClick={GoLogin} color='yellow' />
+                <br />
+              </Form>            
             </Grid.Column>
           </Grid>
         </Segment>

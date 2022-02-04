@@ -1,23 +1,16 @@
-package com.ssafy.sunin.user;
+package com.ssafy.sunin.service;
 
 import com.ssafy.sunin.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-
-import javax.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class UserService{
 
-    private final UserRepository UserRepository;
+    private final com.ssafy.sunin.repository.UserRepository UserRepository;
 
     public User getUser(String userId) {
         return UserRepository.findByUserId(userId);

@@ -7,7 +7,7 @@ import com.ssafy.sunin.oauth.entity.UserPrincipal;
 import com.ssafy.sunin.oauth.exception.OAuthProviderMissMatchException;
 import com.ssafy.sunin.oauth.info.OAuth2UserInfo;
 import com.ssafy.sunin.oauth.info.OAuth2UserInfoFactory;
-import com.ssafy.sunin.user.UserRepository;
+import com.ssafy.sunin.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;

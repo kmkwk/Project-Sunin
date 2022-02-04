@@ -12,7 +12,7 @@ import com.ssafy.sunin.oauth.repository.OAuth2AuthorizationRequestBasedOnCookieR
 import com.ssafy.sunin.oauth.service.CustomOAuth2UserService;
 import com.ssafy.sunin.oauth.service.CustomUserDetailsService;
 import com.ssafy.sunin.oauth.token.AuthTokenProvider;
-import com.ssafy.sunin.user.UserRefreshTokenRepository;
+import com.ssafy.sunin.repository.UserRefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -63,14 +63,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .formLogin().disable()
                     .httpBasic().disable()
                     .exceptionHandling()
-                    .authenticationEntryPoint(new RestAuthenticationEntryPoint())
+//                    .authenticationEntryPoint(new RestAuthenticationEntryPoint())
                     .accessDeniedHandler(tokenAccessDeniedHandler)
-                .and()
-                    .authorizeRequests()
-                    .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                    .antMatchers("/api/**").hasAnyAuthority(RoleType.USER.getCode())
-                    .antMatchers("/api/**/admin/**").hasAnyAuthority(RoleType.ADMIN.getCode())
-                    .anyRequest().authenticated()
+//                .and()
+//                    .authorizeRequests()
+//                    .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+//                    .antMatchers("/api/**").hasAnyAuthority(RoleType.USER.getCode())
+//                    .antMatchers("/api/**/admin/**").hasAnyAuthority(RoleType.ADMIN.getCode())
+//                    .anyRequest().authenticated()
                 .and()
                     .oauth2Login()
                     .authorizationEndpoint()

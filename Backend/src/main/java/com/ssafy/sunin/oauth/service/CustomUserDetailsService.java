@@ -2,7 +2,7 @@ package com.ssafy.sunin.oauth.service;
 
 import com.ssafy.sunin.domain.user.User;
 import com.ssafy.sunin.oauth.entity.UserPrincipal;
-import com.ssafy.sunin.user.UserRepository;
+import com.ssafy.sunin.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

@@ -41,24 +41,10 @@ public class FeedServiceImpl implements FeedService {
 
     @Override
     public FeedDto writeImageFeed(FeedVO feedVO) {
-        List<String> fileNameList = new ArrayList<>();
+        List<String> fileList = new ArrayList<>();
         List<MultipartFile> files = feedVO.getFiles();
         if (files != null) {
-            feedVO.getFiles().forEach(file -> {
-                String fileName = createFileName(file.getOriginalFilename());
-                ObjectMetadata objectMetadata = new ObjectMetadata();
-                objectMetadata.setContentLength(file.getSize());
-                objectMetadata.setContentType(file.getContentType());
-
-                try (InputStream inputStream = file.getInputStream()) {
-                    amazonS3.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
-                            .withCannedAcl(CannedAccessControlList.PublicRead));
-                } catch (IOException e) {
-                    throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패했습니다.");
-                }
-
-                fileNameList.add(String.format(url + "/%s", fileName));
-            });
+            AwsFile(feedVO.getFiles(),fileList);
         }
 
         FeedCollections feedCollections = FeedCollections.builder()
@@ -70,7 +56,7 @@ public class FeedServiceImpl implements FeedService {
                 .modifiedDate(LocalDateTime.now())
                 .flag(true)
                 .likeUser(new HashMap<>())
-                .filePath(fileNameList)
+                .filePath(fileList)
                 .comments(new ArrayList<>())
                 .build();
 
@@ -115,14 +101,15 @@ public class FeedServiceImpl implements FeedService {
     }
 
     @Override
-    public FeedDto updateFile(FeedFile feedFile) {
-        Optional<FeedCollections> feed = feedRepository.findByIdAndUserId(new ObjectId(feedFile.getId()),feedFile.getUserId());
+    public FeedDto updateFile(FileUpdate fileUpdate) {
+        Optional<FeedCollections> feed = feedRepository.findByIdAndUserId(new ObjectId(fileUpdate.getId()),fileUpdate.getUserId());
         if(feed.isPresent()){
-            for (String file: feedFile.getFileName()) {
+            fileUpdate.getFiles().forEach(file -> {
                 amazonS3.deleteObject(new DeleteObjectRequest(bucket, file));
                 feed.get().getFilePath().remove(file);
-            }
-            feed.get().setFileDelete(feed.get().getFilePath());
+            });
+
+            feed.get().setFileModified(feed.get().getFilePath());
             FeedCollections feedCollections = feedRepository.save(feed.get());
             return FeedDto.builder()
                     .id(feedCollections.getId().toString())
@@ -145,12 +132,10 @@ public class FeedServiceImpl implements FeedService {
     public FeedDto addFile(FeedFile feedFile) {
         Optional<FeedCollections> feed = feedRepository.findByIdAndUserId(new ObjectId(feedFile.getId()),feedFile.getUserId());
         if(feed.isPresent()){
-            for (String file: feedFile.getFileName()) {
-                feed.get().getFilePath().add(String.format(url + "/%s", file));
-            }
-
-            feed.get().setFileDelete(feed.get().getFilePath());
+            List<String> fileList = AwsFile(feedFile.getFiles(),feed.get().getFilePath());
+            feed.get().setFileModified(fileList);
             FeedCollections feedCollections = feedRepository.save(feed.get());
+
             return FeedDto.builder()
                     .id(feedCollections.getId().toString())
                     .userId(feedCollections.getUserId())
@@ -166,6 +151,25 @@ public class FeedServiceImpl implements FeedService {
         }
 
         return null;
+    }
+
+    private List<String> AwsFile(List<MultipartFile> files, List<String> list){
+        files.forEach(file -> {
+            String fileName = createFileName(file.getOriginalFilename());
+            ObjectMetadata objectMetadata = new ObjectMetadata();
+            objectMetadata.setContentLength(file.getSize());
+            objectMetadata.setContentType(file.getContentType());
+
+            try (InputStream inputStream = file.getInputStream()) {
+                amazonS3.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
+                        .withCannedAcl(CannedAccessControlList.PublicRead));
+            } catch (IOException e) {
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패했습니다.");
+            }
+            list.add(String.format(url + "/%s", fileName));
+        });
+
+        return list;
     }
 
     @Override

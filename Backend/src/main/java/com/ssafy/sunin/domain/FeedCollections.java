@@ -64,7 +64,7 @@ public class FeedCollections{
         this.likeUser = likeUser;
     }
 
-    public void setFileDelete(List<String> filePath){
+    public void setFileModified(List<String> filePath){
         this.filePath = filePath;
     }
 

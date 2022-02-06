@@ -1,5 +1,4 @@
-FROM java:8
-EXPOSE 8081
-ARG JAR_FILE=build/libs/*.jar
-COPY ${JAR_FILE} app.jar
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+FROM openjdk:11
+ADD backend.jar app.jar
+ENV JAVA_OPTS=""
+ENTRYPOINT ["java","-jar","/app.jar"]

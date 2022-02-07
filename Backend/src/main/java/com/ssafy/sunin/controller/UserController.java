@@ -49,7 +49,7 @@ public class UserController {
 
     @ApiOperation(value = "유저 프로필 사진 수정")
     @PutMapping("/image")
-    public ResponseEntity<UserProfile> updateUserImage(ImageVO imageVO){
+    public ResponseEntity<UserProfile> updateUserImage(@Valid ImageVO imageVO){
         log.info("updateUserImage");
         if(ObjectUtils.isEmpty(imageVO)){
             return ResponseEntity.notFound().build();

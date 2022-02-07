@@ -15,8 +15,8 @@ public interface FeedRepository extends MongoRepository<FeedCollections, ObjectI
                         FeedRepositoryCustom {
 
     FeedCollections findByIdAndFlagTrue(ObjectId id);
+    FeedCollections findByIdAndUserIdAndFlagTrue(ObjectId id, Long userId);
+    Page<FeedDto> findAllByUserId(Pageable pageable, Long userId);
 
-    Page<FeedDto> findAllByUserId(Pageable pageable, String userId);
-
-    Optional<FeedCollections> findByIdAndUserId(ObjectId id, String userId);
+    Optional<FeedCollections> findByIdAndUserId(ObjectId id, Long userId);
 }

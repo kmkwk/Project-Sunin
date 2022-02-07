@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -46,7 +45,7 @@ public class FeedServiceImpl implements FeedService {
         if (files != null) {
             AwsFile(feedVO.getFiles(),fileList);
         }
-
+        User user = userRepository.findProfileByUserSeq(feedVO.getUserId());
         FeedCollections feedCollections = FeedCollections.builder()
                 .userId(feedVO.getUserId())
                 .content(feedVO.getContent())
@@ -74,11 +73,13 @@ public class FeedServiceImpl implements FeedService {
                 .filePath(feedCollections.getFilePath())
 //                .comments(feedCollections.getComments())
                 .likeUser(feedCollections.getLikeUser())
+                .nickName(user.getUserNickname())
+                .image(user.getProfileImageUrl())
                 .build();
     }
 
-    private void suninDays(String userNickname) {
-        User user = userRepository.findByUserNickname(userNickname);
+    private void suninDays(Long id) {
+        User user = userRepository.findProfileByUserSeq(id);
         user.setSuninDayIncrease();
         userRepository.save(user);
     }
@@ -109,11 +110,11 @@ public class FeedServiceImpl implements FeedService {
                 feed.get().getFilePath().remove(file);
             });
 
+            User user = userRepository.findProfileByUserSeq(fileUpdate.getUserId());
             feed.get().setFileModified(feed.get().getFilePath());
             FeedCollections feedCollections = feedRepository.save(feed.get());
             return FeedDto.builder()
                     .id(feedCollections.getId().toString())
-                    .userId(feedCollections.getUserId())
                     .hashtags(feedCollections.getHashtags())
                     .likes(feedCollections.getLikes())
                     .createdDate(feedCollections.getCreatedDate())
@@ -122,6 +123,9 @@ public class FeedServiceImpl implements FeedService {
                     .content(feedCollections.getContent())
                     .likeUser(feedCollections.getLikeUser())
 //                .comments(feedCollections.getComments())
+                    .userId(user.getUserSeq())
+                    .nickName(user.getUserNickname())
+                    .image(user.getProfileImageUrl())
                     .build();
         }
 
@@ -135,10 +139,9 @@ public class FeedServiceImpl implements FeedService {
             List<String> fileList = AwsFile(feedFile.getFiles(),feed.get().getFilePath());
             feed.get().setFileModified(fileList);
             FeedCollections feedCollections = feedRepository.save(feed.get());
-
+            User user = userRepository.findProfileByUserSeq(feedFile.getUserId());
             return FeedDto.builder()
                     .id(feedCollections.getId().toString())
-                    .userId(feedCollections.getUserId())
                     .hashtags(feedCollections.getHashtags())
                     .likes(feedCollections.getLikes())
                     .createdDate(feedCollections.getCreatedDate())
@@ -147,6 +150,9 @@ public class FeedServiceImpl implements FeedService {
                     .content(feedCollections.getContent())
                     .likeUser(feedCollections.getLikeUser())
 //                .comments(feedCollections.getComments())
+                    .userId(feedCollections.getUserId())
+                    .nickName(user.getUserNickname())
+                    .image(user.getProfileImageUrl())
                     .build();
         }
 
@@ -172,13 +178,13 @@ public class FeedServiceImpl implements FeedService {
         return list;
     }
 
+    // userId
     @Override
     public FeedDto getDetailFeed(String id) {
         FeedCollections feedCollections = feedRepository.findByIdAndFlagTrue(new ObjectId(String.valueOf(id)));
-
+        User user = userRepository.findProfileByUserSeq(feedCollections.getUserId());
         return FeedDto.builder()
                 .id(feedCollections.getId().toString())
-                .userId(feedCollections.getUserId())
                 .hashtags(feedCollections.getHashtags())
                 .likes(feedCollections.getLikes())
                 .createdDate(feedCollections.getCreatedDate())
@@ -187,15 +193,19 @@ public class FeedServiceImpl implements FeedService {
                 .content(feedCollections.getContent())
                 .likeUser(feedCollections.getLikeUser())
 //                .comments(feedCollections.getComments())
+                .userId(user.getUserSeq())
+                .nickName(user.getUserNickname())
+                .image(user.getProfileImageUrl())
                 .build();
     }
 
     @Override
     public FeedDto updateFeed(FeedUpdate feedUpdate) {
-        FeedCollections feedCollections = feedRepository.findByIdAndFlagTrue(new ObjectId(feedUpdate.getId()));
+        FeedCollections feedCollections = feedRepository.findByIdAndUserIdAndFlagTrue(new ObjectId(feedUpdate.getId()), feedUpdate.getUserId());
         feedCollections.setFeedModified(feedUpdate);
         feedRepository.save(feedCollections);
 
+        User user = userRepository.findProfileByUserSeq(feedCollections.getUserId());
         return FeedDto.builder()
                 .id(feedCollections.getId().toString())
                 .userId(feedCollections.getUserId())
@@ -207,12 +217,14 @@ public class FeedServiceImpl implements FeedService {
                 .likeUser(feedCollections.getLikeUser())
                 .filePath(feedCollections.getFilePath())
 //                .comments(feedCollections.getComments())
+                .nickName(user.getUserNickname())
+                .image(user.getProfileImageUrl())
                 .build();
     }
 
     @Override
-    public void deleteFeed(String id) {
-        FeedCollections feedCollections = feedRepository.findByIdAndFlagTrue(new ObjectId(id));
+    public void deleteFeed(String id, Long userId) {
+        FeedCollections feedCollections = feedRepository.findByIdAndUserIdAndFlagTrue(new ObjectId(id),userId);
         feedCollections.setFeedDelete();
         feedRepository.save(feedCollections);
     }
@@ -220,27 +232,28 @@ public class FeedServiceImpl implements FeedService {
     @Override
     public List<FeedDto> getFollowerFeed(Long id) {
         List<String> followers = followerRepository.getFollowingList(id);
-        return feedRepository.getFollowerFeed(followers)
-                .stream()
-                .map(FeedDto::feedDto)
-                .collect(Collectors.toList());
+//        return feedRepository.getFollowerFeed(followers)
+//                .stream()
+//                .map(FeedDto::feedDto)
+//                .collect(Collectors.toList());
+        return null;
     }
 
 
     @Override
-    public Page<FeedDto> getLatestFeed(Pageable pageable, String userId) {
+    public Page<FeedDto> getLatestFeed(Pageable pageable, Long userId) {
         return feedRepository.findAllByUserId(pageable,userId);
     }
 
     @Override
-    public Page<FeedDto> getLikeFeed(Pageable pageable, String userId) {
+    public Page<FeedDto> getLikeFeed(Pageable pageable, Long userId) {
         return feedRepository.findAllByUserId(pageable,userId);
     }
 
     @Override
     public FeedDto likeFeed(FeedLike feedLike) {
         FeedCollections feedCollections = feedRepository.findByIdAndFlagTrue(new ObjectId(feedLike.getId()));
-        Map<String, Object> users = new HashMap<>(feedCollections.getLikeUser());
+        Map<Long, Object> users = new HashMap<>(feedCollections.getLikeUser());
 
         int like = feedCollections.getLikes();
 

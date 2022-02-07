@@ -15,20 +15,22 @@ import java.util.Map;
 @ToString
 public class FeedDto {
     private String id;
-    private String userId;
     private String content;
     private List<String> hashtags;
     private int likes;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
     private List<String> filePath;
-    private Map<String,Object> likeUser;
+    private Map<Long,Object> likeUser;
     private List<Comment> comments;
 
-    public static FeedDto feedDto(FeedCollections feed) {
+    private Long userId;
+    private String nickName;
+    private String image;
+
+    public static FeedDto feedDto(FeedCollections feed, UserProfile userProfile) {
         return FeedDto.builder()
                 .id(feed.getId().toString())
-                .userId(feed.getUserId())
                 .content(feed.getContent())
                 .hashtags(feed.getHashtags())
                 .likes(feed.getLikes())
@@ -36,13 +38,15 @@ public class FeedDto {
                 .modifiedDate(feed.getModifiedDate())
                 .likeUser(feed.getLikeUser())
                 .filePath(feed.getFilePath())
+                .userId(userProfile.getId())
+                .nickName(userProfile.getNickName())
+                .image(userProfile.getImage())
                 .build();
     }
 
     @Builder
-    public FeedDto(String id, String userId, String content, List<String> hashtags, int likes, LocalDateTime createdDate, LocalDateTime modifiedDate, List<String> filePath, Map<String, Object> likeUser, List<Comment> comments) {
+    public FeedDto(String id, String content, List<String> hashtags, int likes, LocalDateTime createdDate, LocalDateTime modifiedDate, List<String> filePath, Map<Long, Object> likeUser, List<Comment> comments, Long userId, String nickName, String image) {
         this.id = id;
-        this.userId = userId;
         this.content = content;
         this.hashtags = hashtags;
         this.likes = likes;
@@ -51,5 +55,8 @@ public class FeedDto {
         this.filePath = filePath;
         this.likeUser = likeUser;
         this.comments = comments;
+        this.userId = userId;
+        this.nickName = nickName;
+        this.image = image;
     }
 }

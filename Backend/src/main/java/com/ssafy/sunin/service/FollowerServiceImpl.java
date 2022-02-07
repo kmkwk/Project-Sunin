@@ -21,7 +21,7 @@ public class FollowerServiceImpl implements FollowerService{
         Optional<User> user = userRepository.findById(followerVO.getUserId());
         Long count = user.stream().count();
         User users = user.get();
-        User followerMember = userRepository.findByUserSeq(followerVO.getFollowerMember());
+        User followerMember = userRepository.findFollowerByUserSeq(followerVO.getFollowerMember());
 
         if(followerRepository.getUser(followerVO) == null){
             Follower follower = Follower.builder()

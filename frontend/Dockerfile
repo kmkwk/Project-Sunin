@@ -12,19 +12,24 @@
 # EXPOSE 80
 # CMD ["nginx", "-g", "daemon off;"]
 
-FROM node:alpine
+###########
 
-ENV PORT 3000
+# FROM node:alpine
 
-WORKDIR /usr/src/app
+# ENV PORT 3000
 
-COPY package*.json ./
-RUN npm install
+# WORKDIR /usr/src/app
 
-COPY ./ ./
+# COPY package*.json ./
+# RUN npm install
 
-ENV NODE_ENV production
+# COPY ./ ./
 
-RUN npm run build
+# ENV NODE_ENV production
 
-CMD ["npm", "run", "start"]
+# RUN npm run build
+
+# CMD ["npm", "run", "start"]
+
+FROM nginx:latest
+COPY ./build /usr/share/nginx/html

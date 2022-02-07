@@ -6,9 +6,12 @@ spring:
     name: oauth2
   data:
     mongodb:
-      uri: mongodb://i6c210.p.ssafy.io:27017/sunin
+      authentication-database: admin
       username: sunin
       password: BUKQ@3rbfM=+NY7sGmP^
+      database: sunin
+      port: 27017
+      host: i6c210.p.ssafy.io
   security:
     user:
       name: ssafy
@@ -19,7 +22,7 @@ spring:
     password: BUKQ@3rbfM=+NY7sGmP^
   jpa:
     hibernate:
-      ddl-auto: none # 유의해주세요!!
+      ddl-auto: create # 유의해주세요!!
       use-new-id-generator-mappings: true
     show-sql: true
     properties:

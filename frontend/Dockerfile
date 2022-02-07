@@ -32,4 +32,4 @@
 # CMD ["npm", "run", "start"]
 
 FROM nginx:latest
-COPY ./build /usr/share/nginx/html
+COPY ./next /usr/share/nginx/html

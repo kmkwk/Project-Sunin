@@ -6,8 +6,8 @@ import { useEffect, useState } from "react";
 import FeedList from "../../../src/component/FeedList";
 import InfiniteScroll from "react-infinite-scroll-component";
 
-export default function personal() {
-  const [list, setList] = useState([]);
+export default function Personal() {
+  const [list, setList]: any = useState([]);
   const [pages, setPage] = useState(0);
 
   useEffect(() => {
@@ -40,7 +40,8 @@ export default function personal() {
             style={{ overflow: "hidden" }}
             dataLength={list.length}
             next={loadFeed}
-            hasMore={true}>
+            hasMore={true} 
+            loader={undefined}>
             <FeedList list={list} />
           </InfiniteScroll>
         </Grid.Column>

@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import styles from "../../styles/signup.module.css"
 import ProfileList from '../../src/component/ProfileList'
 
-export default function profileperson() {
+export default function Profileperson() {
 
 const [list, setList] = useState([]);
 const paragraph = <Image src='https://react.semantic-ui.com/images/wireframe/short-paragraph.png' />;

@@ -23,11 +23,11 @@ export default function Createfeed() {
       const i = event.target.files[0];
 
       setImage(i);
-      setCreateObjectURL(URL.createObjectURL(i));
+      // setCreateObjectURL(URL.createObjectURL(i));
     }
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = (event: any) => {
     event.preventDefault(); // 새로고침 방지
 
     const body = new FormData();
@@ -87,7 +87,7 @@ export default function Createfeed() {
                 placeholder="내용을 작성하세요..."
                 onChange={updateContent}></textarea>
               <div>
-                <img src={createObjectURL} width="500px" />
+                {/* <img src={createObjectURL} width="500px" /> */}
                 <h4>이미지 선택</h4>
                 <input
                   type="file"

@@ -6,14 +6,14 @@ spring:
     name: oauth2
   data:
     mongodb:
-      uri: mongodb://localhost:27017
+      uri: mongodb://i6c210.p.ssafy.io:27017
       database: sunin
   security:
     user:
       name: ssafy
       password: ssafy
   datasource:
-    url: jdbc:mysql://localhost:3306/sunin?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
+    url: jdbc:mysql://i6c210.p.ssafy.io:3306/sunin?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
     username: ssafy
     password: ssafy
   jpa:

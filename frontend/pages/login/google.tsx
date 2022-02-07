@@ -19,7 +19,7 @@ export default function GoogleLogin() {
 
   function GoLogin() {
     axios
-      .post("http://localhost:8080/user/login", {
+      .post("http://localhost:8080/login/oauth2/code/google", {
         userId: email,
         user_password: password,
       })

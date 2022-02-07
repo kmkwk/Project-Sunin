@@ -19,7 +19,7 @@ export default function NaverLogin() {
 
   function GoLogin() {
     axios
-      .post("http://localhost:8080/user/login", {
+      .post("http://localhost:8080/login/oauth2/code/naver", {
         userId: email,
         user_password: password,
       })

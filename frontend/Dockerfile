@@ -31,5 +31,9 @@
 
 # CMD ["npm", "run", "start"]
 
-FROM nginx:latest
-COPY ./next /usr/share/nginx/html
+FROM node
+WORKDIR /usr/src/app
+COPY package*.json ./
+RUN npm i -y
+COPY . .
+CMD [ "npm", "run", "build"]

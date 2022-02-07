@@ -45,7 +45,7 @@ public class FeedController {
     }
 
     // Todo : 프론트에서 encodeURI로 감싸서 보내는거 테스트해봐야함
-    @ApiOperation(value = "피드 사진 삭제", notes = "사진 여러장 삭제 가능, encodeURI로 감싸서 보내야함")
+    @ApiOperation(value = "피드 사진 삭제", notes = "사진 여러장 삭제 가능")
     @PutMapping("/file")
     public ResponseEntity<FeedDto> updateFile(@RequestBody @Valid FileUpdate fileUpdate) {
         log.info("deleteFile");

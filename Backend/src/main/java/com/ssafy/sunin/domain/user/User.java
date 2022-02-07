@@ -112,4 +112,12 @@ public class User {
 
     private int suninDays = 0;
 
+    public void setNormalProfileImage(){
+        this.profileImageUrl = "https://sunin-bucket.s3.ap-northeast-2.amazonaws.com/54b65ae4-8d54-4f93-909c-6ad7f2ce75b4.png";
+    }
+
+    public void setUserProfileModified(String profileImageUrl){
+        this.profileImageUrl = profileImageUrl;
+    }
+
 }

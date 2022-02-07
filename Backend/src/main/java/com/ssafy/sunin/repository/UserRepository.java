@@ -12,8 +12,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 //    Optional<User> findByUserId(String userId);
     User findByUserSeq(Long followerMember);
 
-    @Query("select u from User u where u.userNickname = :user_nickname")
-    User getUser(@Param("user_nickname") String user_nickname);
+    User findByUserNickname(String userNickname);
 
     User findByUserId(String userId);
+
+    User findProfileByUserSeq(Long userSeq);
 }

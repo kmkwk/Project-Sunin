@@ -11,8 +11,8 @@ spring:
       password: BUKQ@3rbfM=+NY7sGmP^
   security:
     user:
-      name: sunin
-      password: BUKQ@3rbfM=+NY7sGmP^
+      name: ssafy
+      password: ssafy
   datasource:
     url: jdbc:mysql://i6c210.p.ssafy.io:3306/sunin?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
     username: sunin

@@ -16,7 +16,7 @@ export default function Personal() {
 
   function loadFeed() {
     axios
-      .get(`http://localhost:8080/feed/pageLatest`, {
+      .get(`http://localhost:8080/feed/latest`, {
         params: {
           page: pages,
         },
@@ -40,7 +40,7 @@ export default function Personal() {
             style={{ overflow: "hidden" }}
             dataLength={list.length}
             next={loadFeed}
-            hasMore={true} 
+            hasMore={true}
             loader={undefined}>
             <FeedList list={list} />
           </InfiniteScroll>

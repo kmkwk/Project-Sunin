@@ -6,7 +6,7 @@ import Menubar from '../../src/component/Menubar'
 import Link from 'next/link'
 
 
-const infoperson = () => {
+const Infoperson = () => {
   const [content, setContent] = useState('');
   const [tag, setTag] = useState('');
   const [image, setImage]: any = useState();
@@ -18,7 +18,7 @@ const infoperson = () => {
       const i = event.target.files[0];
 
       setImage(i);
-      setCreateObjectURL(URL.createObjectURL(i));
+      // setCreateObjectURL(URL.createObjectURL(i));
     }
   };
 
@@ -135,4 +135,4 @@ const infoperson = () => {
   );
   };
 
-export default infoperson;
+export default Infoperson;

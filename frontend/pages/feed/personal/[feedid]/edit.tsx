@@ -47,7 +47,7 @@ export default function Edit() {
       const i = event.target.files[0];
 
       setImage(i);
-      setCreateObjectURL(URL.createObjectURL(i));
+      // setCreateObjectURL(URL.createObjectURL(i));
     }
   };
 
@@ -88,7 +88,7 @@ export default function Edit() {
                 onChange={updateContent}
               ></textarea>
               <div>
-              <img src={createObjectURL} width="500px" />
+              {/* <img src={createObjectURL} width="500px" /> */}
               <h4>이미지 선택</h4>
               <input type="file" accept="image/*" name="myImage" onChange={uploadToClient} />
             </div>

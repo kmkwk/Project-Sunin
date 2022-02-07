@@ -8,7 +8,7 @@ import { Grid } from 'semantic-ui-react'
 import Axios from "axios"
 import { useEffect, useState } from 'react';
 import SampleFeedList from '../src/component/SampleFeedList'
-import Searchbar from '../src/component/Searchbar'
+// import Searchbar from '../src/component/Searchbar'
 
 const Home: NextPage = () => {
   const [list, setList] = useState([]);
@@ -29,7 +29,7 @@ const Home: NextPage = () => {
   return (
     <>
       <Navbar />
-      <Searchbar />
+      {/* <Searchbar /> */}
       <Grid columns={4} padded stackable>
       <Grid.Column>
         <Menuvar />

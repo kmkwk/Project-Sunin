@@ -5,7 +5,7 @@ import Axios from "axios"
 import { useEffect, useState } from 'react';
 import FeedList2 from '../../../src/component/FeedList2';
 
-export default function company() {
+export default function Company() {
   const [list, setList] = useState([]);
 
   const API_URL = "http://makeup-api.herokuapp.com/api/v1/products.json?brand=maybelline";

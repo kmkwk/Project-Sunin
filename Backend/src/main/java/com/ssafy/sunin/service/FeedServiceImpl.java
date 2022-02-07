@@ -78,7 +78,7 @@ public class FeedServiceImpl implements FeedService {
     }
 
     private void suninDays(String userNickname) {
-        User user = userRepository.getUser(userNickname);
+        User user = userRepository.findByUserNickname(userNickname);
         user.setSuninDayIncrease();
         userRepository.save(user);
     }

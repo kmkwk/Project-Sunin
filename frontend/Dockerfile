@@ -31,9 +31,12 @@
 
 # CMD ["npm", "run", "start"]
 
-FROM node
-WORKDIR /usr/src/app
-COPY package*.json ./
-RUN npm install --production
+# FROM node
+# WORKDIR /usr/src/app
+# COPY package*.json ./
+# RUN npm install --production
+# COPY . .
+# RUN npm run build
+
+FROM nginx:latest
 COPY . .
-RUN npm run build

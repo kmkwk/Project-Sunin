@@ -18,39 +18,32 @@ export default function Login() {
     setPassword(event.target.value);
   };
   //http://localhost:8080/oauth2/authorization/kakao?redirect_uri=http://localhost:3000/oauth/redirect
- // http://localhost:8080/oauth2/callback/google
+  // http://localhost:8080/oauth2/callback/google
 
   function GoLogin() {
     axios
-      .get("http://localhost:8080/oauth2/authorization/kakao?redirect_uri=http://localhost:3000/oauth/redirect")
-      .then((res) => {
+      .get(
+        "http://localhost:8080/oauth2/authorization/kakao?redirect_uri=http://localhost:3000/oauth/redirect"
+      )
+      .then(() => {
         alert("로그인 성공");
-        console.log("123123123123123132")
-        console.log(router)
-
-    //     const token = router.query.token
-    // console.log('token', token)
-        console.log("123123123123123132")
-        console.log(res);
-        
-        console.log("123123123123123132")
       })
       .catch(() => {
         alert("로그인 실패");
       });
   }
 
-  const router = useRouter()
+  const router = useRouter();
 
-  function goNaverLogin(){
+  function goNaverLogin() {
     GoLogin();
   }
 
-  function goGoogleLogin(){
+  function goGoogleLogin() {
     GoLogin();
   }
 
-  function goKakaoLogin(){
+  function goKakaoLogin() {
     GoLogin();
   }
 
@@ -69,9 +62,32 @@ export default function Login() {
 
             <Grid.Column className={styles.location}>
               <Header textAlign="center">sns로 간편 로그인</Header> <br />
-              <Image src="images/btnG_완성형.png" size="medium" href="http://localhost:8080/oauth2/authorization/naver?redirect_uri=http://localhost:3000/oauth/redirect" alt="네이버로그인" onClick={goNaverLogin} className={ styles.social_login_button }/> <br />
-              <Image src="images/btn_google_signin_light_normal_web.png" size="medium" href="http://localhost:8080/oauth2/authorization/google?redirect_uri=http://localhost:3000/oauth/redirect" alt="구글로그인" onClick={goGoogleLogin} className={ styles.social_login_button }/> <br />
-              <Image src="images/kakao_login_large_narrow.png" size="medium" href="http://localhost:8080/oauth2/authorization/kakao?redirect_uri=http://localhost:3000/oauth/redirect" alt="카카오로그인" onClick={goKakaoLogin} className={ styles.social_login_button }/>
+              <Image
+                src="images/btnG_완성형.png"
+                size="medium"
+                href="http://localhost:8080/oauth2/authorization/naver?redirect_uri=http://localhost:3000/oauth/redirect"
+                alt="네이버로그인"
+                // onClick={goNaverLogin}
+                className={styles.social_login_button}
+              />{" "}
+              <br />
+              <Image
+                src="images/btn_google_signin_light_normal_web.png"
+                size="medium"
+                href="http://localhost:8080/oauth2/authorization/google?redirect_uri=http://localhost:3000/oauth/redirect"
+                alt="구글로그인"
+                // onClick={goGoogleLogin}
+                className={styles.social_login_button}
+              />{" "}
+              <br />
+              <Image
+                src="images/kakao_login_large_narrow.png"
+                size="medium"
+                href="http://localhost:8080/oauth2/authorization/kakao?redirect_uri=http://localhost:3000/oauth/redirect"
+                alt="카카오로그인"
+                // onClick={goKakaoLogin}
+                className={styles.social_login_button}
+              />
               {/* <Form>
                 <Form.Input
                   icon="user"

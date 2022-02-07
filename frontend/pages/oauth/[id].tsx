@@ -1,31 +1,16 @@
 import { useRouter } from "next/router";
-import { Button } from "semantic-ui-react";
+import { useEffect } from "react";
 
-export default function Authentication(){
+export default function Authentication() {
+  const router = useRouter();
 
-  const router = useRouter()
+  useEffect(() => {
+    router.push("/");
+  }, []);
 
-  function goMainPage(){
-    router.push('/')
-  }
-
-  console.log(router.query.token);
-  if (typeof window !== "undefined") { 
-    localStorage.setItem('token', String(router.query.token) );
+  if (typeof window !== "undefined") {
+    localStorage.setItem("token", String(router.query.token));
   }
 
   return <></>;
 }
-
-export async function getServerSideProps() {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("token", JSON.stringify("adsf"));
-    }
-  
-    return {
-      redirect: {
-        permanent: false,
-        destination: "/",
-      },
-    };
-  }

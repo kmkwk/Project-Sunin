@@ -3,7 +3,7 @@ import { Grid, Header, Divider, Form, Button, Image } from 'semantic-ui-react'
 import styles from "../../styles/signup.module.css"
 import Navbar from '../../src/component/Navbar'
 import Menubar from '../../src/component/Menubar'
-import Link from 'next/link'
+
 
 
 const Infoperson = () => {
@@ -11,6 +11,7 @@ const Infoperson = () => {
   const [tag, setTag] = useState('');
   const [image, setImage]: any = useState();
   const [createObjectURL, setCreateObjectURL] = useState(null);
+  const [attachment,setAttachment] = useState()
 
 
   const uploadToClient = (event: any) => {
@@ -39,6 +40,21 @@ const Infoperson = () => {
     setImage(null)
   };
 
+  const onFileChange = (event: any) => {
+      const {
+        target: { files },
+      } = event;
+      const theFile = files[0];
+      const reader = new FileReader();
+      reader.onloadend = (finishedEvent) => {
+        const {
+          currentTarget: { result },
+        } = finishedEvent;
+        setAttachment(result);
+      };
+      reader.readAsDataURL(theFile);
+  };
+  const onClearAttachment = () => setAttachment(undefined);
 
   return (
   <>
@@ -59,8 +75,16 @@ const Infoperson = () => {
       <div>
       <h4>프로필 사진</h4>
       <Image src={createObjectURL} width="100px" />
-              
-              <input type="file" accept="image/*" name="myImage" onChange={uploadToClient} />
+      <input type="file" accept="image/*" name="myImage" onChange={onFileChange} />        
+      {attachment && (
+        <div>
+          <br/>
+        <img src={attachment} width="100%" height="100%"/>
+        
+        <Button basic color='grey' onClick={onClearAttachment} fluid>Cancel</Button>
+        </div>
+      )}
+      {/* <input type="file" accept="image/*" name="myImage" onChange={uploadToClient} /> */}
       {/* <Image src='https://react.semantic-ui.com/images/wireframe/image.png' size='small' verticalAlign='bottom' />{' '}
       <Button basic color='grey'>변&nbsp;경</Button> */}
       </div>
@@ -71,13 +95,17 @@ const Infoperson = () => {
     </Form.Field>
     <Form.Field>
       <label>비밀번호</label>
+      <input disabled placeholder='password' />
+    </Form.Field>
+    {/* <Form.Field>
+      <label>비밀번호</label>
       <Form.Group inline>
      
       <Link href="passwordperson">
       <Button basic color='grey' fluid>변&nbsp;경</Button>
     </Link>
     </Form.Group>
-    </Form.Field>
+    </Form.Field> */}
 
     <Form.Field>
       <label>이름</label>

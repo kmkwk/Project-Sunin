@@ -7,7 +7,6 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
-
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -25,7 +24,7 @@ public class FeedCollections{
     @Id
     private ObjectId id;
 
-    private String userId;
+    private Long userId;
 
     private String content;
 
@@ -34,7 +33,7 @@ public class FeedCollections{
     private int likes;
 
     @NotNull
-    private Map<String,Object> likeUser = new HashMap<>();
+    private Map<Long,Object> likeUser = new HashMap<>();
 
     @CreatedDate
     private LocalDateTime createdDate = LocalDateTime.now();
@@ -59,7 +58,7 @@ public class FeedCollections{
         this.modifiedDate = LocalDateTime.now();
     }
 
-    public void setLikeModified(int likes, Map<String, Object> likeUser){
+    public void setLikeModified(int likes, Map<Long, Object> likeUser){
         this.likes = likes;
         this.likeUser = likeUser;
     }
@@ -69,7 +68,7 @@ public class FeedCollections{
     }
 
     @Builder
-    public FeedCollections(ObjectId id, String userId, String content, List<String> hashtags, int likes, Map<String, Object> likeUser, LocalDateTime createdDate, LocalDateTime modifiedDate, List<String> filePath, boolean flag, List<Comment> comments) {
+    public FeedCollections(ObjectId id, Long userId, String content, List<String> hashtags, int likes, Map<Long, Object> likeUser, LocalDateTime createdDate, LocalDateTime modifiedDate, List<String> filePath, boolean flag, List<Comment> comments) {
         this.id = id;
         this.userId = userId;
         this.content = content;

@@ -29,7 +29,7 @@ public class FeedController {
     @ApiOperation(value = "Feed 작성", notes = "성공시 200, 다중 파일 업로드 가능")
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<FeedDto> writeImageFeed(@RequestBody @Valid FeedVO feedVO){
-        log.info("writerImageFeed"); // log info
+        log.info("writerImageFeed");
 
         if(ObjectUtils.isEmpty(feedVO)){
             return ResponseEntity.notFound().build();
@@ -84,10 +84,10 @@ public class FeedController {
     }
 
     @ApiOperation(value = "피드 삭제")
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteFeed(@PathVariable("id") String id) {
+    @DeleteMapping("/{id}/{userId}")
+    public ResponseEntity<String> deleteFeed(@PathVariable("id") String id, @PathVariable Long userId) {
         log.info("deleteFeed");
-        feedService.deleteFeed(id);
+        feedService.deleteFeed(id,userId);
         return ResponseEntity.ok("success");
     }
 
@@ -102,7 +102,7 @@ public class FeedController {
     @GetMapping("/latest")
     public ResponseEntity<Page<FeedDto>> getLatestFeed(@PageableDefault(size = 6, sort="createdDate",
                                                             direction = Sort.Direction.DESC) Pageable pageable,
-                                                            @RequestParam("userId") String userId){
+                                                            @RequestParam("userId") Long userId){
         log.info("getLatestFeed");
         return ResponseEntity.ok(feedService.getLatestFeed(pageable,userId));
     }
@@ -111,7 +111,7 @@ public class FeedController {
     @GetMapping("/like")
     public ResponseEntity<Page<FeedDto>> getLikesFeed(@PageableDefault(size = 6, sort="likes",
                                                             direction = Sort.Direction.DESC) Pageable pageable,
-                                                           @RequestParam("userId") String userId){
+                                                           @RequestParam("userId") Long userId){
         log.info("getLikesFeed");
         return ResponseEntity.ok(feedService.getLikeFeed(pageable,userId));
     }

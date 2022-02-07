@@ -19,13 +19,13 @@ public interface FeedService {
 
     FeedDto addFile(FeedFile feedFile);
 
-    void deleteFeed(String id);
+    void deleteFeed(String id, Long userId);
 
     List<FeedDto> getFollowerFeed(Long id);
 
-    Page<FeedDto> getLatestFeed(Pageable pageable, String userId);
+    Page<FeedDto> getLatestFeed(Pageable pageable, Long userId);
 
-    Page<FeedDto> getLikeFeed(Pageable pageable, String userId);
+    Page<FeedDto> getLikeFeed(Pageable pageable, Long userId);
 
     FeedDto likeFeed(FeedLike feedLike);
 }

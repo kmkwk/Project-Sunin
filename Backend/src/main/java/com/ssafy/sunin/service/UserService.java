@@ -15,11 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -48,7 +45,7 @@ public class UserService{
     }
 
     public UserProfile updateUserImage(ImageVO imageVO){
-        User user = userRepository.findByUserSeq(imageVO.getId());
+        User user = userRepository.findProfileByUserSeq(imageVO.getId());
         String file = profileUpload(imageVO.getImage());
         user.setUserProfileModified(file);
 
@@ -56,7 +53,7 @@ public class UserService{
     }
 
     public UserProfile delteUserImage(Long id){
-        User user = userRepository.findByUserSeq(id);
+        User user = userRepository.findProfileByUserSeq(id);
         user.setNormalProfileImage();
 
         return UserProfile.userProfile(user);

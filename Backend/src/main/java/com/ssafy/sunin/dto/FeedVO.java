@@ -11,8 +11,8 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 public class FeedVO {
-    @NotBlank
-    private String userId;
+    @NotNull
+    private Long userId;
     private String content;
     private List<String> hashtags;
     private List<MultipartFile> files;

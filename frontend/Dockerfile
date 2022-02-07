@@ -34,6 +34,6 @@
 FROM node
 WORKDIR /usr/src/app
 COPY package*.json ./
-RUN npm i -y
+RUN npm install --production
 COPY . .
-CMD [ "npm", "run", "build"]
+RUN npm run build

@@ -1,4 +1,4 @@
-package com.ssafy.sunin.dto;
+package com.ssafy.sunin.dto.feed;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

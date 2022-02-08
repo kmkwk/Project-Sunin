@@ -4,7 +4,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;
 import com.ssafy.sunin.domain.FeedCollections;
 import com.ssafy.sunin.domain.user.User;
-import com.ssafy.sunin.dto.*;
+import com.ssafy.sunin.dto.feed.*;
 import com.ssafy.sunin.repository.FeedRepository;
 import com.ssafy.sunin.repository.FollowerRepository;
 import com.ssafy.sunin.repository.UserRepository;
@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -39,17 +40,17 @@ public class FeedServiceImpl implements FeedService {
     private final AmazonS3 amazonS3;
 
     @Override
-    public FeedDto writeImageFeed(FeedVO feedVO) {
+    public FeedDto writeImageFeed(FeedWrite feedWrite) {
         List<String> fileList = new ArrayList<>();
-        List<MultipartFile> files = feedVO.getFiles();
+        List<MultipartFile> files = feedWrite.getFiles();
         if (files != null) {
-            AwsFile(feedVO.getFiles(),fileList);
+            AwsFile(feedWrite.getFiles(),fileList);
         }
-        User user = userRepository.findProfileByUserSeq(feedVO.getUserId());
+        User user = userRepository.findProfileByUserSeq(feedWrite.getUserId());
         FeedCollections feedCollections = FeedCollections.builder()
-                .userId(feedVO.getUserId())
-                .content(feedVO.getContent())
-                .hashtags(feedVO.getHashtags())
+                .userId(feedWrite.getUserId())
+                .content(feedWrite.getContent())
+                .hashtags(feedWrite.getHashtags())
                 .likes(0)
                 .createdDate(LocalDateTime.now())
                 .modifiedDate(LocalDateTime.now())
@@ -60,7 +61,7 @@ public class FeedServiceImpl implements FeedService {
                 .build();
 
         ObjectId id = feedRepository.save(feedCollections).getId();
-        suninDays(feedVO.getUserId());
+        suninDays(feedWrite.getUserId());
 
         return FeedDto.builder()
                 .id(id.toString())
@@ -230,13 +231,26 @@ public class FeedServiceImpl implements FeedService {
     }
 
     @Override
-    public List<FeedDto> getFollowerFeed(Long id) {
-        List<String> followers = followerRepository.getFollowingList(id);
-//        return feedRepository.getFollowerFeed(followers)
+    public List<FeedDto> getFollowerFeed(Long userId) {
+        List<Long> followers = followerRepository.getFollowingList(userId);
+        List<User> users = userRepository.findFollowerListByUserSeqIn(followers);
+        System.out.println();
+        return feedRepository.getFollowerFeed(followers)
+                .stream()
+                .map(feedCollections -> FeedDto.builder()
+                        .id(feedCollections.getId().toString())
+                        .userId(feedCollections.getUserId())
+                        .content(feedCollections.getContent())
+                        .hashtags(feedCollections.getHashtags())
+                        .likes(feedCollections.getLikes())
+                        .createdDate(feedCollections.getCreatedDate())
+                        .modifiedDate(feedCollections.getModifiedDate())
+                        .likeUser(feedCollections.getLikeUser())
+                        .filePath(feedCollections.getFilePath())
+                        .build()).collect(Collectors.toList());
 //                .stream()
 //                .map(FeedDto::feedDto)
 //                .collect(Collectors.toList());
-        return null;
     }
 
 
@@ -264,7 +278,6 @@ public class FeedServiceImpl implements FeedService {
             users.put(feedLike.getUserId(), true);
             like++;
         }
-
         feedCollections.setLikeModified(like,users);
 
         feedRepository.save(feedCollections);

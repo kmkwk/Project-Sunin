@@ -1,4 +1,4 @@
-package com.ssafy.sunin.dto;
+package com.ssafy.sunin.dto.user;
 
 import com.ssafy.sunin.domain.user.User;
 import lombok.Builder;

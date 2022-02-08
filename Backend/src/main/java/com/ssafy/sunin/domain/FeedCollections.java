@@ -1,13 +1,14 @@
 package com.ssafy.sunin.domain;
 
-import com.ssafy.sunin.dto.FeedUpdate;
+import com.ssafy.sunin.dto.feed.FeedUpdate;
 import io.swagger.annotations.ApiModel;
 import lombok.*;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
-import javax.persistence.Id;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -65,6 +66,10 @@ public class FeedCollections{
 
     public void setFileModified(List<String> filePath){
         this.filePath = filePath;
+    }
+
+    public void setCommentWrite(List<Comment> comments){
+        this.comments = comments;
     }
 
     @Builder

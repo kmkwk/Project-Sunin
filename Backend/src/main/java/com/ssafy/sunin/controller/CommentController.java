@@ -1,6 +1,9 @@
 package com.ssafy.sunin.controller;
 
 import com.ssafy.sunin.domain.Comment;
+import com.ssafy.sunin.domain.FeedCollections;
+import com.ssafy.sunin.dto.comment.CommentUpdate;
+import com.ssafy.sunin.dto.comment.CommentWrite;
 import com.ssafy.sunin.service.CommentService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -10,12 +13,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
-@CrossOrigin("*")
+//@CrossOrigin("*")
 @RestController
 //@RestControllerAdvice
-@RequestMapping(value = "/comment")
+@RequestMapping("/comment")
 @RequiredArgsConstructor
 public class CommentController {
 
@@ -39,8 +43,8 @@ public class CommentController {
             @ApiImplicitParam(name = "writer", value = "작성자", required = true),
             @ApiImplicitParam(name = "content", value = "내용", required = true)
     })
-    public ResponseEntity<String> writeComment(String feedId, String writer, String content) {
-        Comment result = commentService.writeComment(feedId, writer, content);
+    public ResponseEntity<String> writeComment(CommentWrite commentWrite) {
+        FeedCollections result = commentService.writeComment(commentWrite);
         if(result == null) return new ResponseEntity<>("등록 실패", HttpStatus.INTERNAL_SERVER_ERROR);
         else return new ResponseEntity<>("등록 성공", HttpStatus.CREATED);
     }
@@ -51,8 +55,8 @@ public class CommentController {
             @ApiImplicitParam(name = "commentId", value = "수정할 댓글 ObjectID", required = true),
             @ApiImplicitParam(name = "content", value = "내용", required = true)
     })
-    public ResponseEntity<String> updateComment(String commentId, String content) {
-        Comment result = commentService.updateComment(commentId, content);
+    public ResponseEntity<String> updateComment(CommentUpdate commentUpdate) {
+        Comment result = commentService.updateComment(commentUpdate);
         if(result == null) return new ResponseEntity<>("수정 실패", HttpStatus.INTERNAL_SERVER_ERROR);
         else return new ResponseEntity<>("수정 성공", HttpStatus.OK);
     }
@@ -87,8 +91,8 @@ public class CommentController {
             @ApiImplicitParam(name = "writer", value = "작성자", required = true),
             @ApiImplicitParam(name = "content", value = "내용", required = true)
     })
-    public ResponseEntity<Comment> writeReply(String commentId, String writer, String content) {
-        return new ResponseEntity<>(commentService.writeReply(commentId, writer, content), HttpStatus.OK);
+    public ResponseEntity<Comment> writeReply(CommentWrite commentWrite) {
+        return new ResponseEntity<>(commentService.writeReply(commentWrite), HttpStatus.OK);
     }
 
     @PutMapping("/reply")
@@ -97,8 +101,8 @@ public class CommentController {
             @ApiImplicitParam(name = "commentId", value = "수정할 대댓글 ObjectID", required = true),
             @ApiImplicitParam(name = "content", value = "내용", required = true)
     })
-    public ResponseEntity<Comment> updateReply(String commentId, String content) {
-        return new ResponseEntity<>(commentService.updateComment(commentId, content), HttpStatus.OK);
+    public ResponseEntity<Comment> updateReply(@RequestBody @Valid CommentUpdate commentUpdate) {
+        return new ResponseEntity<>(commentService.updateComment(commentUpdate), HttpStatus.OK);
     }
 
     @DeleteMapping("/reply")

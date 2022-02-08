@@ -1,7 +1,12 @@
 package com.ssafy.sunin.service;
 
 import com.ssafy.sunin.domain.Comment;
+import com.ssafy.sunin.domain.FeedCollections;
+import com.ssafy.sunin.dto.comment.CommentUpdate;
+import com.ssafy.sunin.dto.comment.CommentWrite;
+import com.ssafy.sunin.dto.feed.FeedDto;
 import com.ssafy.sunin.repository.CommentRepository;
+import com.ssafy.sunin.repository.FeedRepository;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Sort;
@@ -11,35 +16,45 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class CommentService {
 
     private final CommentRepository commentRepository;
-
+    private final FeedRepository feedRepository;
     /*
      * 댓글 작성하기
      * */
-    public Comment writeComment(String feedId, String writer, String content) {
+    public FeedCollections writeComment(CommentWrite commentWrite) {
         Comment comment = Comment.builder()
-                .feedId(new ObjectId(feedId))
-                .writer(writer)
-                .content(content)
+                .feedId(new ObjectId(commentWrite.getFeedId()))
+                .writer(commentWrite.getWriter())
+                .content(commentWrite.getContent())
                 .build();
-        commentRepository.insert(comment);
 
+        FeedCollections feedCollections = feedRepository.findFeedIdById(new ObjectId(commentWrite.getFeedId()));
+        commentRepository.insert(comment);
+        List<Comment> comments = feedCollections.getComments();
+        comments.add(comment);
         comment.setCommentGroup(comment.getId());
-        return commentRepository.save(comment);
+        feedCollections.setCommentWrite(comments);
+
+        return feedRepository.save(feedCollections);
     }
 
     /*
      * 댓글 수정하기
      * */
-    public Comment updateComment(String commentId, String content) {
-        Comment comment = commentRepository.findById(new ObjectId(commentId));
-        comment.setCommentModified(content);
-        return commentRepository.save(comment);
+    public Comment updateComment(CommentUpdate commentUpdate) {
+        FeedCollections feedCollections = feedRepository.findFeedIdById(new ObjectId(commentUpdate.getFeedId()));
+        // 피드 해당 댓글
+
+        Comment comment = commentRepository.findById(new ObjectId(commentUpdate.getCommentId()));
+        comment.setCommentModified(commentUpdate.getCommentId());
+//        return commentRepository.save(comment);
+        return null;
     }
 
     /*
@@ -54,12 +69,12 @@ public class CommentService {
     /*
      * 대댓글 작성하기
      * */
-    public Comment writeReply(String commentId, String writer, String content) {
-        Comment rootComment = commentRepository.findById(new ObjectId(commentId));
+    public Comment writeReply(CommentWrite commentWrite) {
+        Comment rootComment = commentRepository.findById(new ObjectId(commentWrite.getFeedId()));
         Comment comment = Comment.builder()
                 .feedId(rootComment.getFeedId())
-                .writer(writer)
-                .content(content)
+//                .writer(writer)
+//                .content(content)
                 .build();
 
         comment.setCommentGroup(rootComment.getGroup());

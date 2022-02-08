@@ -5,8 +5,8 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.ssafy.sunin.domain.user.User;
-import com.ssafy.sunin.dto.ImageVO;
-import com.ssafy.sunin.dto.UserProfile;
+import com.ssafy.sunin.dto.feed.ImageUpdate;
+import com.ssafy.sunin.dto.user.UserProfile;
 import com.ssafy.sunin.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,22 +38,22 @@ public class UserService{
         return userRepository.findByUserId(userId);
     }
 
-    public UserProfile getUserProfile(Long id){
-        User user = userRepository.findProfileByUserSeq(id);
+    public UserProfile getUserProfile(Long userId){
+        User user = userRepository.findProfileByUserSeq(userId);
 
         return UserProfile.userProfile(user);
     }
 
-    public UserProfile updateUserImage(ImageVO imageVO){
-        User user = userRepository.findProfileByUserSeq(imageVO.getId());
-        String file = profileUpload(imageVO.getImage());
+    public UserProfile updateUserImage(ImageUpdate imageUpdate){
+        User user = userRepository.findProfileByUserSeq(imageUpdate.getId());
+        String file = profileUpload(imageUpdate.getImage());
         user.setUserProfileModified(file);
 
         return UserProfile.userProfile(user);
     }
 
-    public UserProfile delteUserImage(Long id){
-        User user = userRepository.findProfileByUserSeq(id);
+    public UserProfile delteUserImage(Long userId){
+        User user = userRepository.findProfileByUserSeq(userId);
         user.setNormalProfileImage();
 
         return UserProfile.userProfile(user);

@@ -2,21 +2,18 @@ package com.ssafy.sunin.controller;
 
 import com.ssafy.sunin.common.ApiResponse;
 import com.ssafy.sunin.domain.user.User;
-import com.ssafy.sunin.dto.ImageVO;
-import com.ssafy.sunin.dto.UserProfile;
+import com.ssafy.sunin.dto.feed.ImageUpdate;
+import com.ssafy.sunin.dto.user.UserProfile;
 import com.ssafy.sunin.service.UserService;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.nio.file.spi.FileTypeDetector;
 
 @Slf4j
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -38,33 +35,33 @@ public class UserController {
     }
 
     @ApiOperation(value = "유저 프로필 조회")
-    @GetMapping("/profile/{id}")
-    public ResponseEntity<UserProfile> getUserProfile(@PathVariable Long id){
+    @GetMapping("/profile/{userId}")
+    public ResponseEntity<UserProfile> getUserProfile(@PathVariable("userId") Long userId){
         log.info("getUserProfile");
-        if(ObjectUtils.isEmpty(id)){
+        if(ObjectUtils.isEmpty(userId)){
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(userService.getUserProfile(id));
+        return ResponseEntity.ok(userService.getUserProfile(userId));
     }
 
     @ApiOperation(value = "유저 프로필 사진 수정")
     @PutMapping("/image")
-    public ResponseEntity<UserProfile> updateUserImage(@Valid ImageVO imageVO){
+    public ResponseEntity<UserProfile> updateUserImage(@Valid ImageUpdate imageUpdate){
         log.info("updateUserImage");
-        if(ObjectUtils.isEmpty(imageVO)){
+        if(ObjectUtils.isEmpty(imageUpdate)){
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(userService.updateUserImage(imageVO));
+        return ResponseEntity.ok(userService.updateUserImage(imageUpdate));
     }
 
     @ApiOperation(value = "유저 프로필 사진 삭제")
-    @DeleteMapping("image/{id}")
-    public ResponseEntity<UserProfile> deleteUserImage(@PathVariable Long id){
+    @DeleteMapping("image/{userId}")
+    public ResponseEntity<UserProfile> deleteUserImage(@PathVariable("userId") Long userId){
         log.info("deleteUserImage");
-        if(ObjectUtils.isEmpty(id)){
+        if(ObjectUtils.isEmpty(userId)){
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(userService.delteUserImage(id));
+        return ResponseEntity.ok(userService.delteUserImage(userId));
     }
 
 //    @PostMapping("/signup")

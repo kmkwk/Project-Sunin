@@ -1,6 +1,6 @@
 package com.ssafy.sunin.controller;
 
-import com.ssafy.sunin.dto.*;
+import com.ssafy.sunin.dto.feed.*;
 import com.ssafy.sunin.service.FeedServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -28,13 +28,13 @@ public class FeedController {
 
     @ApiOperation(value = "Feed 작성", notes = "성공시 200, 다중 파일 업로드 가능")
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<FeedDto> writeImageFeed(@RequestBody @Valid FeedVO feedVO){
+    public ResponseEntity<FeedDto> writeImageFeed(@RequestBody @Valid FeedWrite feedWrite){
         log.info("writerImageFeed");
 
-        if(ObjectUtils.isEmpty(feedVO)){
+        if(ObjectUtils.isEmpty(feedWrite)){
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(feedService.writeImageFeed(feedVO));
+        return ResponseEntity.ok(feedService.writeImageFeed(feedWrite));
     }
 
     @ApiOperation(value = "file 다운로드")
@@ -92,15 +92,15 @@ public class FeedController {
     }
 
     @ApiOperation(value = "나의 팔로워 피드 조회", notes = "우선 나의 id 값 전달")
-    @GetMapping("/follower/{id}")
-    public ResponseEntity<List<FeedDto>> getFollowerFeed(@PathVariable("id") Long id){
+    @GetMapping("/follower/{userId}")
+    public ResponseEntity<List<FeedDto>> getFollowerFeed(@PathVariable("userId") Long userId){
         log.info("getFollowerFeed");
-        return ResponseEntity.ok(feedService.getFollowerFeed(id));
+        return ResponseEntity.ok(feedService.getFollowerFeed(userId));
     }
 
     @ApiOperation(value = "페이징 최신순 피드 조회")
     @GetMapping("/latest")
-    public ResponseEntity<Page<FeedDto>> getLatestFeed(@PageableDefault(size = 6, sort="createdDate",
+    public ResponseEntity<Page<FeedDto>> getLatestFeed(@PageableDefault(sort="createdDate",
                                                             direction = Sort.Direction.DESC) Pageable pageable,
                                                             @RequestParam("userId") Long userId){
         log.info("getLatestFeed");
@@ -109,7 +109,7 @@ public class FeedController {
 
     @ApiOperation(value = "페이징 좋아요순 피드 조회")
     @GetMapping("/like")
-    public ResponseEntity<Page<FeedDto>> getLikesFeed(@PageableDefault(size = 6, sort="likes",
+    public ResponseEntity<Page<FeedDto>> getLikesFeed(@PageableDefault(sort="likes",
                                                             direction = Sort.Direction.DESC) Pageable pageable,
                                                            @RequestParam("userId") Long userId){
         log.info("getLikesFeed");

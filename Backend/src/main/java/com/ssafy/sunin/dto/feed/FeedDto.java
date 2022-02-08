@@ -1,7 +1,8 @@
-package com.ssafy.sunin.dto;
+package com.ssafy.sunin.dto.feed;
 
 import com.ssafy.sunin.domain.Comment;
 import com.ssafy.sunin.domain.FeedCollections;
+import com.ssafy.sunin.dto.user.UserProfile;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -41,6 +42,7 @@ public class FeedDto {
                 .userId(userProfile.getId())
                 .nickName(userProfile.getNickName())
                 .image(userProfile.getImage())
+                .comments(feed.getComments())
                 .build();
     }
 

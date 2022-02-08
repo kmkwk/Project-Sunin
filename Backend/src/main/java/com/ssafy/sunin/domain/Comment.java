@@ -9,12 +9,11 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
-
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
-@Document(collection = "comments")
-@ApiModel(value = "댓글 (Comment)", description = "댓글 관련 정보를 가진 Domain Class")
+//@Document(collection = "comments")
+//@ApiModel(value = "댓글 (Comment)", description = "댓글 관련 정보를 가진 Domain Class")
 @NoArgsConstructor
 @Getter
 public class Comment {
@@ -32,7 +31,7 @@ public class Comment {
 
     @Field("comment_writer")
     @ApiModelProperty(value = "작성자")
-    private String writer;
+    private Long writer;
 
     @Field("comment_like")
     @ApiModelProperty(value = "좋아요")
@@ -65,7 +64,7 @@ public class Comment {
     private int depth;
 
     @Builder
-    public Comment(ObjectId feedId, String content, String writer) {
+    public Comment(ObjectId feedId, String content, Long writer) {
         this.feedId = feedId;
         this.content = content;
         this.writer = writer;

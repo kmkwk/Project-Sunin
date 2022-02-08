@@ -4,7 +4,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.sunin.domain.Follower;
 import com.ssafy.sunin.domain.QFollower;
 import com.ssafy.sunin.domain.user.QUser;
-import com.ssafy.sunin.dto.FollowerVO;
+import com.ssafy.sunin.dto.follower.FollowerUser;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.List;
@@ -29,22 +29,22 @@ public class FollowerRepositoryImpl implements FollowerRepositoryCustom {
     }
 
     @Override
-    public List<String> getFollowingList(Long id) {
+    public List<Long> getFollowingList(Long userId) {
         return queryFactory
-                .select(qUser.userNickname)
+                .select(qUser.userSeq)
                 .from(qFollower)
                 .join(qFollower.followerMember, qUser)
-                .where(qFollower.user.userSeq.eq(id))
+                .where(qFollower.user.userSeq.eq(userId))
                 .distinct()
                 .fetch();
     }
 
     @Override
-    public Long getFollowerCount(Long id) {
+    public Long getFollowerCount(Long followerMember) {
         return queryFactory
                 .select(qFollower.count())
                 .from(qFollower)
-                .where(qFollower.user.userSeq.eq(id))
+                .where(qFollower.user.userSeq.eq(followerMember))
                 .fetch().get(0);
     }
 
@@ -58,14 +58,14 @@ public class FollowerRepositoryImpl implements FollowerRepositoryCustom {
     }
 
     @Override
-    public Follower getUser(FollowerVO followerVO) {
+    public Follower getUser(FollowerUser followerUser) {
         return queryFactory
                 .selectFrom(qFollower)
                 .leftJoin(qFollower.user, qUser)
                 .fetchJoin()
                 .leftJoin(qFollower.followerMember, qUser)
-                .where(qFollower.user.userSeq.eq(followerVO.getUserId())
-                        .and(qFollower.followerMember.userSeq.eq(followerVO.getFollowerMember())))
+                .where(qFollower.user.userSeq.eq(followerUser.getUserId())
+                        .and(qFollower.followerMember.userSeq.eq(followerUser.getFollowerMember())))
                 .fetchOne();
     }
 }

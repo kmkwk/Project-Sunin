@@ -2,7 +2,7 @@ package com.ssafy.sunin.service;
 
 import com.ssafy.sunin.domain.Follower;
 import com.ssafy.sunin.domain.user.User;
-import com.ssafy.sunin.dto.FollowerVO;
+import com.ssafy.sunin.dto.follower.FollowerUser;
 import com.ssafy.sunin.repository.FollowerRepository;
 import com.ssafy.sunin.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,13 +17,13 @@ public class FollowerServiceImpl implements FollowerService{
     private final UserRepository userRepository;
 
     @Override
-    public Long addFollower(FollowerVO followerVO) {
-        Optional<User> user = userRepository.findById(followerVO.getUserId());
+    public Long addFollower(FollowerUser followerUser) {
+        Optional<User> user = userRepository.findById(followerUser.getUserId());
         Long count = user.stream().count();
         User users = user.get();
-        User followerMember = userRepository.findFollowerByUserSeq(followerVO.getFollowerMember());
+        User followerMember = userRepository.findFollowerByUserSeq(followerUser.getFollowerMember());
 
-        if(followerRepository.getUser(followerVO) == null){
+        if(followerRepository.getUser(followerUser) == null){
             Follower follower = Follower.builder()
                     .user(users)
                     .followerMember(followerMember)
@@ -37,19 +37,19 @@ public class FollowerServiceImpl implements FollowerService{
     }
 
     @Override
-    public void deleteFollower(FollowerVO followerVO) {
-        Follower follower = followerRepository.getUser(followerVO);
+    public void deleteFollower(FollowerUser followerUser) {
+        Follower follower = followerRepository.getUser(followerUser);
         followerRepository.deleteFollower(follower);
 
     }
 
     @Override
-    public Long countFollower(Long id) {
-        return followerRepository.getFollowerCount(id);
+    public Long countFollower(Long userId) {
+        return followerRepository.getFollowerCount(userId);
     }
 
     @Override
-    public Long countFollowing(Long id) {
-        return followerRepository.getFollowingCount(id);
+    public Long countFollowing(Long followerMember) {
+        return followerRepository.getFollowingCount(followerMember);
     }
 }

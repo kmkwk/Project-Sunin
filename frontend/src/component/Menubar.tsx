@@ -3,10 +3,32 @@ import Link from 'next/link'
 
 
 export default function Menuvar(){
+
+  var isLogin = false
+
+  if (typeof window !== "undefined") {
+    const token = localStorage.getItem('token')
+    if (token){
+      isLogin = true
+    } else {
+      isLogin = false
+    }
+  }
+
   return (
     <>
       <Menu vertical>
         <MenuItem>
+          {isLogin?
+          <Grid>
+            <GridRow>
+              <img src="/images/로고.png" alt="프로필사진" width="50px"/>
+              <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 로그인
+              <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 새싹
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <Link href="/info"><a><Icon name='cog' size='large' color='grey' circular/></a></Link>
+            </GridRow>
+          </Grid>
+          :
           <Grid>
             <GridRow>
               <img src="/images/디폴트프로필사진.png" alt="프로필사진" width="50px"/>
@@ -15,6 +37,8 @@ export default function Menuvar(){
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <Link href="/info"><a><Icon name='cog' size='large' color='grey' circular/></a></Link>
             </GridRow>
           </Grid>
+          }
+          
           
         </MenuItem>
         <Menu.Item

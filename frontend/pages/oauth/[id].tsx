@@ -5,7 +5,7 @@ export default function Authentication() {
   const router = useRouter();
 
   useEffect(() => {
-    router.push("/");
+    router.push("http://i6c210.p.ssafy.io:3000/");
   }, []);
 
   if (typeof window !== "undefined") {

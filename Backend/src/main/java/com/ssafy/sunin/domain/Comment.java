@@ -12,7 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
-//@Document(collection = "comments")
+@Document(collection = "comments")
 //@ApiModel(value = "댓글 (Comment)", description = "댓글 관련 정보를 가진 Domain Class")
 @NoArgsConstructor
 @Getter

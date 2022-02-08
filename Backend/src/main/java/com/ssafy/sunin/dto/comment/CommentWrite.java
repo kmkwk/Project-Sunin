@@ -9,8 +9,6 @@ import javax.validation.constraints.NotNull;
 @Data
 @AllArgsConstructor
 public class CommentWrite {
-    @NotBlank
-    private String feedId;
     @NotNull
     private Long writer;
     private String content;

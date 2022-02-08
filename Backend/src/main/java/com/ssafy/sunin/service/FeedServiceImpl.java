@@ -57,7 +57,7 @@ public class FeedServiceImpl implements FeedService {
                 .flag(true)
                 .likeUser(new HashMap<>())
                 .filePath(fileList)
-                .comments(new ArrayList<>())
+                .comments(new HashMap<>())
                 .build();
 
         ObjectId id = feedRepository.save(feedCollections).getId();

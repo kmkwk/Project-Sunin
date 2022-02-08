@@ -46,7 +46,7 @@ public class FeedCollections{
 
     private boolean flag = true;
 
-    private List<Comment> comments = new ArrayList<>();
+    private Map<Object,Comment> comments = new HashMap<>();
 
     public void setFeedModified(FeedUpdate feedUpdate){
         this.content = feedUpdate.getContent();;
@@ -68,12 +68,12 @@ public class FeedCollections{
         this.filePath = filePath;
     }
 
-    public void setCommentWrite(List<Comment> comments){
+    public void setCommentWrite(Map<Object,Comment> comments){
         this.comments = comments;
     }
 
     @Builder
-    public FeedCollections(ObjectId id, Long userId, String content, List<String> hashtags, int likes, Map<Long, Object> likeUser, LocalDateTime createdDate, LocalDateTime modifiedDate, List<String> filePath, boolean flag, List<Comment> comments) {
+    public FeedCollections(ObjectId id, Long userId, String content, List<String> hashtags, int likes, Map<Long,Object> likeUser, LocalDateTime createdDate, LocalDateTime modifiedDate, List<String> filePath, boolean flag, Map<Object,Comment> comments) {
         this.id = id;
         this.userId = userId;
         this.content = content;

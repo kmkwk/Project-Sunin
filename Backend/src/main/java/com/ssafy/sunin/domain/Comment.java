@@ -1,13 +1,13 @@
 package com.ssafy.sunin.domain;
 
-import io.swagger.annotations.ApiModel;
+import com.ssafy.sunin.dto.comment.CommentUpdate;
+import com.ssafy.sunin.dto.comment.CommentWrite;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -19,11 +19,7 @@ import java.time.ZoneId;
 public class Comment {
 
     @Id
-    private ObjectId id;
-
-    @Field("comment_feed_id")
-    @ApiModelProperty(value = "댓글이 작성된 피드의 ObjectId")
-    private ObjectId feedId;
+    private ObjectId commentId;
 
     @Field("comment_content")
     @ApiModelProperty(value = "내용")
@@ -64,8 +60,8 @@ public class Comment {
     private int depth;
 
     @Builder
-    public Comment(ObjectId feedId, String content, Long writer) {
-        this.feedId = feedId;
+    public Comment(ObjectId commentId, String content, Long writer) {
+        this.commentId = commentId;
         this.content = content;
         this.writer = writer;
         this.likes = 0;
@@ -73,8 +69,23 @@ public class Comment {
         this.modifiedDate = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
         this.modified = false;
         this.deleted = false;
-        this.group = id;
+        this.group = getCommentId();
         this.depth = 0;
+    }
+
+    public static Comment commentWriter(CommentWrite commentWrite){
+       return Comment.builder()
+                .writer(commentWrite.getWriter())
+                .content(commentWrite.getContent())
+                .build();
+    }
+
+    public static Comment commentUpdate(CommentUpdate commentUpdate){
+        return Comment.builder()
+                .commentId(new ObjectId(commentUpdate.getCommentId()))
+                .writer(commentUpdate.getWriter())
+                .content(commentUpdate.getContent())
+                .build();
     }
 
     /*
@@ -104,8 +115,7 @@ public class Comment {
     @Override
     public String toString() {
         return "Comment{" +
-                "id=" + id +
-                ", feedId=" + feedId +
+                "commentId=" + commentId +
                 ", content='" + content + '\'' +
                 ", writer='" + writer + '\'' +
                 ", likes=" + likes +

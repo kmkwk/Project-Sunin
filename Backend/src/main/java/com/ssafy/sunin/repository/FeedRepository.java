@@ -24,5 +24,4 @@ public interface FeedRepository extends MongoRepository<FeedCollections, ObjectI
 
     FeedCollections findFeedIdById(ObjectId id);
 
-//    FeedCollections findByCommentsContains
 }

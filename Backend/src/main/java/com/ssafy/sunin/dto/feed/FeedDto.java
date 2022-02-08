@@ -23,7 +23,7 @@ public class FeedDto {
     private LocalDateTime modifiedDate;
     private List<String> filePath;
     private Map<Long,Object> likeUser;
-    private List<Comment> comments;
+    private Map<Object,Comment> comments;
 
     private Long userId;
     private String nickName;
@@ -47,7 +47,7 @@ public class FeedDto {
     }
 
     @Builder
-    public FeedDto(String id, String content, List<String> hashtags, int likes, LocalDateTime createdDate, LocalDateTime modifiedDate, List<String> filePath, Map<Long, Object> likeUser, List<Comment> comments, Long userId, String nickName, String image) {
+    public FeedDto(String id, String content, List<String> hashtags, int likes, LocalDateTime createdDate, LocalDateTime modifiedDate, List<String> filePath, Map<Long, Object> likeUser, Map<Object,Comment> comments, Long userId, String nickName, String image) {
         this.id = id;
         this.content = content;
         this.hashtags = hashtags;

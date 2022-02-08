@@ -6,7 +6,7 @@ import http from "../../src/lib/customAxios";
 
 export default function Createfeed() {
   const [feed, setFeed] = useState({
-    userId: "", // 작성자
+    userId: 0, // 작성자
     content: "", // 내용
     filePath: [], // 이미지, 동영상
     hashtags: [], // 해시태그
@@ -23,7 +23,7 @@ export default function Createfeed() {
   const uploadFile = (e) => {
     e.stopPropagation(); // 이벤트 전파 방지
     const filesArr = Array.from(e.target.files);
-    setFeed({ filePath: filesArr });
+    setFeed({ ...feed, [e.target.name]: e.target.value, filePath: filesArr });
     console.log(feed.filePath); // ##### 디버그 #####
   };
 
@@ -32,27 +32,26 @@ export default function Createfeed() {
 
     const body = new FormData();
     body.append("content", feed.content);
-
+    body.append("userId", 1); // ###### 개발용 ######
     feed.filePath.map((each) => {
       body.append("files", each);
     });
     // feed.hashtags.map((each) => {
     //   body.append("hashtags", each);
     // });
-    body.append("userId", "admin"); // ###### 개발용 ######
 
-    console.log(feed.content); // ##### 디버그 #####
+    // console.log(feed.content); // ##### 디버그 #####
 
-    // http
-    //   .post(`/feed`, body, {
-    //     headers: { "Content-Type": "multipart/form-data" },
-    //   })
-    //   .then((data) => {
-    //     alert("성공");
-    //   })
-    //   .catch(() => {
-    //     alert("실패");
-    //   });
+    http
+      .post(`/feed`, body, {
+        headers: { "Content-Type": "multipart/form-data" },
+      })
+      .then((data) => {
+        alert("성공");
+      })
+      .catch(() => {
+        alert("실패");
+      });
   };
 
   return (

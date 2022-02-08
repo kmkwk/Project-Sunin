@@ -20,7 +20,7 @@ export default function Personal() {
         params: {
           size: 9,
           page: pages,
-          userId: "admin",
+          userId: 1,
         },
       })
       .then(({ data }) => {

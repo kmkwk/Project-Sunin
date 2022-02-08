@@ -62,7 +62,7 @@ export default function Edit() {
                 cols={30}
                 rows={10}
                 placeholder="내용을 작성하세요..."
-                onChange={modifyFeed()}>
+                onChange={modifyFeed}>
                 {feed.content}
               </textarea>
               <div>
@@ -73,7 +73,7 @@ export default function Edit() {
                   type="file"
                   accept="image/*, video/*"
                   multiple
-                  onChange={uploadFile}
+                  // onChange={uploadFile}
                 />
               </div>
               <br />
@@ -83,13 +83,13 @@ export default function Edit() {
                 control={Input}
                 label="Tag"
                 placeholder="원하는 태그를 작성하세요..."
-                onChange={updateTag}
+                // onChange={updateTag}
               />
               <br />
               <br />
-              <Form.Field control={Button} onClick={uploadToServer}>
+              {/* <Form.Field control={Button} onClick={uploadToServer}>
                 저장하기
-              </Form.Field>
+              </Form.Field> */}
             </Form>
             <Button onClick={backToDetail}>뒤로가기</Button>
           </Grid.Column>

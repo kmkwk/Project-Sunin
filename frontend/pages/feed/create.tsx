@@ -12,19 +12,20 @@ export default function Createfeed() {
     hashtags: [], // 해시태그
   });
 
-  const handleOnChange = (e) => {
-    console.log(e.target.name);
+  const handleOnChange = (e: any) => {
     setFeed({
       ...feed,
       [e.target.name]: e.target.value,
     });
   };
 
-  const uploadFile = (e) => {
+  const uploadFile = (e: any) => {
     e.stopPropagation(); // 이벤트 전파 방지
-    const filesArr = Array.from(e.target.files);
-    setFeed({ ...feed, [e.target.name]: e.target.value, filePath: filesArr });
-    console.log(feed.filePath); // ##### 디버그 #####
+    setFeed({
+      ...feed,
+      [e.target.name]: e.target.value,
+      filePath: Array.from(e.target.files),
+    });
   };
 
   const handleSubmit = (event: any) => {
@@ -32,7 +33,7 @@ export default function Createfeed() {
 
     const body = new FormData();
     body.append("content", feed.content);
-    body.append("userId", 1); // ###### 개발용 ######
+    body.append("userId", JSON.stringify(1)); // ###### 개발용 ######
     feed.filePath.map((each) => {
       body.append("files", each);
     });
@@ -46,7 +47,7 @@ export default function Createfeed() {
       .post(`/feed`, body, {
         headers: { "Content-Type": "multipart/form-data" },
       })
-      .then((data) => {
+      .then(() => {
         alert("성공");
       })
       .catch(() => {

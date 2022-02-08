@@ -21,6 +21,21 @@ export default function Navbar() {
     }
   }
 
+  function goLogout(){
+    localStorage.removeItem('token')
+  }
+
+  var isLogin = false
+
+  if (typeof window !== "undefined") {
+    const token = localStorage.getItem('token')
+    if (token){
+      isLogin = true
+    } else {
+      isLogin = false
+    }
+  }
+  
   return (
     <>
       <Menu stackable>
@@ -45,16 +60,6 @@ export default function Navbar() {
         >
           <Link href="/feed/company"><a>Company</a></Link>
         </Menu.Item>
-        <Menu.Item
-          name='login'
-        >
-          <Link href="/login"><a>Login</a></Link>
-        </Menu.Item>
-        <Menu.Item
-          name='signup'
-        >
-          <Link href="/signup"><a>Signup</a></Link>
-        </Menu.Item>
         <Menu.Item position='right'>
           <Input
             action={{ type: 'submit', content: '검색', onClick:goSearchedPage}}
@@ -69,7 +74,28 @@ export default function Navbar() {
         </Menu.Item>
         <Menu.Item>
 
+        </Menu.Item>  
+        {isLogin?
+        <Menu.Item
+          name='logout'
+        >
+          <Link href="/"><a onClick={goLogout}>Logout</a></Link>
         </Menu.Item>
+        :
+        <Menu.Item
+          name='login'
+        >
+          <Link href="/login"><a>Login</a></Link>
+        </Menu.Item>
+        }
+        {isLogin?'':
+        <Menu.Item
+          name='signup'
+        >
+          <Link href="/signup"><a>Signup</a></Link>
+        </Menu.Item>
+        }
+        
       </Menu>
     </>
   );

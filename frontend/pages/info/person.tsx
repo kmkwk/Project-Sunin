@@ -5,7 +5,6 @@ import Navbar from '../../src/component/Navbar'
 import Menubar from '../../src/component/Menubar'
 
 
-
 const Infoperson = () => {
   const [content, setContent] = useState('');
   const [tag, setTag] = useState('');
@@ -14,14 +13,14 @@ const Infoperson = () => {
   const [attachment,setAttachment] = useState()
 
 
-  const uploadToClient = (event: any) => {
-    if (event.target.files && event.target.files[0]) {
-      const i = event.target.files[0];
+  // const uploadToClient = (event: any) => {
+  //   if (event.target.files && event.target.files[0]) {
+  //     const i = event.target.files[0];
 
-      setImage(i);
-      // setCreateObjectURL(URL.createObjectURL(i));
-    }
-  };
+  //     setImage(i);
+  //     // setCreateObjectURL(URL.createObjectURL(i));
+  //   }
+  // };
 
   const uploadToServer = async (event: any) => {
     const body = new FormData();
@@ -46,15 +45,21 @@ const Infoperson = () => {
       } = event;
       const theFile = files[0];
       const reader = new FileReader();
-      reader.onloadend = (finishedEvent) => {
-        const {
-          currentTarget: { result },
-        } = finishedEvent;
-        setAttachment(result);
+
+     reader.onloadend = (finishedEvent: any) => {
+      setAttachment(finishedEvent.currentTarget['result']);
       };
+      if (theFile) {
       reader.readAsDataURL(theFile);
+    } else {
+      setAttachment(undefined)
+    }
   };
-  const onClearAttachment = () => setAttachment(undefined);
+  const onClearAttachment = () => {
+    const erase: any = document.getElementsByName('myImage')[0] 
+    erase['value'] = null
+  setAttachment(undefined);
+}
 
   return (
   <>

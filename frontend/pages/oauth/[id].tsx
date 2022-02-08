@@ -9,7 +9,6 @@ export default function Authentication(){
     router.push('/')
   }
 
-  console.log(router.query.token);
   if (typeof window !== "undefined") { 
     localStorage.setItem('token', String(router.query.token) );
   }

@@ -25,15 +25,6 @@ export default function Login() {
       .get("http://localhost:8080/oauth2/authorization/kakao?redirect_uri=http://localhost:3000/oauth/redirect")
       .then((res) => {
         alert("로그인 성공");
-        console.log("123123123123123132")
-        console.log(router)
-
-    //     const token = router.query.token
-    // console.log('token', token)
-        console.log("123123123123123132")
-        console.log(res);
-        
-        console.log("123123123123123132")
       })
       .catch(() => {
         alert("로그인 실패");

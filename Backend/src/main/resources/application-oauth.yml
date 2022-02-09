@@ -14,7 +14,7 @@ spring:
             clientSecret: B2jNek8jz2
             clientAuthenticationMethod: post
             authorizationGrantType: authorization_code
-            redirectUri: {baseUrl}/{action}/oauth2/code/{registrationId}
+            redirectUri: http://i6c210.p.ssafy.io:8080/login/oauth2/code/naver
             scope:
               - nickname
               - email
@@ -25,7 +25,7 @@ spring:
             clientSecret: N1OAubO2IS0B6enFwFSCpt1FXVFXCnsO
             clientAuthenticationMethod: post
             authorizationGrantType: authorization_code
-            redirectUri: {baseUrl}/{action}/oauth2/code/{registrationId}
+            redirectUri: http://i6c210.p.ssafy.io:8080/login/oauth2/code/kakao
             scope:
               - profile_nickname
               - profile_image

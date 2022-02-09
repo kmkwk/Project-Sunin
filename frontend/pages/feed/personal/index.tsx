@@ -1,10 +1,10 @@
 import Navbar from "../../../src/component/Navbar";
 import Menubar from "../../../src/component/Menubar";
 import { Grid } from "semantic-ui-react";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import FeedList from "../../../src/component/FeedList";
 import InfiniteScroll from "react-infinite-scroll-component";
+import http from "../../../src/lib/customAxios";
 
 export default function Personal() {
   const [list, setList]: any = useState([]);
@@ -15,14 +15,17 @@ export default function Personal() {
   }, []);
 
   function loadFeed() {
-    axios
-      .get(`http://localhost:8080/feed/latest`, {
+    http
+      .get(`/feed/latest`, {
         params: {
+          size: 9,
           page: pages,
+          userId: 1,
         },
       })
       .then(({ data }) => {
-        setList([...list, ...data]);
+        console.log(data.content);
+        setList([...list, ...data.content]);
       });
     setPage(pages + 1);
   }

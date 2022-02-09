@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import {
@@ -11,33 +10,38 @@ import {
   Button,
 } from "semantic-ui-react";
 import Navbar from "../../../../src/component/Navbar";
-import styles from "../../../../styles/FeedPersonalDetail.module.css";
 import Menubar from "../../../../src/component/Menubar";
 import React from "react";
+import http from "../../../../src/lib/customAxios";
 
 export default function Detail() {
   const router = useRouter();
   const { feedid } = router.query;
 
-  const [feed, setFeed]: any = useState({});
-
-  function getData() {
-    axios
-      .get(`http://localhost:8080/feed/detail`, {
-        params: {
-          id: feedid,
-        },
-      })
-      .then(({ data }) => {
-        setFeed(data);
-      });
-  }
+  const [feed, setFeed] = useState({
+    feedId: "", // 피드 ID
+    userId: "", // 작성자
+    content: "", // 내용
+    filePath: [], // 이미지, 동영상
+    hashtags: [], // 해시태그
+    likes: "", // 좋아요 수
+    likeUser: [], // 좋아요 누른 사람
+    createdDate: "", // 작성일
+    modifiedDate: "", // 수정일
+  });
 
   useEffect(() => {
-    if (feedid) {
-      getData();
-    }
-  }, [feedid]);
+    http
+      .get(`/feed/detail/${feedid}`)
+      .then(({ data }) => {
+        setFeed(data);
+        console.log(data); // ##### 디버그 #####
+      })
+      .catch(() => {
+        alert("잘못된 접근입니다.");
+        router.push("/feed/personal");
+      });
+  }, []);
 
   const [open, setOpen] = React.useState(false);
 
@@ -63,11 +67,19 @@ export default function Detail() {
               onOpen={() => setOpen(true)}
               open={open}
               trigger={
-                <Image src={feed.filePath} alt={feed.filePath} width="200px" />
+                <Image
+                  src={feed.filePath[0]}
+                  alt={feed.filePath[0]}
+                  width="200px"
+                />
               }>
               <Modal.Header>{feed.userId}</Modal.Header>
               <Modal.Content image>
-                <Image size="big" src={feed.image_link} />
+                <Image
+                  size="big"
+                  src={feed.filePath[0]}
+                  alt={feed.filePath[0]}
+                />
                 <Modal.Description>
                   <Header></Header>
                   <p>#tag</p>

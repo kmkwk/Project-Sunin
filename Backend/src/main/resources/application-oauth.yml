@@ -25,7 +25,7 @@ spring:
             clientSecret: N1OAubO2IS0B6enFwFSCpt1FXVFXCnsO
             clientAuthenticationMethod: post
             authorizationGrantType: authorization_code
-            redirectUri: "{baseUrl}/{action}/oauth2/code/{registrationId}"
+            redirectUri: "http://localhost:3000/{action}/oauth2/code/{registrationId}"
             scope:
               - profile_nickname
               - profile_image

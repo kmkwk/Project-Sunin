@@ -1,11 +1,20 @@
-import { Button, Form, Input, Grid, TextArea } from "semantic-ui-react";
+import {
+  Button,
+  Form,
+  Input,
+  Grid,
+  TextArea,
+  Dropdown,
+  Label,
+  Icon,
+} from "semantic-ui-react";
 import { useState } from "react";
 import Navbar from "../../src/component/Navbar";
 import styles from "../../styles/CreateFeed.module.css";
 import http from "../../src/lib/customAxios";
 
 export default function Createfeed() {
-  const [feed, setFeed] = useState({
+  const [feed, setFeed]: any = useState({
     userId: 0, // 작성자
     content: "", // 내용
     filePath: [], // 이미지, 동영상
@@ -19,11 +28,29 @@ export default function Createfeed() {
     });
   };
 
+  const handleKeyPress = (e: any) => {
+    if (e.key === " ") {
+      const value = e.target.value.split(" ");
+      if (!feed.hashtags.includes(value[0]))
+        setFeed({
+          ...feed,
+          hashtags: [...feed.hashtags, value[0]],
+        });
+      e.target.value = "";
+    }
+  };
+
+  const onRemove = (event: any, data: any) => {
+    const index = feed.hashtags.indexOf(data.content);
+    feed.hashtags.splice(index, 1);
+    const result = feed.hashtags.filter((word: any) => word != data.content);
+    setFeed({ hashtags: result });
+  };
+
   const uploadFile = (e: any) => {
     e.stopPropagation(); // 이벤트 전파 방지
     setFeed({
       ...feed,
-      [e.target.name]: e.target.value,
       filePath: Array.from(e.target.files),
     });
   };
@@ -34,14 +61,18 @@ export default function Createfeed() {
     const body = new FormData();
     body.append("content", feed.content);
     body.append("userId", JSON.stringify(1)); // ###### 개발용 ######
-    feed.filePath.map((each) => {
-      body.append("files", each);
-    });
-    // feed.hashtags.map((each) => {
-    //   body.append("hashtags", each);
-    // });
 
-    // console.log(feed.content); // ##### 디버그 #####
+    if (feed.filePath != null) {
+      feed.filePath.map((each: any) => {
+        body.append("files", each);
+      });
+    }
+
+    feed.hashtags.map((each: any) => {
+      body.append("hashtags", each);
+    });
+
+    console.log(feed); // ##### 디버그 #####
 
     http
       .post(`/feed`, body, {
@@ -84,14 +115,23 @@ export default function Createfeed() {
                   />
                 </div>
               </Form.Field>
-              {/* <Form.Field
-                control={Input}
-                label="Tag"
-                placeholder="원하는 태그를 작성하세요..."
-                name="hashtags"
-                onChange={handleOnChange}
-              /> */}
-              <Form.Field></Form.Field>
+              <Form.Field>
+                <Input
+                  placeholder="해시태그를 입력하세요"
+                  onKeyUp={handleKeyPress}
+                />
+                {feed.hashtags.map((tag: any, index: any) => {
+                  return (
+                    <Label
+                      name="mail"
+                      key={index}
+                      content={tag}
+                      removeIcon="delete"
+                      onRemove={onRemove}
+                    />
+                  );
+                })}
+              </Form.Field>
               <Form.Field control={Button} onClick={handleSubmit}>
                 저장하기
               </Form.Field>

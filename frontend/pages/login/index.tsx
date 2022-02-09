@@ -66,7 +66,7 @@ export default function Login() {
                 src="images/btnG_완성형.png"
                 size="medium"
                 href="http://i6c210.p.ssafy.io:8080/oauth2/authorization/naver?redirect_uri=http://i6c210.p.ssafy.io:3000/oauth/redirect"
-                alt="네이버로그인"      
+                alt="네이버로그인"
                 // onClick={goNaverLogin}
                 className={styles.social_login_button}
               />{" "}
@@ -75,7 +75,7 @@ export default function Login() {
                 src="images/btn_google_signin_light_normal_web@2x.png"
                 size="medium"
                 href="http://i6c210.p.ssafy.io:8080/oauth2/authorization/google?redirect_uri=http://i6c210.p.ssafy.io:3000/oauth/redirect"
-                alt="구글로그인"     
+                alt="구글로그인"
                 // onClick={goGoogleLogin}
                 className={styles.social_login_button}
               />{" "}
@@ -83,7 +83,7 @@ export default function Login() {
               <Image
                 src="images/kakao_login_large_narrow.png"
                 size="medium"
-                href="http://i6c210.p.ssafy.io:8080/oauth2/authorization/kakao?redirect_uri=http://i6c210.p.ssafy.io:3000/oauth/redirect"
+                href="http://i6c210.p.ssafy.io:8080/oauth2/authorization/kakao?redirect_uri=http://i6c210.p.ssafy.io:3000/login/oauth2/code/kakao"
                 alt="카카오로그인"
                 // onClick={goKakaoLogin}
                 className={styles.social_login_button}

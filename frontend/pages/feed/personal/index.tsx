@@ -12,7 +12,6 @@ export default function Personal() {
 
   useEffect(() => {
     loadFeed();
-    console.log("123");
   }, []);
 
   function loadFeed() {

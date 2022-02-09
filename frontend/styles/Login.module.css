@@ -12,5 +12,6 @@
 }
 
 .social_login_button {
-  margin: auto;
+  /* margin: auto; */
+  margin-left: 22%;
 }

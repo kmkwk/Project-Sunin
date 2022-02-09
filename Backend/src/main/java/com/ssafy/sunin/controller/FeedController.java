@@ -1,6 +1,7 @@
 package com.ssafy.sunin.controller;
 
 import com.ssafy.sunin.dto.feed.*;
+import com.ssafy.sunin.dto.user.UserProfile;
 import com.ssafy.sunin.service.FeedServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -14,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
 import java.util.List;
 
@@ -118,8 +120,21 @@ public class FeedController {
 
     @ApiOperation(value = "좋아요 등록 취소")
     @PutMapping("/likes")
-    public ResponseEntity<FeedDto> likeFeed(@RequestBody @Valid FeedLike feedLike){
+    public ResponseEntity<String> likeFeed(@RequestBody @Valid FeedLike feedLike){
         log.info("likeFeed");
-        return ResponseEntity.ok(feedService.likeFeed(feedLike));
+        if(ObjectUtils.isEmpty(feedLike)){
+            return ResponseEntity.notFound().build();
+        }
+        feedService.likeFeed(feedLike);
+        return ResponseEntity.ok("success");
+    }
+
+    @ApiOperation(value = "게시글의 좋아요를 누른 유저들의 프로필, 피드 id")
+    @GetMapping("/likeUser/{id}")
+    public ResponseEntity<List<UserProfile>> getLikeUserList(@PathVariable("id") String id){
+        log.info("likeUserList");
+        List<UserProfile> userProfile = feedService.getLikeUserList(id);
+        System.out.println();
+        return ResponseEntity.ok(feedService.getLikeUserList(id));
     }
 }

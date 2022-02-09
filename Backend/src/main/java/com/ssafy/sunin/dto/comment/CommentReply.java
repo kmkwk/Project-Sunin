@@ -8,10 +8,14 @@ import javax.validation.constraints.NotNull;
 
 @Data
 @AllArgsConstructor
-public class CommentWrite {
+public class CommentReply {
     @NotBlank
     private String feedId;
+    @NotBlank
+    private String commentId;
     @NotNull
     private Long writer;
     private String content;
+    @NotBlank
+    private String group;
 }

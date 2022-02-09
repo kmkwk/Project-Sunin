@@ -1,6 +1,6 @@
 package com.ssafy.sunin.domain;
 
-import com.ssafy.sunin.dto.comment.CommentUpdate;
+import com.ssafy.sunin.dto.comment.CommentReply;
 import com.ssafy.sunin.dto.comment.CommentWrite;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -8,11 +8,12 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
-//@Document(collection = "comments")
+@Document(collection = "comments")
 //@ApiModel(value = "댓글 (Comment)", description = "댓글 관련 정보를 가진 Domain Class")
 @NoArgsConstructor
 @Getter
@@ -31,7 +32,7 @@ public class Comment {
 
     @Field("comment_like")
     @ApiModelProperty(value = "좋아요")
-    private int likes;
+    private int likes = 0;
 
     @Field("comment_write_date")
     @ApiModelProperty(value = "작성일자")
@@ -59,19 +60,20 @@ public class Comment {
     @ApiModelProperty(value = "대댓글 - 깊이")
     private int depth;
 
-    @Builder
-    public Comment(ObjectId commentId, String content, Long writer) {
-        this.commentId = commentId;
-        this.content = content;
-        this.writer = writer;
-        this.likes = 0;
-        this.writeDate = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
-        this.modifiedDate = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
-        this.modified = false;
-        this.deleted = false;
-        this.group = getCommentId();
-        this.depth = 0;
-    }
+
+//    @Builder
+//    public Comment(ObjectId commentId, String content, Long writer) {
+//        this.commentId = commentId;
+//        this.content = content;
+//        this.writer = writer;
+//        this.likes = 0;
+//        this.writeDate = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
+//        this.modifiedDate = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
+//        this.modified = false;
+//        this.deleted = false;
+//        this.group = getCommentId();
+//        this.depth = 0;
+//    }
 
     public static Comment commentWriter(CommentWrite commentWrite){
        return Comment.builder()
@@ -80,11 +82,18 @@ public class Comment {
                 .build();
     }
 
-    public static Comment commentUpdate(CommentUpdate commentUpdate){
+    public static Comment commentReply(CommentReply commentReply){
         return Comment.builder()
-                .commentId(new ObjectId(commentUpdate.getCommentId()))
-                .writer(commentUpdate.getWriter())
-                .content(commentUpdate.getContent())
+                .commentId(new ObjectId())
+                .writer(commentReply.getWriter())
+                .content(commentReply.getContent())
+                .deleted(false)
+                .modified(false)
+                .writeDate(LocalDateTime.now())
+                .modifiedDate(LocalDateTime.now())
+                .likes(0)
+                .group(new ObjectId(commentReply.getCommentId()))
+                .depth(0)
                 .build();
     }
 
@@ -126,5 +135,18 @@ public class Comment {
                 ", group=" + group +
                 ", depth=" + depth +
                 '}';
+    }
+    @Builder
+    public Comment(ObjectId commentId, String content, Long writer, int likes, LocalDateTime writeDate, LocalDateTime modifiedDate, boolean modified, boolean deleted, ObjectId group, int depth) {
+        this.commentId = commentId;
+        this.content = content;
+        this.writer = writer;
+        this.likes = likes;
+        this.writeDate = writeDate;
+        this.modifiedDate = modifiedDate;
+        this.modified = modified;
+        this.deleted = deleted;
+        this.group = group;
+        this.depth = depth;
     }
 }

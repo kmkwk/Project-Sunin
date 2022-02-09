@@ -1,6 +1,7 @@
 package com.ssafy.sunin.domain;
 
 import com.ssafy.sunin.dto.feed.FeedUpdate;
+import com.ssafy.sunin.dto.feed.FeedWrite;
 import io.swagger.annotations.ApiModel;
 import lombok.*;
 import org.bson.types.ObjectId;
@@ -70,6 +71,21 @@ public class FeedCollections{
 
     public void setCommentWrite(Map<Object,Comment> comments){
         this.comments = comments;
+    }
+
+    public static FeedCollections setFeedCollection(FeedWrite feedWrite, List<String> fileList){
+        return  FeedCollections.builder()
+                .userId(feedWrite.getUserId())
+                .content(feedWrite.getContent())
+                .hashtags(feedWrite.getHashtags())
+                .likes(0)
+                .createdDate(LocalDateTime.now())
+                .modifiedDate(LocalDateTime.now())
+                .flag(true)
+                .likeUser(new HashMap<>())
+                .filePath(fileList)
+                .comments(new HashMap<>())
+                .build();
     }
 
     @Builder

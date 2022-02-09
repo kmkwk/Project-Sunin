@@ -6,7 +6,7 @@ export default function Authentication() {
 
   useEffect(() => {
     console.log(router);
-    // router.push("http://localhost:3000/");
+    router.push("http://localhost:3000/");
   }, []);
 
   if (typeof window !== "undefined") {

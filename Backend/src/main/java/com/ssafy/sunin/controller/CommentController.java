@@ -27,7 +27,6 @@ public class CommentController {
 
     private final CommentService commentService;
 
-
     @ApiOperation(value = "댓글 작성하기", notes = "피드와 상호작용할 댓글을 입력합니다.")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "feedId", value = "피드 ObjectId", required = true),

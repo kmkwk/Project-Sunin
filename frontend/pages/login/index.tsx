@@ -83,7 +83,7 @@ export default function Login() {
               <Image
                 src="images/kakao_login_large_narrow.png"
                 size="medium"
-                href="http://i6c210.p.ssafy.io:8080/oauth2/authorization/kakao?redirect_uri=http://i6c210.p.ssafy.io:3000/login/oauth2/code/kakao"
+                href="http://i6c210.p.ssafy.io:8080/oauth2/authorization/kakao?redirect_uri=http://i6c210.p.ssafy.io:3000/oauth/redirect"
                 alt="카카오로그인"
                 // onClick={goKakaoLogin}
                 className={styles.social_login_button}

@@ -1,7 +1,6 @@
 package com.ssafy.sunin.domain;
 
-import com.ssafy.sunin.dto.comment.CommentReply;
-import com.ssafy.sunin.dto.comment.CommentWrite;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.bson.types.ObjectId;
@@ -20,7 +19,11 @@ import java.time.ZoneId;
 public class Comment {
 
     @Id
-    private ObjectId commentId;
+    private ObjectId id;
+
+    @Field("comment_feed_id")
+    @ApiModelProperty(value = "댓글이 작성된 피드의 ObjectId")
+    private ObjectId feedId;
 
     @Field("comment_content")
     @ApiModelProperty(value = "내용")
@@ -32,7 +35,7 @@ public class Comment {
 
     @Field("comment_like")
     @ApiModelProperty(value = "좋아요")
-    private int likes = 0;
+    private int likes;
 
     @Field("comment_write_date")
     @ApiModelProperty(value = "작성일자")
@@ -60,41 +63,18 @@ public class Comment {
     @ApiModelProperty(value = "대댓글 - 깊이")
     private int depth;
 
-
-//    @Builder
-//    public Comment(ObjectId commentId, String content, Long writer) {
-//        this.commentId = commentId;
-//        this.content = content;
-//        this.writer = writer;
-//        this.likes = 0;
-//        this.writeDate = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
-//        this.modifiedDate = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
-//        this.modified = false;
-//        this.deleted = false;
-//        this.group = getCommentId();
-//        this.depth = 0;
-//    }
-
-    public static Comment commentWriter(CommentWrite commentWrite){
-       return Comment.builder()
-                .writer(commentWrite.getWriter())
-                .content(commentWrite.getContent())
-                .build();
-    }
-
-    public static Comment commentReply(CommentReply commentReply){
-        return Comment.builder()
-                .commentId(new ObjectId())
-                .writer(commentReply.getWriter())
-                .content(commentReply.getContent())
-                .deleted(false)
-                .modified(false)
-                .writeDate(LocalDateTime.now())
-                .modifiedDate(LocalDateTime.now())
-                .likes(0)
-                .group(new ObjectId(commentReply.getCommentId()))
-                .depth(0)
-                .build();
+    @Builder
+    public Comment(ObjectId feedId, String content, Long writer) {
+        this.feedId = feedId;
+        this.content = content;
+        this.writer = writer;
+        this.likes = 0;
+        this.writeDate = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
+        this.modifiedDate = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
+        this.modified = false;
+        this.deleted = false;
+        this.group = id;
+        this.depth = 0;
     }
 
     /*
@@ -124,7 +104,8 @@ public class Comment {
     @Override
     public String toString() {
         return "Comment{" +
-                "commentId=" + commentId +
+                "id=" + id +
+                ", feedId=" + feedId +
                 ", content='" + content + '\'' +
                 ", writer='" + writer + '\'' +
                 ", likes=" + likes +
@@ -135,18 +116,5 @@ public class Comment {
                 ", group=" + group +
                 ", depth=" + depth +
                 '}';
-    }
-    @Builder
-    public Comment(ObjectId commentId, String content, Long writer, int likes, LocalDateTime writeDate, LocalDateTime modifiedDate, boolean modified, boolean deleted, ObjectId group, int depth) {
-        this.commentId = commentId;
-        this.content = content;
-        this.writer = writer;
-        this.likes = likes;
-        this.writeDate = writeDate;
-        this.modifiedDate = modifiedDate;
-        this.modified = modified;
-        this.deleted = deleted;
-        this.group = group;
-        this.depth = depth;
     }
 }

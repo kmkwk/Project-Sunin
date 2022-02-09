@@ -6,7 +6,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 public class FeedWrite {
     @NotNull

@@ -1,7 +1,6 @@
 package com.ssafy.sunin.domain;
 
 import com.ssafy.sunin.dto.feed.FeedUpdate;
-import com.ssafy.sunin.dto.feed.FeedWrite;
 import io.swagger.annotations.ApiModel;
 import lombok.*;
 import org.bson.types.ObjectId;
@@ -47,7 +46,7 @@ public class FeedCollections{
 
     private boolean flag = true;
 
-    private Map<Object,Comment> comments = new HashMap<>();
+    private List<Comment> comments = new ArrayList<>();
 
     public void setFeedModified(FeedUpdate feedUpdate){
         this.content = feedUpdate.getContent();;
@@ -69,27 +68,12 @@ public class FeedCollections{
         this.filePath = filePath;
     }
 
-    public void setCommentWrite(Map<Object,Comment> comments){
+    public void setCommentWrite(List<Comment> comments){
         this.comments = comments;
     }
 
-    public static FeedCollections setFeedCollection(FeedWrite feedWrite, List<String> fileList){
-        return  FeedCollections.builder()
-                .userId(feedWrite.getUserId())
-                .content(feedWrite.getContent())
-                .hashtags(feedWrite.getHashtags())
-                .likes(0)
-                .createdDate(LocalDateTime.now())
-                .modifiedDate(LocalDateTime.now())
-                .flag(true)
-                .likeUser(new HashMap<>())
-                .filePath(fileList)
-                .comments(new HashMap<>())
-                .build();
-    }
-
     @Builder
-    public FeedCollections(ObjectId id, Long userId, String content, List<String> hashtags, int likes, Map<Long,Object> likeUser, LocalDateTime createdDate, LocalDateTime modifiedDate, List<String> filePath, boolean flag, Map<Object,Comment> comments) {
+    public FeedCollections(ObjectId id, Long userId, String content, List<String> hashtags, int likes, Map<Long, Object> likeUser, LocalDateTime createdDate, LocalDateTime modifiedDate, List<String> filePath, boolean flag, List<Comment> comments) {
         this.id = id;
         this.userId = userId;
         this.content = content;

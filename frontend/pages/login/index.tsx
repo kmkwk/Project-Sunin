@@ -3,7 +3,6 @@ import Link from "next/link";
 import { Button, Form, Grid, Segment, Image, Header } from "semantic-ui-react";
 import { useState } from "react";
 import styles from "../../styles/Login.module.css";
-import axios from "axios";
 import { useRouter } from "next/router";
 
 export default function Login() {
@@ -17,35 +16,6 @@ export default function Login() {
   const updatePassword = (event: any) => {
     setPassword(event.target.value);
   };
-  //http://localhost:8080/oauth2/authorization/kakao?redirect_uri=http://localhost:3000/oauth/redirect
-  // http://localhost:8080/oauth2/callback/google
-
-  function GoLogin() {
-    axios
-      .get(
-        "http://localhost:8080/oauth2/authorization/kakao?redirect_uri=http://localhost:3000/oauth/redirect"
-      )
-      .then(() => {
-        alert("로그인 성공");
-      })
-      .catch(() => {
-        alert("로그인 실패");
-      });
-  }
-
-  const router = useRouter();
-
-  function goNaverLogin() {
-    GoLogin();
-  }
-
-  function goGoogleLogin() {
-    GoLogin();
-  }
-
-  function goKakaoLogin() {
-    GoLogin();
-  }
 
   return (
     <>
@@ -67,7 +37,6 @@ export default function Login() {
                 size="medium"
                 href="http://i6c210.p.ssafy.io:8080/oauth2/authorization/naver?redirect_uri=http://localhost:3000/oauth/redirect"
                 alt="네이버로그인"
-                // onClick={goNaverLogin}
                 className={styles.social_login_button}
               />{" "}
               <br />
@@ -76,7 +45,6 @@ export default function Login() {
                 size="medium"
                 href="http://i6c210.p.ssafy.io:8080/oauth2/authorization/google?redirect_uri=http://localhost:3000/oauth/redirect"
                 alt="구글로그인"
-                // onClick={goGoogleLogin}
                 className={styles.social_login_button}
               />{" "}
               <br />
@@ -85,7 +53,6 @@ export default function Login() {
                 size="medium"
                 href="http://i6c210.p.ssafy.io:8080/oauth2/authorization/kakao?redirect_uri=http://localhost:3000/oauth/redirect"
                 alt="카카오로그인"
-                // onClick={goKakaoLogin}
                 className={styles.social_login_button}
               />
               {/* <Form>

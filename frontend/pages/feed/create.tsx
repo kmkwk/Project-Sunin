@@ -1,25 +1,56 @@
-import {
-  Button,
-  Form,
-  Input,
-  Grid,
-  TextArea,
-  Dropdown,
-  Label,
-  Icon,
-} from "semantic-ui-react";
-import { useState } from "react";
-import Navbar from "../../src/component/Navbar";
-import styles from "../../styles/CreateFeed.module.css";
-import http from "../../src/lib/customAxios";
+import { Button, Form, Input, Grid, TextArea, Label } from "semantic-ui-react";
+import { useEffect, useState } from "react";
+import styles from "styles/CreateFeed.module.css";
+import { useRouter } from "next/router";
+
+import Navbar from "src/component/Navbar";
+import userAxios from "src/lib/userAxios";
 
 export default function Createfeed() {
+  const router = useRouter();
+
   const [feed, setFeed]: any = useState({
     userId: 0, // 작성자
     content: "", // 내용
     filePath: [], // 이미지, 동영상
     hashtags: [], // 해시태그
   });
+
+  const [user, setUser]: any = useState({
+    userId: "",
+    username: "",
+    email: "",
+    follower: [],
+    userNickname: null,
+    profileImageUrl: "",
+    providerType: "",
+    roleType: "",
+    suninDays: 0,
+  });
+
+  useEffect(() => {
+    userAxios
+      .get(`/api/v1/users`)
+      .then(({ data }) => {
+        const value = data.body.user;
+        setUser({
+          userSeq: "######### 이 값이 받아와져야 합니다 ##########",
+          userId: value.userId,
+          username: value.username,
+          email: value.email,
+          follower: value.follower,
+          userNickname: value.userNickname,
+          profileImageUrl: value.profileImageUrl,
+          providerType: value.providerType,
+          roleType: value.roleType,
+          suninDays: value.suninDays,
+        });
+      })
+      .catch(() => {
+        alert("잘못된 접근입니다.");
+        router.push("/feed/personal");
+      });
+  }, []);
 
   const handleOnChange = (e: any) => {
     setFeed({
@@ -74,12 +105,13 @@ export default function Createfeed() {
 
     console.log(feed); // ##### 디버그 #####
 
-    http
+    userAxios
       .post(`/feed`, body, {
         headers: { "Content-Type": "multipart/form-data" },
       })
       .then(() => {
         alert("성공");
+        router.push("/feed/personal");
       })
       .catch(() => {
         alert("실패");

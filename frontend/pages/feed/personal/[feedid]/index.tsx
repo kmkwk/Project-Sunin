@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Icon,
   Grid,
@@ -9,10 +9,10 @@ import {
   Modal,
   Button,
 } from "semantic-ui-react";
-import Navbar from "../../../../src/component/Navbar";
-import Menubar from "../../../../src/component/Menubar";
-import React from "react";
-import http from "../../../../src/lib/customAxios";
+
+import Navbar from "src/component/Navbar";
+import Menubar from "src/component/Menubar";
+import allAxios from "src/lib/allAxios";
 
 export default function Detail() {
   const router = useRouter();
@@ -31,7 +31,7 @@ export default function Detail() {
   });
 
   useEffect(() => {
-    http
+    allAxios
       .get(`/feed/detail/${feedid}`)
       .then(({ data }) => {
         setFeed(data);

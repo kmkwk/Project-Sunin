@@ -1,10 +1,12 @@
-import Navbar from "../../../src/component/Navbar";
-import Menubar from "../../../src/component/Menubar";
 import { Grid } from "semantic-ui-react";
 import { useEffect, useState } from "react";
-import FeedList from "../../../src/component/FeedList";
+
 import InfiniteScroll from "react-infinite-scroll-component";
-import http from "../../../src/lib/customAxios";
+
+import FeedList from "src/component/FeedList";
+import Menubar from "src/component/Menubar";
+import Navbar from "src/component/Navbar";
+import allAxios from "src/lib/allAxios";
 
 export default function Personal() {
   const [list, setList]: any = useState([]);
@@ -15,7 +17,7 @@ export default function Personal() {
   }, []);
 
   function loadFeed() {
-    http
+    allAxios
       .get(`/feed/latest`, {
         params: {
           size: 9,

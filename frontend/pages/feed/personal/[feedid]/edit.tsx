@@ -1,101 +1,185 @@
-import { useRouter } from "next/router";
-import axios from "axios";
+import { Button, Form, Input, Grid, TextArea, Label } from "semantic-ui-react";
 import { useEffect, useState } from "react";
-import Navbar from "../../../../src/component/Navbar";
-import { Form, Grid, Input, Button } from "semantic-ui-react";
-import styles from "../../../../styles/edit.module.css";
-import http from "../../../../src/lib/customAxios";
+import { useRouter } from "next/router";
 
-export default function Edit() {
+import Navbar from "src/component/Navbar";
+import userAxios from "src/lib/userAxios";
+import styles from "styles/CreateFeed.module.css";
+import allAxios from "src/lib/allAxios";
+
+export default function Createfeed() {
   const router = useRouter();
-  const { feedid } = router.query;
 
-  const [feed, setFeed] = useState({
-    feedId: "", // 피드 ID
-    userId: "", // 작성자
+  const [feed, setFeed]: any = useState({
+    userId: 0, // 작성자
     content: "", // 내용
     filePath: [], // 이미지, 동영상
     hashtags: [], // 해시태그
-    likes: "", // 좋아요 수
-    likeUser: [], // 좋아요 누른 사람
-    createdDate: "", // 작성일
-    modifiedDate: "", // 수정일
+  });
+
+  const [user, setUser]: any = useState({
+    userId: "",
+    username: "",
+    email: "",
+    follower: [],
+    userNickname: null,
+    profileImageUrl: "",
+    providerType: "",
+    roleType: "",
+    suninDays: 0,
   });
 
   useEffect(() => {
-    http
-      .get(`/feed/detail/${feedid}`)
+    userAxios
+      .get(`/api/v1/users`)
       .then(({ data }) => {
-        setFeed(data);
-        console.log(data); // ##### 디버그 #####
+        const value = data.body.user;
+        setUser({
+          userSeq: "######### 이 값이 받아와져야 합니다 ##########",
+          userId: value.userId,
+          username: value.username,
+          email: value.email,
+          follower: value.follower,
+          userNickname: value.userNickname,
+          profileImageUrl: value.profileImageUrl,
+          providerType: value.providerType,
+          roleType: value.roleType,
+          suninDays: value.suninDays,
+        });
       })
       .catch(() => {
         alert("잘못된 접근입니다.");
         router.push("/feed/personal");
       });
+
+    allAxios.get(`feed/detail/${router.query.feedid}`).then(({ data }) => {
+      setFeed({
+        content: data.content,
+        filePath: data.filePath,
+        hashtags: data.hashtags,
+      });
+    });
   }, []);
 
-  function modifyFeed() {}
+  const handleOnChange = (e: any) => {
+    setFeed({
+      ...feed,
+      [e.target.name]: e.target.value,
+    });
+  };
 
-  function backToDetail() {
-    router.push(`/feed/personal/${feedid}`);
-  }
+  const handleKeyPress = (e: any) => {
+    if (e.key === " ") {
+      const value = e.target.value.split(" ");
+      if (!feed.hashtags.includes(value[0]))
+        setFeed({
+          ...feed,
+          hashtags: [...feed.hashtags, value[0]],
+        });
+      e.target.value = "";
+    }
+  };
+
+  const onRemove = (event: any, data: any) => {
+    const index = feed.hashtags.indexOf(data.content);
+    feed.hashtags.splice(index, 1);
+    const result = feed.hashtags.filter((word: any) => word != data.content);
+    setFeed({ hashtags: result });
+  };
+
+  const uploadFile = (e: any) => {
+    e.stopPropagation(); // 이벤트 전파 방지
+    setFeed({
+      ...feed,
+      filePath: Array.from(e.target.files),
+    });
+  };
+
+  const handleSubmit = (event: any) => {
+    event.preventDefault(); // 새로고침 방지
+
+    const body = new FormData();
+    body.append("content", feed.content);
+    body.append("userId", JSON.stringify(1)); // ###### 개발용 ######
+
+    if (feed.filePath != null) {
+      feed.filePath.map((each: any) => {
+        body.append("files", each);
+      });
+    }
+
+    feed.hashtags.map((each: any) => {
+      body.append("hashtags", each);
+    });
+
+    console.log(feed); // ##### 디버그 #####
+
+    allAxios
+      .put(`/feed`, body, {
+        headers: { "Content-Type": "multipart/form-data" },
+      })
+      .then(() => {
+        alert("성공");
+        router.push("/feed/personal");
+      })
+      .catch(() => {
+        alert("실패");
+      });
+  };
 
   return (
     <>
       <Navbar />
-      <h1>피드 수정 페이지</h1>
-      <p>수정하는 글 번호: {feedid}</p>
+
       <Grid>
         <Grid.Row>
           <Grid.Column width={3}></Grid.Column>
           <Grid.Column width={10}>
             <Form className={styles.form}>
-              <br />
-              <br />
-              <label htmlFor="feedcontent">
-                <b>피드 내용</b>
-              </label>
-              <textarea
-                name="feedcontent"
-                id="feedcontent"
-                cols={30}
-                rows={10}
-                placeholder="내용을 작성하세요..."
-                onChange={modifyFeed}>
-                {feed.content}
-              </textarea>
-              <div>
-                {/* <img src={createObjectURL} width="500px" /> */}
-                <h4>이미지 선택</h4>
-                <input
-                  id="upload-file"
-                  type="file"
-                  accept="image/*, video/*"
-                  multiple
-                  // onChange={uploadFile}
+              <Form.Field>
+                <h3>피드 내용</h3>
+                <TextArea
+                  name="content"
+                  rows={10}
+                  placeholder="내용을 작성하세요..."
+                  value={feed.content}
+                  onChange={handleOnChange}
                 />
-              </div>
-              <br />
-              <br />
-              <br />
-              <Form.Field
-                control={Input}
-                label="Tag"
-                placeholder="원하는 태그를 작성하세요..."
-                // onChange={updateTag}
-              />
-              <br />
-              <br />
-              {/* <Form.Field control={Button} onClick={uploadToServer}>
+              </Form.Field>
+              <Form.Field>
+                <div>
+                  <h3>이미지 선택</h3>
+                  <input
+                    type="file"
+                    accept="image/*, video/*"
+                    multiple
+                    onChange={uploadFile}
+                  />
+                </div>
+              </Form.Field>
+              <Form.Field>
+                <Input
+                  placeholder="해시태그를 입력하세요"
+                  onKeyUp={handleKeyPress}
+                />
+                {feed.hashtags.map((tag: any, index: any) => {
+                  return (
+                    <Label
+                      name="mail"
+                      key={index}
+                      content={tag}
+                      removeIcon="delete"
+                      onRemove={onRemove}
+                    />
+                  );
+                })}
+              </Form.Field>
+              <Form.Field control={Button} onClick={handleSubmit}>
                 저장하기
-              </Form.Field> */}
+              </Form.Field>
             </Form>
-            <Button onClick={backToDetail}>뒤로가기</Button>
           </Grid.Column>
-          <Grid.Column width={3}>
-            <Button>글 삭제</Button>
-          </Grid.Column>
+          <Grid.Column width={3}></Grid.Column>
         </Grid.Row>
       </Grid>
     </>

@@ -1,15 +1,25 @@
-import { useEffect, useState } from "react";
-import http from "../../src/lib/customAxios";
+import { useEffect } from "react";
+import allAxios from "../../src/lib/allAxios";
+import userAxios from "../../src/lib/userAxios";
 
 export default function Personal() {
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    http
-      .get(`/api/v1/users`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+    allAxios
+      .get(`/api/v1/users`)
       .then((data: any) => {
         console.log(data);
+      })
+      .catch(() => {
+        console.log("로그인 실패");
+      });
+
+    userAxios
+      .get(`/api/v1/users`)
+      .then((data: any) => {
+        console.log(data);
+      })
+      .catch(() => {
+        console.log("로그인 실패");
       });
   }, []);
 

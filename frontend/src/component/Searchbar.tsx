@@ -4,16 +4,16 @@ import { Dropdown, Input } from "semantic-ui-react"
 
 export default function Search(){
 
-  const option = [
-    { key: '1', text:'피드 검색', value:'피드 검색'}, 
-    { key: '2', text:'태그 검색', value:'태그 검색'}, 
-    { key: '3', text:'유저 검색', value:'유저 검색'}, 
-  ]
-  const [searchRange, setSearchRange] = useState('피드 검색')
+  // const option = [
+  //   { key: '1', text:'피드 검색', value:'피드 검색'}, 
+  //   { key: '2', text:'태그 검색', value:'태그 검색'}, 
+  //   { key: '3', text:'유저 검색', value:'유저 검색'}, 
+  // ]
+  // const [searchRange, setSearchRange] = useState('피드 검색')
 
-  function changeSearchRange(e: any){
-    setSearchRange(e.target.outerText)
-  }
+  // function changeSearchRange(e: any){
+  //   setSearchRange(e.target.outerText)
+  // }
 
   const [searchValue, setSearchValue] = useState('')
   const router = useRouter()
@@ -31,7 +31,7 @@ export default function Search(){
 
   return(
     <>
-      <Dropdown placeholder='State' search selection options={option} defaultValue="피드 검색" onChange={changeSearchRange}/>
+      {/* <Dropdown placeholder='State' search selection options={option} defaultValue="피드 검색" onChange={changeSearchRange}/> */}
       <Input
             action={{ type: 'submit', content: '검색', onClick:goSearchedPage}}
             placeholder='피드 아이디를 입력하세요!!!'

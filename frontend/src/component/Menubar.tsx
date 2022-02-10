@@ -1,19 +1,11 @@
 import { Header, Menu, MenuItem, Icon, Divider, Grid, GridRow } from 'semantic-ui-react'
 import Link from 'next/link'
+import IsLogin from '../lib/customIsLogin'
 
 
 export default function Menuvar(){
 
-  var isLogin = false
-
-  if (typeof window !== "undefined") {
-    const token = localStorage.getItem('token')
-    if (token){
-      isLogin = true
-    } else {
-      isLogin = false
-    }
-  }
+  const isLogin = IsLogin
 
   return (
     <>

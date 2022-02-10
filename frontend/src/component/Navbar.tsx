@@ -3,6 +3,7 @@ import Link from 'next/link'
 import styles from '../../styles/Navbar.module.css'
 import Alarm from './Alarm';
 import Searchbar from './Searchbar'
+import IsLogin from '../lib/customIsLogin';
 
 
 export default function Navbar() {
@@ -11,16 +12,7 @@ export default function Navbar() {
     localStorage.removeItem('token')
   }
 
-  var isLogin = false
-
-  if (typeof window !== "undefined") {
-    const token = localStorage.getItem('token')
-    if (token){
-      isLogin = true
-    } else {
-      isLogin = false
-    }
-  }
+  const isLogin = IsLogin
   
   return (
     <>

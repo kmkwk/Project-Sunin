@@ -5,6 +5,7 @@ import com.amazonaws.services.s3.model.*;
 import com.ssafy.sunin.domain.Comment;
 import com.ssafy.sunin.domain.FeedCollections;
 import com.ssafy.sunin.domain.user.User;
+import com.ssafy.sunin.dto.comment.CommentDto;
 import com.ssafy.sunin.dto.feed.*;
 import com.ssafy.sunin.dto.user.UserProfile;
 import com.ssafy.sunin.repository.FeedRepository;
@@ -23,7 +24,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @Service
 @RequiredArgsConstructor
@@ -133,7 +133,7 @@ public class FeedServiceImpl implements FeedService {
     }
 
     @Override
-    public FeedDto getDetailFeed(String id) {
+    public FeedCommentDto getDetailFeed(String id) {
         FeedCollections feedCollections = feedRepository.findByIdAndFlagTrue(new ObjectId(String.valueOf(id)));
         User user = userRepository.findProfileByUserSeq(feedCollections.getUserId());
 
@@ -147,10 +147,12 @@ public class FeedServiceImpl implements FeedService {
 
         List<Comment> commentsList = new ArrayList<>();
         List<Object> commentKey = new ArrayList<>();
+        // Comment key값
         commentKey.addAll(commentsMap.keySet());
-        // 키값이랑 밸류값 둘다 넣어야함
+        // Comment value값
         commentsList.addAll(commentsMap.values());
 
+        // 아이디 중복 처리
         Set<Long> setUser = commentsList.stream()
                 .map(Comment::getWriter)
                 .collect(Collectors.toSet());
@@ -162,15 +164,14 @@ public class FeedServiceImpl implements FeedService {
                         o -> o
                 ));
         // 댓글 유저 프로필 정보랑 댓글 조합
-        List<Comment> comments = Comment.mapComment(commentsList,userMap);
-        Map<Object,Comment> commentMap = new HashMap<>();
+        List<CommentDto> comments = CommentDto.mapCommentDto(commentsList,userMap);
+        Map<Object,CommentDto> commentMap = new HashMap<>();
 
         for (int i = 0; i < comments.size(); i++) {
-            commentMap.put(commentKey.get(i),commentMap.get(i));
+            commentMap.put(commentKey.get(i),comments.get(i));
         }
 
-        feedCollections.setCommentWrite(commentMap);
-        return FeedDto.feedDto(feedCollections, user);
+        return FeedCommentDto.feedCommentDto(feedCollections, user, commentMap);
     }
 
     @Override

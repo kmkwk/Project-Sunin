@@ -3,21 +3,20 @@ package com.ssafy.sunin.domain;
 import com.ssafy.sunin.domain.user.User;
 import com.ssafy.sunin.dto.comment.CommentReply;
 import com.ssafy.sunin.dto.comment.CommentWrite;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
-
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Document(collection = "comments")
-//@ApiModel(value = "댓글 (Comment)", description = "댓글 관련 정보를 가진 Domain Class")
+@ApiModel(value = "댓글 (Comment)", description = "댓글 관련 정보를 가진 Domain Class")
 @NoArgsConstructor
 @Getter
 @ToString
@@ -31,6 +30,8 @@ public class Comment {
 
     @ApiModelProperty(value = "좋아요")
     private int likes = 0;
+
+    private Map<Long,Object> likeUser = new HashMap<>();
 
     @ApiModelProperty(value = "작성일자")
     @CreatedDate
@@ -65,6 +66,7 @@ public class Comment {
                 .likes(0)
                 .group(objectId)
                 .depth(0)
+                .likeUser(new HashMap<>())
                 .build();
     }
 
@@ -79,52 +81,34 @@ public class Comment {
                 .likes(0)
                 .group(new ObjectId(commentReply.getCommentId()))
                 .depth(0)
+                .likeUser(new HashMap<>())
                 .build();
     }
 
-    /*
-    * 댓글 수정 메서드
-    * */
     public void setCommentModified(String content) {
         this.content = content;
         this.modified = true;
         this.modifiedDate = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
     }
 
-    /*
-    * 댓글 삭제 메서드
-    * */
     public void setCommentDeleted() {
         this.deleted = true;
     }
 
-    /*
-    * 대댓글 작성 메서드
-    * */
     public void setCommentGroup(ObjectId group) {
+        this.group = group;
+    }
+    public void setCommentDepth(ObjectId group){
         this.group = group;
         this.depth++;
     }
-
-
-    public static List<Comment> mapComment(List<Comment> comments, Map<Long,User> userMap){
-        return comments.stream()
-                .map(comment -> Comment.builder()
-                        .writer(comment.getWriter())
-                        .content(comment.getContent())
-                        .likes(comment.getLikes())
-                        .writeDate(comment.getWriteDate())
-                        .modifiedDate(comment.getModifiedDate())
-                        .modified(comment.isModified())
-                        .deleted(comment.isDeleted())
-                        .group(comment.getGroup())
-                        .user(userMap.get(comment.getWriter()))
-                        .build())
-                .collect(Collectors.toList());
+    public void setCommentLikeModified(int likes, Map<Long, Object> likeUser){
+        this.likes = likes;
+        this.likeUser = likeUser;
     }
 
     @Builder
-    public Comment(String content, Long writer, int likes, LocalDateTime writeDate, LocalDateTime modifiedDate, boolean modified, boolean deleted, ObjectId group, int depth, User user) {
+    public Comment(String content, Long writer, int likes, LocalDateTime writeDate, LocalDateTime modifiedDate, boolean modified, boolean deleted, ObjectId group, int depth, User user, Map<Long,Object> likeUser) {
         this.content = content;
         this.writer = writer;
         this.likes = likes;
@@ -134,25 +118,7 @@ public class Comment {
         this.deleted = deleted;
         this.group = group;
         this.depth = depth;
-        this.user = Comment.CommentUser.fromUser(user);
+        this.likeUser = likeUser;
     }
 
-
-    @Data
-    static class CommentUser {
-        private Long userId;
-        private String nickName;
-        private String image;
-
-        private CommentUser(Long userId, String nickName, String image) {
-            this.userId = userId;
-            this.nickName = nickName;
-            this.image = image;
-        }
-
-        public static CommentUser fromUser(User user) {
-            return new CommentUser(user.getUserSeq(), user.getUserNickname(), user.getProfileImageUrl());
-        }
-
-    }
 }

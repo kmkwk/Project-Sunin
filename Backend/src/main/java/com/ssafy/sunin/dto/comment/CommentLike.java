@@ -7,11 +7,11 @@ import javax.validation.constraints.NotNull;
 
 @Data
 @AllArgsConstructor
-public class CommentDelete {
+public class CommentLike {
     @NotBlank
     private String feedId;
     @NotBlank
     private String commentId;
     @NotNull
-    private Long writer;
+    private Long userId;
 }

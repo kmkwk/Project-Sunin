@@ -12,7 +12,7 @@ public interface FeedService {
 
     List<String> downloadFileFeed(String fileNames);
 
-    FeedDto getDetailFeed(String id);
+    FeedCommentDto getDetailFeed(String id);
 
     FeedDto updateFeed(FeedUpdate feedUpdate);
 

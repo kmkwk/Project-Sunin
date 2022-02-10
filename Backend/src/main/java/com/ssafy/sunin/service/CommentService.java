@@ -2,12 +2,7 @@ package com.ssafy.sunin.service;
 
 import com.ssafy.sunin.domain.Comment;
 import com.ssafy.sunin.domain.FeedCollections;
-import com.ssafy.sunin.domain.user.User;
-import com.ssafy.sunin.dto.comment.CommentDelete;
-import com.ssafy.sunin.dto.comment.CommentReply;
-import com.ssafy.sunin.dto.comment.CommentUpdate;
-import com.ssafy.sunin.dto.comment.CommentWrite;
-import com.ssafy.sunin.dto.user.UserProfile;
+import com.ssafy.sunin.dto.comment.*;
 import com.ssafy.sunin.repository.FeedRepository;
 import com.ssafy.sunin.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,15 +11,16 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class CommentService {
 
     private final FeedRepository feedRepository;
+    private final UserRepository userRepository;
 
     /*
      * 댓글 작성하기
@@ -81,6 +77,7 @@ public class CommentService {
         FeedCollections feedCollections = feedRepository.findFeedIdByIdAndFlagTrue(new ObjectId(commentReply.getFeedId()));
         Map<Object,Comment> comments = feedCollections.getComments();
         comments.put(objectId,comment);
+        comment.setCommentDepth(new ObjectId(commentReply.getCommentId()));
         feedCollections.setCommentWrite(comments);
         feedRepository.save(feedCollections);
         return comment;
@@ -99,9 +96,46 @@ public class CommentService {
     /*
      * 피드에 달린 댓글 갯수
      * */
-    public long countCommentsByFeed(String feedId) {
-//        return commentRepository.countByFeedId(new ObjectId(feedId));
-        return feedRepository.findFeedIdByIdAndFlagTrue(new ObjectId(feedId)).getComments().size();
+    public int countCommentsByFeed(String feedId) {
+        FeedCollections feedCollections = feedRepository.findFeedIdByIdAndFlagTrue(new ObjectId(feedId));
+
+        return feedCollections.getComments().size();
+    }
+
+    public void likeComment(CommentLike commentLike){
+        FeedCollections feedCollections = feedRepository.findByIdAndFlagTrue(new ObjectId(commentLike.getFeedId()));
+        Map<Object,Comment> comments = feedCollections.getComments();
+        Comment comment = comments.get(commentLike.getCommentId());
+        Map<Long, Object> users = new HashMap<>(comment.getLikeUser());
+
+        int like = comment.getLikes();
+
+        if (users.containsKey(commentLike.getUserId())) {
+            users.remove(commentLike.getUserId());
+            like--;
+        } else {
+            users.put(commentLike.getUserId(), true);
+            like++;
+        }
+
+        comment.setCommentLikeModified(like,users);
+
+        feedCollections.setCommentLikeUsers(comments);
+        feedRepository.save(feedCollections);
+    }
+
+    public List<CommentProfile> getLikeUserList(String feedId, String commentId){
+        FeedCollections feedCollections = feedRepository.findByIdAndFlagTrue(new ObjectId(feedId));
+        Comment comment = feedCollections.getComments().get(commentId);
+        Set<Long> list = comment.getLikeUser().keySet();
+
+        return userRepository.findFollowerSetByUserSeqIn(list)
+                .stream()
+                .map(user -> CommentProfile.builder()
+                        .id(user.getUserSeq())
+                        .nickName(user.getUserNickname())
+                        .image(user.getProfileImageUrl())
+                        .build()).collect(Collectors.toList());
     }
 
     /*

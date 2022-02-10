@@ -1,15 +1,12 @@
 package com.ssafy.sunin.controller;
 
-import com.ssafy.sunin.domain.FeedCollections;
 import com.ssafy.sunin.dto.feed.*;
 import com.ssafy.sunin.dto.user.UserProfile;
 import com.ssafy.sunin.service.FeedServiceImpl;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -51,7 +48,7 @@ public class FeedController {
     @ApiOperation(value = "피드 사진 삭제", notes = "사진 여러장 삭제 가능")
     @PutMapping("/file")
     public ResponseEntity<FeedDto> updateFile(@RequestBody @Valid FileUpdate fileUpdate) {
-        log.info("deleteFile");
+        log.info("updateFile");
         if(ObjectUtils.isEmpty(fileUpdate)){
             return ResponseEntity.notFound().build();
         }
@@ -70,7 +67,7 @@ public class FeedController {
 
     @ApiOperation(value = "피드 상세 페이지")
     @GetMapping("/detail/{id}")
-    public ResponseEntity<FeedDto> getDetailFeed(@PathVariable("id") String id) {
+    public ResponseEntity<FeedCommentDto> getDetailFeed(@PathVariable("id") String id) {
         log.info("getDetailFeed");
         return ResponseEntity.ok(feedService.getDetailFeed(id));
     }
@@ -147,8 +144,7 @@ public class FeedController {
     @GetMapping("/likeUser/{id}")
     public ResponseEntity<List<UserProfile>> getLikeUserList(@PathVariable("id") String id){
         log.info("likeUserList");
-        List<UserProfile> userProfile = feedService.getLikeUserList(id);
-        System.out.println();
+
         return ResponseEntity.ok(feedService.getLikeUserList(id));
     }
 }

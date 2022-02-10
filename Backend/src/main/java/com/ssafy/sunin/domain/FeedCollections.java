@@ -8,7 +8,6 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -18,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 @Document("feed")
-@ApiModel(value = "피드", description = "피드 정보 클래스")
+@ApiModel(value = "피드", description = "피드 콜렉션")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class FeedCollections{
@@ -73,7 +72,7 @@ public class FeedCollections{
         this.comments = comments;
     }
 
-    public void setCommentDtoWrite(Map<Object, Comment> comments){
+    public void setCommentLikeUsers(Map<Object,Comment> comments){
         this.comments = comments;
     }
 

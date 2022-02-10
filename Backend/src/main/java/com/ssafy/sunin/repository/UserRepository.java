@@ -17,6 +17,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     User findProfileByUserSeq(Long userSeq);
 
-    List<User> findFollowerListByUserSeqIn(List<Long> userId);
+    List<User> findAllListByUserSeqIn(List<Long> userId);
+
+    List<User> findAllSetByUserSeqIn(Set<Long> userId);
+
     List<User> findFollowerSetByUserSeqIn(Set<Long> userId);
 }

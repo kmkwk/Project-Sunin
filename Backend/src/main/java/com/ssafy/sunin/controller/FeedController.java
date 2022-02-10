@@ -1,8 +1,10 @@
 package com.ssafy.sunin.controller;
 
+import com.ssafy.sunin.domain.FeedCollections;
 import com.ssafy.sunin.dto.feed.*;
 import com.ssafy.sunin.dto.user.UserProfile;
 import com.ssafy.sunin.service.FeedServiceImpl;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +17,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class FeedController {
 
     private final FeedServiceImpl feedService;
 
-    @ApiOperation(value = "Feed 작성", notes = "성공시 200, 다중 파일 업로드 가능")
+    @ApiOperation(value = "Feed 작성", notes = "다중 파일 업로드 가능")
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<FeedDto> writeImageFeed(@RequestBody @Valid FeedWrite feedWrite){
         log.info("writerImageFeed");
@@ -93,33 +94,46 @@ public class FeedController {
         return ResponseEntity.ok("success");
     }
 
-    @ApiOperation(value = "나의 팔로워 피드 조회", notes = "우선 나의 id 값 전달")
-    @GetMapping("/follower/{userId}")
-    public ResponseEntity<List<FeedDto>> getFollowerFeed(@PathVariable("userId") Long userId){
+    @ApiOperation(value = "나의 팔로워 최신순 피드 조회", notes = "나의 userId 값 전달")
+    @GetMapping("/followerLatest/{userId}")
+    public ResponseEntity<List<FeedDto>> getFollowerLatestFeed(@PathVariable("userId") Long userId){
         log.info("getFollowerFeed");
-        return ResponseEntity.ok(feedService.getFollowerFeed(userId));
+        return ResponseEntity.ok(feedService.getFollowerLatestFeed(userId));
     }
 
-    @ApiOperation(value = "페이징 최신순 피드 조회")
+    @ApiOperation(value = "나의 팔로워 좋아요순 피드 조회 피드 ", notes = "나의 userId 값 전달")
+    @GetMapping("/followerLike/{userId}")
+    public ResponseEntity<List<FeedDto>> getFollowerLikeFeed(@PathVariable("userId") Long userId){
+        log.info("getFollowerLikeFeed");
+        return ResponseEntity.ok(feedService.getFollowerLikeFeed(userId));
+    }
+
+    @ApiOperation(value = "나의 피드 최신순 프로필용")
+    @GetMapping("/person/{userId}")
+    public ResponseEntity<List<FeedDto>> getPersonalFeed(@PathVariable("userId") Long userId){
+        log.info("getPersonalFeed");
+        return ResponseEntity.ok(feedService.getPersonalFeed(userId));
+    }
+
+
+    @ApiOperation(value = "전체 최신순 피드 조회")
     @GetMapping("/latest")
-    public ResponseEntity<Page<FeedDto>> getLatestFeed(@PageableDefault(sort="createdDate",
-                                                            direction = Sort.Direction.DESC) Pageable pageable,
-                                                            @RequestParam("userId") Long userId){
+    public ResponseEntity<List<FeedDto>> getLatestFeed(@PageableDefault(sort="createdDate",
+                                                            direction = Sort.Direction.DESC) Pageable pageable){
         log.info("getLatestFeed");
-        return ResponseEntity.ok(feedService.getLatestFeed(pageable,userId));
+        return ResponseEntity.ok(feedService.getLatestFeed(pageable));
     }
 
-    @ApiOperation(value = "페이징 좋아요순 피드 조회")
+    @ApiOperation(value = "전체 좋아요순 피드 조회")
     @GetMapping("/like")
-    public ResponseEntity<Page<FeedDto>> getLikesFeed(@PageableDefault(sort="likes",
-                                                            direction = Sort.Direction.DESC) Pageable pageable,
-                                                           @RequestParam("userId") Long userId){
+    public ResponseEntity<List<FeedDto>> getLikesFeed(@PageableDefault(sort="likes",
+                                                            direction = Sort.Direction.DESC) Pageable pageable){
         log.info("getLikesFeed");
-        return ResponseEntity.ok(feedService.getLikeFeed(pageable,userId));
+        return ResponseEntity.ok(feedService.getLikeFeed(pageable));
     }
 
     @ApiOperation(value = "좋아요 등록 취소")
-    @PutMapping("/likes")
+    @PutMapping("/addLike")
     public ResponseEntity<String> likeFeed(@RequestBody @Valid FeedLike feedLike){
         log.info("likeFeed");
         if(ObjectUtils.isEmpty(feedLike)){

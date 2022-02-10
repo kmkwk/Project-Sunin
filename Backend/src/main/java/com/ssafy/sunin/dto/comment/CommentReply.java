@@ -16,6 +16,4 @@ public class CommentReply {
     @NotNull
     private Long writer;
     private String content;
-    @NotBlank
-    private String group;
 }

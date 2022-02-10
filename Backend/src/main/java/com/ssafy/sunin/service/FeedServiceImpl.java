@@ -2,6 +2,7 @@ package com.ssafy.sunin.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;
+import com.ssafy.sunin.domain.Comment;
 import com.ssafy.sunin.domain.FeedCollections;
 import com.ssafy.sunin.domain.user.User;
 import com.ssafy.sunin.dto.feed.*;
@@ -12,8 +13,8 @@ import com.ssafy.sunin.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Service
 @RequiredArgsConstructor
@@ -135,14 +137,55 @@ public class FeedServiceImpl implements FeedService {
         FeedCollections feedCollections = feedRepository.findByIdAndFlagTrue(new ObjectId(String.valueOf(id)));
         User user = userRepository.findProfileByUserSeq(feedCollections.getUserId());
 
-        return FeedDto.feedDto(feedCollections,user);
+        // 댓글쓴 사람 프로필정보까지 같이 보내줘야함
+        // 우선 댓글에 대한 전체 정보를 가져와서
+        List<Sort.Order> orders = new ArrayList<>();
+        orders.add(new Sort.Order(Sort.Direction.ASC, "group"));
+        orders.add(new Sort.Order(Sort.Direction.ASC, "order"));
+        // 해당 피드의 전체 댓글
+        Map<Object, Comment> commentsMap = feedRepository.findFeedSortIdByIdAndFlagTrue(feedCollections.getId(), Sort.by(orders)).getComments();
+
+        List<Comment> commentsList = new ArrayList<>();
+        List<Object> commentKey = new ArrayList<>();
+        commentKey.addAll(commentsMap.keySet());
+        // 키값이랑 밸류값 둘다 넣어야함
+        commentsList.addAll(commentsMap.values());
+
+        Set<Long> setUser = commentsList.stream()
+                .map(Comment::getWriter)
+                .collect(Collectors.toSet());
+        // 댓글의 유저의 프로필 정보
+        Map<Long, User> userMap = userRepository.findAllSetByUserSeqIn(setUser).stream()
+                .collect(Collectors.toMap(
+                        User::getUserSeq,
+                        o -> o
+                ));
+        // 댓글 유저 프로필 정보랑 댓글 조합
+        List<Comment> comments = Comment.mapCommentDto(commentsList,userMap);
+
+        Map<Object,Comment> commentMap = IntStream.range(0, commentKey.size())
+                .boxed()
+                .collect(Collectors.toMap(
+                        commentKey::get,
+                        comments::get,
+                        (a, b) -> b)
+                );
+        feedCollections.setCommentWrite(commentMap);
+        System.out.println();
+        //        FeedDto feedDto = FeedDto.feedDto(feedCollections, user);
+        return null;
     }
 
     @Override
     public FeedDto updateFeed(FeedUpdate feedUpdate) {
         FeedCollections feedCollections = feedRepository.findByIdAndUserIdAndFlagTrue(new ObjectId(feedUpdate.getId()), feedUpdate.getUserId());
+        List<String> fileNames = new ArrayList<>();
+        // Todo : aws에선 중복 파일은 제거하던가, 안올려야함
+        AwsFile(feedUpdate.getFiles(),fileNames);
+        feedCollections.setFileModified(fileNames);
         feedCollections.setFeedModified(feedUpdate);
-        feedRepository.save(feedCollections);
+
+         feedRepository.save(feedCollections);
 
         User user = userRepository.findProfileByUserSeq(feedCollections.getUserId());
         return FeedDto.feedDto(feedCollections,user);
@@ -155,40 +198,83 @@ public class FeedServiceImpl implements FeedService {
         feedRepository.save(feedCollections);
     }
 
+    // 나의 팔로워 최신순
     @Override
-    public List<FeedDto> getFollowerFeed(Long userId) {
+    public List<FeedDto> getFollowerLatestFeed(Long userId) {
         // TODO :  1. 시간 구하는 쿼리 (startDate ,endDate)
+        //  로그인시 로그인시간을 로깅하는 테이블을 만든다. - mysql
+        //  내가 처음에 로그인 했을때 로깅 테이블에서 로그인한 시간 최신순 두개의 시간을 가져온다.
+        //  ex) 로깅 테이블에 저장된 시간이 오전 12시,오후 1시, 오후 2시, 오후 5시라면 오후2시 오후 5시를 가져온다.
+        //  나의 유저의 팔로워 리스트를 구한다.
+        //  몽고에서 나의 유저 팔로워들의 오후 2시 오후 5시 사이의 피드를 가져온다.
+
         List<Long> followers = followerRepository.getFollowingList(userId);
-        Map<Long, User> userMap = userRepository.findFollowerListByUserSeqIn(followers).stream()
+        Map<Long, User> userMap = userRepository.findAllListByUserSeqIn(followers).stream()
                 .collect(Collectors.toMap(
                         User::getUserSeq,
                         o -> o
-                )); 
-
-        return feedRepository.getFollowerFeed(followers).stream()
-                .map(feedCollections -> FeedDto.builder()
-                                .id(feedCollections.getId().toString())
-                                .content(feedCollections.getContent())
-                                .hashtags(feedCollections.getHashtags())
-                                .likes(feedCollections.getLikes())
-                                .createdDate(feedCollections.getCreatedDate())
-                                .modifiedDate(feedCollections.getModifiedDate())
-                                .likeUser(feedCollections.getLikeUser())
-                                .filePath(feedCollections.getFilePath())
-                                .user(userMap.get(feedCollections.getUserId()))
-                                .build())
-                                .collect(Collectors.toList());
+                ));
+        List<FeedCollections> feedCollections = feedRepository.getFollowerLatesFeed(followers);
+        return FeedDto.mapFeedDto(feedCollections,userMap);
     }
 
-
+    // 나의 팔로워 좋아요 순
     @Override
-    public Page<FeedDto> getLatestFeed(Pageable pageable, Long userId) {
-        return feedRepository.findAllByUserId(pageable, userId);
+    public List<FeedDto> getFollowerLikeFeed(Long userId) {
+        // 나의 팔로워
+        List<Long> followers = followerRepository.getFollowingList(userId);
+        // 유저 전체 정보
+        Map<Long, User> userMap = userRepository.findAllListByUserSeqIn(followers).stream()
+                .collect(Collectors.toMap(
+                        User::getUserSeq,
+                        o -> o
+                ));
+
+        List<FeedCollections> feedCollections = feedRepository.getFollowerLikeFeed(followers);
+        return FeedDto.mapFeedDto(feedCollections,userMap);
     }
 
+    // 나의 피드 프로필용
     @Override
-    public Page<FeedDto> getLikeFeed(Pageable pageable, Long userId) {
-        return feedRepository.findAllByUserId(pageable, userId);
+    public List<FeedDto> getPersonalFeed(Long userId) {
+        List<FeedCollections> feedCollections = feedRepository.getPersonalFeed(userId);
+        User user = userRepository.findProfileByUserSeq(userId);
+
+        return FeedDto.personFeedDto(feedCollections,user);
+    }
+
+    // 전체 최신순
+    @Override
+    public List<FeedDto> getLatestFeed(Pageable pageable) {
+         List<FeedCollections> feedCollection = feedRepository.findAllByFlagTrue(pageable);
+
+         Set<Long> users = feedCollection.stream()
+                 .map(FeedCollections::getUserId)
+                 .collect(Collectors.toSet());
+
+         Map<Long, User> userMap = userRepository.findAllSetByUserSeqIn(users).stream()
+                 .collect(Collectors.toMap(
+                         User::getUserSeq,
+                         o -> o
+                 ));
+         return FeedDto.mapFeedDto(feedCollection,userMap);
+    }
+
+    // 전체 좋아요 순
+    @Override
+    public List<FeedDto> getLikeFeed(Pageable pageable) {
+        List<FeedCollections> feedCollection = feedRepository.findAllByFlagTrue(pageable);
+
+         Set<Long> users = feedCollection.stream()
+                 .map(FeedCollections::getUserId)
+                 .collect(Collectors.toSet());
+
+         Map<Long, User> userMap = userRepository.findAllSetByUserSeqIn(users).stream()
+                 .collect(Collectors.toMap(
+                         User::getUserSeq,
+                         o -> o
+                 ));
+         return FeedDto.mapFeedDto(feedCollection,userMap);
     }
 
     @Override

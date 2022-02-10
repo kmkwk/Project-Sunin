@@ -73,6 +73,10 @@ public class FeedCollections{
         this.comments = comments;
     }
 
+    public void setCommentDtoWrite(Map<Object, Comment> comments){
+        this.comments = comments;
+    }
+
     public static FeedCollections setFeedCollection(FeedWrite feedWrite, List<String> fileList){
         return  FeedCollections.builder()
                 .userId(feedWrite.getUserId())

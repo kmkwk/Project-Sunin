@@ -15,9 +15,25 @@ public class FeedRepositoryImpl extends QuerydslRepositorySupport implements Fee
     }
 
     @Override
-    public List<FeedCollections> getFollowerFeed(List<Long> followList) {
+    public List<FeedCollections> getFollowerLatesFeed(List<Long> followList) {
         return from(qfeed)
                 .where(qfeed.userId.in(followList).and(qfeed.flag.eq(true)))
+                .orderBy(qfeed.createdDate.desc())
+                .fetch();
+    }
+
+    @Override
+    public List<FeedCollections> getFollowerLikeFeed(List<Long> followList) {
+        return from(qfeed)
+                .where(qfeed.userId.in(followList).and(qfeed.flag.eq(true)))
+                .orderBy(qfeed.likes.desc())
+                .fetch();
+    }
+
+    @Override
+    public List<FeedCollections> getPersonalFeed(Long userId) {
+        return from(qfeed)
+                .where(qfeed.userId.eq(userId).and(qfeed.flag.eq(true)))
                 .orderBy(qfeed.createdDate.desc())
                 .fetch();
     }

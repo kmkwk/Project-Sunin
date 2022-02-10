@@ -2,6 +2,7 @@ package com.ssafy.sunin.dto.feed;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -15,5 +16,5 @@ public class FeedUpdate {
     @NotNull
     private Long userId;
     private List<String> hashtags;
-//    private List<String> files;
+    private List<MultipartFile> files;
 }

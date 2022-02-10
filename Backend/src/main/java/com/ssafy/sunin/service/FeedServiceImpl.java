@@ -154,6 +154,7 @@ public class FeedServiceImpl implements FeedService {
         Set<Long> setUser = commentsList.stream()
                 .map(Comment::getWriter)
                 .collect(Collectors.toSet());
+
         // 댓글의 유저의 프로필 정보
         Map<Long, User> userMap = userRepository.findAllSetByUserSeqIn(setUser).stream()
                 .collect(Collectors.toMap(
@@ -161,19 +162,15 @@ public class FeedServiceImpl implements FeedService {
                         o -> o
                 ));
         // 댓글 유저 프로필 정보랑 댓글 조합
-        List<Comment> comments = Comment.mapCommentDto(commentsList,userMap);
+        List<Comment> comments = Comment.mapComment(commentsList,userMap);
+        Map<Object,Comment> commentMap = new HashMap<>();
 
-        Map<Object,Comment> commentMap = IntStream.range(0, commentKey.size())
-                .boxed()
-                .collect(Collectors.toMap(
-                        commentKey::get,
-                        comments::get,
-                        (a, b) -> b)
-                );
+        for (int i = 0; i < comments.size(); i++) {
+            commentMap.put(commentKey.get(i),commentMap.get(i));
+        }
+
         feedCollections.setCommentWrite(commentMap);
-        System.out.println();
-        //        FeedDto feedDto = FeedDto.feedDto(feedCollections, user);
-        return null;
+        return FeedDto.feedDto(feedCollections, user);
     }
 
     @Override

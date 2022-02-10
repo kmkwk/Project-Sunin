@@ -31,13 +31,14 @@ public class CommentService {
      * */
     public FeedCollections writeComment(CommentWrite commentWrite) {
         ObjectId objectId = new ObjectId();
+
         // 새로운 댓글
         Comment comment = Comment.commentWriter(commentWrite,objectId);
         FeedCollections feedCollections = feedRepository.findFeedIdByIdAndFlagTrue(new ObjectId(commentWrite.getFeedId()));
-//        Map<Object,Comment> comments = feedCollections.getComments();
-//        comments.put(objectId,comment);
-//        comment.setCommentGroup(objectId);
-//        feedCollections.setCommentWrite(comments);
+        Map<Object,Comment> comments = feedCollections.getComments();
+        comments.put(objectId,comment);
+        comment.setCommentGroup(objectId);
+        feedCollections.setCommentWrite(comments);
 
         return feedRepository.save(feedCollections);
     }

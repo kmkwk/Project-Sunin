@@ -23,9 +23,6 @@ import java.util.stream.Collectors;
 @ToString
 public class Comment {
 
-//    @Id
-//    private ObjectId commentId;
-
     @ApiModelProperty(value = "내용")
     private String content;
 
@@ -55,7 +52,7 @@ public class Comment {
     @ApiModelProperty(value = "대댓글 - 깊이")
     private int depth;
 
-    private CommentUser user;
+//    private CommentUser user;
 
     public static Comment commentWriter(CommentWrite commentWrite, ObjectId objectId){
         return Comment.builder()
@@ -110,7 +107,7 @@ public class Comment {
     }
 
 
-    public static List<Comment> mapCommentDto(List<Comment> comments, Map<Long,User> userMap){
+    public static List<Comment> mapComment(List<Comment> comments, Map<Long,User> userMap){
         return comments.stream()
                 .map(comment -> Comment.builder()
                         .writer(comment.getWriter())
@@ -139,7 +136,6 @@ public class Comment {
         this.depth = depth;
         this.user = Comment.CommentUser.fromUser(user);
     }
-
 
 
     @Data

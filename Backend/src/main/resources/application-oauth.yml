@@ -14,18 +14,18 @@ spring:
             clientSecret: B2jNek8jz2
             clientAuthenticationMethod: post
             authorizationGrantType: authorization_code
-            redirectUri: "http://localhost:3000/login/oauth2/code/naver"
+            redirectUri: http://i6c210.p.ssafy.io:8080/login/oauth2/code/naver
             scope:
               - nickname
               - email
               - profile_image
             clientName: Naver
           kakao:
-            clientId: a17d69d97f5fed847460e793e23ea66d
-            clientSecret: l10gR10KtO0ysDarPqMGDait5JC8SLgT
+            clientId: d67bea23970971372929a592f317d5ef
+            clientSecret: N1OAubO2IS0B6enFwFSCpt1FXVFXCnsO
             clientAuthenticationMethod: post
             authorizationGrantType: authorization_code
-            redirectUri: "http://localhost:8080/login/oauth2/code/kakao"
+            redirectUri: http://i6c210.p.ssafy.io:8080/login/oauth2/code/kakao
             scope:
               - profile_nickname
               - profile_image

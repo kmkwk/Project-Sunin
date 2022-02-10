@@ -33,28 +33,28 @@
 <!-- 필수 항목 -->
 
 ## 프로젝트 소개
+
 <div align="center">
 <img src="md-images/logo2.png">
 </div>
 
-
 - 프로젝트명 : 써닌(SUN-IN)
 
 - 서비스 특징
-
-    - 일생생활 속 선한 영향력을 끼칠 수 있는 일들을 한 후 서로 공유하고 함께 참여할 수 있도록 이끄는 서비스
+  
+  - 일생생활 속 선한 영향력을 끼칠 수 있는 일들을 한 후 서로 공유하고 함께 참여할 수 있도록 이끄는 서비스
 
 - 기간 : 2022.01.04 ~ 2022.02.18
 
 - 주요 기능
-
-  | 기능         | 내용                                                         |
-  | ------------ | ------------------------------------------------------------ |
-  | SNS 기능     | 개인과 기업들의 활동이 담긴 게시물 공유                      |
+  
+  | 기능         | 내용                                     |
+  | ---------- | -------------------------------------- |
+  | SNS 기능     | 개인과 기업들의 활동이 담긴 게시물 공유                 |
   | 써닌(SUN-IN) | 사회 공헌 활동 참여일수에 따라 자신이 노력한 결과를 시각화하여 제공 |
-
+  
   - 상세기능
-
+    
     - 로그인 및 회원가입
     - 회원 관리
     - 검색기능
@@ -68,17 +68,18 @@
     - 게시글 신고 기능 및 블랙리스트 회원 관리
     - 프로필 옆 상단에 써닌(SUN-IN) 표시로 참여일수 시각화
 
-    
-
 - 주요 기술
+  
   - Single Page Application
   - CSS, SASS
   - REST API
 
 - 참조 리소스
+  
   - sass-loader: scss 로드 및 컴파일
 
 - 배포 환경
+  
   - URL : // 웹 서비스, 랜딩 페이지, 프로젝트 소개 등의 배포 URL 기입
   - 테스트 계정 : // 로그인이 필요한 경우, 사용 가능한 테스트 계정(ID/PW) 기입
 
@@ -95,52 +96,54 @@
 
 <!-- 자유 양식 -->
 
-
-
 ## 기술 스택
 
 ### **Front-end**
 
-| <img src="https://profilinator.rishav.dev/skills-assets/react-original-wordmark.svg" alt="React.js" width="50px" height="50px" /> | <img src="https://profilinator.rishav.dev/skills-assets/bootstrap-plain.svg" alt="Bootstrap" width="50px" height="50px" /> | <img src="https://profilinator.rishav.dev/skills-assets/html5-original-wordmark.svg" alt="HTML5" width="50px" height="50px" /> | <img src="https://profilinator.rishav.dev/skills-assets/css3-original-wordmark.svg" alt="CSS3" width="50px" height="50px" /> | <img src="https://profilinator.rishav.dev/skills-assets/javascript-original.svg" alt="JavaScript" width="50px" height="50px" /> | <img src="md-images/next.js.png" width="50" height="50" > |
-| :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: | :-------------------------------------------------------: |
-|                           React.js                           |                          Bootstrap                           |                            HTML5                             |                             CSS3                             |                       JavaScript(ES6)                        |                          NEXT.js                          |
+| <img src="https://profilinator.rishav.dev/skills-assets/react-original-wordmark.svg" alt="React.js" width="50px" height="50px" /> | <img src="https://profilinator.rishav.dev/skills-assets/bootstrap-plain.svg" alt="Bootstrap" width="50px" height="50px" /> | <img src="https://profilinator.rishav.dev/skills-assets/html5-original-wordmark.svg" alt="HTML5" width="50px" height="50px" /> | <img src="https://profilinator.rishav.dev/skills-assets/css3-original-wordmark.svg" alt="CSS3" width="50px" height="50px" /> | <img src="https://profilinator.rishav.dev/skills-assets/javascript-original.svg" alt="JavaScript" width="50px" height="50px" /> | <img src="md-images/next.js.png" width="50" height="50" > | <img src="md-images/typescript.png" width="50" height="50" > |
+| :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: | :-------------------------------------------------------: | :----------------------------------------------------------: |
+|                           React.js                           |                          Bootstrap                           |                            HTML5                             |                             CSS3                             |                       JavaScript(ES6)                        |                          NEXT.js                          |                          TypeScript                          |
 
 ### **Back-end**
+
 | <img src="md-images/springboot.png" width="50" height="50"/> | <img src="md-images/jpa.png" width="50" height="50"/> | <img src="md-images/gradle.png" width="50" height="50"/> | <img src="md-images/swagger.png" width="50" height="50"/> |
-| :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------: |
-|                                                                                       Springboot                                                                                       |                                                                 JPA                                                                 |                                                              Gradle                                                               |                                                      Swagger                                                      |
+|:------------------------------------------------------------:|:-----------------------------------------------------:|:--------------------------------------------------------:|:---------------------------------------------------------:|
+| Springboot                                                   | JPA                                                   | Gradle                                                   | Swagger                                                   |
 
 ### **Server**
-| <img src="md-images/docker.png" width="50" height="50"/> |<img src="md-images/aws.png" width="50" height="50"/> |
-| :---------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------: |
-|                                                        Docker                                                       |                                                     aws                                                     |
+
+| <img src="md-images/docker.png" width="50" height="50"/> | <img src="md-images/aws.png" width="50" height="50"/> |
+|:--------------------------------------------------------:|:-----------------------------------------------------:|
+| Docker                                                   | aws                                                   |
 
 ### **DB**
-| <img src="md-images/mysql.png" width="50" height="50"/> |<img style="margin: 10px" src="https://profilinator.rishav.dev/skills-assets/mongodb-original-wordmark.svg" alt="MongoDB" height="50" /> |
-| :---------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------: |
-|                                                        MySQL                                                       |                                                     mongoDB                                                     |
+
+| <img src="md-images/mysql.png" width="50" height="50"/> | <img style="margin: 10px" src="https://profilinator.rishav.dev/skills-assets/mongodb-original-wordmark.svg" alt="MongoDB" height="50" /> |
+|:-------------------------------------------------------:|:----------------------------------------------------------------------------------------------------------------------------------------:|
+| MySQL                                                   | mongoDB                                                                                                                                  |
 
 ### **Version Control**
 
 | <img src="https://profilinator.rishav.dev/skills-assets/git-scm-icon.svg" alt="Git" width="50px" height="50px" /> | <img src="https://profilinator.rishav.dev/skills-assets/gitlab.svg" alt="GitLab" width="50px" height="50px" /> |
-| :---------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------: |
-|                                                        Git                                                        |                                                     GitLab           
+|:-----------------------------------------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------------------------------------:|
+| Git                                                                                                               | GitLab                                                                                                         |
 
 ### **Issue Tracking System**
+
 | <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQsDUF0PKgtpJAgkMzi_2BiEwdso_e50rpiR2hORndM4Q8jiKEWNmRfbRG5UxQH-iJ1t_E&usqp=CAU" alt="Jira" width="50px" height="50px" /> |
-| :---------------------------------------------------------------------------------------------------------------: | 
-|                                                        Jira
-
-
+|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+| Jira                                                                                                                                                                                     |
 
 ## 프로젝트 진행
 
 ### 공통-sub PJT Ⅰ
 
 - 기간 : 2022.01.10 ~ 2022.01.14 (1주)
+
 - 목표 : 모바일 웹 디자인 및 기본 구성
 
 - 진행상황
+  
   - 1/10
     - [서비스를 개발하기 전 기획 고민](/문서/와이어프레임/README.md)
     - [와이어프레임 작성](/문서/와이어프레임/README.md)
@@ -155,7 +158,6 @@
     - [DB 결정](/문서/화면설계/readme.md)
     - [ERD](/문서/ERD 설계/readme.md)
 
-
 ### 공통-sub PJT Ⅱ
 
 - 기간 : 2022.01.17 ~ 2022.01.28 (2주)
@@ -168,7 +170,7 @@
 ### 공통-sub PJT Ⅲ
 
 - 기간 : 2022.01.29 ~ 2022.02.18 (총3주)
+
 - 목표 : 웹 큐레이션 SNS 완성
 
 - 진행상황  
-

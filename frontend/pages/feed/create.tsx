@@ -1,11 +1,13 @@
 import { Button, Form, Input, Image, Grid, TextArea } from "semantic-ui-react";
-import { useState } from "react";
+import { SetStateAction, useRef, useState } from "react";
 import Navbar from "../../src/component/Navbar";
 import styles from "../../styles/CreateFeed.module.css";
 import http from "../../src/lib/customAxios";
 import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import SwiperCore, { Navigation } from "swiper";
+import "swiper/components/navigation/navigation.min.css";
+import "swiper/swiper.min.css";
+import SwiperCore, { Navigation, Pagination, Autoplay } from "swiper";
+
 
 export default function Createfeed() {
   const [feed, setFeed] = useState({
@@ -16,12 +18,20 @@ export default function Createfeed() {
   });
   SwiperCore.use([Navigation]);
   const [swiper, setSwiper] = useState(null);
+  const [mainImageIndex, setMainImageIndex] = useState(0);
   const swiperParams = {
     navigation : true,
     onSwiper : setSwiper,
+    onSlideChange: (e: { activeIndex: SetStateAction<number>; }) => setMainImageIndex(e.activeIndex),
   }
+  // const navigationPrevRef = useRef(null);
+  // const navigationNextRef = useRef(null);
+  const [myImage, setMyImage] = useState([]);
+
+  
   const [attachment,setAttachment] = useState()
   const [createObjectURL, setCreateObjectURL] = useState(null);
+
   const handleOnChange = (e: any) => {
     setFeed({
       ...feed,
@@ -30,6 +40,7 @@ export default function Createfeed() {
   };
 
   const uploadFile = (e: any) => {
+    
     e.stopPropagation(); // 이벤트 전파 방지
     setFeed({
       ...feed,
@@ -86,6 +97,7 @@ export default function Createfeed() {
   setAttachment(undefined);
 }
 
+
   return (
     <>
       <Navbar />
@@ -137,6 +149,12 @@ export default function Createfeed() {
                   <SwiperSlide>1</SwiperSlide>
                   <SwiperSlide>2</SwiperSlide>
                   <SwiperSlide>3</SwiperSlide>
+                  {/* <PrevButton ref={navigationPrevRef}>
+                    <img alt="preButton" src={prevIcon} />
+                  </PrevButton> */}
+                  {/* <NextButton ref={navigationNextRef}>
+                    <img alt="nextButton" src={nextIcon} />
+                  </NextButton> */}
                 </Swiper>
               </Form.Field>
               <Button basic color='black' onClick={handleSubmit} fluid>저장하기</Button>

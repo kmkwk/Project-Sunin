@@ -1,4 +1,4 @@
-import { Button, Form, Input, Grid, TextArea, Label } from "semantic-ui-react";
+import { Button, Form, Input,Image, Grid, TextArea, Label } from "semantic-ui-react";
 import { useEffect, useState } from "react";
 import styles from "styles/CreateFeed.module.css";
 import { useRouter } from "next/router";
@@ -9,8 +9,8 @@ import User from "src/class/User";
 import Feed from "src/class/Feed";
 
 // import Swiper core and required modules
-import { Swiper, SwiperSlide } from 'swiper/react';
-import SwiperCore, { Navigation, Pagination, Autoplay } from "swiper";
+// import { Swiper, SwiperSlide } from 'swiper/react';
+// import SwiperCore, { Navigation, Pagination, Autoplay } from "swiper";
 
 // Import Swiper styles
 
@@ -26,6 +26,9 @@ export default function Createfeed() {
 
   const [feed, setFeed]: any = useState({});
   const [user, setUser]: any = useState({});
+
+  const [attachment,setAttachment] = useState()
+  const [createObjectURL, setCreateObjectURL] = useState(null);
 
   useEffect(() => {
     setFeed(new Feed());
@@ -78,6 +81,9 @@ export default function Createfeed() {
     } = e;
     const theFile = files[0];
     const reader = new FileReader();
+
+    
+
 
    reader.onloadend = (finishedEvent: any) => {
     setAttachment(finishedEvent.currentTarget['result']);
@@ -199,3 +205,7 @@ export default function Createfeed() {
     </>
   );
 }
+function setAttachment(arg0: any) {
+  throw new Error("Function not implemented.");
+}
+

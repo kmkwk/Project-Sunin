@@ -6,23 +6,24 @@ spring:
     name: oauth2
   data:
     mongodb:
-      # authentication-database: admin
-      # username: sunin
-      # password: BUKQ@3rbfM=+NY7sGmP^
+      #      authentication-database: admin
+      #      username: sunin
+      #      password: BUKQ@3rbfM=+NY7sGmP^
+      uri: mongodb://localhost:27017
       database: sunin
-      port: 27017
-      host: i6c210.p.ssafy.io
+  #      port: 27017
+  #      host: i6c210.p.ssafy.io
   security:
     user:
       name: ssafy
       password: ssafy
   datasource:
-    url: jdbc:mysql://i6c210.p.ssafy.io:3306/sunin?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
-    username: sunin
-    password: BUKQ@3rbfM=+NY7sGmP^
+    url: jdbc:mysql://localhost:3306/sunin?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
+    username: ssafy
+    password: ssafy
   jpa:
     hibernate:
-      ddl-auto: update # 유의해주세요!!
+      ddl-auto: none # 유의해주세요!!
       use-new-id-generator-mappings: true
     show-sql: true
     properties:
@@ -35,7 +36,8 @@ spring:
       - oauth
       - aws
       - credentials
-
+  jackson:
+    property-naming-strategy: SNAKE_CASE
 #logging:
 #  level.org.springframework: debug
 #  level.org.springframework.web: debug
@@ -59,3 +61,6 @@ app:
   oauth2:
     authorizedRedirectUris:
       - http://localhost:3000/oauth/redirect
+
+
+

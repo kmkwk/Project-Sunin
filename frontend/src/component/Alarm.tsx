@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 // import { Icon, Button, Image, Modal } from "semantic-ui-react";
 import { Button, Header, Icon, Segment, TransitionablePortal } from "semantic-ui-react";
 import styles from '../../styles/alarm.module.css'
+import SockJS from "sockjs-client";
+import Stomp from "webstomp-client";
 
 export default function Alarm(){
 
@@ -17,22 +19,51 @@ export default function Alarm(){
   function handleClose() {
     setOpen(false)
   }
-  
-  const userId = 1;
+  const FromUserId = 2
+  const toUserId = 1;
+  const listUser = [FromUserId,toUserId];
   const message = "";
 
   useEffect(() => {
-      axios
-      // 메시지를 받아야함
-      .get(`http://localhost:8080/follower/follower/`+ userId,{})
-      .then(({ data }) => {
-        console.log(data);
-        // setUserInfo(data.body.user)
-      })
-      .catch((e: any) => {
-        console.log(e)
-      });
-  }, [])
+    connect()
+  })
+  
+  
+  const socket = new SockJS('http://localhost:8080/stomp');
+  const stompClient = Stomp.over(socket);
+
+
+  function connect() {
+    stompClient.connect(
+      {},
+      (frame: any) => {
+        // 소켓 연결 성공
+        stompClient.connected = true;
+        console.log("소켓 연결 성공", frame);
+        stompClient.send(`/app/send/`+ toUserId +`/`+ FromUserId)
+        stompClient.subscribe(`/send/`, (res: any) => {
+          console.log("구독으로 받은 메시지 입니다.", res.body);
+        });
+      },
+      (error: any) => {
+        console.log("소켓 연결 실패", error); 
+        stompClient.connected = false;
+      }
+    );
+  }
+  
+
+  // useEffect(() => {
+  //     axios
+  //     // 메시지를 받아야함
+  //     .get(`http://localhost:8080/follower/follower/`+ userId,{})
+  //     .then(({ data }) => {
+  //       console.log(data);
+  //     })
+  //     .catch((e: any) => {
+  //       console.log(e)
+  //     });
+  // }, [])
 
 
   return (

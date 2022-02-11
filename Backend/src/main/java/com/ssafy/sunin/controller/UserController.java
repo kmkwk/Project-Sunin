@@ -44,6 +44,9 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserProfile(userId));
     }
 
+    // Todo : 유저 프로필 수정
+    // 이미지/닉네임/자기소개/전화번호/주소
+
     @ApiOperation(value = "유저 프로필 사진 수정")
     @PutMapping("/image")
     public ResponseEntity<UserProfile> updateUserImage(@Valid ImageUpdate imageUpdate){

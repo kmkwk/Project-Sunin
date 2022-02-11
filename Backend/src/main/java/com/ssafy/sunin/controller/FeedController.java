@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
@@ -25,6 +26,7 @@ import java.util.List;
 public class FeedController {
 
     private final FeedServiceImpl feedService;
+//    private final SimpMessagingTemplate simpMessagingTemplate;
 
     @ApiOperation(value = "Feed 작성", notes = "다중 파일 업로드 가능")
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
@@ -34,6 +36,7 @@ public class FeedController {
         if(ObjectUtils.isEmpty(feedWrite)){
             return ResponseEntity.notFound().build();
         }
+
         return ResponseEntity.ok(feedService.writeImageFeed(feedWrite));
     }
 

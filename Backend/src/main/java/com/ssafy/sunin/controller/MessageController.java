@@ -20,8 +20,9 @@ public class MessageController {
    @MessageMapping("/send/{toUserId}/{fromUserId}") //userId를 메세지를 받을 endpoint로 설정
     public void message(@DestinationVariable("toUserId") Long toUserId,
                         @DestinationVariable("fromUserId") Long fromUserId) {
-        System.out.println(toUserId);
-        List<String> messages = alarmService.getMessage(fromUserId,toUserId);
+
+       List<String> messages = alarmService.getMessage(fromUserId,toUserId);
         simpMessagingTemplate.convertAndSend("/sub/" + toUserId, messages);
+
    }
 }

@@ -8,6 +8,19 @@ import userAxios from "src/lib/userAxios";
 import User from "src/class/User";
 import Feed from "src/class/Feed";
 
+// import Swiper core and required modules
+import { Swiper, SwiperSlide } from 'swiper/react';
+import SwiperCore, { Navigation, Pagination, Autoplay } from "swiper";
+
+// Import Swiper styles
+
+import "swiper/components/navigation/navigation.min.css";
+import "swiper/components/pagination/pagination.min.css";
+import "swiper/swiper.min.css";
+
+
+
+
 export default function Createfeed() {
   const router = useRouter();
 
@@ -54,11 +67,27 @@ export default function Createfeed() {
   };
 
   const uploadFile = (e: any) => {
+    
     e.stopPropagation(); // 이벤트 전파 방지
     setFeed({
       ...feed,
       filePath: Array.from(e.target.files),
     });
+    const {
+      target: { files },
+    } = e;
+    const theFile = files[0];
+    const reader = new FileReader();
+
+   reader.onloadend = (finishedEvent: any) => {
+    setAttachment(finishedEvent.currentTarget['result']);
+    };
+    if (theFile) {
+    reader.readAsDataURL(theFile);
+  } else {
+    setAttachment(undefined)
+  }
+
   };
 
   const handleSubmit = (event: any) => {
@@ -94,6 +123,13 @@ export default function Createfeed() {
       });
   };
 
+  const onClearAttachment = () => {
+    const erase: any = document.getElementsByName('myImage') 
+    erase[''] = null
+  setAttachment(undefined);
+}
+
+
   return (
     <>
       <Navbar />
@@ -115,12 +151,21 @@ export default function Createfeed() {
               <Form.Field>
                 <div>
                   <h3>이미지 선택</h3>
+                  <Image src={createObjectURL} width="100px" />
                   <input
                     type="file"
                     accept="image/*, video/*"
                     multiple
                     onChange={uploadFile}
                   />
+                        {attachment && (
+        <div>
+          <br/>
+        <img src={attachment} width="80%" height="80%"/>
+        
+        <Button basic color='grey' onClick={onClearAttachment} fluid>Cancel</Button>
+        </div>
+      )}
                 </div>
               </Form.Field>
               <Form.Field>
@@ -144,6 +189,8 @@ export default function Createfeed() {
               <Form.Field control={Button} onClick={handleSubmit}>
                 저장하기
               </Form.Field>
+              <Button basic color='black' onClick={handleSubmit} fluid>저장하기</Button>
+
             </Form>
           </Grid.Column>
           <Grid.Column width={3}></Grid.Column>

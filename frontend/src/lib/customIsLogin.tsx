@@ -1,5 +1,5 @@
 
-var isLogin = false
+let isLogin = false
 
 if (typeof window !== "undefined") {
   const token = localStorage.getItem('token')

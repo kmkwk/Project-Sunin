@@ -10,6 +10,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
+
+import java.util.List;
 import java.util.Optional;
 
 public interface FeedRepository extends MongoRepository<FeedCollections, ObjectId>,
@@ -20,11 +22,12 @@ public interface FeedRepository extends MongoRepository<FeedCollections, ObjectI
 
     FeedCollections findByIdAndUserIdAndFlagTrue(ObjectId id, Long userId);
 
-    Page<FeedDto> findAllByUserId(Pageable pageable, Long userId);
+    List<FeedCollections> findAllByFlagTrue(Pageable pageable);
 
     Optional<FeedCollections> findByIdAndUserId(ObjectId id, Long userId);
 
-    FeedCollections findFeedIdById(ObjectId id);
-    FeedCollections findFeedSortIdById(ObjectId id, Sort sort);
+    FeedCollections findFeedIdByIdAndFlagTrue(ObjectId id);
+
+    FeedCollections findFeedSortIdByIdAndFlagTrue(ObjectId id, Sort sort);
 
 }

@@ -7,6 +7,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
@@ -37,6 +38,38 @@ public class FeedDto {
                 .user(user)
                 .comments(feed.getComments())
                 .build();
+    }
+
+    public static List<FeedDto> mapFeedDto(List<FeedCollections> feedCollection, Map<Long,User> userMap){
+        return feedCollection.stream()
+                .map(feedCollections -> FeedDto.builder()
+                        .id(feedCollections.getId().toString())
+                        .content(feedCollections.getContent())
+                        .hashtags(feedCollections.getHashtags())
+                        .likes(feedCollections.getLikes())
+                        .createdDate(feedCollections.getCreatedDate())
+                        .modifiedDate(feedCollections.getModifiedDate())
+                        .likeUser(feedCollections.getLikeUser())
+                        .filePath(feedCollections.getFilePath())
+                        .user(userMap.get(feedCollections.getUserId()))
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    public static List<FeedDto> personFeedDto(List<FeedCollections> feedCollection,User user) {
+        return feedCollection.stream()
+                .map(feedCollections -> FeedDto.builder()
+                        .id(feedCollections.getId().toString())
+                        .content(feedCollections.getContent())
+                        .hashtags(feedCollections.getHashtags())
+                        .likes(feedCollections.getLikes())
+                        .createdDate(feedCollections.getCreatedDate())
+                        .modifiedDate(feedCollections.getModifiedDate())
+                        .likeUser(feedCollections.getLikeUser())
+                        .filePath(feedCollections.getFilePath())
+                        .user(user)
+                        .build())
+                .collect(Collectors.toList());
     }
 
     @Builder

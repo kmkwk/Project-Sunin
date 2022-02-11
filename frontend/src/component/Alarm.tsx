@@ -40,8 +40,7 @@ export default function Alarm(){
         // 소켓 연결 성공
         stompClient.connected = true;
         console.log("소켓 연결 성공", frame);
-        stompClient.send(`/app/send/`+ toUserId +`/`+ FromUserId)
-        stompClient.subscribe(`/send/`, (res: any) => {
+        stompClient.subscribe(`/sub/1`, (res: any) => {
           console.log("구독으로 받은 메시지 입니다.", res.body);
         });
       },
@@ -52,6 +51,10 @@ export default function Alarm(){
     );
   }
   
+  function send() {
+
+    stompClient.send(`/app/send/`+ toUserId+`/`+FromUserId)
+  }
 
   // useEffect(() => {
   //     axios
@@ -97,7 +100,7 @@ export default function Alarm(){
           // negative={open}
           // positive={!open}
           positive={true}
-          onClick={handleClick}
+          onClick={send}
         />
         <TransitionablePortal onClose={handleClose} open={open}>
           <Segment

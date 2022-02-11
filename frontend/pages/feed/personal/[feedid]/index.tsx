@@ -34,8 +34,19 @@ export default function Detail() {
     allAxios
       .get(`/feed/detail/${feedid}`)
       .then(({ data }) => {
-        setFeed(data);
+        setFeed({
+          feedId: data.id,
+          userId: data.user.userId,
+          content: data.content,
+          filePath: data.filePath,
+          hashtags: data.hashtags,
+          likes: data.likes,
+          likeUser: data.likeUser,
+          createdDate: data.createdDate,
+          modifiedDate: data.modifiedDate,
+        });
         console.log(data); // ##### 디버그 #####
+        console.log(feed); // ##### 디버그 #####
       })
       .catch(() => {
         alert("잘못된 접근입니다.");

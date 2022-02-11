@@ -3,10 +3,18 @@ import { SetStateAction, useRef, useState } from "react";
 import Navbar from "../../src/component/Navbar";
 import styles from "../../styles/CreateFeed.module.css";
 import http from "../../src/lib/customAxios";
+
+// import Swiper core and required modules
 import { Swiper, SwiperSlide } from 'swiper/react';
-import "swiper/components/navigation/navigation.min.css";
-import "swiper/swiper.min.css";
 import SwiperCore, { Navigation, Pagination, Autoplay } from "swiper";
+
+// Import Swiper styles
+
+import "swiper/components/navigation/navigation.min.css";
+import "swiper/components/pagination/pagination.min.css";
+import "swiper/swiper.min.css";
+
+
 
 
 export default function Createfeed() {
@@ -16,7 +24,7 @@ export default function Createfeed() {
     filePath: [], // 이미지, 동영상
     hashtags: [], // 해시태그
   });
-  SwiperCore.use([Navigation]);
+  SwiperCore.use([Navigation, Pagination, Autoplay]);
   const [swiper, setSwiper] = useState(null);
   const [mainImageIndex, setMainImageIndex] = useState(0);
   const swiperParams = {
@@ -144,18 +152,19 @@ export default function Createfeed() {
                 onChange={handleOnChange}
               /> */}
               <Form.Field>
-                <Swiper className={styles.swiperStyle}>
+              {/* <Swiper className={styles.swiperStyle} navigation loop={false}> */}
+                {/* <Swiper className={styles.swiperStyle} navigation pagination={{ clickable:true }} loop={true}> */}
                 {/* <Swiper className={styles.swiperStyle} {...swiperParams} ref={setSwiper}> */}
-                  <SwiperSlide>1</SwiperSlide>
+                  {/* <SwiperSlide>1</SwiperSlide>
                   <SwiperSlide>2</SwiperSlide>
-                  <SwiperSlide>3</SwiperSlide>
+                  <SwiperSlide>3</SwiperSlide> */}
                   {/* <PrevButton ref={navigationPrevRef}>
                     <img alt="preButton" src={prevIcon} />
                   </PrevButton> */}
                   {/* <NextButton ref={navigationNextRef}>
                     <img alt="nextButton" src={nextIcon} />
                   </NextButton> */}
-                </Swiper>
+                {/* </Swiper> */}
               </Form.Field>
               <Button basic color='black' onClick={handleSubmit} fluid>저장하기</Button>
 

@@ -22,12 +22,10 @@ export default function Personal() {
         params: {
           size: 9,
           page: pages,
-          userId: 1,
         },
       })
       .then(({ data }) => {
-        console.log(data.content);
-        setList([...list, ...data.content]);
+        setList([...list, ...data]);
       });
     setPage(pages + 1);
   }

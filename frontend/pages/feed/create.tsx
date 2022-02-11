@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import Navbar from "src/component/Navbar";
 import userAxios from "src/lib/userAxios";
 import User from "src/class/User";
-import Feed from "src/class/Feed";
+import FeedWrite from "src/class/FeedWrite";
 
 // import Swiper core and required modules
 // import { Swiper, SwiperSlide } from 'swiper/react';
@@ -31,7 +31,7 @@ export default function Createfeed() {
   const [createObjectURL, setCreateObjectURL] = useState(null);
 
   useEffect(() => {
-    setFeed(new Feed());
+    setFeed(new FeedWrite());
     userAxios
       .get(`/api/v1/users`)
       .then(({ data }) => {

@@ -1,4 +1,5 @@
-import { useState } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 // import { Icon, Button, Image, Modal } from "semantic-ui-react";
 import { Button, Header, Icon, Segment, TransitionablePortal } from "semantic-ui-react";
 import styles from '../../styles/alarm.module.css'
@@ -9,12 +10,30 @@ export default function Alarm(){
 
   const [open, setOpen] = useState(false)
 
+
   function handleClick() {
     setOpen(true)
   }
   function handleClose() {
     setOpen(false)
   }
+  
+  const userId = 1;
+  const message = "";
+
+  useEffect(() => {
+      axios
+      // 메시지를 받아야함
+      .get(`http://localhost:8080/follower/follower/`+ userId,{})
+      .then(({ data }) => {
+        console.log(data);
+        // setUserInfo(data.body.user)
+      })
+      .catch((e: any) => {
+        console.log(e)
+      });
+  }, [])
+
 
   return (
     <>

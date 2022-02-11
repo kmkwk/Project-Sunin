@@ -102,6 +102,7 @@ public class User {
         this.providerType = providerType;
         this.roleType = roleType;
         this.createdAt = createdAt;
+        this.userNickname = username;
         this.modifiedAt = modifiedAt;
     }
 

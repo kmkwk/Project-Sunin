@@ -1,13 +1,22 @@
 import { useEffect, useState } from "react";
+import { Input, Message } from "semantic-ui-react";
 import SockJS from "sockjs-client";
 import Stomp from "webstomp-client";
 import styles from '../styles/chat.module.css'
+import 'semantic-ui-css/semantic.min.css'
 
 function Index() {
   const SERVER_URL = "http://localhost:8080";
   // const stompClient = Stomp.over(new SockJS(SERVER_URL));
 
   const fixname = '고정이름'
+  const click = (e: any) =>{
+    if(list.message !== ""){
+      send(); 
+      const erase: any = document.getElementsByName("message")[0] 
+      erase['value'] = ''
+    }
+  }
 
   const [list, setList]: any = useState({
     stompClient: Stomp.over(new SockJS(SERVER_URL)),
@@ -48,14 +57,13 @@ function Index() {
   };
 
   function sendMessage(e: any) {
-    if (e.key === "Enter" && list.userName !== "6" && list.message !== "") {
+    if (e.key === "Enter" && list.userName !== "6" && list.message !== "" ) {
       send();
       const nametag: any = document.getElementsByName('userName')[0]
       // nametag['value'] = ''
       e.target.value = "";
     }
   }
-
   function send() {
     console.log("Send message:" + list.message);
     if (list.stompClient && list.stompClient.connected) {
@@ -69,31 +77,47 @@ function Index() {
   }
 
   return (
-    <div>
-      <header className={styles.chat_wrap}>
-      {list.recvList.map((data: any, index: any) => {
-        return (
-          <h3 key={index} className={styles.back}>
-            유저이름: {data.userName} / 내용: {data.content}
-          </h3>
-        );
-      })}
+    <div className={styles.chat_border}>
+      <header>
+        <h1 className={styles.chat_header}>🌞Sun-In 채팅방🌞</h1>
       </header>
-      {/* <span>유저이름: </span> */}
+      <div className={styles.chat_background}>
+        {list.recvList.slice(0).reverse().map((data: any, index: any) => {
+          return (
+            <div key={index}>
+              <br />
+            <div className={styles.chat_message}>
+              {data.content}
+            </div>
+            <div className={styles.chat_username}>
+              {data.userName}
+            </div>
+            </div>
+          );
+        })}
+      </div>
+      <div className={styles.chat_write}>
+        {/* <span>유저이름: </span> */}
+        {/* <br /> */}
+        {/* <input name="userName" type="text" onChange={handleOnChange} /> */}
+        {/* <br /> */}
+        {/* <span>내용: </span> */}
+        {/* <br /> */}
+        {/* <Input icon='send' fluid/> */}
 
-      {/* <input name="userName" type="text" onChange={handleOnChange} /> */}
-      
-
-      <div className={styles.foot}>
-
-        <span>내용: </span>
-        <input
+        <Input 
+        name="message"
+        type="text"
+        onChange={handleOnChange}
+        onKeyUp={sendMessage}
+        action={{ icon: 'send', onClick: click}} fluid/>
+        {/* <input
           name="message"
           type="text"
           onChange={handleOnChange}
-          onKeyUp={sendMessage} />
-
-        </div>
+          onKeyUp={sendMessage}
+        /> */}
+      </div>
     </div>
   );
 }

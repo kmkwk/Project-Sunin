@@ -6,6 +6,7 @@ import IsLogin from '../lib/customIsLogin'
 export default function Menuvar(){
 
   const isLogin = IsLogin
+  console.log('isLogin')
 
   return (
     <>

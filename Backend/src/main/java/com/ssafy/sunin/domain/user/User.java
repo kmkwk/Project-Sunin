@@ -79,6 +79,18 @@ public class User {
     @NotNull
     private LocalDateTime modifiedAt;
 
+    //    //소개문구
+//    @Column(name = "INTRODUCTION")
+//    private String introduction;
+//
+//    //주소
+//    @Column(name = "ADDRESS")
+//    private String address;
+//
+//    //전화번호
+//    @Column(name = "PHONE_NUMBER")
+//    private String phoneNumber;
+
     public void setSuninDayIncrease(){
         this.suninDays++;
     }

@@ -2,14 +2,12 @@ package com.ssafy.sunin.dto.feed;
 
 import com.ssafy.sunin.domain.Comment;
 import com.ssafy.sunin.domain.FeedCollections;
-import com.ssafy.sunin.dto.user.UserProfile;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import com.ssafy.sunin.domain.user.User;
+import lombok.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
@@ -22,14 +20,12 @@ public class FeedDto {
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
     private List<String> filePath;
-    private Map<Long,Object> likeUser;
-    private List<Comment> comments;
+    private Map<Long, Object> likeUser;
+    private Map<Object, Comment> comments;
+//    @JsonUnwrapped
+    private FeedUserDto user;
 
-    private Long userId;
-    private String nickName;
-    private String image;
-
-    public static FeedDto feedDto(FeedCollections feed, UserProfile userProfile) {
+    public static FeedDto feedDto(FeedCollections feed, User user) {
         return FeedDto.builder()
                 .id(feed.getId().toString())
                 .content(feed.getContent())
@@ -39,15 +35,45 @@ public class FeedDto {
                 .modifiedDate(feed.getModifiedDate())
                 .likeUser(feed.getLikeUser())
                 .filePath(feed.getFilePath())
-                .userId(userProfile.getId())
-                .nickName(userProfile.getNickName())
-                .image(userProfile.getImage())
+                .user(user)
                 .comments(feed.getComments())
                 .build();
     }
 
+    public static List<FeedDto> mapFeedDto(List<FeedCollections> feedCollection, Map<Long,User> userMap){
+        return feedCollection.stream()
+                .map(feedCollections -> FeedDto.builder()
+                        .id(feedCollections.getId().toString())
+                        .content(feedCollections.getContent())
+                        .hashtags(feedCollections.getHashtags())
+                        .likes(feedCollections.getLikes())
+                        .createdDate(feedCollections.getCreatedDate())
+                        .modifiedDate(feedCollections.getModifiedDate())
+                        .likeUser(feedCollections.getLikeUser())
+                        .filePath(feedCollections.getFilePath())
+                        .user(userMap.get(feedCollections.getUserId()))
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    public static List<FeedDto> personFeedDto(List<FeedCollections> feedCollection,User user) {
+        return feedCollection.stream()
+                .map(feedCollections -> FeedDto.builder()
+                        .id(feedCollections.getId().toString())
+                        .content(feedCollections.getContent())
+                        .hashtags(feedCollections.getHashtags())
+                        .likes(feedCollections.getLikes())
+                        .createdDate(feedCollections.getCreatedDate())
+                        .modifiedDate(feedCollections.getModifiedDate())
+                        .likeUser(feedCollections.getLikeUser())
+                        .filePath(feedCollections.getFilePath())
+                        .user(user)
+                        .build())
+                .collect(Collectors.toList());
+    }
+
     @Builder
-    public FeedDto(String id, String content, List<String> hashtags, int likes, LocalDateTime createdDate, LocalDateTime modifiedDate, List<String> filePath, Map<Long, Object> likeUser, List<Comment> comments, Long userId, String nickName, String image) {
+    public FeedDto(String id, String content, List<String> hashtags, int likes, LocalDateTime createdDate, LocalDateTime modifiedDate, List<String> filePath, Map<Long, Object> likeUser, Map<Object, Comment> comments, User user) {
         this.id = id;
         this.content = content;
         this.hashtags = hashtags;
@@ -57,8 +83,25 @@ public class FeedDto {
         this.filePath = filePath;
         this.likeUser = likeUser;
         this.comments = comments;
-        this.userId = userId;
-        this.nickName = nickName;
-        this.image = image;
+        this.user = FeedUserDto.fromUser(user);
     }
+
+    @Data
+    static class FeedUserDto {
+        private Long userId;
+        private String nickName;
+        private String image;
+
+        private FeedUserDto(Long userId, String nickName, String image) {
+            this.userId = userId;
+            this.nickName = nickName;
+            this.image = image;
+        }
+
+        public static FeedUserDto fromUser(User user) {
+            return new FeedUserDto(user.getUserSeq(), user.getUserNickname(), user.getProfileImageUrl());
+        }
+
+    }
+
 }

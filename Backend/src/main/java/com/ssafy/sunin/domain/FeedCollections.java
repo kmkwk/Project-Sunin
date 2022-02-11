@@ -1,13 +1,13 @@
 package com.ssafy.sunin.domain;
 
 import com.ssafy.sunin.dto.feed.FeedUpdate;
+import com.ssafy.sunin.dto.feed.FeedWrite;
 import io.swagger.annotations.ApiModel;
 import lombok.*;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 @Document("feed")
-@ApiModel(value = "피드", description = "피드 정보 클래스")
+@ApiModel(value = "피드", description = "피드 콜렉션")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class FeedCollections{
@@ -46,7 +46,7 @@ public class FeedCollections{
 
     private boolean flag = true;
 
-    private List<Comment> comments = new ArrayList<>();
+    private Map<Object,Comment> comments = new HashMap<>();
 
     public void setFeedModified(FeedUpdate feedUpdate){
         this.content = feedUpdate.getContent();;
@@ -68,12 +68,31 @@ public class FeedCollections{
         this.filePath = filePath;
     }
 
-    public void setCommentWrite(List<Comment> comments){
+    public void setCommentWrite(Map<Object,Comment> comments){
         this.comments = comments;
     }
 
+    public void setCommentLikeUsers(Map<Object,Comment> comments){
+        this.comments = comments;
+    }
+
+    public static FeedCollections setFeedCollection(FeedWrite feedWrite, List<String> fileList){
+        return  FeedCollections.builder()
+                .userId(feedWrite.getUserId())
+                .content(feedWrite.getContent())
+                .hashtags(feedWrite.getHashtags())
+                .likes(0)
+                .createdDate(LocalDateTime.now())
+                .modifiedDate(LocalDateTime.now())
+                .flag(true)
+                .likeUser(new HashMap<>())
+                .filePath(fileList)
+                .comments(new HashMap<>())
+                .build();
+    }
+
     @Builder
-    public FeedCollections(ObjectId id, Long userId, String content, List<String> hashtags, int likes, Map<Long, Object> likeUser, LocalDateTime createdDate, LocalDateTime modifiedDate, List<String> filePath, boolean flag, List<Comment> comments) {
+    public FeedCollections(ObjectId id, Long userId, String content, List<String> hashtags, int likes, Map<Long,Object> likeUser, LocalDateTime createdDate, LocalDateTime modifiedDate, List<String> filePath, boolean flag, Map<Object,Comment> comments) {
         this.id = id;
         this.userId = userId;
         this.content = content;

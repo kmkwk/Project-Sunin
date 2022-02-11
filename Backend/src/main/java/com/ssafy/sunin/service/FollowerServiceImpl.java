@@ -6,6 +6,7 @@ import com.ssafy.sunin.dto.follower.FollowerUser;
 import com.ssafy.sunin.repository.FollowerRepository;
 import com.ssafy.sunin.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
 
@@ -15,6 +16,7 @@ public class FollowerServiceImpl implements FollowerService{
 
     private final FollowerRepository followerRepository;
     private final UserRepository userRepository;
+//    private final SimpMessagingTemplate simpMessagingTemplate;
 
     @Override
     public Long addFollower(FollowerUser followerUser) {
@@ -33,6 +35,7 @@ public class FollowerServiceImpl implements FollowerService{
             followerRepository.save(follower);
         }
 
+//        simpMessagingTemplate.convertAndSend();
         return count;
     }
 

@@ -1,8 +1,12 @@
-import { Button, Form, Input, Image, Grid, TextArea } from "semantic-ui-react";
-import { SetStateAction, useRef, useState } from "react";
-import Navbar from "../../src/component/Navbar";
-import styles from "../../styles/CreateFeed.module.css";
-import http from "../../src/lib/customAxios";
+import { Button, Form, Input, Grid, TextArea, Label } from "semantic-ui-react";
+import { useEffect, useState } from "react";
+import styles from "styles/CreateFeed.module.css";
+import { useRouter } from "next/router";
+
+import Navbar from "src/component/Navbar";
+import userAxios from "src/lib/userAxios";
+import User from "src/class/User";
+import Feed from "src/class/Feed";
 
 // import Swiper core and required modules
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -18,27 +22,23 @@ import "swiper/swiper.min.css";
 
 
 export default function Createfeed() {
-  const [feed, setFeed] = useState({
-    userId: 0, // 작성자
-    content: "", // 내용
-    filePath: [], // 이미지, 동영상
-    hashtags: [], // 해시태그
-  });
-  SwiperCore.use([Navigation, Pagination, Autoplay]);
-  const [swiper, setSwiper] = useState(null);
-  const [mainImageIndex, setMainImageIndex] = useState(0);
-  const swiperParams = {
-    navigation : true,
-    onSwiper : setSwiper,
-    onSlideChange: (e: { activeIndex: SetStateAction<number>; }) => setMainImageIndex(e.activeIndex),
-  }
-  // const navigationPrevRef = useRef(null);
-  // const navigationNextRef = useRef(null);
-  const [myImage, setMyImage] = useState([]);
+  const router = useRouter();
 
-  
-  const [attachment,setAttachment] = useState()
-  const [createObjectURL, setCreateObjectURL] = useState(null);
+  const [feed, setFeed]: any = useState({});
+  const [user, setUser]: any = useState({});
+
+  useEffect(() => {
+    setFeed(new Feed());
+    userAxios
+      .get(`/api/v1/users`)
+      .then(({ data }) => {
+        setUser(new User(data.body.user));
+      })
+      .catch(() => {
+        alert("잘못된 접근입니다.");
+        router.push("/feed/personal");
+      });
+  }, []);
 
   const handleOnChange = (e: any) => {
     setFeed({
@@ -47,12 +47,30 @@ export default function Createfeed() {
     });
   };
 
+  const handleKeyPress = (e: any) => {
+    if (e.key === " ") {
+      const value = e.target.value.split(" ");
+      if (!feed.hashtags.includes(value[0]))
+        setFeed({
+          ...feed,
+          hashtags: [...feed.hashtags, value[0]],
+        });
+      e.target.value = "";
+    }
+  };
+
+  const onRemove = (event: any, data: any) => {
+    const index = feed.hashtags.indexOf(data.content);
+    feed.hashtags.splice(index, 1);
+    const result = feed.hashtags.filter((word: any) => word != data.content);
+    setFeed({ hashtags: result });
+  };
+
   const uploadFile = (e: any) => {
     
     e.stopPropagation(); // 이벤트 전파 방지
     setFeed({
       ...feed,
-      [e.target.name]: e.target.value,
       filePath: Array.from(e.target.files),
     });
     const {
@@ -76,23 +94,29 @@ export default function Createfeed() {
     event.preventDefault(); // 새로고침 방지
 
     const body = new FormData();
+    // body.append("userId", user.userSeq);
+    body.append("userId", JSON.stringify(1));
     body.append("content", feed.content);
-    body.append("userId", JSON.stringify(1)); // ###### 개발용 ######
-    feed.filePath.map((each) => {
-      body.append("files", each);
+
+    if (feed.filePath != null) {
+      feed.filePath.map((each: any) => {
+        body.append("files", each);
+      });
+    }
+
+    feed.hashtags.map((each: any) => {
+      body.append("hashtags", each);
     });
-    // feed.hashtags.map((each) => {
-    //   body.append("hashtags", each);
-    // });
 
-    // console.log(feed.content); // ##### 디버그 #####
+    console.log(feed); // ##### 디버그 #####
 
-    http
+    userAxios
       .post(`/feed`, body, {
         headers: { "Content-Type": "multipart/form-data" },
       })
       .then(() => {
         alert("성공");
+        router.push("/feed/personal");
       })
       .catch(() => {
         alert("실패");
@@ -144,27 +168,26 @@ export default function Createfeed() {
       )}
                 </div>
               </Form.Field>
-              {/* <Form.Field
-                control={Input}
-                label="Tag"
-                placeholder="원하는 태그를 작성하세요..."
-                name="hashtags"
-                onChange={handleOnChange}
-              /> */}
               <Form.Field>
-              {/* <Swiper className={styles.swiperStyle} navigation loop={false}> */}
-                {/* <Swiper className={styles.swiperStyle} navigation pagination={{ clickable:true }} loop={true}> */}
-                {/* <Swiper className={styles.swiperStyle} {...swiperParams} ref={setSwiper}> */}
-                  {/* <SwiperSlide>1</SwiperSlide>
-                  <SwiperSlide>2</SwiperSlide>
-                  <SwiperSlide>3</SwiperSlide> */}
-                  {/* <PrevButton ref={navigationPrevRef}>
-                    <img alt="preButton" src={prevIcon} />
-                  </PrevButton> */}
-                  {/* <NextButton ref={navigationNextRef}>
-                    <img alt="nextButton" src={nextIcon} />
-                  </NextButton> */}
-                {/* </Swiper> */}
+                <Input
+                  placeholder="해시태그를 입력하세요"
+                  onKeyUp={handleKeyPress}
+                />
+                {feed.hashtags &&
+                  feed.hashtags.map((tag: any, index: any) => {
+                    return (
+                      <Label
+                        name="mail"
+                        key={index}
+                        content={tag}
+                        removeIcon="delete"
+                        onRemove={onRemove}
+                      />
+                    );
+                  })}
+              </Form.Field>
+              <Form.Field control={Button} onClick={handleSubmit}>
+                저장하기
               </Form.Field>
               <Button basic color='black' onClick={handleSubmit} fluid>저장하기</Button>
 

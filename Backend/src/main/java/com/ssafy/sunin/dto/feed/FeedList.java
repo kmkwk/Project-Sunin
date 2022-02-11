@@ -1,12 +1,12 @@
 package com.ssafy.sunin.dto.feed;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import javax.validation.constraints.NotNull;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 public class FeedList {
     @NotNull

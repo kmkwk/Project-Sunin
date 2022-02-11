@@ -1,7 +1,7 @@
 package com.ssafy.sunin.service;
 
 import com.ssafy.sunin.dto.feed.*;
-import org.springframework.data.domain.Page;
+import com.ssafy.sunin.dto.user.UserProfile;
 import org.springframework.data.domain.Pageable;
 import java.util.List;
 
@@ -12,7 +12,7 @@ public interface FeedService {
 
     List<String> downloadFileFeed(String fileNames);
 
-    FeedDto getDetailFeed(String id);
+    FeedCommentDto getDetailFeed(String id);
 
     FeedDto updateFeed(FeedUpdate feedUpdate);
 
@@ -20,11 +20,17 @@ public interface FeedService {
 
     void deleteFeed(String id, Long userId);
 
-    List<FeedDto> getFollowerFeed(Long userId);
+    List<FeedDto> getFollowerLatestFeed(Long userId);
 
-    Page<FeedDto> getLatestFeed(Pageable pageable, Long userId);
+    List<FeedDto> getFollowerLikeFeed(Long userId);
 
-    Page<FeedDto> getLikeFeed(Pageable pageable, Long userId);
+    List<FeedDto> getPersonalFeed(Long userId);
 
-    FeedDto likeFeed(FeedLike feedLike);
+    List<FeedDto> getLatestFeed(Pageable pageable);
+
+    List<FeedDto> getLikeFeed(Pageable pageable);
+
+    void likeFeed(FeedLike feedLike);
+
+    List<UserProfile> getLikeUserList(String id);
 }

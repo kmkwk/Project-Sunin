@@ -14,7 +14,7 @@ export default function FeedList({ list }: any) {
         <Grid.Row>
           {list.map((item: any) => (
             <Grid.Column key={item.id}>
-              <Link href={`/feed/personal/${item.id}`} className="content">
+              <Link href={`/feed/personal/${item.id}`}>
                 <Card>
                   <Image src={item.filePath[0]} alt={item.filePath[0]} />
                   <Card.Content>

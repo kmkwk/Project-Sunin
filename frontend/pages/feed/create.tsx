@@ -5,46 +5,21 @@ import { useRouter } from "next/router";
 
 import Navbar from "src/component/Navbar";
 import userAxios from "src/lib/userAxios";
+import User from "src/class/User";
+import Feed from "src/class/Feed";
 
 export default function Createfeed() {
   const router = useRouter();
 
-  const [feed, setFeed]: any = useState({
-    userId: 0, // 작성자
-    content: "", // 내용
-    filePath: [], // 이미지, 동영상
-    hashtags: [], // 해시태그
-  });
-
-  const [user, setUser]: any = useState({
-    userId: "",
-    username: "",
-    email: "",
-    follower: [],
-    userNickname: null,
-    profileImageUrl: "",
-    providerType: "",
-    roleType: "",
-    suninDays: 0,
-  });
+  const [feed, setFeed]: any = useState({});
+  const [user, setUser]: any = useState({});
 
   useEffect(() => {
+    setFeed(new Feed());
     userAxios
       .get(`/api/v1/users`)
       .then(({ data }) => {
-        const value = data.body.user;
-        setUser({
-          userSeq: "######### 이 값이 받아와져야 합니다 ##########",
-          userId: value.userId,
-          username: value.username,
-          email: value.email,
-          follower: value.follower,
-          userNickname: value.userNickname,
-          profileImageUrl: value.profileImageUrl,
-          providerType: value.providerType,
-          roleType: value.roleType,
-          suninDays: value.suninDays,
-        });
+        setUser(new User(data.body.user));
       })
       .catch(() => {
         alert("잘못된 접근입니다.");
@@ -90,8 +65,9 @@ export default function Createfeed() {
     event.preventDefault(); // 새로고침 방지
 
     const body = new FormData();
+    // body.append("userId", user.userSeq);
+    body.append("userId", JSON.stringify(1));
     body.append("content", feed.content);
-    body.append("userId", JSON.stringify(1)); // ###### 개발용 ######
 
     if (feed.filePath != null) {
       feed.filePath.map((each: any) => {
@@ -152,17 +128,18 @@ export default function Createfeed() {
                   placeholder="해시태그를 입력하세요"
                   onKeyUp={handleKeyPress}
                 />
-                {feed.hashtags.map((tag: any, index: any) => {
-                  return (
-                    <Label
-                      name="mail"
-                      key={index}
-                      content={tag}
-                      removeIcon="delete"
-                      onRemove={onRemove}
-                    />
-                  );
-                })}
+                {feed.hashtags &&
+                  feed.hashtags.map((tag: any, index: any) => {
+                    return (
+                      <Label
+                        name="mail"
+                        key={index}
+                        content={tag}
+                        removeIcon="delete"
+                        onRemove={onRemove}
+                      />
+                    );
+                  })}
               </Form.Field>
               <Form.Field control={Button} onClick={handleSubmit}>
                 저장하기

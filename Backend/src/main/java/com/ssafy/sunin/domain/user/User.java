@@ -22,7 +22,6 @@ import java.util.List;
 @Entity
 @Table(name = "USER")
 public class User {
-    @JsonIgnore
     @Id
     @Column(name = "USER_SEQ")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

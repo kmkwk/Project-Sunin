@@ -16,7 +16,7 @@ public class FollowerServiceImpl implements FollowerService{
 
     private final FollowerRepository followerRepository;
     private final UserRepository userRepository;
-    private final SimpMessagingTemplate simpMessagingTemplate;
+//    private final SimpMessagingTemplate simpMessagingTemplate;
 
     @Override
     public Long addFollower(FollowerUser followerUser) {

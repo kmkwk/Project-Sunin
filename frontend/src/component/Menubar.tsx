@@ -27,7 +27,7 @@ export default function Menuvar(){
     }
     
   }, [])
-  
+
   // let userData = null;
   // const tester = getUserData
   // console.log('test', tester)
@@ -52,7 +52,11 @@ export default function Menuvar(){
           {isLogin?
           <Grid>
             <GridRow>
-              <img src="/images/로고.png" alt="프로필사진" width="50px"/>
+              {userInfo?
+              <img src={userInfo['profileImageUrl']} alt="프로필사진" width="50px"/>
+              :
+              <img src="/images/디폴트프로필사진.png" alt="프로필사진" width="50px"/>
+              }
               <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
               {userInfo?
               userInfo['username']:

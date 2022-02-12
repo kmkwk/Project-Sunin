@@ -13,29 +13,55 @@ import {
 import Navbar from "src/component/Navbar";
 import Menubar from "src/component/Menubar";
 import allAxios from "src/lib/allAxios";
+import userAxios from "src/lib/userAxios";
+import User from "src/class/User";
+import FeedDetail from "src/class/FeedDetail";
+import Comment from "src/component/comment/Comment";
+import SwiperMedia from "src/component/Swiper";
 
-export default function Detail() {
+function Detail({ feedid }: any) {
   const router = useRouter();
-  const { feedid } = router.query;
 
+  // 로그인 유저 정보
+  const [user, setUser]: any = useState({
+    userSeq: 0, // 기본키
+    userId: "", // 아이디
+    username: "", // 이름
+    email: "", // 이메일
+    follower: [], // 팔로워
+    userNickname: "", // 닉네임
+    profileImageUrl: "", // 프로필사진
+    providerType: "", // 제공자(GOOGLE, KAKAO, NAVER)
+    roleType: "", // ENUM("ADMIN", "USER")
+    suninDays: 0, // 적립된 선인
+  });
+
+  // 피드 정보
   const [feed, setFeed] = useState({
-    feedId: "", // 피드 ID
-    userId: "", // 작성자
+    feedId: "", // 피드ID
+    userInfo: {}, // 작성자
     content: "", // 내용
     filePath: [], // 이미지, 동영상
     hashtags: [], // 해시태그
     likes: "", // 좋아요 수
-    likeUser: [], // 좋아요 누른 사람
+    likeUser: [], // 좋아요 누른사람
+    comments: {},
     createdDate: "", // 작성일
     modifiedDate: "", // 수정일
   });
 
   useEffect(() => {
+    userAxios
+      .get(`/api/v1/users`)
+      .then(({ data }) => {
+        setUser(new User(data.body.user));
+      })
+      .catch(() => {});
+
     allAxios
       .get(`/feed/detail/${feedid}`)
       .then(({ data }) => {
-        setFeed(data);
-        console.log(data); // ##### 디버그 #####
+        setFeed(new FeedDetail(data));
       })
       .catch(() => {
         alert("잘못된 접근입니다.");
@@ -52,17 +78,22 @@ export default function Detail() {
     return router.push(`/feed/personal/${feedid}/edit`);
   }
 
+  const showNickname = (object: any) => {
+    return Object.entries(object).map(
+      (obj: any) => obj[0] == "nickName" && <Header as="h2">{obj[1]}</Header>
+    );
+  };
+
   return (
     <>
       <Navbar />
-
       <Grid padded>
         <Grid.Row>
           <Grid.Column width={3}>
             <Menubar />
           </Grid.Column>
-          <Grid.Column width={3}>
-            <Modal
+          <Grid.Column width={5}>
+            {/* <Modal
               onClose={() => setOpen(false)}
               onOpen={() => setOpen(true)}
               open={open}
@@ -73,7 +104,7 @@ export default function Detail() {
                   width="200px"
                 />
               }>
-              <Modal.Header>{feed.userId}</Modal.Header>
+              <Modal.Header>{showNickname(feed.userInfo)}</Modal.Header>
               <Modal.Content image>
                 <Image
                   size="big"
@@ -90,12 +121,13 @@ export default function Detail() {
                   닫기
                 </Button>
               </Modal.Actions>
-            </Modal>
+            </Modal> */}
+            <SwiperMedia media={feed.filePath} />
           </Grid.Column>
-          <Grid.Column width={9}>
+          <Grid.Column width={8}>
             <Container>
-              <Header as="h2">{feed.userId}</Header>
-              <Icon name="user" />4 flowers &nbsp;&nbsp;&nbsp;
+              <Header as="h2">{showNickname(feed.userInfo)}</Header>
+              <Icon name="user" />4 followers
               <Icon name="like" />
               {feed.likes} like
             </Container>
@@ -111,25 +143,42 @@ export default function Detail() {
           </Grid.Column>
         </Grid.Row>
 
-        <Grid.Row>
-          <Grid.Column width={3}></Grid.Column>
-          <Grid.Column width={10}>
-            <h2>댓글 작성하는 곳</h2>
-            <input type="text" placeholder="댓글 쓰는 곳" size={50} />
-            <button>작성</button>
-          </Grid.Column>
-          <Grid.Column width={3}>
+        <Grid.Row textAlign="right">
+          <Grid.Column>
             <Button onClick={backToList}>뒤로가기</Button>
-            <Button onClick={changeContent}>글 수정하기</Button>
+            <Button onClick={changeContent}>수정</Button>
+          </Grid.Column>
+        </Grid.Row>
+
+        <Grid.Row>
+          <Grid.Column width={3} />
+          <Grid.Column width={10}>
+            <Header as="h1">
+              <Icon name="comments" />
+              <Header.Content>Comments</Header.Content>
+            </Header>
+          </Grid.Column>
+        </Grid.Row>
+
+        <Grid.Row>
+          <Grid.Column width={3} />
+          <Grid.Column width={12}>
+            <Comment
+              list={feed.comments}
+              userSeq={user.userSeq}
+              feedId={feed.feedId}
+              onChange={feed.comments}
+            />
           </Grid.Column>
         </Grid.Row>
       </Grid>
-      <style jsx>{`
-        .content {
-          white-space: normal;
-          word-break: break-all;
-        }
-      `}</style>
     </>
   );
 }
+
+export async function getServerSideProps(context: any) {
+  const feedid = context.params.feedid;
+  return { props: { feedid } };
+}
+
+export default Detail;

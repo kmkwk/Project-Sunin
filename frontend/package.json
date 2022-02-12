@@ -8,6 +8,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@types/sockjs-client": "^1.5.1",
     "axios": "^0.24.0",
     "faker": "^6.6.6",
     "lodash": "^4.17.21",
@@ -20,7 +21,9 @@
     "react-redux": "^7.2.6",
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^2.0.4",
-    "swiper": "^6.8.4"
+    "sockjs-client": "^1.5.2",
+    "swiper": "^6.8.4",
+    "webstomp-client": "^1.2.6"
   },
   "devDependencies": {
     "@types/node": "17.0.8",

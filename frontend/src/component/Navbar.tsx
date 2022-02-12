@@ -4,12 +4,16 @@ import styles from '../../styles/Navbar.module.css'
 import Alarm from './Alarm';
 import Searchbar from './Searchbar'
 import IsLogin from '../lib/customIsLogin';
+import { useRouter } from 'next/router';
 
 
 export default function Navbar() {
 
+  const router = useRouter()
+
   function goLogout(){
     localStorage.removeItem('token')
+    router.reload()
   }
 
   const isLogin = IsLogin

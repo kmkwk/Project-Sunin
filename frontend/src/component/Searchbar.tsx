@@ -1,9 +1,32 @@
+import Link from "next/link"
 import { useRouter } from "next/router"
-import { useState } from "react"
-import { Dropdown, Input } from "semantic-ui-react"
+import { useEffect, useState } from "react"
+import { Dropdown, Input, Search } from "semantic-ui-react"
+import allAxios from '../lib/allAxios'
 
-export default function Search(){
+export default function Searchbar(){
 
+  const [feedList, setFeedList]: any = useState([])
+
+  // useEffect(() => {
+  //   // loadFeed()
+  // }, [])
+
+
+  // function loadFeed() {
+  //   allAxios
+  //     .get(`/feed/latest`, {
+  //       params: {
+  //         size: 9,
+  //       },
+  //     })
+  //     .then(({ data }) => {
+  //       data.map((feed: any) => {
+  //         feedList.push({key: feed.createdDate, title: feed.content.slice(0, 15), id: feed.id})
+  //       })
+  //     });
+  //   }
+  
   // const option = [
   //   { key: '1', text:'피드 검색', value:'피드 검색'}, 
   //   { key: '2', text:'태그 검색', value:'태그 검색'}, 
@@ -23,25 +46,61 @@ export default function Search(){
   }
 
   function getSearchValue(e: any){
-    setSearchValue(e.target.value)
+    // setSearchValue(e.target.value)
     if (e.keyCode === 13){
-      router.push(`/feed/company/${searchValue}`)
+      allAxios
+      .get(`/feed/latest`, {
+        params: {
+          size: 9,
+        },
+      })
+      .then(({ data }) => {
+        console.log(data)
+        let newList: any = []
+        data.map((feed: any) => {
+          if (feed.content.indexOf(e.target.value) != '-1'){
+            newList.push({key: feed.createdDate, title: feed.content.slice(0, 20), id: feed.id})
+          }
+        })
+        setFeedList(newList)
+      });
+    }
+  }
+  
+
+  function getSelectedValue(e: any){
+    if (e.type === "click") {
+      // console.log('클릭 선택', e.target.outerText)
+      feedList.filter((feed: any) => {
+        if (feed.title === e.target.outerText) {
+          router.push(`/feed/personal/${feed.id}`)
+        }
+      })
+    } else {
+      // console.log('엔터 선택', e.target.value)
+      feedList.filter((feed: any) => {
+        if (feed.title === e.target.value) {
+          router.push(`/feed/personal/${feed.id}`)
+        }
+      })
     }
   }
 
   return(
     <>
       {/* <Dropdown placeholder='State' search selection options={option} defaultValue="피드 검색" onChange={changeSearchRange}/> */}
-      <Input
+      {/* <Input
             action={{ type: 'submit', content: '검색', onClick:goSearchedPage}}
             placeholder='피드 아이디를 입력하세요!!!'
             onKeyUp={getSearchValue}
-          />
-          {/* <Search
-            onResultSelect={getSearchValue}
-            results={[{title: '123', description: '123efef', price: '2000'}]}
-            onKeyUp={getSearchValue}
           /> */}
+      <Search
+        onResultSelect={getSelectedValue}
+        results={feedList}
+        onKeyUp={getSearchValue}
+        placeholder="#tag 입력 후 enter"
+        name = 'searchInput'
+      />
     </>
   );
 }

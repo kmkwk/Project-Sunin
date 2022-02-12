@@ -17,6 +17,7 @@ import userAxios from "src/lib/userAxios";
 import User from "src/class/User";
 import FeedDetail from "src/class/FeedDetail";
 import Comment from "src/component/comment/Comment";
+import SwiperMedia from "src/component/Swiper";
 
 function Detail({ feedid }: any) {
   const router = useRouter();
@@ -91,8 +92,8 @@ function Detail({ feedid }: any) {
           <Grid.Column width={3}>
             <Menubar />
           </Grid.Column>
-          <Grid.Column width={3}>
-            <Modal
+          <Grid.Column width={5}>
+            {/* <Modal
               onClose={() => setOpen(false)}
               onOpen={() => setOpen(true)}
               open={open}
@@ -120,9 +121,10 @@ function Detail({ feedid }: any) {
                   닫기
                 </Button>
               </Modal.Actions>
-            </Modal>
+            </Modal> */}
+            <SwiperMedia media={feed.filePath} />
           </Grid.Column>
-          <Grid.Column width={9}>
+          <Grid.Column width={8}>
             <Container>
               <Header as="h2">{showNickname(feed.userInfo)}</Header>
               <Icon name="user" />4 followers

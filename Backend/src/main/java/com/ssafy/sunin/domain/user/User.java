@@ -78,6 +78,18 @@ public class User {
     @NotNull
     private LocalDateTime modifiedAt;
 
+//    //소개문구
+//    @Column(name = "INTRODUCTION")
+//    private String introduction;
+//
+//    //주소
+//    @Column(name = "ADDRESS")
+//    private String address;
+//
+//    //전화번호
+//    @Column(name = "PHONE_NUMBER")
+//    private String phoneNumber;
+
     public void setSuninDayIncrease(){
         this.suninDays++;
     }
@@ -92,6 +104,9 @@ public class User {
             @NotNull RoleType roleType,
             @NotNull LocalDateTime createdAt,
             @NotNull LocalDateTime modifiedAt
+//            String introduction,
+//            String address,
+//            String phoneNumber
     ) {
         this.userId = userId;
         this.username = username;
@@ -104,6 +119,9 @@ public class User {
         this.createdAt = createdAt;
         this.userNickname = username;
         this.modifiedAt = modifiedAt;
+//        this.introduction = introduction;
+//        this.address = address;
+//        this.phoneNumber = phoneNumber;
     }
 
 
@@ -112,9 +130,9 @@ public class User {
 
     private int suninDays = 0;
 
-    public void setNormalProfileImage(){
-        this.profileImageUrl = "https://sunin-bucket.s3.ap-northeast-2.amazonaws.com/54b65ae4-8d54-4f93-909c-6ad7f2ce75b4.png";
-    }
+//    public void setNormalProfileImage(){
+//        this.profileImageUrl = "https://sunin-bucket.s3.ap-northeast-2.amazonaws.com/54b65ae4-8d54-4f93-909c-6ad7f2ce75b4.png";
+//    }
 
     public void setUserProfileModified(String profileImageUrl){
         this.profileImageUrl = profileImageUrl;

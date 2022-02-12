@@ -54,7 +54,7 @@ public class UserService{
 
     public UserProfile delteUserImage(Long userId){
         User user = userRepository.findProfileByUserSeq(userId);
-        user.setNormalProfileImage();
+//        user.setNormalProfileImage();
 
         return UserProfile.userProfile(user);
     }

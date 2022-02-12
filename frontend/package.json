@@ -12,18 +12,21 @@
     "faker": "^6.6.6",
     "lodash": "^4.17.21",
     "lodash-next": "^2.0.1",
-    "next": "12.0.8",
+    "next": "^12.0.10",
     "next-redux-wrapper": "^7.0.5",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-infinite-scroll-component": "^6.1.0",
     "react-redux": "^7.2.6",
     "semantic-ui-css": "^2.4.1",
-    "semantic-ui-react": "^2.0.4"
+    "semantic-ui-react": "^2.0.4",
+    "sockjs-client": "^1.5.2",
+    "webstomp-client": "^1.2.6"
   },
   "devDependencies": {
     "@types/node": "17.0.8",
     "@types/react": "17.0.38",
+    "@types/sockjs-client": "^1.5.1",
     "eslint": "8.7.0",
     "eslint-config-next": "12.0.8",
     "typescript": "4.5.4"

@@ -5,6 +5,7 @@ import Alarm from './Alarm';
 import Searchbar from './Searchbar'
 import IsLogin from '../lib/customIsLogin';
 import { useRouter } from 'next/router';
+import LoginModal from './login/loginModal';
 
 
 export default function Navbar() {
@@ -70,7 +71,8 @@ export default function Navbar() {
         <Menu.Item
           name='login'
         >
-          <Link href="/login"><a>Login</a></Link>
+          {/* <Link href="/login"><a>Login</a></Link> */}
+          <LoginModal />
         </Menu.Item>
         }    
       </Menu>

@@ -4,27 +4,44 @@ import type { NextPage } from 'next'
 import Menuvar from '../src/component/Menubar'
 import Navbar from '../src/component/Navbar'
 // import styles from '../styles/Home.module.css'
-import { Grid } from 'semantic-ui-react'
+import { Grid, Header } from 'semantic-ui-react'
 import Axios from "axios"
 import { useEffect, useState } from 'react';
 import SampleFeedList from '../src/component/SampleFeedList'
+import allAxios from 'src/lib/allAxios'
 // import Searchbar from '../src/component/Searchbar'
 
 const Home: NextPage = () => {
-  const [list, setList] = useState([]);
+  const [list, setList]: any = useState([]);
 
-  const API_URL = "http://makeup-api.herokuapp.com/api/v1/products.json?brand=maybelline";
+  // const API_URL = "http://makeup-api.herokuapp.com/api/v1/products.json?brand=maybelline";
 
-  function getData() {
-    Axios.get(API_URL)
-    .then(res => {
-      setList(res.data)
-    })
-  }
+  // function getData() {
+  //   Axios.get(API_URL)
+  //   .then(res => {
+  //     setList(res.data)
+  //   })
+  // }
 
-  useEffect(()=>{
-    getData();
+  // useEffect(()=>{
+  //   getData();
+  // }, []);
+
+  useEffect(() => {
+    loadFeed();
   }, []);
+
+  function loadFeed() {
+    allAxios
+      .get(`/feed/latest`, {
+        params: {
+          size: 3,
+        },
+      })
+      .then(({ data }) => {
+        setList([...list, ...data]);
+      });
+  }
 
   return (
     <>
@@ -34,17 +51,17 @@ const Home: NextPage = () => {
       <Grid.Column>
         <Menuvar />
       </Grid.Column>
-      <Grid.Column>
-        <b>Recent</b>
-        <SampleFeedList list={list.slice(0,3)} />
+      <Grid.Column textAlign='center'>
+        <Header as='h1'>Flower</Header>
+        <SampleFeedList list={list} />
       </Grid.Column>
-      <Grid.Column>
-        <b>Personal</b>
-        <SampleFeedList list={list.slice(3,6)} />
+      <Grid.Column textAlign='center'>
+        <Header as='h1'>Flowing</Header>
+        <SampleFeedList list={list} />
       </Grid.Column>
-      <Grid.Column>
-        <b>Company</b>
-        <SampleFeedList list={list.slice(6,9)} />
+      <Grid.Column textAlign='center'>
+        <Header as='h1'>Personal</Header>
+        <SampleFeedList list={list} />
       </Grid.Column>
     </Grid>
     </>

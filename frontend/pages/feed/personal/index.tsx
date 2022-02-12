@@ -8,7 +8,7 @@ import Menubar from "src/component/Menubar";
 import Navbar from "src/component/Navbar";
 import allAxios from "src/lib/allAxios";
 
-export default function Personal() {
+function Personal() {
   const [list, setList]: any = useState([]);
   const [pages, setPage] = useState(0);
 
@@ -20,7 +20,7 @@ export default function Personal() {
     allAxios
       .get(`/feed/latest`, {
         params: {
-          size: 9,
+          size: 20,
           page: pages,
         },
       })
@@ -53,3 +53,5 @@ export default function Personal() {
     </>
   );
 }
+
+export default Personal;

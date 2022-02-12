@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Button, Header, Image, Modal } from 'semantic-ui-react'
+import styles from "styles/Login.module.css";
 
 export default function LoginModal(){
 
@@ -8,34 +9,51 @@ export default function LoginModal(){
   return(
     <>
       <Modal
+      closeIcon
       onClose={() => setOpen(false)}
       onOpen={() => setOpen(true)}
       open={open}
       trigger={<Button>로그인</Button>}
     >
-      <Modal.Header>Select a Photo</Modal.Header>
+      <Modal.Header>
+        <div>
+        🌞Social Login🌞
+        </div>
+        </Modal.Header>
       <Modal.Content image>
-        <Image size='medium' src='https://react.semantic-ui.com/images/avatar/large/rachel.png' wrapped />
+        <Image size='large' src="/images/로고.png" className={styles.sunin_display}/>
         <Modal.Description>
-          <Header>Default Profile Image</Header>
-          <p>
-            We've found the following gravatar image associated with your e-mail
-            address.
-          </p>
-          <p>Is it okay to use this photo?</p>
+          <div className={styles.logintop}>
+          </div>
+        <Image
+                src="images/btnG_완성형.png"
+                size="medium"
+                href="http://i6c210.p.ssafy.io:8080/oauth2/authorization/naver?redirect_uri=http://localhost:3000/oauth/redirect"
+                alt="네이버로그인"
+                className={styles.social_login_button}
+              />{" "}
+              <br />
+              <br />
+              <Image
+                src="images/btn_google_signin_light_normal_web@2x.png"
+                size="medium"
+                href="http://i6c210.p.ssafy.io:8080/oauth2/authorization/google?redirect_uri=http://localhost:3000/oauth/redirect"
+                alt="구글로그인"
+                className={styles.social_login_button}
+              />{" "}
+              <br />
+              <br />
+              <Image
+                src="images/kakao_login_large_narrow.png"
+                size="medium"
+                href="http://i6c210.p.ssafy.io:8080/oauth2/authorization/kakao?redirect_uri=http://localhost:3000/oauth/redirect"
+                alt="카카오로그인"
+                className={styles.social_login_button}
+                />
         </Modal.Description>
       </Modal.Content>
       <Modal.Actions>
-        <Button color='black' onClick={() => setOpen(false)}>
-          Nope
-        </Button>
-        <Button
-          content="Yep, that's me"
-          labelPosition='right'
-          icon='checkmark'
-          onClick={() => setOpen(false)}
-          positive
-        />
+        
       </Modal.Actions>
     </Modal>
     </>

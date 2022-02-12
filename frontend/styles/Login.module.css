@@ -13,5 +13,13 @@
 
 .social_login_button {
   /* margin: auto; */
-  margin-left: 22%;
+  padding-top: 1%;
+  align-content: center;
+}
+
+.sunin_diplay{
+  align-content: center;
+}
+.logintop{
+  padding-top: 55px;
 }

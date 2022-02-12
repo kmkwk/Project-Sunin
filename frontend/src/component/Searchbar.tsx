@@ -74,6 +74,7 @@ export default function Searchbar(){
       feedList.filter((feed: any) => {
         if (feed.title === e.target.outerText) {
           router.push(`/feed/personal/${feed.id}`)
+          router.reload()
         }
       })
     } else {
@@ -81,6 +82,7 @@ export default function Searchbar(){
       feedList.filter((feed: any) => {
         if (feed.title === e.target.value) {
           router.push(`/feed/personal/${feed.id}`)
+          router.reload()
         }
       })
     }

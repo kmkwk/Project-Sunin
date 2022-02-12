@@ -5,15 +5,15 @@ spring:
         registration:
           google:
             clientId: 944954562684-cqcrkqgpkgpdi75i3dv0ldh2su5m2kit.apps.googleusercontent.com
-#            clientSecret: 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
-            clientSecret: ENC(0I/qMj+h1SYvAhRaYKxm7XIMMRrm7Nxv8t7TnbbIoyxqDkCmb0JRyGJDeMJG7r+V)
+            clientSecret: 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
+#            clientSecret: ENC(0I/qMj+h1SYvAhRaYKxm7XIMMRrm7Nxv8t7TnbbIoyxqDkCmb0JRyGJDeMJG7r+V)
             scope:
               - email
               - profile
           naver:
             clientId: PVbOVwkqA48r5lmokxLn
-#            clientSecret: B2jNek8jz2
-            clientSecret: ENC(AFkKVRWDG/ft3y/djwhQucVclrzuo0nK)
+            clientSecret: B2jNek8jz2
+#            clientSecret: ENC(AFkKVRWDG/ft3y/djwhQucVclrzuo0nK)
             clientAuthenticationMethod: post
             authorizationGrantType: authorization_code
             redirectUri: http://i6c210.p.ssafy.io:8080/login/oauth2/code/naver
@@ -24,8 +24,8 @@ spring:
             clientName: Naver
           kakao:
             clientId: d67bea23970971372929a592f317d5ef
-#            clientSecret: N1OAubO2IS0B6enFwFSCpt1FXVFXCnsO
-            clientSecret: ENC(1zdPcyo0yxO36UX2xqOrLEuk74JH0hS2adDM8TjdLPA+AvQnNAwQgNK2kEnbwgYF)
+            clientSecret: N1OAubO2IS0B6enFwFSCpt1FXVFXCnsO
+#            clientSecret: ENC(1zdPcyo0yxO36UX2xqOrLEuk74JH0hS2adDM8TjdLPA+AvQnNAwQgNK2kEnbwgYF)
             clientAuthenticationMethod: post
             authorizationGrantType: authorization_code
             redirectUri: http://i6c210.p.ssafy.io:8080/login/oauth2/code/kakao

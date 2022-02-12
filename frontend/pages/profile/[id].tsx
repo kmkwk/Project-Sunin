@@ -1,32 +1,80 @@
 import React from "react";
-import { Grid, Divider, Icon, Image, Item } from "semantic-ui-react";
+import { Grid, Divider, Icon, Item, Label } from "semantic-ui-react";
 import Navbar from "src/component/Navbar";
 import Menubar from "src/component/Menubar";
 import { useEffect, useState } from "react";
 import styles from "styles/signup.module.css";
-import ProfileList from "src/component/ProfileList";
+import allAxios from "src/lib/allAxios";
+import { useRouter } from "next/router";
+import InfiniteScroll from "react-infinite-scroll-component";
+import FeedList from "src/component/FeedList";
 
-export default function Profileperson() {
-  const [list, setList] = useState([]);
+function Profiles({ id }: any) {
+  const router = useRouter();
 
-  // router.query 불러와서
-  // 해당 프로필의 주인을 불러옵니다.
-  // router.query엔 userSeq 들어가야함
+  // 프로필 유저
+  const [user, setUser] = useState({
+    image: "",
+    nickName: "",
+  });
 
-  // 유저정보랑 그 유저가 작성한 피드 로드해오기
+  const [follower, setFollower] = useState(-1);
+  const [following, setFollowing] = useState(-1);
 
-  const API_URL =
-    "http://makeup-api.herokuapp.com/api/v1/products.json?brand=maybelline";
+  // 프로필 유저 피드
+  const [list, setList]: any = useState([]);
 
-  function getData() {
-    // 피드 불러오기
-  }
-  const [nickname, setNickname] = useState("닉네임");
-  const [introduce, setIntroduce] = useState("introduce");
+  const [pages, setPage] = useState(0); // 넌 보류
 
   useEffect(() => {
-    getData();
+    allAxios
+      .get(`/api/v1/users/profile/${id}`)
+      .then(({ data }) => {
+        setUser({
+          ...user,
+          image: data.image,
+          nickName: data.nickName,
+        });
+      })
+      .catch(() => {
+        alert("잠시 후 다시 시도해주세요.");
+        router.push("/");
+      });
+
+    allAxios
+      .get(`/follower/follower/${id}`)
+      .then(({ data }) => {
+        setFollower(data);
+      })
+      .catch(() => {
+        alert("잠시 후 다시 시도해주세요.");
+        router.push("/");
+      });
+
+    allAxios
+      .get(`/follower/following/${id}`)
+      .then(({ data }) => {
+        setFollowing(data);
+      })
+      .catch(() => {
+        alert("잠시 후 다시 시도해주세요.");
+        router.push("/");
+      });
+
+    allAxios
+      .get(`/feed/person/${id}`)
+      .then(({ data }) => {
+        setList(data);
+      })
+      .catch(() => {
+        alert("잠시 후 다시 시도해주세요.");
+        router.push("/");
+      });
   }, []);
+
+  function loadFeed() {
+    setPage(pages + 1);
+  }
 
   return (
     <>
@@ -39,31 +87,53 @@ export default function Profileperson() {
           <div className={styles.headeralign}>
             <Item.Group divided>
               <Item>
-                <Item.Image src="https://react.semantic-ui.com/images/wireframe/image.png" />
+                <Item.Image src={user.image} />
 
                 <Item.Content>
-                  <Item.Header as="a">{nickname}&nbsp;</Item.Header>
-                  <Icon name="lemon outline" />
-                  <span className="cinema">9day</span>
+                  <Item.Header>
+                    <span>{user.nickName}</span>
+                    <span> | </span>
+                    <Icon name="lemon outline" />
+                    <span className="cinema">### 썬인포인트 조회 불가 ###</span>
+                  </Item.Header>
                   <Item.Description>
-                    {/* {paragraph} */}
-                    {introduce}
+                    ### 소개문구 조회 불가 ###
                   </Item.Description>
                   <Item.Extra>
-                    <h1>어디?</h1>
+                    <Label>
+                      <Icon name="write" />
+                      <span>Feed {list.length}</span>
+                    </Label>
+                    <Label>
+                      <Icon name="sign-in" />
+                      <span>Follower {follower}</span>
+                    </Label>
+                    <Label>
+                      <Icon name="sign-out" />
+                      <span>Following {following}</span>
+                    </Label>
                   </Item.Extra>
-                  <span className="cinema">게시물수 9&nbsp;&nbsp;&nbsp;</span>
-                  <Icon name="user" /> followers 127&nbsp;&nbsp;
-                  <Icon name="user" /> following 219
                 </Item.Content>
               </Item>
             </Item.Group>
           </div>
           <Divider />
-          <ProfileList list={list} />
+          <InfiniteScroll
+            style={{ overflow: "hidden" }}
+            dataLength={list.length}
+            next={loadFeed}
+            hasMore={true}
+            loader={undefined}>
+            <FeedList list={list} />
+          </InfiniteScroll>
         </Grid.Column>
         <Grid.Column width={2} />
       </Grid>
     </>
   );
 }
+export async function getServerSideProps(context: any) {
+  const id = context.params.id;
+  return { props: { id } };
+}
+export default Profiles;

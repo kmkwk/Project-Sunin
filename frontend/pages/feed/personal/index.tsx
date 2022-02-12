@@ -8,7 +8,7 @@ import Menubar from "src/component/Menubar";
 import Navbar from "src/component/Navbar";
 import allAxios from "src/lib/allAxios";
 
-function Profiles() {
+function Personal() {
   const [list, setList]: any = useState([]);
   const [pages, setPage] = useState(0);
 
@@ -20,7 +20,7 @@ function Profiles() {
     allAxios
       .get(`/feed/latest`, {
         params: {
-          size: 9,
+          size: 20,
           page: pages,
         },
       })
@@ -54,9 +54,4 @@ function Profiles() {
   );
 }
 
-export async function getServerSideProps(context: any) {
-  const feedid = context.params.feedid;
-  return { props: { feedid } };
-}
-
-export default Profiles;
+export default Personal;

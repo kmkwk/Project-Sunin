@@ -4,7 +4,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.sunin.domain.Follower;
 import com.ssafy.sunin.domain.QFollower;
 import com.ssafy.sunin.domain.user.QUser;
-import com.ssafy.sunin.dto.follower.FollowerUser;
+import com.ssafy.sunin.payload.request.follower.FollowerUser;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.List;
@@ -40,21 +40,21 @@ public class FollowerRepositoryImpl implements FollowerRepositoryCustom {
     }
 
     @Override
-    public Long getFollowerCount(Long followerMember) {
+    public int getFollowerCount(Long followerMember) {
         return queryFactory
                 .select(qFollower.count())
                 .from(qFollower)
                 .where(qFollower.user.userSeq.eq(followerMember))
-                .fetch().get(0);
+                .fetch().get(0).intValue();
     }
 
     @Override
-    public Long getFollowingCount(Long followerMember) {
+    public int getFollowingCount(Long followerMember) {
         return queryFactory
                 .select(qFollower.count())
                 .from(qFollower)
                 .where(qFollower.followerMember.userSeq.eq(followerMember))
-                .fetch().get(0);
+                .fetch().get(0).intValue();
     }
 
     @Override

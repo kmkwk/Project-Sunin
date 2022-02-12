@@ -1,4 +1,4 @@
-package com.ssafy.sunin.dto.comment;
+package com.ssafy.sunin.payload.response.comment;
 
 import com.ssafy.sunin.domain.Comment;
 import com.ssafy.sunin.domain.user.User;

@@ -1,18 +1,15 @@
 package com.ssafy.sunin.controller;
 
-import com.ssafy.sunin.dto.follower.FollowerUser;
+import com.ssafy.sunin.payload.request.follower.FollowerUser;
 import com.ssafy.sunin.service.FollowerService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.DestinationVariable;
-import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 
 @RestController
@@ -50,14 +47,14 @@ public class FollowerController {
 
     @ApiOperation(value = "팔로워 수 조회", notes = "userId: 현재 로그인중인 유저 id, 팔로워 수 조회")
     @GetMapping("/follower/{userId}")
-    public ResponseEntity<Long> getFollowerCount(@PathVariable("userId") Long userId){
+    public ResponseEntity<Integer> getFollowerCount(@PathVariable("userId") Long userId){
         log.info("getFollwerCount");
         return ResponseEntity.ok(followerService.countFollower(userId));
     }
 
     @ApiOperation(value = "팔로잉 수 조회", notes = "userId: 현재 로그인중인 유저 id, 팔로잉 수 조회")
     @GetMapping("/following/{userId}")
-    public ResponseEntity<Long> getFollowingCount(@PathVariable("userId") Long userId){
+    public ResponseEntity<Integer> getFollowingCount(@PathVariable("userId") Long userId){
         log.info("getFollowingCount");
         return ResponseEntity.ok(followerService.countFollowing(userId));
     }

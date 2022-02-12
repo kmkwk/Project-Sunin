@@ -2,13 +2,14 @@ package com.ssafy.sunin.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;
-import com.amazonaws.transform.MapEntry;
 import com.ssafy.sunin.domain.Comment;
 import com.ssafy.sunin.domain.FeedCollections;
 import com.ssafy.sunin.domain.user.User;
-import com.ssafy.sunin.dto.comment.CommentDto;
-import com.ssafy.sunin.dto.feed.*;
-import com.ssafy.sunin.dto.user.UserProfile;
+import com.ssafy.sunin.payload.request.feed.*;
+import com.ssafy.sunin.payload.response.comment.CommentDto;
+import com.ssafy.sunin.payload.response.user.UserDetailProfile;
+import com.ssafy.sunin.payload.response.feed.FeedCommentDto;
+import com.ssafy.sunin.payload.response.feed.FeedDto;
 import com.ssafy.sunin.repository.FeedRepository;
 import com.ssafy.sunin.repository.FollowerRepository;
 import com.ssafy.sunin.repository.UserRepository;
@@ -310,18 +311,23 @@ public class FeedServiceImpl implements FeedService {
     }
 
     @Override
-    public List<UserProfile> getLikeUserList(String id) {
+    public List<UserDetailProfile> getLikeUserList(String id) {
         FeedCollections feedCollections = feedRepository.findByIdAndFlagTrue(new ObjectId(id));
         Set<Long> list = feedCollections.getLikeUser().keySet();
 
         return userRepository.findFollowerSetByUserSeqIn(list)
                 .stream()
-                .map(user -> UserProfile.builder()
+                .map(user -> UserDetailProfile.builder()
                         .id(user.getUserSeq())
                         .nickName(user.getUserNickname())
                         .image(user.getProfileImageUrl())
                         .build()).collect(Collectors.toList());
 
+    }
+
+    @Override
+    public Long feedCount(Long userId) {
+        return feedRepository.getFeedCount(userId);
     }
 
     private String createFileName(String fileName) {

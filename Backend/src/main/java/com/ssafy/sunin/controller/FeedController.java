@@ -1,7 +1,9 @@
 package com.ssafy.sunin.controller;
 
-import com.ssafy.sunin.dto.feed.*;
-import com.ssafy.sunin.dto.user.UserProfile;
+import com.ssafy.sunin.payload.response.user.UserDetailProfile;
+import com.ssafy.sunin.payload.request.feed.*;
+import com.ssafy.sunin.payload.response.feed.FeedCommentDto;
+import com.ssafy.sunin.payload.response.feed.FeedDto;
 import com.ssafy.sunin.service.FeedServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -12,7 +14,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
@@ -145,7 +146,7 @@ public class FeedController {
 
     @ApiOperation(value = "게시글의 좋아요를 누른 유저들의 프로필, 피드 id")
     @GetMapping("/likeUser/{id}")
-    public ResponseEntity<List<UserProfile>> getLikeUserList(@PathVariable("id") String id){
+    public ResponseEntity<List<UserDetailProfile>> getLikeUserList(@PathVariable("id") String id){
         log.info("likeUserList");
 
         return ResponseEntity.ok(feedService.getLikeUserList(id));

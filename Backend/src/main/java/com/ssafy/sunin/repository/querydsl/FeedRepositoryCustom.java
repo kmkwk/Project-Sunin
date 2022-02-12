@@ -10,4 +10,6 @@ public interface FeedRepositoryCustom {
     List<FeedCollections> getFollowerLikeFeed(List<Long> followList);
 
     List<FeedCollections> getPersonalFeed(Long userId);
+
+    Long getFeedCount(Long userId);
 }

@@ -1,6 +1,6 @@
 package com.ssafy.sunin.service;
 
-import com.ssafy.sunin.dto.follower.FollowerUser;
+import com.ssafy.sunin.payload.request.follower.FollowerUser;
 
 public interface FollowerService {
 
@@ -8,7 +8,7 @@ public interface FollowerService {
 
     void deleteFollower(FollowerUser followerUser);
 
-    Long countFollower(Long userId);
+    int countFollower(Long userId);
 
-    Long countFollowing(Long followerMember);
+    int countFollowing(Long followerMember);
 }

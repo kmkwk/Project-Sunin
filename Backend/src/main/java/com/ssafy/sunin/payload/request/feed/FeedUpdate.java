@@ -1,4 +1,4 @@
-package com.ssafy.sunin.dto.feed;
+package com.ssafy.sunin.payload.request.feed;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,10 +9,12 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor
-public class FeedFile {
+public class FeedUpdate {
     @NotBlank
     private String id;
-    private List<MultipartFile> files;
+    private String content;
     @NotNull
     private Long userId;
+    private List<String> hashtags;
+    private List<MultipartFile> files;
 }

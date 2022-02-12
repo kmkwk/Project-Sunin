@@ -2,6 +2,7 @@ package com.ssafy.sunin.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;
+import com.amazonaws.transform.MapEntry;
 import com.ssafy.sunin.domain.Comment;
 import com.ssafy.sunin.domain.FeedCollections;
 import com.ssafy.sunin.domain.user.User;
@@ -24,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.Map.Entry;
 
 @Service
 @RequiredArgsConstructor
@@ -140,6 +142,7 @@ public class FeedServiceImpl implements FeedService {
         // 댓글쓴 사람 프로필정보까지 같이 보내줘야함
         // 우선 댓글에 대한 전체 정보를 가져와서
         List<Sort.Order> orders = new ArrayList<>();
+        orders.add(new Sort.Order(Sort.Direction.ASC, "writeDate"));
         orders.add(new Sort.Order(Sort.Direction.ASC, "group"));
         orders.add(new Sort.Order(Sort.Direction.ASC, "order"));
         // 해당 피드의 전체 댓글
@@ -171,7 +174,18 @@ public class FeedServiceImpl implements FeedService {
             commentMap.put(commentKey.get(i),comments.get(i));
         }
 
-        return FeedCommentDto.feedCommentDto(feedCollections, user, commentMap);
+        // 댓글 최신순 정렬
+        List<Entry<Object,CommentDto>> entryList = new ArrayList<Entry<Object,CommentDto>>(commentMap.entrySet());
+        entryList.sort(
+                Comparator.comparing(o -> o.getValue().getWriteDate())
+        );
+
+        LinkedHashMap<Object,CommentDto> linkedHashMap = new LinkedHashMap<>();
+        for (int i = 0; i < entryList.size(); i++) {
+            linkedHashMap.put(entryList.get(i).getKey(),entryList.get(i).getValue());
+        }
+
+        return FeedCommentDto.feedCommentDto(feedCollections, user, linkedHashMap);
     }
 
     @Override

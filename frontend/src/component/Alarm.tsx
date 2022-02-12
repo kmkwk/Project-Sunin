@@ -51,22 +51,27 @@ export default function Alarm(){
     );
   }
   
-  function send() {
+  const messages = FromUserId+"님이 팔로워를 요청하셨습니다.";
 
-    stompClient.send(`/app/send/`+ toUserId+`/`+FromUserId)
+  function send() {
+    stompClient.send(`/app/send/`+ toUserId+`/`+messages)
   }
 
-  // useEffect(() => {
-  //     axios
-  //     // 메시지를 받아야함
-  //     .get(`http://localhost:8080/follower/follower/`+ userId,{})
-  //     .then(({ data }) => {
-  //       console.log(data);
-  //     })
-  //     .catch((e: any) => {
-  //       console.log(e)
-  //     });
-  // }, [])
+  const userId = 1;
+  
+  useEffect(() => {
+      axios
+      // 메시지를 받아야함
+      .get(`http://localhost:8080/follower/follower/`+ userId,{})
+      .then(({ data }) => {
+        console.log(data);
+        connect();
+        send()
+      })
+      .catch((e: any) => {
+        console.log(e)
+      });
+  }, [])
 
 
   return (

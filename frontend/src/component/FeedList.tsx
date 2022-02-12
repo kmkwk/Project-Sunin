@@ -7,8 +7,6 @@ export default function FeedList({ list }: any) {
     return list.length;
   }
 
-  console.log(list);
-
   return (
     <>
       <Grid columns={3} stackable container>
@@ -45,16 +43,11 @@ export default function FeedList({ list }: any) {
                       </span>
                     </Card.Content>
                   </Card>
-                  {/* <a>
-                  <Image src={item.filePath[0]} alt={item.filePath[0]} />
-                  <p className="content">{item.content}</p>
-                </a> */}
                 </Link>
               </Grid.Column>
             ))}
         </Grid.Row>
       </Grid>
-      <style jsx>{``}</style>
     </>
   );
 }

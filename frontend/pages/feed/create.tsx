@@ -100,8 +100,8 @@ export default function Createfeed() {
     event.preventDefault(); // 새로고침 방지
 
     const body = new FormData();
-    // body.append("userId", user.userSeq);
-    body.append("userId", JSON.stringify(1));
+    body.append("userId", user.userSeq);
+    // body.append("userId", JSON.stringify(1));
     body.append("content", feed.content);
 
     if (feed.filePath != null) {

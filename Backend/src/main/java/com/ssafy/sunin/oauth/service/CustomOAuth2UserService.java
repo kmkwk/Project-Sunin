@@ -71,7 +71,10 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 providerType,
                 RoleType.USER,
                 now,
-                now
+                now,
+                null,
+                null,
+                null
         );
 
         return userRepository.saveAndFlush(user);

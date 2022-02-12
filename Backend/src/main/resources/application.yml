@@ -12,7 +12,6 @@ spring:
       database: sunin
       port: 27017
       host: i6c210.p.ssafy.io
-#      host: ENC(x54Z/RMv0aYokEUfW0+mOdpgecI+OhzDdyzMs/NfCSo=)
   security:
     user:
       name: ssafy
@@ -21,9 +20,6 @@ spring:
     url: jdbc:mysql://i6c210.p.ssafy.io:3306/sunin?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
     username: sunin
     password: BUKQ@3rbfM=+NY7sGmP^
-#    url: ENC(h6GhLeNvPovQfkwMIbE0x98SXLCYBULtr4S+7RZOpqqIT19mkQyqlP8lDsDUsGDWDfEIyzsQtrCArwdh0Z79mREhfifkh1aFfTVL0U1b2/wz00eu53ckxJ1nXwNDxFr2xn7odOivU6oVrhTPPuMKRQ==)
-#    username: ENC(RIW2UG6R+uYROI4oUti9LQ==)
-#    password: ENC(0IVp60LFwUrgeykAO6jlqP0iqw3iISMT6wHu/m8y+Yg=)
   jpa:
     hibernate:
       ddl-auto: none # 유의해주세요!!
@@ -39,6 +35,8 @@ spring:
       - oauth
       - aws
       - credentials
+  jackson:
+    property-naming-strategy: SNAKE_CASE
 
 #logging:
 #  level.org.springframework: debug
@@ -56,7 +54,6 @@ jwt:
   secret: c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK
 #  secret: ENC(jGKmciAnyrtj+Ht6hzsC7fHv9R67FxH38qJdsn+km/fYNaz/xxzfpB90la/9tlAXubj7mKZvbqmaC98Th/3xeA4SWIYTo++VzTnqZxOZbrwOCf3m2qn5YXo6EbgFH02G)
 
-
 # jasypt
 jasypt:
   encryptor:
@@ -64,12 +61,10 @@ jasypt:
     password : ssafy
 #    password : ENC(QxiQKa7GkBsypVEVvAqpVQ==)
 
-
 # 토큰 관련 secret Key 및 RedirectUri 설정
 app:
   auth:
     tokenSecret: 926D96C90030DD58429D2751AC1BDBBC
-#    tokenSecret: ENC(W+k8TONZjyX5PNcQ2hTeWfPhcCKH+HyimkpOv0bJ7AJmmF8CVOgmZGjoCI4v5MG8)
     tokenExpiry: 1800000
     refreshTokenExpiry: 604800000
   oauth2:

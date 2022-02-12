@@ -1,17 +1,17 @@
-package com.ssafy.sunin.dto.feed;
+package com.ssafy.sunin.payload.request.comment;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
-public class FileUpdate {
+public class CommentWrite {
     @NotBlank
-    private String id;
-    private List<String> files;
+    private String feedId;
     @NotNull
-    private Long userId;
+    private Long writer;
+    private String content;
 }

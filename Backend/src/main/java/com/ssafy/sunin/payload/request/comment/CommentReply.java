@@ -1,4 +1,4 @@
-package com.ssafy.sunin.dto.comment;
+package com.ssafy.sunin.payload.request.comment;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 
 @Data
 @AllArgsConstructor
-public class CommentUpdate {
+public class CommentReply {
     @NotBlank
     private String feedId;
     @NotBlank

@@ -1,4 +1,4 @@
-package com.ssafy.sunin.dto.comment;
+package com.ssafy.sunin.payload.response.comment;
 
 import lombok.Builder;
 import lombok.Data;

@@ -2,7 +2,8 @@ package com.ssafy.sunin.controller;
 
 import com.ssafy.sunin.domain.Comment;
 import com.ssafy.sunin.domain.FeedCollections;
-import com.ssafy.sunin.dto.comment.*;
+import com.ssafy.sunin.payload.request.comment.*;
+import com.ssafy.sunin.payload.response.comment.CommentProfile;
 import com.ssafy.sunin.service.CommentService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -126,7 +127,7 @@ public class CommentController {
     @ApiOperation(value = "댓글의 좋아요를 누른 유저들의 프로필, 피드 id")
     @GetMapping("/likeUser/{feedId}/{commentId}")
     public ResponseEntity<List<CommentProfile>> getLikeUserList(@PathVariable("feedId") String feedId,
-                                                             @PathVariable("commentId") String commentId){
+                                                                @PathVariable("commentId") String commentId){
         log.info("likeUserList");
         return ResponseEntity.ok(commentService.getLikeUserList(feedId,commentId));
     }

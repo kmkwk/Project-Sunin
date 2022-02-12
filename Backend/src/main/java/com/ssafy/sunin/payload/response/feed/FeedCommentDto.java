@@ -1,8 +1,8 @@
-package com.ssafy.sunin.dto.feed;
+package com.ssafy.sunin.payload.response.feed;
 
 import com.ssafy.sunin.domain.FeedCollections;
 import com.ssafy.sunin.domain.user.User;
-import com.ssafy.sunin.dto.comment.CommentDto;
+import com.ssafy.sunin.payload.response.comment.CommentDto;
 import lombok.*;
 import java.time.LocalDateTime;
 import java.util.List;

@@ -1,8 +1,8 @@
 package com.ssafy.sunin.domain;
 
 import com.ssafy.sunin.domain.user.User;
-import com.ssafy.sunin.dto.comment.CommentReply;
-import com.ssafy.sunin.dto.comment.CommentWrite;
+import com.ssafy.sunin.payload.request.comment.CommentReply;
+import com.ssafy.sunin.payload.request.comment.CommentWrite;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;

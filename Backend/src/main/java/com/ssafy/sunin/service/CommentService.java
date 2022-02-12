@@ -2,7 +2,8 @@ package com.ssafy.sunin.service;
 
 import com.ssafy.sunin.domain.Comment;
 import com.ssafy.sunin.domain.FeedCollections;
-import com.ssafy.sunin.dto.comment.*;
+import com.ssafy.sunin.payload.request.comment.*;
+import com.ssafy.sunin.payload.response.comment.CommentProfile;
 import com.ssafy.sunin.repository.FeedRepository;
 import com.ssafy.sunin.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +12,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
-
 import java.util.*;
 import java.util.stream.Collectors;
 

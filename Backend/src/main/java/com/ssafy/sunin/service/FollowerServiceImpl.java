@@ -2,7 +2,7 @@ package com.ssafy.sunin.service;
 
 import com.ssafy.sunin.domain.Follower;
 import com.ssafy.sunin.domain.user.User;
-import com.ssafy.sunin.dto.follower.FollowerUser;
+import com.ssafy.sunin.payload.request.follower.FollowerUser;
 import com.ssafy.sunin.repository.FollowerRepository;
 import com.ssafy.sunin.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -44,12 +44,12 @@ public class FollowerServiceImpl implements FollowerService{
     }
 
     @Override
-    public Long countFollower(Long userId) {
+    public int countFollower(Long userId) {
         return followerRepository.getFollowerCount(userId);
     }
 
     @Override
-    public Long countFollowing(Long followerMember) {
+    public int countFollowing(Long followerMember) {
         return followerRepository.getFollowingCount(followerMember);
     }
 }

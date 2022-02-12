@@ -1,7 +1,7 @@
 package com.ssafy.sunin.repository.querydsl;
 
 import com.ssafy.sunin.domain.Follower;
-import com.ssafy.sunin.dto.follower.FollowerUser;
+import com.ssafy.sunin.payload.request.follower.FollowerUser;
 import java.util.List;
 
 public interface FollowerRepositoryCustom {
@@ -10,9 +10,9 @@ public interface FollowerRepositoryCustom {
 
     List<Long> getFollowingList(Long userId);
 
-    Long getFollowerCount(Long id);
+    int getFollowerCount(Long id);
 
-    Long getFollowingCount(Long followerMember);
+    int getFollowingCount(Long followerMember);
 
     Follower getUser(FollowerUser followerUser);
 }

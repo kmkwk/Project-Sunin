@@ -1,7 +1,7 @@
 package com.ssafy.sunin.domain;
 
-import com.ssafy.sunin.dto.feed.FeedUpdate;
-import com.ssafy.sunin.dto.feed.FeedWrite;
+import com.ssafy.sunin.payload.request.feed.FeedUpdate;
+import com.ssafy.sunin.payload.request.feed.FeedWrite;
 import io.swagger.annotations.ApiModel;
 import lombok.*;
 import org.bson.types.ObjectId;

@@ -1,4 +1,4 @@
-package com.ssafy.sunin.dto.feed;
+package com.ssafy.sunin.payload.response.feed;
 
 import com.ssafy.sunin.domain.Comment;
 import com.ssafy.sunin.domain.FeedCollections;

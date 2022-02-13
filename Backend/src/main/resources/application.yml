@@ -6,9 +6,9 @@ spring:
     name: oauth2
   data:
     mongodb:
-      # authentication-database: admin
-      # username: sunin
-      # password: BUKQ@3rbfM=+NY7sGmP^
+      authentication-database: admin
+      username: sunin
+      password: BUKQ@3rbfM=+NY7sGmP^
       database: sunin
       port: 27017
       host: i6c210.p.ssafy.io
@@ -58,7 +58,7 @@ jwt:
 jasypt:
   encryptor:
     bean: jasyptStringEncryptor
-    password : ssafy
+    password: ssafy
 #    password : ENC(QxiQKa7GkBsypVEVvAqpVQ==)
 
 # 토큰 관련 secret Key 및 RedirectUri 설정

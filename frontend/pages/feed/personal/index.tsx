@@ -45,7 +45,7 @@ function Personal() {
             next={loadFeed}
             hasMore={true}
             loader={undefined}>
-            <FeedList list={list} />
+            {list && <FeedList list={list} />}
           </InfiniteScroll>
         </Grid.Column>
         <Grid.Column width={2} />

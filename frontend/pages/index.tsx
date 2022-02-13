@@ -36,10 +36,11 @@ const Home: NextPage = () => {
       .get(`/feed/latest`, {
         params: {
           size: 3,
+          page: 1,
         },
       })
       .then(({ data }) => {
-        setList([])
+        setList([]);
         setList([...list, ...data]);
       });
   }

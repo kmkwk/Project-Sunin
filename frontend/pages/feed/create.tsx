@@ -16,15 +16,10 @@ import userAxios from "src/lib/userAxios";
 import User from "src/class/User";
 import FeedWrite from "src/class/FeedWrite";
 
-// import Swiper core and required modules
-// import { Swiper, SwiperSlide } from 'swiper/react';
-// import SwiperCore, { Navigation, Pagination, Autoplay } from "swiper";
-
-// Import Swiper styles
-
-import "swiper/components/navigation/navigation.min.css";
-import "swiper/components/pagination/pagination.min.css";
-import "swiper/swiper.min.css";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "swiper/css/scrollbar";
 
 export default function Createfeed() {
   const router = useRouter();
@@ -41,6 +36,7 @@ export default function Createfeed() {
       .get(`/api/v1/users`)
       .then(({ data }) => {
         setUser(new User(data.body.user));
+        console.log(data);
       })
       .catch(() => {
         alert("잘못된 접근입니다.");

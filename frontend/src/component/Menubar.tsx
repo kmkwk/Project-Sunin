@@ -5,6 +5,7 @@ import IsLogin from '../lib/customIsLogin'
 import { useEffect, useState } from 'react'
 import userAxios from 'src/lib/userAxios'
 import { useRouter } from 'next/router';
+import ChatModal from './chat/chatModal'
 
 
 export default function Menuvar(){
@@ -114,15 +115,17 @@ export default function Menuvar(){
         <Menu.Item
           name='personal'
         >
-          <Header as='h4'><Link href="/feed/personal"><a>개인</a></Link></Header>
+          <Header as='h4'><Link href="/feed/personal"><a>피드</a></Link></Header>
         </Menu.Item>
-
+        
+        {userInfo?
         <Menu.Item
-          name='company'
-        >
-          <Header as='h4'><Link href="/feed/company"><a>기업</a></Link></Header>
-        </Menu.Item>
-
+        name='company'
+      >
+        <Header as='h4'><Link href={`/profile/${userInfo['userSeq']}`}><a>프로필</a></Link></Header>
+      </Menu.Item>
+        :""}
+        
         <Menu.Item
           name='rank'
         >
@@ -141,6 +144,7 @@ export default function Menuvar(){
         name='chat'
       >
         <Header as='h4'>채팅</Header>
+        <ChatModal />
       </Menu.Item>
         :''} 
         </Menu>

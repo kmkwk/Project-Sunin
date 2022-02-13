@@ -1,15 +1,12 @@
-
-let isLogin = false
+let isLogin = false;
 
 if (typeof window !== "undefined") {
-  const token = localStorage.getItem('token')
-  if (token){
-    isLogin = true
-  } else {
-    isLogin = false
-  }
+  const token = localStorage.getItem("token");
+
+  if (!token || token == "undefined") isLogin = false;
+  else isLogin = true;
 }
 
-const IsLogin = isLogin
+const IsLogin = isLogin;
 
-export default IsLogin
+export default IsLogin;

@@ -1,14 +1,14 @@
-import type { NextPage } from 'next'
+import type { NextPage } from "next";
 // import Head from 'next/head'
 // import Image from 'next/image'
-import Menuvar from '../src/component/Menubar'
-import Navbar from '../src/component/Navbar'
+import Menuvar from "../src/component/Menubar";
+import Navbar from "../src/component/Navbar";
 // import styles from '../styles/Home.module.css'
-import { Grid, Header } from 'semantic-ui-react'
-import Axios from "axios"
-import { useEffect, useState } from 'react';
-import SampleFeedList from '../src/component/SampleFeedList'
-import allAxios from 'src/lib/allAxios'
+import { Grid, Header } from "semantic-ui-react";
+import Axios from "axios";
+import { useEffect, useState } from "react";
+import SampleFeedList from "../src/component/SampleFeedList";
+import allAxios from "src/lib/allAxios";
 // import Searchbar from '../src/component/Searchbar'
 
 const Home: NextPage = () => {
@@ -48,24 +48,24 @@ const Home: NextPage = () => {
       <Navbar />
       {/* <Searchbar /> */}
       <Grid columns={4} padded stackable>
-      <Grid.Column>
-        <Menuvar />
-      </Grid.Column>
-      <Grid.Column textAlign='center'>
-        <Header as='h1'>Flower</Header>
-        <SampleFeedList list={list} />
-      </Grid.Column>
-      <Grid.Column textAlign='center'>
-        <Header as='h1'>Flowing</Header>
-        <SampleFeedList list={list} />
-      </Grid.Column>
-      <Grid.Column textAlign='center'>
-        <Header as='h1'>Personal</Header>
-        <SampleFeedList list={list} />
-      </Grid.Column>
-    </Grid>
+        <Grid.Column>
+          <Menuvar />
+        </Grid.Column>
+        <Grid.Column textAlign="center">
+          <Header as="h1">Flower</Header>
+          <SampleFeedList list={list} />
+        </Grid.Column>
+        <Grid.Column textAlign="center">
+          <Header as="h1">Flowing</Header>
+          <SampleFeedList list={list} />
+        </Grid.Column>
+        <Grid.Column textAlign="center">
+          <Header as="h1">Personal</Header>
+          <SampleFeedList list={list} />
+        </Grid.Column>
+      </Grid>
     </>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

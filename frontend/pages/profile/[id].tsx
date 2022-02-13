@@ -7,7 +7,7 @@ import styles from "styles/signup.module.css";
 import allAxios from "src/lib/allAxios";
 import { useRouter } from "next/router";
 import InfiniteScroll from "react-infinite-scroll-component";
-import FeedList from "src/component/FeedList";
+import FeedList from "src/component/feed/FeedList";
 
 function Profiles({ id }: any) {
   const router = useRouter();
@@ -41,35 +41,17 @@ function Profiles({ id }: any) {
         router.push("/");
       });
 
-    allAxios
-      .get(`/follower/follower/${id}`)
-      .then(({ data }) => {
-        setFollower(data);
-      })
-      .catch(() => {
-        alert("잠시 후 다시 시도해주세요.");
-        router.push("/");
-      });
+    allAxios.get(`/follower/follower/${id}`).then(({ data }) => {
+      setFollower(data);
+    });
 
-    allAxios
-      .get(`/follower/following/${id}`)
-      .then(({ data }) => {
-        setFollowing(data);
-      })
-      .catch(() => {
-        alert("잠시 후 다시 시도해주세요.");
-        router.push("/");
-      });
+    allAxios.get(`/follower/following/${id}`).then(({ data }) => {
+      setFollowing(data);
+    });
 
-    allAxios
-      .get(`/feed/person/${id}`)
-      .then(({ data }) => {
-        setList(data);
-      })
-      .catch(() => {
-        alert("잠시 후 다시 시도해주세요.");
-        router.push("/");
-      });
+    allAxios.get(`/feed/person/${id}`).then(({ data }) => {
+      setList(data);
+    });
   }, []);
 
   function loadFeed() {

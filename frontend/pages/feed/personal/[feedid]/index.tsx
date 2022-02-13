@@ -8,6 +8,7 @@ import {
   Header,
   Modal,
   Button,
+  Label,
 } from "semantic-ui-react";
 
 import Navbar from "src/component/Navbar";
@@ -43,7 +44,7 @@ function Detail({ feedid }: any) {
     content: "", // 내용
     filePath: [], // 이미지, 동영상
     hashtags: [], // 해시태그
-    likes: "", // 좋아요 수
+    likes: 0, // 좋아요 수
     likeUser: [], // 좋아요 누른사람
     comments: {},
     createdDate: "", // 작성일
@@ -84,6 +85,21 @@ function Detail({ feedid }: any) {
     );
   };
 
+  const likeFeed = () => {
+    const body = new FormData();
+    body.append("id", feed.feedId);
+    body.append("userId", user.userSeq);
+
+    userAxios
+      .put(`/feed/addLike`, body)
+      .then(() => {
+        router.reload();
+      })
+      .catch(() => {
+        alert("잠시 후 다시 시도해주세요.");
+      });
+  };
+
   return (
     <>
       <Navbar />
@@ -93,43 +109,23 @@ function Detail({ feedid }: any) {
             <Menubar />
           </Grid.Column>
           <Grid.Column width={5}>
-            {/* <Modal
-              onClose={() => setOpen(false)}
-              onOpen={() => setOpen(true)}
-              open={open}
-              trigger={
-                <Image
-                  src={feed.filePath[0]}
-                  alt={feed.filePath[0]}
-                  width="200px"
-                />
-              }>
-              <Modal.Header>{showNickname(feed.userInfo)}</Modal.Header>
-              <Modal.Content image>
-                <Image
-                  size="big"
-                  src={feed.filePath[0]}
-                  alt={feed.filePath[0]}
-                />
-                <Modal.Description>
-                  <Header></Header>
-                  <p>#tag</p>
-                </Modal.Description>
-              </Modal.Content>
-              <Modal.Actions>
-                <Button color="black" onClick={() => setOpen(false)}>
-                  닫기
-                </Button>
-              </Modal.Actions>
-            </Modal> */}
             <SwiperMedia media={feed.filePath} />
           </Grid.Column>
           <Grid.Column width={8}>
             <Container>
               <Header as="h2">{showNickname(feed.userInfo)}</Header>
-              <Icon name="user" />4 followers
-              <Icon name="like" />
-              {feed.likes} like
+              <Label onClick={likeFeed}>
+                <Icon name="like" />
+                <span>Like {feed.likes == 0 ? 0 : feed.likes}</span>
+              </Label>
+              <Label>
+                <Icon name="sign-in" />
+                <span>Follower ###</span>
+              </Label>
+              <Label>
+                <Icon name="sign-out" />
+                <span>Following ###</span>
+              </Label>
             </Container>
             <br />
             <Container>

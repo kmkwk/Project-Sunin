@@ -24,19 +24,17 @@ import "swiper/css/scrollbar";
 export default function Createfeed() {
   const router = useRouter();
 
-  const [feed, setFeed]: any = useState({});
-  const [user, setUser]: any = useState({});
+  const [feed, setFeed]: any = useState(new FeedWrite());
+  const [user, setUser]: any = useState();
 
   const [attachment, setAttachment] = useState();
   const [createObjectURL, setCreateObjectURL] = useState(null);
 
   useEffect(() => {
-    setFeed(new FeedWrite());
     userAxios
       .get(`/api/v1/users`)
       .then(({ data }) => {
-        setUser(new User(data.body.user));
-        console.log(data);
+        setUser(data.body.user);
       })
       .catch(() => {
         alert("잘못된 접근입니다.");
@@ -64,7 +62,7 @@ export default function Createfeed() {
     }
   };
 
-  const onRemove = (event: any, data: any) => {
+  const onRemove = (e: any, data: any) => {
     const index = feed.hashtags.indexOf(data.content);
     feed.hashtags.splice(index, 1);
     const result = feed.hashtags.filter((word: any) => word != data.content);
@@ -93,12 +91,10 @@ export default function Createfeed() {
     }
   };
 
-  const handleSubmit = (event: any) => {
-    event.preventDefault(); // 새로고침 방지
-
+  const handleSubmit = (e: any) => {
+    e.preventDefault(); // 새로고침 방지
     const body = new FormData();
-    body.append("userId", user.userSeq);
-    // body.append("userId", JSON.stringify(1));
+    body.append("userId", user.user_seq);
     body.append("content", feed.content);
 
     if (feed.filePath != null) {
@@ -111,10 +107,8 @@ export default function Createfeed() {
       body.append("hashtags", each);
     });
 
-    console.log(feed); // ##### 디버그 #####
-
     userAxios
-      .post(`/feed`, body, {
+      .post("/feed", body, {
         headers: { "Content-Type": "multipart/form-data" },
       })
       .then(() => {

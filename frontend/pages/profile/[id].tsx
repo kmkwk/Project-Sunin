@@ -14,12 +14,14 @@ function Profiles({ id }: any) {
 
   // 프로필 유저
   const [user, setUser] = useState({
+    intro: "",
+    feedCount: 0,
+    follower: 0,
+    following: 0,
     image: "",
     nickName: "",
+    sunin: 0,
   });
-
-  const [follower, setFollower] = useState(-1);
-  const [following, setFollowing] = useState(-1);
 
   // 프로필 유저 피드
   const [list, setList]: any = useState([]);
@@ -30,24 +32,21 @@ function Profiles({ id }: any) {
     allAxios
       .get(`/api/v1/users/profile/${id}`)
       .then(({ data }) => {
+        console.log(data);
         setUser({
-          ...user,
+          intro: data.introduction,
+          feedCount: data.feed_count,
+          follower: data.follwer_count,
+          following: data.follwing_count,
           image: data.image,
-          nickName: data.nickName,
+          nickName: data.nick_name,
+          sunin: data.sunin_days,
         });
       })
       .catch(() => {
         alert("잠시 후 다시 시도해주세요.");
         router.push("/");
       });
-
-    allAxios.get(`/follower/follower/${id}`).then(({ data }) => {
-      setFollower(data);
-    });
-
-    allAxios.get(`/follower/following/${id}`).then(({ data }) => {
-      setFollowing(data);
-    });
 
     allAxios.get(`/feed/person/${id}`).then(({ data }) => {
       setList(data);
@@ -76,23 +75,23 @@ function Profiles({ id }: any) {
                     <span>{user.nickName}</span>
                     <span> | </span>
                     <Icon name="lemon outline" />
-                    <span className="cinema">### 썬인포인트 조회 불가 ###</span>
+                    <span className="cinema">{user.sunin}</span>
                   </Item.Header>
                   <Item.Description>
-                    ### 소개문구 조회 불가 ###
+                    <span>{user.intro}</span>
                   </Item.Description>
                   <Item.Extra>
                     <Label>
                       <Icon name="write" />
-                      <span>Feed {list.length}</span>
+                      <span>Feed {user.feedCount}</span>
                     </Label>
                     <Label>
                       <Icon name="sign-in" />
-                      <span>Follower {follower}</span>
+                      <span>Follower {user.follower}</span>
                     </Label>
                     <Label>
                       <Icon name="sign-out" />
-                      <span>Following {following}</span>
+                      <span>Following {user.following}</span>
                     </Label>
                   </Item.Extra>
                 </Item.Content>

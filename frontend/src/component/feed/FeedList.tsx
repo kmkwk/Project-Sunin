@@ -7,26 +7,28 @@ export default function FeedList({ list }: any) {
     return list.length;
   }
 
-  console.log(list);
-
   return (
     <>
-      <Grid columns={3} stackable container>
+      <Grid columns={1} stackable>
         <Grid.Row>
           {list &&
             list.map((item: any) => (
               <Grid.Column key={item.id}>
+                <br />
                 <Link href={`/feed/personal/${item.id}`}>
-                  <Card>
-                    <Image
-                      src={
-                        item.file_path[0]
-                          ? item.file_path[0]
-                          : "/images/로고.png"
-                      }
-                      alt={item.file_path[0]}
-                      height="300px"
-                    />
+                  <Card fluid>
+                    {item.file_path[0] && (
+                      <Image
+                        src={
+                          item.file_path[0]
+                            ? item.file_path[0]
+                            : "/images/로고.png"
+                        }
+                        alt={item.file_path[0]}
+                        height="500px"
+                      />
+                    )}
+
                     <Card.Content>
                       <Image
                         floated="left"
@@ -57,6 +59,7 @@ export default function FeedList({ list }: any) {
                         <Icon name="comments" color="blue" />
                       </span>
                     </Card.Content>
+                    <br />
                   </Card>
                 </Link>
               </Grid.Column>

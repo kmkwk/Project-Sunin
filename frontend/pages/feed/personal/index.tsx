@@ -7,6 +7,7 @@ import FeedList from "src/component/feed/FeedList";
 import Menubar from "src/component/Menubar";
 import Navbar from "src/component/Navbar";
 import allAxios from "src/lib/allAxios";
+import userAxios from "src/lib/userAxios";
 
 function Personal() {
   const [list, setList]: any = useState([]);
@@ -20,7 +21,7 @@ function Personal() {
     allAxios
       .get(`/feed/latest`, {
         params: {
-          size: 20,
+          size: 2,
           page: pages,
         },
       })
@@ -33,7 +34,7 @@ function Personal() {
   return (
     <>
       <Navbar />
-      <Grid columns={2} padded stackable>
+      <Grid padded stackable>
         <Grid.Column width={4}>
           <Menubar />
         </Grid.Column>

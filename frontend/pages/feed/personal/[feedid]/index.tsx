@@ -3,10 +3,8 @@ import React, { useEffect, useState } from "react";
 import {
   Icon,
   Grid,
-  Image,
   Container,
   Header,
-  Modal,
   Button,
   Label,
 } from "semantic-ui-react";
@@ -24,21 +22,10 @@ function Detail({ feedid }: any) {
   const router = useRouter();
 
   // 로그인 유저 정보
-  const [user, setUser]: any = useState({
-    userSeq: 0, // 기본키
-    userId: "", // 아이디
-    username: "", // 이름
-    email: "", // 이메일
-    follower: [], // 팔로워
-    userNickname: "", // 닉네임
-    profileImageUrl: "", // 프로필사진
-    providerType: "", // 제공자(GOOGLE, KAKAO, NAVER)
-    roleType: "", // ENUM("ADMIN", "USER")
-    suninDays: 0, // 적립된 선인
-  });
+  const [user, setUser]: any = useState(new User());
 
   // 피드 정보
-  const [feed, setFeed] = useState({
+  const [feed, setFeed]: any = useState({
     feedId: "", // 피드ID
     userInfo: {}, // 작성자
     content: "", // 내용
@@ -53,9 +40,9 @@ function Detail({ feedid }: any) {
 
   useEffect(() => {
     userAxios
-      .get(`/api/v1/users`)
+      .get("/api/v1/users")
       .then(({ data }) => {
-        setUser(new User(data.body.user));
+        setUser(data.body.user);
       })
       .catch(() => {});
 
@@ -69,8 +56,6 @@ function Detail({ feedid }: any) {
         router.push("/feed/personal");
       });
   }, []);
-
-  const [open, setOpen] = React.useState(false);
 
   function backToList() {
     return router.push("/feed/personal");

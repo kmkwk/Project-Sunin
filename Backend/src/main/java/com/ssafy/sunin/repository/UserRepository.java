@@ -23,4 +23,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findFollowerSetByUserSeqIn(Set<Long> userId);
 
     List<User> findTop100AllBy(Sort sort);
+
 }

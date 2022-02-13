@@ -26,7 +26,10 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         // 클라이언트가 메시지를 받는 경우
+        // 해당 경로로 SimpleBroker를 등록.
+        // SimpleBroker는 해당하는 경로를 SUBSCRIBE하는 Client에게 메세지를 전달하는 간단한 작업을 수행
         registry.enableSimpleBroker("/sub");
+        // SimpleBroker의 기능과 외부 Message Broker( RabbitMQ, ActiveMQ 등 )에 메세지를 전달하는 기능을 가짐
         registry.setApplicationDestinationPrefixes("/app");
     }
 }

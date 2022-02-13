@@ -12,6 +12,7 @@ export default function Alarm(){
 
   const [open, setOpen] = useState(false)
 
+  const token = localStorage.getItem("token");
 
   function handleClick() {
     setOpen(true)
@@ -28,19 +29,23 @@ export default function Alarm(){
     connect()
   })
   
-  
+
   const socket = new SockJS('http://localhost:8080/stomp');
   const stompClient = Stomp.over(socket);
 
 
   function connect() {
+    const userIds = localStorage.getItem("userId");
     stompClient.connect(
       {},
       (frame: any) => {
         // 소켓 연결 성공
         stompClient.connected = true;
         console.log("소켓 연결 성공", frame);
-        stompClient.subscribe(`/sub/1`, (res: any) => {
+        // 로컬스토리지에 상태관리가 
+        // 메세지 받는 사람 - 게시글 작성한 사람
+        // 게시글을 작성한사람의 채널을 열어놓음
+        stompClient.subscribe(`/sub/`+userIds, (res: any) => {
           console.log("구독으로 받은 메시지 입니다.", res.body);
         });
       },
@@ -50,28 +55,37 @@ export default function Alarm(){
       }
     );
   }
-  
-  const messages = FromUserId+"님이 팔로워를 요청하셨습니다.";
 
   function send() {
     stompClient.send(`/app/send/`+ toUserId+`/`+messages)
   }
+  
+  // subscribe 현재 게시글의 좋아요를 누른사람의 정보가 들어가있다. /sub/보내는사람의 localstorage에서 가져온 userId
+  // 팔로워를 눌렀을때 send(받는사람의 pk을 우선 보내서 서버에서 조회를 한 후 userId) 보내면 그 해당 userId 가진 사람이 알람을 받겠지?
 
+  const messages = FromUserId+"님이 팔로워를 요청하셨습니다.";
+
+  
+
+  console.log()
   const userId = 1;
   
-  useEffect(() => {
+  // useEffect(() => {
+    function follower(){
       axios
       // 메시지를 받아야함
       .get(`http://localhost:8080/follower/follower/`+ userId,{})
       .then(({ data }) => {
         console.log(data);
-        connect();
+        // console.log(localStorage.getItem('token'));
+        // connect();
         send()
       })
       .catch((e: any) => {
         console.log(e)
       });
-  }, [])
+    }
+  // }, [])
 
 
   return (
@@ -105,7 +119,7 @@ export default function Alarm(){
           // negative={open}
           // positive={!open}
           positive={true}
-          onClick={send}
+          onClick={follower}
         />
         <TransitionablePortal onClose={handleClose} open={open}>
           <Segment

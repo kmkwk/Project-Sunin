@@ -14,12 +14,12 @@ export default class FeedDetail {
     this.feedId = data.id || "";
     this.userInfo = data.user || {};
     this.content = data.content || "";
-    this.filePath = data.filePath || [];
+    this.filePath = data.file_path || [];
     this.hashtags = data.hashtags || [];
     this.likes = data.likes || "";
-    this.likeUser = data.likeUser || [];
+    this.likeUser = data.like_user || [];
     this.comments = data.comments || {};
-    this.createdDate = data.createdDate || "";
-    this.modifiedDate = data.modifiedDate || "";
+    this.createdDate = data.created_date || "";
+    this.modifiedDate = data.modified_date || "";
   }
 }

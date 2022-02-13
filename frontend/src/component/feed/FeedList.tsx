@@ -7,6 +7,8 @@ export default function FeedList({ list }: any) {
     return list.length;
   }
 
+  console.log(list);
+
   return (
     <>
       <Grid columns={3} stackable container>
@@ -18,9 +20,11 @@ export default function FeedList({ list }: any) {
                   <Card>
                     <Image
                       src={
-                        item.filePath[0] ? item.filePath[0] : "/images/로고.png"
+                        item.file_path[0]
+                          ? item.file_path[0]
+                          : "/images/로고.png"
                       }
-                      alt={item.filePath[0]}
+                      alt={item.file_path[0]}
                       height="300px"
                     />
                     <Card.Content>
@@ -34,8 +38,8 @@ export default function FeedList({ list }: any) {
                       <Card.Header>{item.user.nickName}</Card.Header>
                       <Card.Meta>
                         <span>
-                          {item.modifiedDate.slice(0, 10)}{" "}
-                          {item.modifiedDate.slice(11, 16)}
+                          {item.modified_date.slice(0, 10)}{" "}
+                          {item.modified_date.slice(11, 16)}
                         </span>
                       </Card.Meta>
                       <Card.Description>

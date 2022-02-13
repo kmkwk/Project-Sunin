@@ -3,14 +3,30 @@ import Navbar from "../src/component/Navbar"
 import Menubar from "../src/component/Menubar"
 import styles from "../styles/rank.module.css"
 import { useRouter } from "next/router"
+import { useEffect, useState } from "react"
+import allAxios from "src/lib/allAxios"
 
 export default function Rank() {
 
   const router = useRouter()
+  const [userInfo, setUserInfo] = useState([])
 
-  function goProfile() {
-    router.push('/profile/person')
+  function goProfile(data: any) {
+    router.push(`/profile/${data}`)
   }
+
+  useEffect(() => {
+    loadFeed();
+  }, []);
+
+  function loadFeed() {
+    allAxios
+      .get(`/api/v1/users/rank`)
+      .then(({ data }) => {
+        setUserInfo(data)
+      });
+    }
+    
   return (
     <>
       <Navbar />
@@ -25,24 +41,24 @@ export default function Rank() {
           <br />
           <div>
             <Image src='/images/goldmedal.png' size="tiny" inline/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <Header as='h2' content='1등 이름' textAlign="center" className={styles.name}/>&nbsp;&nbsp;&nbsp;
+            <Header as='h2' content={userInfo[0]?userInfo[0]['nick_name']:'1등'} textAlign="center" className={styles.name}/>&nbsp;&nbsp;&nbsp;
             <Icon name='trophy' />
-            <Button onClick={goProfile}>프로필</Button>
-            <Progress progress='value' value={45} total={50} success />
+            <Button onClick={() => {if(userInfo[0]['id']) {router.push(`/profile/${userInfo[0]['id']}`)}}}>프로필</Button>
+            <Progress progress='value' value={userInfo[0]?userInfo[0]['sunin_days']:'30'} total={userInfo[0]?userInfo[0]['sunin_days']:'50'} success />
           </div><br />
           <div>
             <Image src='/images/silvermedal.png' size="tiny" inline/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <Header as='h2' content='2등 이름' textAlign="center" className={styles.name}/>&nbsp;&nbsp;&nbsp;
+            <Header as='h2' content={userInfo[1]?userInfo[1]['nick_name']:'2등'} textAlign="center" className={styles.name}/>&nbsp;&nbsp;&nbsp;
             <Icon name='trophy' />
-            <Button onClick={goProfile}>프로필</Button>
-            <Progress progress='value' value={30} total={50} success />
+            <Button onClick={() => {if(userInfo[1]['id']) {router.push(`/profile/${userInfo[1]['id']}`)}}}>프로필</Button>
+            <Progress progress='value' value={userInfo[1]?userInfo[1]['sunin_days']:20} total={userInfo[0]?userInfo[0]['sunin_days']:'50'} success />
           </div><br />
           <div>
             <Image src='/images/bronzemedal.png' size="tiny" inline/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <Header as='h2' content='3등 이름' textAlign="center" className={styles.name}/>&nbsp;&nbsp;&nbsp;
+            <Header as='h2' content={userInfo[2]?userInfo[2]['nick_name']:'3등'} textAlign="center" className={styles.name}/>&nbsp;&nbsp;&nbsp;
             <Icon name='trophy' />
-            <Button onClick={goProfile}>프로필</Button>
-            <Progress progress='value' value={15} total={50} success />
+            <Button onClick={() => {if(userInfo[2]['id']) {router.push(`/profile/${userInfo[2]['id']}`)}}}>프로필</Button>
+            <Progress progress='value' value={userInfo[2]?userInfo[2]['sunin_days']:10} total={userInfo[0]?userInfo[0]['sunin_days']:'50'} success />
           </div>
         </Grid.Column>
         <GridColumn width={3}>

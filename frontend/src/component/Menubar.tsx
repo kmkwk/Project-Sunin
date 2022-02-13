@@ -6,12 +6,13 @@ import { useEffect, useState } from 'react'
 import userAxios from 'src/lib/userAxios'
 import { useRouter } from 'next/router';
 import ChatModal from './chat/chatModal'
+import User from 'src/class/User'
 
 
 export default function Menuvar(){
 
   const isLogin = IsLogin
-  const [userInfo, setUserInfo] = useState(null)
+  const [userInfo, setUserInfo]: any = useState({})
   const router = useRouter()
 
   function goProfile(){
@@ -27,7 +28,7 @@ export default function Menuvar(){
 
       })
       .then(({ data }) => {
-        setUserInfo(data.body.user)
+        setUserInfo(new User(data.body.user))
       })
       .catch((e: any) => {
         console.log(e)
@@ -50,9 +51,7 @@ export default function Menuvar(){
   //   userData = loadUserData();
   //   console.log('값이 있어야됨', userData)
   // }, [])
-
   
-
   return (
     <>
       <Menu vertical>
@@ -81,7 +80,7 @@ export default function Menuvar(){
               :
               ""
               } */}
-              {userInfo?
+              {userInfo.username?
               <>
                 <img src={userInfo['profileImageUrl']} alt="프로필사진" width="50px" onClick={goProfile} style={{cursor: "pointer", textShadow:"123"}} title="내 프로필로 이동합니다."/>
                 <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -97,7 +96,7 @@ export default function Menuvar(){
                     "/images/suninimage/나무.png"
                     } width="50px" title="씨앗->새싹->봉오리->꽃->나무"/>
                 {/* &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; */}
-                <Link href="/info"><a title="회원정보 수정 페이지로 이동합니다."><Icon name='cog' size='large' color='grey' circular/></a></Link>
+                <Link href="/profile/info"><a title="회원정보 수정 페이지로 이동합니다."><Icon name='cog' size='large' color='grey' circular/></a></Link>
               </>
               :
               <>

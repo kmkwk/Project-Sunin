@@ -20,28 +20,28 @@ export default function Navbar() {
   const isLogin = IsLogin
   
   return (
-    <>
-      <Menu stackable>
+    <div>
+      <Menu stackable pointing secondary>
         <Menu.Item>
-        <Link href="/"><a><img className={ styles.logo_size } src='/images/로고center.png' /></a></Link>
+          <Link href="/"><a><img className={ styles.logo_size } src='/images/로고center.png' /></a></Link>
         </Menu.Item>
 
         <Menu.Item
           name='home'
         >
-          <Link href="/"><a>Home</a></Link>
+          <Link href="/"><a className={ styles.nav_names }>Home</a></Link>
         </Menu.Item>
 
         <Menu.Item
           name='personal'
         >
-          <Link href="/feed/personal"><a>Perosnal</a></Link>
+          <Link href="/feed/personal"><a className={ styles.nav_names }>Personal</a></Link>
         </Menu.Item>
 
         <Menu.Item
           name='company'
         >
-          <Link href="/feed/company"><a>Company</a></Link>
+          <Link href="/feed/company"><a className={ styles.nav_names }>Company</a></Link>
         </Menu.Item>
 
         <Menu.Item position='right'>
@@ -54,28 +54,32 @@ export default function Navbar() {
           <Alarm />
         </Menu.Item> 
         :
-        <Menu.Item
-          name='signup'
-        >
-          <Link href="/signup"><a>Signup</a></Link>
-        </Menu.Item>
+        // <Menu.Item
+        //   name='signup'
+        // >
+        //   <Link href="/signup"><a  className={ styles.nav_names }>Signup</a></Link>
+        // </Menu.Item>
+        ""
         }
 
         {isLogin?
         <Menu.Item
           name='logout'
         >
-          <Link href="/"><a onClick={goLogout}>Logout</a></Link>
+          <Link href="/"><a onClick={goLogout} className={ styles.nav_logout }>Logout</a></Link>
         </Menu.Item>
         :
-        <Menu.Item
-          name='login'
-        >
+        <div className={ styles.nav_loginbutton }>
+          <Menu.Item
+           name='login' className={ styles.nav_login }
+          >
           {/* <Link href="/login"><a>Login</a></Link> */}
           <LoginModal />
         </Menu.Item>
-        }    
-      </Menu>
-    </>
+        </div>
+        
+        }
+      </Menu> 
+    </div>
   );
 }

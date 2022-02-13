@@ -1,7 +1,19 @@
 .logo_size {
-  width: 30px;
+  width: 27px; height: 27px;
 }
 
 .response {
   background-color: blue;
+}
+
+.nav_names{
+  height: 27px ; display: table-cell; vertical-align: middle
+}
+
+.nav_logout{
+  height: 27px ; display: table-cell; vertical-align: middle; margin-right: 10px;
+}
+
+.nav_loginbutton{
+  align-self:center;
 }

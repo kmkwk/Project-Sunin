@@ -330,6 +330,40 @@ public class FeedServiceImpl implements FeedService {
         return feedRepository.getFeedCount(userId);
     }
 
+    @Override
+    public List<String> getSearchList(String content) {
+        List<String> contentList = new ArrayList<>();
+        Set<String> set = new HashSet<>();
+
+        if(content.length() == 0){
+            return null;
+        }else if(content.contains("#") && 2 <= content.length()){
+            content = content.substring(1);
+            List<FeedCollections> feedCollections =  feedRepository.findAll();
+
+            for (int i = 0; i < feedCollections.size(); i++) {
+                List<String> hashtags = feedCollections.get(i).getHashtags();
+                if(!hashtags.isEmpty()){
+                    for (int j = 0; j < hashtags.size(); j++){
+                        if(hashtags.get(j).startsWith(content)){
+                            set.add(hashtags.get(j));
+                        }
+                    }
+                }
+            }
+        }else {
+            List<FeedCollections> feedCollections = feedRepository.findByContentStartsWith(content);
+            for (int i = 0; i < feedCollections.size(); i++) {
+                set.add(feedCollections.get(i).getContent());
+            }
+        }
+
+        contentList.addAll(set);
+        Collections.sort(contentList);
+
+        return contentList;
+    }
+
     private String createFileName(String fileName) {
         return UUID.randomUUID().toString().concat(getFileExtension(fileName));
     }

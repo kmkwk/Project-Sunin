@@ -18,6 +18,7 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
@@ -150,5 +151,13 @@ public class FeedController {
         log.info("likeUserList");
 
         return ResponseEntity.ok(feedService.getLikeUserList(id));
+    }
+
+    @ApiOperation(value = "내용 및 해시태그 검색 창", notes = "해시태그 검색은 #내용, 내용검색은 내용만 보내면 됨")
+    @GetMapping("/search")
+    public ResponseEntity<List<String>> getSearchList(@RequestParam("content") String content){
+        log.info("getSearchList");
+
+        return ResponseEntity.ok(feedService.getSearchList(content));
     }
 }

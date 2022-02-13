@@ -6,8 +6,10 @@ import Searchbar from "./Searchbar";
 import IsLogin from "../lib/customIsLogin";
 import { useRouter } from "next/router";
 import LoginModal from "./login/loginModal";
-import { createRef } from "react";
+import { createRef, useEffect, useState } from "react";
 import Image from "next/image";
+import userAxios from "src/lib/userAxios";
+import User from "src/class/User";
 
 export default function Navbar() {
   const contextRef = createRef();
@@ -19,6 +21,24 @@ export default function Navbar() {
   }
 
   const isLogin = IsLogin;
+
+  const [userInfo, setUserInfo]: any = useState({})
+
+  useEffect(() => {
+    if (isLogin) {
+      userAxios
+      .get(`/api/v1/users`, {
+
+      })
+      .then(({ data }) => {
+        setUserInfo(new User(data.body.user))
+      })
+      .catch((e: any) => {
+        console.log(e)
+        // alert("잘못된 접근입니다.");
+      });
+    }
+  }, [])
 
   return (
     <div className={styles.fixed}>
@@ -47,12 +67,14 @@ export default function Navbar() {
             <a>Feed</a>
           </Link>
         </Menu.Item>
-
+        
+        {userInfo.username?
         <Menu.Item className={styles.item} link>
-          <Link href="/feed/company">
+          <Link href={`/profile/${userInfo['userSeq']}`}>
             <a>Profile</a>
           </Link>
         </Menu.Item>
+        :""}
 
         <Menu.Item position="right">
           <Searchbar />

@@ -26,4 +26,5 @@ public interface FeedRepository extends MongoRepository<FeedCollections, ObjectI
 
     FeedCollections findFeedSortIdByIdAndFlagTrue(ObjectId id, Sort sort);
 
+    List<FeedCollections> findByContentStartsWith(String content);
 }

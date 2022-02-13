@@ -81,7 +81,7 @@ export default function Navbar() {
         </Menu.Item>
         <Menu.Item />
 
-        {/* {isLogin ? (
+        {isLogin ? (
           <Menu.Item>
             <Alarm />
           </Menu.Item>
@@ -91,7 +91,7 @@ export default function Navbar() {
               <a>Signup</a>
             </Link>
           </Menu.Item>
-        )} */}
+        )}
 
         {isLogin ? (
           <Menu.Item name="logout">

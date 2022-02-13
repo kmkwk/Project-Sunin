@@ -13,6 +13,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.ObjectUtils;
@@ -66,8 +67,8 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserListLank());
     }
 
-    @ApiOperation(value = "유저 프로필 수정", notes = "유저 id 보내면 됨")
-    @PutMapping
+    @ApiOperation(value = "유저 프로필 수정")
+    @PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<UserUpdateResponse> updateUser(@RequestBody @Valid UserUpdateRequest userUpdateRequest) {
         log.info("updateUser");
 

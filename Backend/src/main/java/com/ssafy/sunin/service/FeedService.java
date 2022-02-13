@@ -6,6 +6,7 @@ import com.ssafy.sunin.payload.response.feed.FeedCommentDto;
 import com.ssafy.sunin.payload.response.feed.FeedDto;
 import org.springframework.data.domain.Pageable;
 import java.util.List;
+import java.util.Set;
 
 public interface FeedService {
     FeedDto updateFile(FileUpdate fileUpdate);
@@ -37,4 +38,7 @@ public interface FeedService {
     List<UserDetailProfile> getLikeUserList(String id);
 
     Long feedCount(Long userId);
+
+    List<String> getSearchList(String content);
+
 }

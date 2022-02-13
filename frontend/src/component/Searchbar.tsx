@@ -55,7 +55,6 @@ export default function Searchbar(){
         },
       })
       .then(({ data }) => {
-        console.log(data)
         let newList: any = []
         data.map((feed: any) => {
           if (feed.content.indexOf(e.target.value) != '-1'){
@@ -66,7 +65,9 @@ export default function Searchbar(){
       });
     }
   }
-  
+  function goReloading(){
+    router.reload()
+  }
 
   function getSelectedValue(e: any){
     if (e.type === "click") {
@@ -74,7 +75,7 @@ export default function Searchbar(){
       feedList.filter((feed: any) => {
         if (feed.title === e.target.outerText) {
           router.push(`/feed/personal/${feed.id}`)
-          router.reload()
+          setTimeout(goReloading, 500)
         }
       })
     } else {
@@ -82,7 +83,7 @@ export default function Searchbar(){
       feedList.filter((feed: any) => {
         if (feed.title === e.target.value) {
           router.push(`/feed/personal/${feed.id}`)
-          router.reload()
+          setTimeout(goReloading, 500)
         }
       })
     }

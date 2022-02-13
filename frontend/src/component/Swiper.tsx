@@ -2,9 +2,10 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Navigation, Pagination, Autoplay } from "swiper";
 import { Image } from "semantic-ui-react";
 
-import "swiper/components/navigation/navigation.min.css";
-import "swiper/components/pagination/pagination.min.css";
-import "swiper/swiper.min.css";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "swiper/css/scrollbar";
 
 const SwiperMedia = ({ media }: any) => {
   SwiperCore.use([Navigation, Pagination, Autoplay]);

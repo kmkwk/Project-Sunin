@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 import InfiniteScroll from "react-infinite-scroll-component";
 
-import FeedList from "src/component/FeedList";
+import FeedList from "src/component/feed/FeedList";
 import Menubar from "src/component/Menubar";
 import Navbar from "src/component/Navbar";
 import allAxios from "src/lib/allAxios";

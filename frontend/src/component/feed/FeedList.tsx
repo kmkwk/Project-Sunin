@@ -16,7 +16,13 @@ export default function FeedList({ list }: any) {
               <Grid.Column key={item.id}>
                 <Link href={`/feed/personal/${item.id}`}>
                   <Card>
-                    <Image src={item.filePath[0]} alt={item.filePath[0]} />
+                    <Image
+                      src={
+                        item.filePath[0] ? item.filePath[0] : "/images/로고.png"
+                      }
+                      alt={item.filePath[0]}
+                      height="300px"
+                    />
                     <Card.Content>
                       <Image
                         floated="left"
@@ -27,9 +33,14 @@ export default function FeedList({ list }: any) {
                       />
                       <Card.Header>{item.user.nickName}</Card.Header>
                       <Card.Meta>
-                        <span>{item.modifiedDate}</span>
+                        <span>
+                          {item.modifiedDate.slice(0, 10)}{" "}
+                          {item.modifiedDate.slice(11, 16)}
+                        </span>
                       </Card.Meta>
-                      <Card.Description>{item.content}</Card.Description>
+                      <Card.Description>
+                        {item.content.slice(0, 30)}
+                      </Card.Description>
                     </Card.Content>
                     <Card.Content extra textAlign="center">
                       <span>

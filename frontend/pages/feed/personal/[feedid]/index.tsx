@@ -15,7 +15,7 @@ import allAxios from "src/lib/allAxios";
 import userAxios from "src/lib/userAxios";
 import User from "src/class/User";
 import FeedDetail from "src/class/FeedDetail";
-import Comment from "src/component/comment/Comment";
+import Comments from "src/component/comment/Comments";
 import SwiperMedia from "src/component/Swiper";
 
 function Detail({ feedid }: any) {
@@ -144,9 +144,9 @@ function Detail({ feedid }: any) {
         <Grid.Row>
           <Grid.Column width={3} />
           <Grid.Column width={12}>
-            <Comment
+            <Comments
               list={feed.comments}
-              userSeq={user.userSeq}
+              userSeq={user.user_seq}
               feedId={feed.feedId}
               onChange={feed.comments}
             />

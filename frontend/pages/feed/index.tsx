@@ -7,7 +7,6 @@ import FeedList from "src/component/feed/FeedList";
 import Menubar from "src/component/Menubar";
 import Navbar from "src/component/Navbar";
 import allAxios from "src/lib/allAxios";
-import userAxios from "src/lib/userAxios";
 
 function Personal() {
   const [list, setList]: any = useState([]);

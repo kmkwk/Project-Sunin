@@ -53,7 +53,7 @@ function Detail({ feedid }: any) {
       })
       .catch(() => {
         alert("잘못된 접근입니다.");
-        router.push("/feed/personal");
+        router.push("/feed");
       });
   }, []);
 
@@ -61,7 +61,7 @@ function Detail({ feedid }: any) {
     allAxios
       .delete(`/feed/${feedid}/${user.user_seq}`)
       .then(() => {
-        router.push("/feed/personal");
+        router.push("/feed");
       })
       .catch(() => {
         alert("잠시 후 다시 시도해주세요.");
@@ -130,13 +130,10 @@ function Detail({ feedid }: any) {
 
         <Grid.Row textAlign="right">
           <Grid.Column>
-            <Button onClick={() => router.push("/feed/personal")}>
-              뒤로가기
-            </Button>
+            <Button onClick={() => router.push("/feed")}>뒤로가기</Button>
             {feed.userInfo.user_id == user.user_seq && (
               <>
-                <Button
-                  onClick={() => router.push(`/feed/personal/edit/${feedid}`)}>
+                <Button onClick={() => router.push(`/feed/edit/${feedid}`)}>
                   수정
                 </Button>
                 <Button onClick={deleteFeed}>삭제</Button>

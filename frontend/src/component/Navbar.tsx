@@ -61,8 +61,14 @@ export default function Navbar() {
         </Menu.Item> */}
 
         <Menu.Item className={styles.item} link>
-          <Link href="/feed/personal">
+          <Link href="/feed">
             <a>Feed</a>
+          </Link>
+        </Menu.Item>
+
+        <Menu.Item className={styles.item} link>
+          <Link href="/follow">
+            <a>Follow</a>
           </Link>
         </Menu.Item>
 

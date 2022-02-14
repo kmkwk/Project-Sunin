@@ -105,7 +105,7 @@ function Createfeed() {
         headers: { "Content-Type": "multipart/form-data" },
       })
       .then(() => {
-        router.push("/feed/personal");
+        router.push("/feed");
       })
       .catch(() => {
         alert("잠시 후 다시 시도해주세요.");

@@ -23,6 +23,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.mvc.method.annotation.AbstractMappingJacksonResponseBodyAdvice;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
@@ -314,36 +316,48 @@ public class FeedServiceImpl implements FeedService {
     public FeedSearch getSearchList(Pageable pageable,String content) {
         List<String> contentList = new ArrayList<>();
         Set<String> set = new HashSet<>();
-        List<FeedCollections> feedCollections;
-        List<FeedCollections> hashtagFeed;
+        List<FeedCollections> feedCollections = new ArrayList<>();
+        Map<Object,FeedCollections> map = new HashMap<>();
+        List<Integer> idx = new ArrayList<>();
 
         if(content.length() == 0){
             return null;
-        }else if(content.contains("#") && 2 <= content.length()){
+        }else if(content.contains("#") && 2 <= content.length()) {
             content = content.substring(1);
             // 현재는 모든 피드 검색
             List<FeedCollections> feedList = feedRepository.findAll();
+
+            boolean[] check = new boolean[feedList.size()];
             // 해당 해시태그만 포함하는 피드만 가져와야함
             for (int i = 0; i < feedList.size(); i++) {
                 // 해당 해시태그 가져오기
                 List<String> hashtags = feedList.get(i).getHashtags();
-                if(!hashtags.isEmpty()){
-                    for (int j = 0; j < hashtags.size(); j++){
-                        // 해시태그 리스트
-                        if(hashtags.get(j).startsWith(content)){
+                if (!hashtags.isEmpty()) {
+                    // 배열에 들어간 해시태그 돌아서
+                    for (int j = 0; j < hashtags.size(); j++) {
+                        if (check[i]) continue;
+                        // 해시태그의 첫글자가 content로 시작한다면
+                        if (hashtags.get(j).startsWith(content)) {
+                            // 중복제거를위해 set에 넣고
                             set.add(hashtags.get(j));
+                            check[i] = true;
+                            // 해당 피드 넣고
+                            map.put(i,feedList.get(i));
+                            idx.add(i);
                         }
                     }
                 }
             }
 
-            if(30 <= feedList.size()){
-                feedCollections = feedList.subList(feedList.size()-29 ,feedList.size()-1);
+            if(30 <= idx.size()){
+                for (int i = idx.size()-1; i > idx.size()-30 ; i--) {
+                    feedCollections.add(map.get(idx.get(i)));
+                }
             }else{
-                feedCollections = feedList;
+                for (int i = idx.size()-1; i >=0; i--) {
+                    feedCollections.add(map.get(idx.get(i)));
+                }
             }
-
-            Collections.reverse(feedCollections);
         }else {
             feedCollections = feedRepository.findByContentStartsWith(content,pageable);
 

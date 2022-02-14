@@ -28,10 +28,8 @@ public class CommentService {
     public FeedCollections writeComment(CommentWrite commentWrite) {
         ObjectId objectId = new ObjectId();
 
-        // 새로운 댓글
         Comment comment = Comment.commentWriter(commentWrite,objectId);
         FeedCollections feedCollections = feedRepository.findFeedIdByIdAndFlagTrue(new ObjectId(commentWrite.getFeedId()));
-        // Todo : 기존 댓글이 없는 경우 널포인트
         Map<Object,Comment> comments = feedCollections.getComments();
         comments.put(objectId,comment);
         comment.setCommentGroup(objectId);
@@ -74,7 +72,7 @@ public class CommentService {
      * */
     public Comment writeReply(CommentReply commentReply) {
         ObjectId objectId = new ObjectId();
-        Comment comment = Comment.commentReply(commentReply);
+        Comment comment = Comment.commentReply(objectId,commentReply);
         FeedCollections feedCollections = feedRepository.findFeedIdByIdAndFlagTrue(new ObjectId(commentReply.getFeedId()));
         Map<Object,Comment> comments = feedCollections.getComments();
         comments.put(objectId,comment);
@@ -88,10 +86,11 @@ public class CommentService {
      * 피드에 달린 댓글 리스트
      * */
     public Map<Object,Comment> findCommentsByFeed(String feedId) {
-        List<Order> orders = new ArrayList<>();
-        orders.add(new Order(Direction.ASC, "group"));
-        orders.add(new Order(Direction.ASC, "order"));
-        return feedRepository.findFeedSortIdByIdAndFlagTrue(new ObjectId(feedId), Sort.by(orders)).getComments();
+//        List<Order> orders = new ArrayList<>();
+//        orders.add(new Order(Direction.ASC, "group"));
+//        orders.add(new Order(Direction.ASC, "order"));
+//        return feedRepository.findFeedSortIdByIdAndFlagTrue(new ObjectId(feedId), Sort.by(orders)).getComments();
+        return null;
     }
 
     /*

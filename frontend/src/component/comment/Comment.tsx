@@ -116,10 +116,14 @@ function Comment({ item, userSeq, feedId }: any) {
               <Icon name="like" />
               {item[1].likes}
             </Label>
-            {/* <Label as="a" onClick={replyButton}>
-              <Icon name="reply" />
-              Reply
-            </Label> */}
+            {/* {item[1].depth == 0 ? (
+              <Label as="a" onClick={replyButton}>
+                <Icon name="reply" />
+                Reply
+              </Label>
+            ) : (
+              ""
+            )} */}
           </>
         )}
         {userSeq == item[1].writer && !item[1].deleted && (
@@ -135,6 +139,7 @@ function Comment({ item, userSeq, feedId }: any) {
           </>
         )}
       </List.Content>
+
       <Image
         avatar
         circular
@@ -145,11 +150,13 @@ function Comment({ item, userSeq, feedId }: any) {
       />
       <List.Content>
         <List.Header as="">
-          <span>{item[1].user.nickName}</span>
+          {item[1].depth > 0 && (
+            <Icon name="level up alternate" rotated="clockwise" />
+          )}
+          <span>{item[1].user.nick_name}</span>
           <span> | {writeDate(item[1].write_date)}</span>
         </List.Header>
         <List.Description>
-          {item[1].depth > 0 && "ㄴ "}
           {item[1].deleted ? (
             "※ 삭제된 댓글입니다."
           ) : editable ? (

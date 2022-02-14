@@ -4,67 +4,72 @@ import { useRouter } from "next/router";
 
 import Navbar from "src/component/Navbar";
 import userAxios from "src/lib/userAxios";
+import SwiperMedia from "src/component/Swiper";
+
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "swiper/css/scrollbar";
+
 import styles from "styles/CreateFeed.module.css";
 import allAxios from "src/lib/allAxios";
 
-export default function Createfeed() {
+function Modifyfeed({ feedid }: any) {
   const router = useRouter();
 
   const [feed, setFeed]: any = useState({
-    userId: 0, // 작성자
-    content: "", // 내용
-    filePath: [], // 이미지, 동영상
-    hashtags: [], // 해시태그
+    userSeq: 0,
+    content: "",
+    filePath: [],
+    hashtags: [],
   });
 
   const [user, setUser]: any = useState({
-    userId: "",
+    user_seq: -1,
+    user_id: "",
     username: "",
     email: "",
+    user_nickname: "",
+    profile_image_url: "",
+    provider_type: "",
+    role_type: "",
+    sunin_days: 0,
+    created_at: "",
+    modified_at: "",
     follower: [],
-    userNickname: null,
-    profileImageUrl: "",
-    providerType: "",
-    roleType: "",
-    suninDays: 0,
+    address: "",
+    introduction: "",
+    phone_number: "",
   });
 
+  const [media, setMedia]: any = useState([]);
+
   useEffect(() => {
+    allAxios.get(`feed/detail/${feedid}`).then(({ data }) => {
+      setFeed({
+        userSeq: data.user_seq,
+        content: data.content,
+        filePath: data.file_path,
+        hashtags: data.hashtags,
+      });
+    });
+
     userAxios
       .get(`/api/v1/users`)
       .then(({ data }) => {
-        const value = data.body.user;
-        setUser({
-          userSeq: "######### 이 값이 받아와져야 합니다 ##########",
-          userId: value.userId,
-          username: value.username,
-          email: value.email,
-          follower: value.follower,
-          userNickname: value.userNickname,
-          profileImageUrl: value.profileImageUrl,
-          providerType: value.providerType,
-          roleType: value.roleType,
-          suninDays: value.suninDays,
-        });
+        setUser(data.body.user);
       })
       .catch(() => {
         alert("잘못된 접근입니다.");
         router.push("/feed/personal");
       });
-
-    allAxios.get(`feed/detail/${router.query.feedid}`).then(({ data }) => {
-      setFeed({
-        content: data.content,
-        filePath: data.filePath,
-        hashtags: data.hashtags,
-      });
-    });
   }, []);
 
   const handleOnChange = (e: any) => {
+    const { value, name } = e.target;
     setFeed({
       ...feed,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
   };
 
@@ -80,7 +85,7 @@ export default function Createfeed() {
     }
   };
 
-  const onRemove = (event: any, data: any) => {
+  const onRemove = (e: any, data: any) => {
     const index = feed.hashtags.indexOf(data.content);
     feed.hashtags.splice(index, 1);
     const result = feed.hashtags.filter((word: any) => word != data.content);
@@ -88,19 +93,35 @@ export default function Createfeed() {
   };
 
   const uploadFile = (e: any) => {
-    e.stopPropagation(); // 이벤트 전파 방지
     setFeed({
       ...feed,
       filePath: Array.from(e.target.files),
     });
+
+    const arr: any = [];
+    Object.entries(e.target.files).map((item: any) => {
+      const url = URL.createObjectURL(item[1]);
+      arr.push(url);
+    });
+    setMedia(arr);
   };
 
-  const handleSubmit = (event: any) => {
-    event.preventDefault(); // 새로고침 방지
+  const handleSubmit = (e: any) => {
+    e.preventDefault(); // 새로고침 방지
+
+    let flag = false;
+    if (feed.content == "") flag = true;
+    if (feed.filePath.length == 0) flag = true;
+
+    if (flag) {
+      alert("내용을 입력해주세요.");
+      return;
+    }
 
     const body = new FormData();
+    body.append("userId", user.user_seq);
+    body.append("id", feedid);
     body.append("content", feed.content);
-    body.append("userId", JSON.stringify(1)); // ###### 개발용 ######
 
     if (feed.filePath != null) {
       feed.filePath.map((each: any) => {
@@ -112,18 +133,13 @@ export default function Createfeed() {
       body.append("hashtags", each);
     });
 
-    console.log(feed); // ##### 디버그 #####
-
     allAxios
-      .put(`/feed`, body, {
-        headers: { "Content-Type": "multipart/form-data" },
-      })
+      .put("/feed", body)
       .then(() => {
-        alert("성공");
         router.push("/feed/personal");
       })
       .catch(() => {
-        alert("실패");
+        alert("잠시 후 다시 시도해주세요.");
       });
   };
 
@@ -141,20 +157,21 @@ export default function Createfeed() {
                 <TextArea
                   name="content"
                   rows={10}
-                  placeholder="내용을 작성하세요..."
                   value={feed.content}
+                  placeholder="내용을 작성하세요..."
                   onChange={handleOnChange}
                 />
               </Form.Field>
               <Form.Field>
                 <div>
                   <h3>이미지 선택</h3>
-                  <input
+                  <Input
                     type="file"
                     accept="image/*, video/*"
-                    multiple
                     onChange={uploadFile}
+                    multiple
                   />
+                  {media.length > 0 && <SwiperMedia media={media} />}
                 </div>
               </Form.Field>
               <Form.Field>
@@ -162,26 +179,39 @@ export default function Createfeed() {
                   placeholder="해시태그를 입력하세요"
                   onKeyUp={handleKeyPress}
                 />
-                {feed.hashtags.map((tag: any, index: any) => {
-                  return (
-                    <Label
-                      name="mail"
-                      key={index}
-                      content={tag}
-                      removeIcon="delete"
-                      onRemove={onRemove}
-                    />
-                  );
-                })}
+                {feed.hashtags &&
+                  feed.hashtags.map((tag: any, index: any) => {
+                    return (
+                      <Label
+                        name="mail"
+                        key={index}
+                        content={tag}
+                        removeIcon="delete"
+                        onRemove={onRemove}
+                      />
+                    );
+                  })}
               </Form.Field>
-              <Form.Field control={Button} onClick={handleSubmit}>
-                저장하기
+              <Form.Field>
+                <Button control={Button} onClick={() => router.back()}>
+                  뒤로가기
+                </Button>
+                <Button control={Button} onClick={handleSubmit}>
+                  저장하기
+                </Button>
               </Form.Field>
             </Form>
           </Grid.Column>
-          <Grid.Column width={3}></Grid.Column>
+          <Grid.Column width={3} />
         </Grid.Row>
       </Grid>
     </>
   );
 }
+
+export async function getServerSideProps(context: any) {
+  const feedid = context.params.feedid;
+  return { props: { feedid } };
+}
+
+export default Modifyfeed;

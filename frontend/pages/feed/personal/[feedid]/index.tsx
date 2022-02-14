@@ -57,12 +57,16 @@ function Detail({ feedid }: any) {
       });
   }, []);
 
-  function backToList() {
-    return router.push("/feed/personal");
-  }
-  function changeContent() {
-    return router.push(`/feed/personal/${feedid}/edit`);
-  }
+  const deleteFeed = () => {
+    allAxios
+      .delete(`/feed/${feedid}/${user.user_seq}`)
+      .then(() => {
+        router.push("/feed/personal");
+      })
+      .catch(() => {
+        alert("잠시 후 다시 시도해주세요.");
+      });
+  };
 
   const showNickname = (object: any) => {
     return Object.entries(object).map(
@@ -126,8 +130,18 @@ function Detail({ feedid }: any) {
 
         <Grid.Row textAlign="right">
           <Grid.Column>
-            <Button onClick={backToList}>뒤로가기</Button>
-            <Button onClick={changeContent}>수정</Button>
+            <Button onClick={() => router.push("/feed/personal")}>
+              뒤로가기
+            </Button>
+            {feed.userInfo.user_id == user.user_seq && (
+              <>
+                <Button
+                  onClick={() => router.push(`/feed/personal/edit/${feedid}`)}>
+                  수정
+                </Button>
+                <Button onClick={deleteFeed}>삭제</Button>
+              </>
+            )}
           </Grid.Column>
         </Grid.Row>
 

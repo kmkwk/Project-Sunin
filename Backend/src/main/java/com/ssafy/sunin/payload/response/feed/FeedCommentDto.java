@@ -12,6 +12,7 @@ import java.util.Map;
 @NoArgsConstructor
 @ToString
 public class FeedCommentDto {
+    private String id;
     private String content;
     private List<String> hashtags;
     private int likes;
@@ -25,6 +26,7 @@ public class FeedCommentDto {
 
     public static FeedCommentDto feedCommentDto(FeedCollections feed, User user,Map<Object,CommentDto> comments) {
         return FeedCommentDto.builder()
+                .id(feed.getId().toString())
                 .content(feed.getContent())
                 .hashtags(feed.getHashtags())
                 .likes(feed.getLikes())
@@ -38,7 +40,8 @@ public class FeedCommentDto {
     }
 
     @Builder
-    public FeedCommentDto(String content, List<String> hashtags, int likes, LocalDateTime createdDate, LocalDateTime modifiedDate, List<String> filePath, Map<Long, Object> likeUser, Map<Object, CommentDto> comments, User user) {
+    public FeedCommentDto(String id, String content, List<String> hashtags, int likes, LocalDateTime createdDate, LocalDateTime modifiedDate, List<String> filePath, Map<Long, Object> likeUser, Map<Object, CommentDto> comments, User user) {
+        this.id = id;
         this.content = content;
         this.hashtags = hashtags;
         this.likes = likes;

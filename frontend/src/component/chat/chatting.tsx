@@ -4,12 +4,16 @@ import SockJS from "sockjs-client";
 import Stomp from "webstomp-client";
 import styles from '../../../styles/chat.module.css'
 import 'semantic-ui-css/semantic.min.css'
+import userAxios from 'src/lib/userAxios'
+import IsLogin from 'src/lib/customIsLogin'
+import User from "src/class/User";
 
 function Chatting() {
-  const SERVER_URL = "http://localhost:8080";
+  const SERVER_URL = "http://localhost:8080/stomp";
   // const stompClient = Stomp.over(new SockJS(SERVER_URL));
-
-  const fixname = '고정이름'
+  const [userInfo, setUserInfo]: any = useState([])
+  const isLogin = IsLogin
+  const fixname = userInfo.username
   const click = (e: any) =>{
     if(list.message !== ""){
       send(); 
@@ -25,6 +29,23 @@ function Chatting() {
     recvList: [],
   });
 
+
+useEffect(() => {
+    if (isLogin) {
+      userAxios
+      .get(`/api/v1/users`, {
+
+      })
+      .then(({ data }:any) => {
+        setUserInfo(data.body.user)
+      })
+      .catch((e: any) => {
+        console.log(e)
+        // alert("잘못된 접근입니다.");
+      });
+    }
+  }, [])
+
   useEffect(() => {
     console.log(`소켓 연결을 시도합니다. 서버 주소: ${SERVER_URL}`);
     list.stompClient.connect(
@@ -33,7 +54,7 @@ function Chatting() {
         // 소켓 연결 성공
         list.stompClient.connected = true;
         console.log("소켓 연결 성공", frame);
-        list.stompClient.subscribe("/send12", (res: any) => {
+        list.stompClient.subscribe("/sub", (res: any) => {
           console.log("구독으로 받은 메시지 입니다.", res.body);
           list.recvList.push(JSON.parse(res.body));
           setList({
@@ -71,6 +92,7 @@ function Chatting() {
         userName: fixname,
         content: list.message,
       };
+      // stompClient.send(`/app/send/`+ toUserId+`/`+messages)
       list.stompClient.send("/receive", JSON.stringify(msg), {});
     }
     console.log(list.recvList);
@@ -90,7 +112,7 @@ function Chatting() {
               {data.content}
             </div>
             <div className={styles.chat_username}>
-              {data.userName}
+              {data.user_name}
             </div>
             </div>
           );

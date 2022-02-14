@@ -1,0 +1,61 @@
+@import url('https://fonts.googleapis.com/css2?family=Gaegu&family=Gamja+Flower&family=Nanum+Gothic&display=swap');
+
+.test{
+    width: 100%;
+    height: 500px;
+}
+.first{
+    width: 100%;
+    height: 300px;
+    color: black;
+}
+
+.mainhead{
+    color: blue;
+}
+.mainzero{
+    padding-left: 7%;
+    height: 150px;
+    font-family: 'Gamja Flower', cursive;
+  font-size: 30px;
+  color: rgb(0, 0, 0);
+}
+
+.container{
+    padding-left: 7%;
+    height: 150px;
+    background-color: #DDECCA;
+    font-family: 'Gamja Flower', cursive;
+  font-size: 30px;
+  color: rgb(0, 0, 0);
+}
+/* 
+.mainfirst1{
+    float:left;
+    width:500px;
+    font-family: 'Gamja Flower', cursive;
+    background-color: lightsalmon;
+    
+} */
+.mainfirst2{
+   
+    
+}
+
+.mainsecond{
+    padding-left: 7%;
+    height: 150px;
+    background-color: #CEE8CE;
+    font-family: 'Gamja Flower', cursive;
+  font-size: 30px;
+  color: rgb(0, 0, 0);
+}
+
+.mainthird{
+    padding-left: 7%;
+    height: 150px;
+    background-color: #B8D9C0;
+    font-family: 'Gamja Flower', cursive;
+  font-size: 30px;
+  color: rgb(0, 0, 0);
+}

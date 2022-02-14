@@ -44,7 +44,7 @@ export default function Navbar() {
     <div className={styles.fixed}>
       <Menu fixed="top" color="teal" inverted secondary>
         <Menu.Item link>
-          <Link href="/">
+          <Link href="/mainpage">
             <a>
               <Image
                 src="/images/로고만.png"

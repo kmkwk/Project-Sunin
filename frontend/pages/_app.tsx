@@ -5,9 +5,9 @@ import { Container } from "semantic-ui-react";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <Container>
+    // <Container>
       <Component {...pageProps} />
-    </Container>
+    // {/* </Container> */}
   );
 }
 

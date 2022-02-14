@@ -16,6 +16,7 @@ import userAxios from "src/lib/userAxios";
 import { useRouter } from "next/router";
 import ChatModal from "./chat/chatModal";
 import User from "src/class/User";
+import styles from "../../styles/menubar.module.css"
 
 export default function Menuvar() {
   const isLogin = IsLogin;
@@ -49,12 +50,12 @@ export default function Menuvar() {
       userInfo["sunin_days"] < 3
         ? "/images/suninimage/씨앗.png"
         : userInfo["sunin_days"] < 6
-        ? "/images/suninimage/새싹.jpg"
+        ? "/images/suninimage/새싹.png"
         : userInfo["sunin_days"] < 9
-        ? "/images/suninimage/봉오리.jpg"
+        ? "/images/suninimage/튤립.png"
         : userInfo["sunin_days"] < 12
-        ? "/images/suninimage/꽃.png"
-        : "/images/suninimage/나무.png";
+        ? "/images/suninimage/나무.png"
+        : "/images/suninimage/큰나무.png";
   }
 
   // let userData = null;
@@ -111,22 +112,24 @@ export default function Menuvar() {
                     title="내 프로필로 이동합니다."
                   />
                   <br />
+
+                
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  {userInfo["username"]}
-                  <br />
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  {userInfo["sunin_days"]}일
+                  <span><br/> <span style={{fontSize: "20px"}}>{userInfo["username"]} </span> <br/> {userInfo["sunin_days"]}일</span>
+                  {/* {userInfo["username"]} */}
+                  <br/>
+                  {/* &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; */}
+                  {/* <span>{userInfo["sunin_days"]}일</span> */}
+                  {/* {userInfo["sunin_days"]}일 */}
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   <Image
                     src={suninImage}
-                    width="50px"
-                    title="씨앗->새싹->봉오리->꽃->나무"
+                    width="50px" height="50px"
+                    title="씨앗->새싹->꽃->작은 나무->큰 나무"
                   />
+                  &nbsp;&nbsp;&nbsp;&nbsp;<br/>
                   {/* &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; */}
-                  <Link href="/profile/info">
-                    <a title="회원정보 수정 페이지로 이동합니다.">
-                      <Icon name="cog" size="large" color="grey" circular />
-                    </a>
-                  </Link>
+                  
                 </>
               ) : (
                 <>
@@ -144,6 +147,32 @@ export default function Menuvar() {
             </GridRow>
           </Grid>
         </MenuItem>
+
+
+
+        {userInfo.username ? (
+          <Menu.Item name="profile">
+            
+            <Header className={styles.setting}  as="h4">
+              <Link href={`/profile/${userInfo["user_seq"]}`}>
+                <a>프로필</a>
+              </Link>
+
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <Link href="/profile/info">
+                    <a title="회원정보 수정 페이지로 이동합니다.">
+                    <Icon className={styles.setting} name="cog" size="small" color="grey" circular />
+                    </a>
+            </Link>
+            
+            
+            </Header>
+           
+          </Menu.Item>
+        ) : (
+          ""
+        )}
+
         <Menu.Item name="personal">
           <Header as="h4">
             <Link href="/feed">
@@ -152,17 +181,7 @@ export default function Menuvar() {
           </Header>
         </Menu.Item>
 
-        {userInfo.username ? (
-          <Menu.Item name="profile">
-            <Header as="h4">
-              <Link href={`/profile/${userInfo["user_seq"]}`}>
-                <a>프로필</a>
-              </Link>
-            </Header>
-          </Menu.Item>
-        ) : (
-          ""
-        )}
+        
 
         <Menu.Item name="rank">
           <Header as="h4">

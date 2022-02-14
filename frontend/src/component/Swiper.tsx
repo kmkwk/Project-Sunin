@@ -13,7 +13,7 @@ const SwiperMedia = ({ media }: any) => {
   return (
     <>
       <Swiper
-        style={{ height: "500px" }}
+        style={{ height: "800px"}}
         spaceBetween={200}
         slidesPerView={1}
         navigation

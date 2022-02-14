@@ -60,7 +60,7 @@ function Profiles({ id }: any) {
   return (
     <>
       <Navbar />
-      <Container>
+      <Container className={styles.con}>
         <Grid columns={2} padded stackable>
           <Grid.Column width={4}>
             <Menubar />
@@ -79,7 +79,7 @@ function Profiles({ id }: any) {
                       <span className="cinema">{user.sunin}</span>
                     </Item.Header>
                     <Item.Description>
-                      <span>{user.intro}</span>
+                      <span>{user.intro} ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ</span>
                     </Item.Description>
                     <Item.Extra>
                       <Label>

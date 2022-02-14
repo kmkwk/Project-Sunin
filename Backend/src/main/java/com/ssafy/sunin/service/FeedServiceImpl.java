@@ -42,20 +42,20 @@ public class FeedServiceImpl implements FeedService {
     private final AmazonS3 amazonS3;
 
     @Override
-    public FeedDto writeImageFeed(FeedWrite feedWrite) {
+    public FeedCollections writeImageFeed(FeedWrite feedWrite) {
         List<String> fileList = new ArrayList<>();
         List<MultipartFile> files = feedWrite.getFiles();
         if (files != null) {
             AwsFile(feedWrite.getFiles(), fileList);
         }
 
-        User user = userRepository.findProfileByUserSeq(feedWrite.getUserId());
+//        User user = userRepository.findProfileByUserSeq(feedWrite.getUserId());
         FeedCollections feedCollections = FeedCollections.setFeedCollection(feedWrite,fileList);
 
-        feedRepository.save(feedCollections);
+        FeedCollections feedCollection = feedRepository.save(feedCollections);
         suninDays(feedWrite.getUserId());
 
-        return FeedDto.feedDto(feedCollections,user);
+        return feedCollection;
     }
 
     private void suninDays(Long userId) {
@@ -82,7 +82,7 @@ public class FeedServiceImpl implements FeedService {
     }
 
     @Override
-    public FeedDto updateFile(FileUpdate fileUpdate) {
+    public FeedCollections updateFile(FileUpdate fileUpdate) {
         Optional<FeedCollections> feed = feedRepository.findByIdAndUserId(new ObjectId(fileUpdate.getId()), fileUpdate.getUserId());
         if (feed.isPresent()) {
             fileUpdate.getFiles().forEach(file -> {
@@ -92,22 +92,19 @@ public class FeedServiceImpl implements FeedService {
 
             User user = userRepository.findProfileByUserSeq(fileUpdate.getUserId());
             feed.get().setFileModified(feed.get().getFilePath());
-            FeedCollections feedCollections = feedRepository.save(feed.get());
-            return FeedDto.feedDto(feedCollections,user);
+            return feedRepository.save(feed.get());
         }
 
         return null;
     }
 
     @Override
-    public FeedDto addFile(FeedFile feedFile) {
+    public FeedCollections addFile(FeedFile feedFile) {
         Optional<FeedCollections> feed = feedRepository.findByIdAndUserId(new ObjectId(feedFile.getId()), feedFile.getUserId());
         if (feed.isPresent()) {
             List<String> fileList = AwsFile(feedFile.getFiles(), feed.get().getFilePath());
             feed.get().setFileModified(fileList);
-            FeedCollections feedCollections = feedRepository.save(feed.get());
-            User user = userRepository.findProfileByUserSeq(feedFile.getUserId());
-            return FeedDto.feedDto(feedCollections,user);
+            return feedRepository.save(feed.get());
         }
 
         return null;
@@ -165,7 +162,7 @@ public class FeedServiceImpl implements FeedService {
     }
 
     @Override
-    public FeedDto updateFeed(FeedUpdate feedUpdate) {
+    public FeedCollections updateFeed(FeedUpdate feedUpdate) {
         FeedCollections feedCollections = feedRepository.findByIdAndUserIdAndFlagTrue(new ObjectId(feedUpdate.getId()), feedUpdate.getUserId());
         List<String> fileNames = new ArrayList<>();
         // Todo : aws에선 중복 파일은 제거하던가, 안올려야함
@@ -173,19 +170,15 @@ public class FeedServiceImpl implements FeedService {
         feedCollections.setFileModified(fileNames);
         feedCollections.setFeedModified(feedUpdate);
 
-         feedRepository.save(feedCollections);
-
-        User user = userRepository.findProfileByUserSeq(feedCollections.getUserId());
-        return FeedDto.feedDto(feedCollections,user);
+        return feedRepository.save(feedCollections);
     }
 
     @Override
-    public void deleteFeed(String id, Long userId) {
+    public FeedCollections deleteFeed(String id, Long userId) {
         FeedCollections feedCollections = feedRepository.findByIdAndUserIdAndFlagTrue(new ObjectId(id), userId);
         feedCollections.setFeedDelete();
-        feedRepository.save(feedCollections);
+        return feedRepository.save(feedCollections);
     }
-
     // 나의 팔로워 최신순
     @Override
     public List<FeedDto> getFollowerLatestFeed(Long userId) {
@@ -202,6 +195,7 @@ public class FeedServiceImpl implements FeedService {
                         User::getUserSeq,
                         o -> o
                 ));
+
         List<FeedCollections> feedCollections = feedRepository.getFollowerLatesFeed(followers);
         return FeedDto.mapFeedDto(feedCollections,userMap);
     }
@@ -245,6 +239,7 @@ public class FeedServiceImpl implements FeedService {
                          User::getUserSeq,
                          o -> o
                  ));
+
          return FeedDto.mapFeedDto(feedCollection,userMap);
     }
 
@@ -266,7 +261,7 @@ public class FeedServiceImpl implements FeedService {
     }
 
     @Override
-    public void likeFeed(FeedLike feedLike) {
+    public FeedCollections likeFeed(FeedLike feedLike) {
         FeedCollections feedCollections = feedRepository.findByIdAndFlagTrue(new ObjectId(feedLike.getId()));
         Map<Long, Object> users = new HashMap<>(feedCollections.getLikeUser());
 
@@ -282,7 +277,7 @@ public class FeedServiceImpl implements FeedService {
 
         feedCollections.setLikeModified(like, users);
 
-        feedRepository.save(feedCollections);
+        return feedRepository.save(feedCollections);
     }
 
     @Override

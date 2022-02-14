@@ -1,5 +1,6 @@
 package com.ssafy.sunin.service;
 
+import com.ssafy.sunin.domain.FeedCollections;
 import com.ssafy.sunin.payload.response.feed.FeedSearch;
 import com.ssafy.sunin.payload.response.user.UserDetailProfile;
 import com.ssafy.sunin.payload.request.feed.*;
@@ -10,19 +11,19 @@ import java.util.List;
 import java.util.Set;
 
 public interface FeedService {
-    FeedDto updateFile(FileUpdate fileUpdate);
+    FeedCollections updateFile(FileUpdate fileUpdate);
 
-    FeedDto writeImageFeed(FeedWrite feedWrite);
+    FeedCollections writeImageFeed(FeedWrite feedWrite);
 
     List<String> downloadFileFeed(String fileNames);
 
     FeedCommentDto getDetailFeed(String id);
 
-    FeedDto updateFeed(FeedUpdate feedUpdate);
+    FeedCollections updateFeed(FeedUpdate feedUpdate);
 
-    FeedDto addFile(FeedFile feedFile);
+    FeedCollections addFile(FeedFile feedFile);
 
-    void deleteFeed(String id, Long userId);
+    FeedCollections deleteFeed(String id, Long userId);
 
     List<FeedDto> getFollowerLatestFeed(Long userId);
 
@@ -34,7 +35,7 @@ public interface FeedService {
 
     List<FeedDto> getLikeFeed(Pageable pageable);
 
-    void likeFeed(FeedLike feedLike);
+    FeedCollections likeFeed(FeedLike feedLike);
 
     List<UserDetailProfile> getLikeUserList(String id);
 

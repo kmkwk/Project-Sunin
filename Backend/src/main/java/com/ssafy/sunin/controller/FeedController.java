@@ -1,5 +1,6 @@
 package com.ssafy.sunin.controller;
 
+import com.ssafy.sunin.domain.FeedCollections;
 import com.ssafy.sunin.payload.response.feed.FeedSearch;
 import com.ssafy.sunin.payload.response.user.UserDetailProfile;
 import com.ssafy.sunin.payload.request.feed.*;
@@ -13,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ObjectUtils;
@@ -31,14 +33,16 @@ public class FeedController {
 
     @ApiOperation(value = "Feed 작성", notes = "다중 파일 업로드 가능")
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<FeedDto> writeImageFeed(@RequestBody @Valid FeedWrite feedWrite){
+    public ResponseEntity<String> writeImageFeed(@RequestBody @Valid FeedWrite feedWrite){
         log.info("writerImageFeed");
 
         if(ObjectUtils.isEmpty(feedWrite)){
             return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.ok(feedService.writeImageFeed(feedWrite));
+        FeedCollections result = feedService.writeImageFeed(feedWrite);
+        if(result == null) return new ResponseEntity<>("등록 실패", HttpStatus.INTERNAL_SERVER_ERROR);
+        else return new ResponseEntity<>("등록 성공", HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "file 다운로드")
@@ -50,22 +54,27 @@ public class FeedController {
 
     @ApiOperation(value = "피드 사진 삭제", notes = "사진 여러장 삭제 가능")
     @PutMapping("/file")
-    public ResponseEntity<FeedDto> updateFile(@RequestBody @Valid FileUpdate fileUpdate) {
+    public ResponseEntity<String> updateFile(@RequestBody @Valid FileUpdate fileUpdate) {
         log.info("updateFile");
         if(ObjectUtils.isEmpty(fileUpdate)){
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(feedService.updateFile(fileUpdate));
+        FeedCollections result = feedService.updateFile(fileUpdate);
+        if(result == null) return new ResponseEntity<>("등록 실패", HttpStatus.INTERNAL_SERVER_ERROR);
+        else return new ResponseEntity<>("등록 성공", HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "피드 사진 추가", notes = "사진 여러장 추가 가능")
     @PutMapping(value = "/addFile",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<FeedDto> addFile(@RequestBody @Valid FeedFile feedFile) {
+    public ResponseEntity<String> addFile(@RequestBody @Valid FeedFile feedFile) {
         log.info("addFile");
         if(ObjectUtils.isEmpty(feedFile)){
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(feedService.addFile(feedFile));
+
+        FeedCollections result = feedService.addFile(feedFile);
+        if(result == null) return new ResponseEntity<>("등록 실패", HttpStatus.INTERNAL_SERVER_ERROR);
+        else return new ResponseEntity<>("등록 성공", HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "피드 상세 페이지")
@@ -77,12 +86,15 @@ public class FeedController {
 
     @ApiOperation(value = "피드 수정")
     @PutMapping
-    public ResponseEntity<FeedDto> updateFeed(@RequestBody @Valid FeedUpdate feedUpdate){
+    public ResponseEntity<String> updateFeed(@RequestBody @Valid FeedUpdate feedUpdate){
         log.info("updateFeed");
         if(ObjectUtils.isEmpty(feedUpdate)){
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(feedService.updateFeed(feedUpdate));
+
+        FeedCollections result = feedService.updateFeed(feedUpdate);
+        if(result == null) return new ResponseEntity<>("등록 실패", HttpStatus.INTERNAL_SERVER_ERROR);
+        else return new ResponseEntity<>("등록 성공", HttpStatus.CREATED);
 
     }
 
@@ -90,8 +102,10 @@ public class FeedController {
     @DeleteMapping("/{id}/{userId}")
     public ResponseEntity<String> deleteFeed(@PathVariable("id") String id, @PathVariable Long userId) {
         log.info("deleteFeed");
-        feedService.deleteFeed(id,userId);
-        return ResponseEntity.ok("success");
+
+        FeedCollections result = feedService.deleteFeed(id,userId);
+        if(result == null) return new ResponseEntity<>("등록 실패", HttpStatus.INTERNAL_SERVER_ERROR);
+        else return new ResponseEntity<>("등록 성공", HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "나의 팔로워 최신순 피드 조회", notes = "나의 userId 값 전달")
@@ -139,8 +153,10 @@ public class FeedController {
         if(ObjectUtils.isEmpty(feedLike)){
             return ResponseEntity.notFound().build();
         }
-        feedService.likeFeed(feedLike);
-        return ResponseEntity.ok("success");
+
+        FeedCollections result = feedService.likeFeed(feedLike);
+        if(result == null) return new ResponseEntity<>("등록 실패", HttpStatus.INTERNAL_SERVER_ERROR);
+        else return new ResponseEntity<>("등록 성공", HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "게시글의 좋아요를 누른 유저들의 프로필, 피드 id")

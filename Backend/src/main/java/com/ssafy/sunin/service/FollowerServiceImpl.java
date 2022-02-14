@@ -39,10 +39,9 @@ public class FollowerServiceImpl implements FollowerService{
     }
 
     @Override
-    public void deleteFollower(FollowerUser followerUser) {
+    public Long deleteFollower(FollowerUser followerUser) {
         Follower follower = followerRepository.getUser(followerUser);
-        followerRepository.deleteFollower(follower);
-
+        return followerRepository.deleteFollower(follower);
     }
 
     @Override

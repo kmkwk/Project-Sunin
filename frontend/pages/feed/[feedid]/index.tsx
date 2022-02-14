@@ -17,6 +17,7 @@ import User from "src/class/User";
 import FeedDetail from "src/class/FeedDetail";
 import Comments from "src/component/comment/Comments";
 import SwiperMedia from "src/component/Swiper";
+import styles from "styles/feed.module.css";
 
 function Detail({ feedid }: any) {
   const router = useRouter();
@@ -92,15 +93,19 @@ function Detail({ feedid }: any) {
   return (
     <>
       <Navbar />
+    <div></div>
+
       <Grid padded>
         <Grid.Row>
           <Grid.Column width={3}>
             <Menubar />
           </Grid.Column>
-          <Grid.Column width={5}>
+          <Grid.Column width={9}>
+            <div className={styles.height}>
             <SwiperMedia media={feed.filePath} />
+            </div>
           </Grid.Column>
-          <Grid.Column width={8}>
+          <Grid.Column width={3}>
             <Container>
               <Header as="h2">{showNickname(feed.userInfo)}</Header>
               <Label onClick={likeFeed}>
@@ -109,40 +114,69 @@ function Detail({ feedid }: any) {
               </Label>
               <Label>
                 <Icon name="sign-in" />
-                <span>Follower ###</span>
+                <span>Follower</span>
               </Label>
               <Label>
                 <Icon name="sign-out" />
-                <span>Following ###</span>
+                <span>Following</span>
               </Label>
             </Container>
             <br />
             <Container>
               <p className="content">{feed.content}</p>
             </Container>
-            <br />
+            <br /><br />
             <Container>
-              #tag <br />
-              <p className="content">{feed.hashtags}</p>
+            <Header as="h1">
+              <Icon name="tags" />
+              <Header.Content>Tags</Header.Content>
+            </Header>
+              {/* {feed.hashtags} */}
+              {/* {feed.hashtags.map((item: any, index: any) => {
+                <p>{item}123</p>
+              })} */}
+              {feed.hashtags.map((data: any, key: any) => {
+                return (
+                  <div key={key}>
+                    <Label>{data}</Label>
+                  </div>
+                );
+              })}
+              
+            </Container>
+            <Container>
+              <br />
+            <Header as="h1">
+              <Icon name="comments" />
+              <Header.Content>Comments</Header.Content>
+            </Header>
+            <Comments
+              list={feed.comments}
+              userSeq={user.user_seq}
+              feedId={feed.feedId}
+              onChange={feed.comments}
+            />
             </Container>
           </Grid.Column>
         </Grid.Row>
 
-        <Grid.Row textAlign="right">
-          <Grid.Column>
-            <Button onClick={() => router.push("/feed")}>뒤로가기</Button>
+        <Grid.Row>
+          <Grid.Column width={12}>
+          </Grid.Column>
+          <Grid.Column width={3}>
+            <Button onClick={() => router.push("/feed")} color="grey">뒤로</Button>
             {feed.userInfo.user_id == user.user_seq && (
               <>
-                <Button onClick={() => router.push(`/feed/edit/${feedid}`)}>
+                <Button onClick={() => router.push(`/feed/edit/${feedid}`)} color="grey">
                   수정
                 </Button>
-                <Button onClick={deleteFeed}>삭제</Button>
+                <Button onClick={deleteFeed} color="black">삭제</Button>
               </>
             )}
           </Grid.Column>
         </Grid.Row>
 
-        <Grid.Row>
+        {/* <Grid.Row>
           <Grid.Column width={3} />
           <Grid.Column width={10}>
             <Header as="h1">
@@ -162,7 +196,7 @@ function Detail({ feedid }: any) {
               onChange={feed.comments}
             />
           </Grid.Column>
-        </Grid.Row>
+        </Grid.Row> */}
       </Grid>
     </>
   );

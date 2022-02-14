@@ -13,7 +13,7 @@ const SwiperMedia = ({ media }: any) => {
   return (
     <>
       <Swiper
-        style={{ height: "500px" }}
+        style={{ height: "800px"}}
         spaceBetween={200}
         slidesPerView={1}
         navigation
@@ -24,6 +24,7 @@ const SwiperMedia = ({ media }: any) => {
           return (
             <SwiperSlide key={index}>
               <Image src={item} alt={item} />
+              {/* <Image src={item} alt={item} style={{ height: "350px" ,width: "auto" }} /> */}
             </SwiperSlide>
           );
         })}

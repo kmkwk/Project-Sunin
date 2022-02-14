@@ -129,9 +129,17 @@ function Modifyfeed({ feedid }: any) {
       });
     }
 
-    feed.hashtags.map((each: any) => {
-      body.append("hashtags", each);
-    });
+    // feed.hashtags.map((each: any) => {
+    //   body.append("hashtags", each);
+    // });
+
+    {feed.hashtags.map((data: any, key: any) => {
+      return (
+        <div key={key}>
+          <Label>data</Label>
+        </div>
+      );
+    })}
 
     allAxios
       .put("/feed", body)

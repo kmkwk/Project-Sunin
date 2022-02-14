@@ -13,7 +13,7 @@ const SwiperMedia = ({ media }: any) => {
   return (
     <>
       <Swiper
-        style={{ width:"auto", height: "750px"}} // 이미지 height
+        style={{ width:"auto", height: "650px"}} // 이미지 height
         spaceBetween={0}  // 이미지 사이 간격???
         slidesPerView={1} // 한 슬라이드에 띄울 이미지 기본 1
         navigation

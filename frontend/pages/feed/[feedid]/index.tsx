@@ -39,6 +39,7 @@ function Detail({ feedid }: any) {
   });
 
   useEffect(() => {
+    console.log(feedid);
     userAxios
       .get("/api/v1/users")
       .then(({ data }) => {

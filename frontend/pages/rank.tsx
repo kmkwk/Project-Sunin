@@ -19,6 +19,8 @@ export default function Rank() {
   const router = useRouter();
   const [userInfo, setUserInfo] = useState([]);
 
+  const month = new Date().getMonth() + 1;
+
   function goProfile(data: any) {
     router.push(`/profile/${data}`);
   }
@@ -46,7 +48,7 @@ export default function Rank() {
               <br />
               <Header
                 as="h1"
-                content="1월 Sun in MVP"
+                content={`${month}월 Sun in MVP`}
                 textAlign="center"
                 color="yellow"
               />

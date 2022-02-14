@@ -11,6 +11,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/follower")
@@ -57,5 +58,12 @@ public class FollowerController {
     public ResponseEntity<Integer> getFollowingCount(@PathVariable("userId") Long userId){
         log.info("getFollowingCount");
         return ResponseEntity.ok(followerService.countFollowing(userId));
+    }
+
+    @ApiOperation(value = "내가 팔로한 한 사람들의 리스트 - 팔로잉 리스트")
+    @GetMapping("/followingList/{userId}")
+    public ResponseEntity<List<Long>> getFollowingList(@PathVariable("userId") Long userId){
+        log.info("getFollowingList");
+        return ResponseEntity.ok(followerService.getFollwingList(userId));
     }
 }

@@ -7,6 +7,8 @@ import com.ssafy.sunin.repository.FollowerRepository;
 import com.ssafy.sunin.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -51,5 +53,10 @@ public class FollowerServiceImpl implements FollowerService{
     @Override
     public int countFollower(Long followerMember) {
         return followerRepository.getFollowerCount(followerMember);
+    }
+
+    @Override
+    public List<Long> getFollwingList(Long userId) {
+        return followerRepository.getFollowingList(userId);
     }
 }

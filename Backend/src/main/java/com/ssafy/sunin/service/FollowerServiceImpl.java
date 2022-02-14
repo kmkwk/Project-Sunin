@@ -44,12 +44,12 @@ public class FollowerServiceImpl implements FollowerService{
     }
 
     @Override
-    public int countFollower(Long userId) {
-        return followerRepository.getFollowerCount(userId);
+    public int countFollowing(Long userId) {
+        return followerRepository.getFollowingCount(userId);
     }
 
     @Override
-    public int countFollowing(Long followerMember) {
-        return followerRepository.getFollowingCount(followerMember);
+    public int countFollower(Long followerMember) {
+        return followerRepository.getFollowerCount(followerMember);
     }
 }

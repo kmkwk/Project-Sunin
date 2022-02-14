@@ -2,6 +2,7 @@ package com.ssafy.sunin.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;
+import com.amazonaws.transform.MapEntry;
 import com.ssafy.sunin.domain.Comment;
 import com.ssafy.sunin.domain.FeedCollections;
 import com.ssafy.sunin.domain.user.User;
@@ -177,6 +178,26 @@ public class FeedServiceImpl implements FeedService {
             commentMap.put(commentKey.get(i),comments.get(i));
         }
 
+//        commentMap.values().stream().sorted(Comparator.comparing(CommentDto::getGroup)
+//                .thenComparing(CommentDto::getDepth));
+//        LinkedHashMap<Object,CommentDto> linkedHashMap = new LinkedHashMap<>();
+//        for (int i = 0; i < comments.size(); i++) {
+//            linkedHashMap.put(commentKey.get(i),comments.get(i));
+//        }
+
+
+//        linkedHashMap.values().stream().sorted(Comparator.comparing(CommentDto::getGroup)
+//                .thenComparing(CommentDto::getDepth));
+//        System.out.println();
+        // 댓글 최신순 정렬
+//        List<Entry<Object,CommentDto>> entryList = new ArrayList<Entry<Object,CommentDto>>(commentMap.entrySet());
+//        entryList.sort(Comparator.comparing(CommentDto::getGroup)
+//                .thenComparing(CommentDto::getDepth));
+
+//        entryList.sort(Comparator.comparing(o -> o.getValue().getDepth()));
+//        System.out.println();
+//        entryList.sort(Comparator.comparing(o -> o.getValue().getGroup().getTimestamp()));
+
         // 댓글 최신순 정렬
         List<Entry<Object,CommentDto>> entryList = new ArrayList<Entry<Object,CommentDto>>(commentMap.entrySet());
         entryList.sort(
@@ -188,6 +209,7 @@ public class FeedServiceImpl implements FeedService {
         for (int i = 0; i < entryList.size(); i++) {
             linkedHashMap.put(entryList.get(i).getKey(),entryList.get(i).getValue());
         }
+//        linkedHashMap.(Comparator.comparing(o -> o.getValue().getDepth()));
 
         return FeedCommentDto.feedCommentDto(feedCollections, user, linkedHashMap);
     }
@@ -338,6 +360,7 @@ public class FeedServiceImpl implements FeedService {
         List<String> contentList = new ArrayList<>();
         Set<String> set = new HashSet<>();
         List<FeedCollections> feedCollections;
+        List<FeedCollections> hashtagFeed;
 
         if(content.length() == 0){
             return null;
@@ -351,6 +374,7 @@ public class FeedServiceImpl implements FeedService {
                 List<String> hashtags = feedList.get(i).getHashtags();
                 if(!hashtags.isEmpty()){
                     for (int j = 0; j < hashtags.size(); j++){
+                        // 해시태그 리스트
                         if(hashtags.get(j).startsWith(content)){
                             set.add(hashtags.get(j));
                         }

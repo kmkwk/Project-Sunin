@@ -26,7 +26,7 @@ export default function Alarm(){
   const message = "";
 
   useEffect(() => {
-    connect()
+    // connect()
   })
   
   const socket = new SockJS('http://localhost:8080/stomp');

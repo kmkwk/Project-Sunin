@@ -55,7 +55,7 @@ export default function FeedList({ list }: any) {
                       </span>
                       <span> </span>
                       <span>
-                        {count(item.comments)}&nbsp;&nbsp;
+                        {count(item.comments)}##########
                         <Icon name="comments" color="blue" />
                       </span>
                     </Card.Content>

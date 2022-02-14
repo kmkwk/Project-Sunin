@@ -3,8 +3,10 @@ import { useState } from "react";
 import { List, Image, Icon, Label, Input } from "semantic-ui-react";
 import allAxios from "src/lib/allAxios";
 
-function Comment({ list, userSeq, feedId }: any) {
+function Comment({ item, userSeq, feedId }: any) {
   const [comment, setComment] = useState("");
+  const [editable, setEditable] = useState(false); // 테스트
+  const [replyable, setReplyable] = useState(false); // 테스트
 
   const writeDate = (date: any) => {
     return date.split("T")[0];
@@ -14,14 +16,37 @@ function Comment({ list, userSeq, feedId }: any) {
     setComment(e.target.value);
   };
 
-  const writeComment = () => {
+  const likeComment = (e: any) => {
     const body = new FormData();
+    body.append("commentId", item[0]);
+    body.append("feedId", feedId);
+    body.append("userId", userSeq);
+
+    allAxios
+      .put(`/comment/addLike`, body)
+      .then(() => {
+        Router.reload();
+      })
+      .catch(() => {
+        alert("잠시 후 다시 시도해주세요.");
+      });
+  };
+
+  const modifyButton = () => {
+    setEditable(!editable);
+  };
+
+  const modifyComment = () => {
+    setEditable(false);
+
+    const body = new FormData();
+    body.append("commentId", item[0]);
     body.append("content", comment);
     body.append("feedId", feedId);
     body.append("writer", userSeq);
 
     allAxios
-      .post(`/comment`, body)
+      .put(`/comment`, body)
       .then(() => {
         Router.reload();
       })
@@ -31,15 +56,7 @@ function Comment({ list, userSeq, feedId }: any) {
     setComment("");
   };
 
-  const likeFeed = (e: any) => {
-    console.log("피드 좋아요");
-  };
-
-  const modifyComment = (e: any) => {
-    console.log("댓글 수정");
-  };
-
-  const deleteComment = (e: any) => {
+  const deleteButton = (e: any) => {
     const body: any = new FormData();
     body.append("commentId", e.target.name);
     body.append("feedId", feedId);
@@ -61,87 +78,121 @@ function Comment({ list, userSeq, feedId }: any) {
       });
   };
 
-  const replyComment = (e: any) => {
+  const replyButton = (e: any) => {
     console.log("대댓글 작성");
+    setReplyable(!replyable);
+  };
+
+  const replyComment = (e: any) => {
+    const body = new FormData();
+    body.append("commentId", item[0]);
+    body.append("content", comment);
+    body.append("feedId", feedId);
+    body.append("writer", userSeq);
+
+    allAxios
+      .post(`/comment/reply`, body)
+      .then(() => {
+        Router.reload();
+      })
+      .catch(() => {
+        alert("잠시 후 다시 시도해주세요.");
+      });
+    setComment("");
   };
 
   return (
     <>
-      {userSeq != 0 && (
-        <Input
-          fluid
-          className="commentInput"
-          placeholder="Comment"
-          icon="comment"
-          iconPosition="left"
-          value={comment}
-          onChange={handleComment}
-          action={{
-            icon: "send",
-            onClick: writeComment,
-          }}
-        />
-      )}
-      <List relaxed="very" divided verticalAlign="middle">
-        {Object.keys(list).map((key: any, index: any) => (
-          <List.Item key={index}>
-            <List.Content floated="right">
-              {userSeq == 0 && (
-                <Label>
-                  <Icon name="like" />
-                  {list[key].likes}
-                </Label>
-              )}
-              {userSeq != 0 && !list[key].deleted && (
-                <>
-                  <Label as="a" onClick={likeFeed}>
-                    <Icon name="like" />
-                    {list[key].likes}
-                  </Label>
-                  <Label as="a" onClick={replyComment}>
-                    <Icon name="reply" />
-                    Reply
-                  </Label>
-                </>
-              )}
-              {userSeq == list[key].writer && !list[key].deleted && (
-                <>
-                  <Label as="a" onClick={modifyComment}>
-                    <Icon name="edit" />
-                    Edit
-                  </Label>
+      <List.Content floated="right">
+        {userSeq == 0 && (
+          <Label>
+            <Icon name="like" />
+            {item[1].likes}
+          </Label>
+        )}
+        {userSeq != 0 && !item[1].deleted && (
+          <>
+            <Label as="a" onClick={likeComment}>
+              <Icon name="like" />
+              {item[1].likes}
+            </Label>
+            {/* <Label as="a" onClick={replyButton}>
+              <Icon name="reply" />
+              Reply
+            </Label> */}
+          </>
+        )}
+        {userSeq == item[1].writer && !item[1].deleted && (
+          <>
+            <Label as="a" name={item[0]} onClick={modifyButton}>
+              <Icon name="edit" />
+              Edit
+            </Label>
 
-                  <Label as="a" name={key} onClick={deleteComment}>
-                    <Icon name="remove" /> Delete
-                  </Label>
-                </>
-              )}
-            </List.Content>
-            <Image
-              avatar
-              circular
-              width={30}
-              height={30}
-              src={list[key].user.image}
-              alt={list[key].user.image}
+            <Label as="a" name={item[0]} onClick={deleteButton}>
+              <Icon name="remove" /> Delete
+            </Label>
+          </>
+        )}
+      </List.Content>
+      <Image
+        avatar
+        circular
+        width={30}
+        height={30}
+        src={item[1].user.image}
+        alt={item[1].user.image}
+      />
+      <List.Content>
+        <List.Header as="">
+          <span>{item[1].user.nickName}</span>
+          <span> | {writeDate(item[1].write_date)}</span>
+        </List.Header>
+        <List.Description>
+          {item[1].depth > 0 && "ㄴ "}
+          {item[1].deleted ? (
+            "※ 삭제된 댓글입니다."
+          ) : editable ? (
+            <Input
+              placeholder="Comment"
+              icon="comment"
+              iconPosition="left"
+              value={comment}
+              onChange={handleComment}
+              action={{
+                icon: "send",
+                onClick: modifyComment,
+              }}
             />
-            <List.Content>
-              <List.Header as="">
-                <span>{list[key].user.nickName}</span>
-                <span> | {writeDate(list[key].writeDate)}</span>
-              </List.Header>
-              <List.Description>
-                {list[key].deleted == true
-                  ? "※ 삭제된 댓글입니다."
-                  : list[key].content}
-                {list[key].deleted == false && list[key].modified == true
-                  ? "(" + writeDate(list[key].modifiedDate) + " 수정됨)"
-                  : ""}
-              </List.Description>
-            </List.Content>
-          </List.Item>
-        ))}
-      </List>
+          ) : (
+            item[1].content
+          )}
+
+          {!item[1].deleted && item[1].modified && !editable
+            ? "(" + writeDate(item[1].modified_date) + " 수정됨)"
+            : ""}
+        </List.Description>
+        <List.Description>
+          {replyable && (
+            <>
+              <br />
+              <Icon name="level up alternate" rotated="clockwise" />
+              &nbsp;&nbsp;
+              <Input
+                placeholder="Comment"
+                icon="comment"
+                iconPosition="left"
+                value={comment}
+                onChange={handleComment}
+                action={{
+                  icon: "send",
+                  onClick: replyComment,
+                }}
+              />
+            </>
+          )}
+        </List.Description>
+      </List.Content>
     </>
   );
 }

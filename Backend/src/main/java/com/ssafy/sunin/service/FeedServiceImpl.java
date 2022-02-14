@@ -181,6 +181,7 @@ public class FeedServiceImpl implements FeedService {
         List<Entry<Object,CommentDto>> entryList = new ArrayList<Entry<Object,CommentDto>>(commentMap.entrySet());
         entryList.sort(
                 Comparator.comparing(o -> o.getValue().getWriteDate())
+
         );
 
         LinkedHashMap<Object,CommentDto> linkedHashMap = new LinkedHashMap<>();
@@ -356,6 +357,7 @@ public class FeedServiceImpl implements FeedService {
                     }
                 }
             }
+
             if(30 <= feedList.size()){
                 feedCollections = feedList.subList(feedList.size()-29 ,feedList.size()-1);
             }else{
@@ -374,7 +376,18 @@ public class FeedServiceImpl implements FeedService {
         contentList.addAll(set);
         Collections.sort(contentList);
 
-        return FeedSearch.feedSearch(feedCollections,contentList);
+        Set<Long> users = feedCollections.stream()
+                .map(FeedCollections::getUserId)
+                .collect(Collectors.toSet());
+
+        Map<Long, User> userMap = userRepository.findAllSetByUserSeqIn(users).stream()
+                .collect(Collectors.toMap(
+                        User::getUserSeq,
+                        o -> o
+                ));
+
+        List<FeedDto> feedDtos = FeedDto.mapFeedDto(feedCollections,userMap);
+        return FeedSearch.feedSearch(feedDtos,contentList);
 
     }
 

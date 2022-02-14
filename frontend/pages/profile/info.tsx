@@ -7,6 +7,7 @@ import {
   Button,
   Image,
   Input,
+  Container,
 } from "semantic-ui-react";
 import styles from "styles/signup.module.css";
 import Navbar from "src/component/Navbar";
@@ -114,99 +115,100 @@ function EditProfile() {
   return (
     <>
       <Navbar />
+      <Container>
+        <Grid columns={2} padded stackable>
+          <Grid.Column width={4}>
+            <Menubar />
+          </Grid.Column>
+          <Grid.Column width={12}>
+            <div className={styles.headeralign}>
+              <Header size="huge">회원정보 수정</Header>
+              <Divider />
+            </div>
+            <div className={styles.formalign}>
+              <Form>
+                <Form.Field>
+                  <div>
+                    <h4>프로필 사진</h4>
+                    <Image
+                      src={user.profile_image_url}
+                      alt={user.profile_image_url}
+                      width="250px"
+                    />
+                    <Input
+                      type="file"
+                      accept="image/*"
+                      name="profileImage"
+                      onChange={onFileChange}
+                    />
+                    {
+                      <div>
+                        <br />
+                        <Button
+                          basic
+                          color="grey"
+                          onClick={onClearAttachment}
+                          fluid>
+                          Cancel
+                        </Button>
+                      </div>
+                    }
+                  </div>
+                </Form.Field>
+                <Form.Field>
+                  <label>이메일</label>
+                  <Input
+                    disabled
+                    name="email"
+                    placeholder="Email"
+                    value={user.email}
+                    onChange={handleOnChange}
+                  />
+                </Form.Field>
 
-      <Grid columns={2} padded stackable>
-        <Grid.Column width={4}>
-          <Menubar />
-        </Grid.Column>
-        <Grid.Column width={12}>
-          <div className={styles.headeralign}>
-            <Header size="huge">회원정보 수정</Header>
-            <Divider />
-          </div>
-          <div className={styles.formalign}>
-            <Form>
-              <Form.Field>
-                <div>
-                  <h4>프로필 사진</h4>
-                  <Image
-                    src={user.profile_image_url}
-                    alt={user.profile_image_url}
-                    width="250px"
-                  />
-                  <Input
-                    type="file"
-                    accept="image/*"
-                    name="profileImage"
-                    onChange={onFileChange}
-                  />
-                  {
-                    <div>
-                      <br />
-                      <Button
-                        basic
-                        color="grey"
-                        onClick={onClearAttachment}
-                        fluid>
-                        Cancel
-                      </Button>
-                    </div>
-                  }
-                </div>
-              </Form.Field>
-              <Form.Field>
-                <label>이메일</label>
-                <Input
-                  disabled
-                  name="email"
-                  placeholder="Email"
-                  value={user.email}
-                  onChange={handleOnChange}
-                />
-              </Form.Field>
-
-              <Form.Field>
-                <label>닉네임</label>
-                <Form.Group inline>
-                  <Input
-                    name="user_nickname"
-                    placeholder="Nickname"
-                    value={user.user_nickname}
-                    onChange={handleOnChange}
-                  />
-                </Form.Group>
-              </Form.Field>
-              <Form.Field>
-                <label>전화번호</label>
-                <Form.Group inline>
-                  <Input
-                    name="phone_number"
-                    placeholder="Tel"
-                    value={user.phone_number}
-                    onChange={handleOnChange}
-                  />
-                </Form.Group>
-              </Form.Field>
-              <Form.Field>
-                <label>주소</label>
-                <Form.Group inline>
-                  <Input
-                    name="address"
-                    placeholder="Address"
-                    value={user.address}
-                    onChange={handleOnChange}
-                  />
-                </Form.Group>
-              </Form.Field>
-            </Form>
+                <Form.Field>
+                  <label>닉네임</label>
+                  <Form.Group inline>
+                    <Input
+                      name="user_nickname"
+                      placeholder="Nickname"
+                      value={user.user_nickname}
+                      onChange={handleOnChange}
+                    />
+                  </Form.Group>
+                </Form.Field>
+                <Form.Field>
+                  <label>전화번호</label>
+                  <Form.Group inline>
+                    <Input
+                      name="phone_number"
+                      placeholder="Tel"
+                      value={user.phone_number}
+                      onChange={handleOnChange}
+                    />
+                  </Form.Group>
+                </Form.Field>
+                <Form.Field>
+                  <label>주소</label>
+                  <Form.Group inline>
+                    <Input
+                      name="address"
+                      placeholder="Address"
+                      value={user.address}
+                      onChange={handleOnChange}
+                    />
+                  </Form.Group>
+                </Form.Field>
+              </Form>
+              <br />
+              <Button basic color="grey" onClick={uploadToServer} fluid>
+                저장하기
+              </Button>
+            </div>
             <br />
-            <Button basic color="grey" onClick={uploadToServer} fluid>
-              저장하기
-            </Button>
-          </div>
-          <br />
-        </Grid.Column>
-      </Grid>
+          </Grid.Column>
+        </Grid>
+      </Container>
     </>
   );
 }

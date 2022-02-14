@@ -22,29 +22,27 @@ export default function Navbar() {
 
   const isLogin = IsLogin;
 
-  const [userInfo, setUserInfo]: any = useState([])
+  const [userInfo, setUserInfo]: any = useState([]);
 
   useEffect(() => {
     if (isLogin) {
       userAxios
-      .get(`/api/v1/users`, {
-
-      })
-      .then(({ data }) => {
-        setUserInfo(data.body.user)
-      })
-      .catch((e: any) => {
-        console.log(e)
-        // alert("잘못된 접근입니다.");
-      });
+        .get(`/api/v1/users`, {})
+        .then(({ data }) => {
+          setUserInfo(data.body.user);
+        })
+        .catch((e: any) => {
+          console.log(e);
+          // alert("잘못된 접근입니다.");
+        });
     }
-  }, [])
+  }, []);
 
   return (
     <div className={styles.fixed}>
       <Menu fixed="top" color="teal" inverted secondary>
         <Menu.Item link>
-          <Link href="/mainpage">
+          <Link href="/">
             <a>
               <Image
                 src="/images/로고만.png"
@@ -67,14 +65,16 @@ export default function Navbar() {
             <a>Feed</a>
           </Link>
         </Menu.Item>
-        
-        {userInfo.username?
-        <Menu.Item className={styles.item} link>
-          <Link href={`/profile/${userInfo['user_seq']}`}>
-            <a>Profile</a>
-          </Link>
-        </Menu.Item>
-        :""}
+
+        {userInfo.username ? (
+          <Menu.Item className={styles.item} link>
+            <Link href={`/profile/${userInfo["user_seq"]}`}>
+              <a>Profile</a>
+            </Link>
+          </Menu.Item>
+        ) : (
+          ""
+        )}
 
         <Menu.Item position="right">
           <Searchbar />

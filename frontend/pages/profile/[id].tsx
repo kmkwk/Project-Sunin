@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid, Divider, Icon, Item, Label } from "semantic-ui-react";
+import { Grid, Divider, Icon, Item, Label, Container } from "semantic-ui-react";
 import Navbar from "src/component/Navbar";
 import Menubar from "src/component/Menubar";
 import { useEffect, useState } from "react";
@@ -60,56 +60,58 @@ function Profiles({ id }: any) {
   return (
     <>
       <Navbar />
-      <Grid columns={2} padded stackable>
-        <Grid.Column width={4}>
-          <Menubar />
-        </Grid.Column>
-        <Grid.Column width={10}>
-          <div className={styles.headeralign}>
-            <Item.Group divided>
-              <Item>
-                <Item.Image src={user.image} />
+      <Container>
+        <Grid columns={2} padded stackable>
+          <Grid.Column width={4}>
+            <Menubar />
+          </Grid.Column>
+          <Grid.Column width={10}>
+            <div className={styles.headeralign}>
+              <Item.Group divided>
+                <Item>
+                  <Item.Image src={user.image} />
 
-                <Item.Content>
-                  <Item.Header>
-                    <span>{user.nickName}</span>
-                    <span> | </span>
-                    <Icon name="lemon outline" />
-                    <span className="cinema">{user.sunin}</span>
-                  </Item.Header>
-                  <Item.Description>
-                    <span>{user.intro}</span>
-                  </Item.Description>
-                  <Item.Extra>
-                    <Label>
-                      <Icon name="write" />
-                      <span>Feed {user.feedCount}</span>
-                    </Label>
-                    <Label>
-                      <Icon name="sign-in" />
-                      <span>Follower {user.follower}</span>
-                    </Label>
-                    <Label>
-                      <Icon name="sign-out" />
-                      <span>Following {user.following}</span>
-                    </Label>
-                  </Item.Extra>
-                </Item.Content>
-              </Item>
-            </Item.Group>
-          </div>
-          <Divider />
-          <InfiniteScroll
-            style={{ overflow: "hidden" }}
-            dataLength={list.length}
-            next={loadFeed}
-            hasMore={true}
-            loader={undefined}>
-            <FeedList list={list} />
-          </InfiniteScroll>
-        </Grid.Column>
-        <Grid.Column width={2} />
-      </Grid>
+                  <Item.Content>
+                    <Item.Header>
+                      <span>{user.nickName}</span>
+                      <span> | </span>
+                      <Icon name="lemon outline" />
+                      <span className="cinema">{user.sunin}</span>
+                    </Item.Header>
+                    <Item.Description>
+                      <span>{user.intro}</span>
+                    </Item.Description>
+                    <Item.Extra>
+                      <Label>
+                        <Icon name="write" />
+                        <span>Feed {user.feedCount}</span>
+                      </Label>
+                      <Label>
+                        <Icon name="sign-in" />
+                        <span>Follower {user.follower}</span>
+                      </Label>
+                      <Label>
+                        <Icon name="sign-out" />
+                        <span>Following {user.following}</span>
+                      </Label>
+                    </Item.Extra>
+                  </Item.Content>
+                </Item>
+              </Item.Group>
+            </div>
+            <Divider />
+            <InfiniteScroll
+              style={{ overflow: "hidden" }}
+              dataLength={list.length}
+              next={loadFeed}
+              hasMore={true}
+              loader={undefined}>
+              <FeedList list={list} />
+            </InfiniteScroll>
+          </Grid.Column>
+          <Grid.Column width={2} />
+        </Grid>
+      </Container>
     </>
   );
 }

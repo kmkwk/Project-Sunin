@@ -1,4 +1,4 @@
-import { Grid } from "semantic-ui-react";
+import { Container, Grid } from "semantic-ui-react";
 import { useEffect, useState } from "react";
 
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -34,23 +34,25 @@ function Personal() {
   return (
     <>
       <Navbar />
-      <Grid padded stackable>
-        <Grid.Column width={4}>
-          <Menubar />
-        </Grid.Column>
-        <Grid.Column width={10}>
-          <h1>this page is personal</h1>
-          <InfiniteScroll
-            style={{ overflow: "hidden" }}
-            dataLength={list.length}
-            next={loadFeed}
-            hasMore={true}
-            loader={undefined}>
-            {list && <FeedList list={list} />}
-          </InfiniteScroll>
-        </Grid.Column>
-        <Grid.Column width={2} />
-      </Grid>
+      <Container>
+        <Grid padded stackable>
+          <Grid.Column width={4}>
+            <Menubar />
+          </Grid.Column>
+          <Grid.Column width={10}>
+            <h1>this page is personal</h1>
+            <InfiniteScroll
+              style={{ overflow: "hidden" }}
+              dataLength={list.length}
+              next={loadFeed}
+              hasMore={true}
+              loader={undefined}>
+              {list && <FeedList list={list} />}
+            </InfiniteScroll>
+          </Grid.Column>
+          <Grid.Column width={2} />
+        </Grid>
+      </Container>
     </>
   );
 }

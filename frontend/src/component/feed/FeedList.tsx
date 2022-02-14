@@ -25,7 +25,7 @@ export default function FeedList({ list }: any) {
                             : "/images/로고.png"
                         }
                         alt={item.file_path[0]}
-                        height="500px"
+                        height="400px"
                       />
                     )}
 

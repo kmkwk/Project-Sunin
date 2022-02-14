@@ -122,7 +122,7 @@ export default function Menuvar(){
           <Header as='h4'><Link href="/feed/personal"><a>피드</a></Link></Header>
         </Menu.Item>
         
-        {userInfo?
+        {userInfo.username?
         <Menu.Item
         name='company'
       >

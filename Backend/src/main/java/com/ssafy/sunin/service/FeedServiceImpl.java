@@ -373,7 +373,7 @@ public class FeedServiceImpl implements FeedService {
 
         contentList.addAll(set);
         Collections.sort(contentList);
-        
+
         return FeedSearch.feedSearch(feedCollections,contentList);
 
     }

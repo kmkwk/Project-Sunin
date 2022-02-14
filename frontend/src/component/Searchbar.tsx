@@ -1,32 +1,35 @@
-import Link from "next/link"
-import { useRouter } from "next/router"
-import { useEffect, useState } from "react"
-import { Dropdown, Input, Search } from "semantic-ui-react"
-import allAxios from '../lib/allAxios'
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { Dropdown, Input, Search } from "semantic-ui-react";
+import allAxios from "../lib/allAxios";
 
-export default function Searchbar(){
+export default function Searchbar() {
+  const [feedList, setFeedList]: any = useState([]);
+  const router = useRouter();
 
-  const [feedList, setFeedList]: any = useState([])
-  const router = useRouter()
-
-  function getSearchValue(e: any){
+  function getSearchValue(e: any) {
     // if (e.target.value[0] === '#'){
-      allAxios
+    allAxios
       .get(`/feed/search`, {
         params: {
-          content: e.target.value
+          content: e.target.value,
         },
       })
       .then(({ data }) => {
         if (data.feed_dtos) {
-          let newFeedList: any = []
+          let newFeedList: any = [];
           data.feed_dtos.map((feed: any) => {
-            console.log('feed', feed)
-            newFeedList.push({key: feed.created_date, title: feed.content.slice(0, 20), id: feed.id})
-          })
-          setFeedList(newFeedList)
+            console.log("feed", feed);
+            newFeedList.push({
+              key: feed.created_date,
+              title: feed.content.slice(0, 20),
+              id: feed.id,
+            });
+          });
+          setFeedList(newFeedList);
         }
-        })
+      });
     //   } else {
     //   allAxios
     //   .get(`/feed/latest`, {
@@ -45,36 +48,36 @@ export default function Searchbar(){
     //   });
     // }
   }
-  function goReloading(){
-    router.reload()
+  function goReloading() {
+    router.reload();
   }
 
-  function getSelectedValue(e: any){
+  function getSelectedValue(e: any) {
     if (e.type === "click") {
       feedList.filter((feed: any) => {
         if (feed.title === e.target.outerText) {
-          router.push(`/feed/personal/${feed.id}`)
-          setTimeout(goReloading, 1500)
+          router.push(`/feed/${feed.id}`);
+          setTimeout(goReloading, 1500);
         }
-      })
+      });
     } else {
       feedList.filter((feed: any) => {
         if (feed.title === e.target.value) {
-          router.push(`/feed/personal/${feed.id}`)
-          setTimeout(goReloading, 1500)
+          router.push(`/feed/${feed.id}`);
+          setTimeout(goReloading, 1500);
         }
-      })
+      });
     }
   }
 
-  return(
+  return (
     <>
       <Search
         onResultSelect={getSelectedValue}
         results={feedList}
         onKeyUp={getSearchValue}
         placeholder="#tag / 피드내용 입력"
-        name = 'searchInput'
+        name="searchInput"
       />
     </>
   );

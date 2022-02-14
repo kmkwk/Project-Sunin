@@ -36,7 +36,7 @@ export default function SampleFeedList({ list }: any) {
                   </Feed.Content>
                 </Feed.Event>
               </Feed> */}
-              <Link href={`/feed/personal/${item.id}`}>
+              <Link href={`/feed/${item.id}`}>
                 <Card>
                   <Image
                     src={

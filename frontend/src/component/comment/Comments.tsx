@@ -17,6 +17,10 @@ function Comments({ list, userSeq, feedId }: any) {
     body.append("feedId", feedId);
     body.append("writer", userSeq);
 
+    console.log(userSeq);
+    console.log(feedId);
+    console.log(userSeq);
+
     allAxios
       .post(`/comment`, body)
       .then(() => {

@@ -7,6 +7,8 @@ export default function FeedList({ list }: any) {
     return list.length;
   }
 
+  console.log(list);
+
   return (
     <>
       <Grid columns={1} stackable>
@@ -55,7 +57,7 @@ export default function FeedList({ list }: any) {
                       </span>
                       <span> </span>
                       <span>
-                        {count(item.comments)}##########
+                        {item.comments} ######&nbsp;&nbsp;
                         <Icon name="comments" color="blue" />
                       </span>
                     </Card.Content>

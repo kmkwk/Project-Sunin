@@ -116,14 +116,14 @@ function Comment({ item, userSeq, feedId }: any) {
               <Icon name="like" />
               {item[1].likes}
             </Label>
-            {/* {item[1].depth == 0 ? (
+            {item[1].depth == 0 ? (
               <Label as="a" onClick={replyButton}>
                 <Icon name="reply" />
                 Reply
               </Label>
             ) : (
               ""
-            )} */}
+            )}
           </>
         )}
         {userSeq == item[1].writer && !item[1].deleted && (

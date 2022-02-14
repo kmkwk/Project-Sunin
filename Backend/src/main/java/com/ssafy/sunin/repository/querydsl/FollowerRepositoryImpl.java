@@ -40,16 +40,16 @@ public class FollowerRepositoryImpl implements FollowerRepositoryCustom {
     }
 
     @Override
-    public int getFollowerCount(Long followerMember) {
+    public int getFollowingCount(Long userId) {
         return queryFactory
                 .select(qFollower.count())
                 .from(qFollower)
-                .where(qFollower.user.userSeq.eq(followerMember))
+                .where(qFollower.user.userSeq.eq(userId))
                 .fetch().get(0).intValue();
     }
 
     @Override
-    public int getFollowingCount(Long followerMember) {
+    public int getFollowerCount(Long followerMember) {
         return queryFactory
                 .select(qFollower.count())
                 .from(qFollower)

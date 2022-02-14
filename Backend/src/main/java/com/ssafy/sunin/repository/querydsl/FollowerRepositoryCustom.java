@@ -10,9 +10,9 @@ public interface FollowerRepositoryCustom {
 
     List<Long> getFollowingList(Long userId);
 
-    int getFollowerCount(Long id);
+    int getFollowingCount(Long userId);
 
-    int getFollowingCount(Long followerMember);
+    int getFollowerCount(Long followerMember);
 
     Follower getUser(FollowerUser followerUser);
 }

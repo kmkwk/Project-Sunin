@@ -31,6 +31,7 @@ public class CommentService {
         // 새로운 댓글
         Comment comment = Comment.commentWriter(commentWrite,objectId);
         FeedCollections feedCollections = feedRepository.findFeedIdByIdAndFlagTrue(new ObjectId(commentWrite.getFeedId()));
+        // Todo : 기존 댓글이 없는 경우 널포인트
         Map<Object,Comment> comments = feedCollections.getComments();
         comments.put(objectId,comment);
         comment.setCommentGroup(objectId);

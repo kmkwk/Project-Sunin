@@ -7,6 +7,7 @@ import com.ssafy.sunin.domain.FeedCollections;
 import com.ssafy.sunin.domain.user.User;
 import com.ssafy.sunin.payload.request.feed.*;
 import com.ssafy.sunin.payload.response.comment.CommentDto;
+import com.ssafy.sunin.payload.response.feed.FeedSearch;
 import com.ssafy.sunin.payload.response.user.UserDetailProfile;
 import com.ssafy.sunin.payload.response.feed.FeedCommentDto;
 import com.ssafy.sunin.payload.response.feed.FeedDto;
@@ -16,6 +17,7 @@ import com.ssafy.sunin.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -331,18 +333,21 @@ public class FeedServiceImpl implements FeedService {
     }
 
     @Override
-    public List<String> getSearchList(String content) {
+    public FeedSearch getSearchList(Pageable pageable,String content) {
         List<String> contentList = new ArrayList<>();
         Set<String> set = new HashSet<>();
+        List<FeedCollections> feedCollections;
 
         if(content.length() == 0){
             return null;
         }else if(content.contains("#") && 2 <= content.length()){
             content = content.substring(1);
-            List<FeedCollections> feedCollections =  feedRepository.findAll();
-
-            for (int i = 0; i < feedCollections.size(); i++) {
-                List<String> hashtags = feedCollections.get(i).getHashtags();
+            // 현재는 모든 피드 검색
+            List<FeedCollections> feedList = feedRepository.findAll();
+            // 해당 해시태그만 포함하는 피드만 가져와야함
+            for (int i = 0; i < feedList.size(); i++) {
+                // 해당 해시태그 가져오기
+                List<String> hashtags = feedList.get(i).getHashtags();
                 if(!hashtags.isEmpty()){
                     for (int j = 0; j < hashtags.size(); j++){
                         if(hashtags.get(j).startsWith(content)){
@@ -351,8 +356,16 @@ public class FeedServiceImpl implements FeedService {
                     }
                 }
             }
+            if(30 <= feedList.size()){
+                feedCollections = feedList.subList(feedList.size()-29 ,feedList.size()-1);
+            }else{
+                feedCollections = feedList;
+            }
+
+            Collections.reverse(feedCollections);
         }else {
-            List<FeedCollections> feedCollections = feedRepository.findByContentStartsWith(content);
+            feedCollections = feedRepository.findByContentStartsWith(content,pageable);
+
             for (int i = 0; i < feedCollections.size(); i++) {
                 set.add(feedCollections.get(i).getContent());
             }
@@ -361,7 +374,8 @@ public class FeedServiceImpl implements FeedService {
         contentList.addAll(set);
         Collections.sort(contentList);
 
-        return contentList;
+        return FeedSearch.feedSearch(feedCollections,contentList);
+
     }
 
     private String createFileName(String fileName) {

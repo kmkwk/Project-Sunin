@@ -1,5 +1,6 @@
 package com.ssafy.sunin.controller;
 
+import com.ssafy.sunin.payload.response.feed.FeedSearch;
 import com.ssafy.sunin.payload.response.user.UserDetailProfile;
 import com.ssafy.sunin.payload.request.feed.*;
 import com.ssafy.sunin.payload.response.feed.FeedCommentDto;
@@ -155,9 +156,10 @@ public class FeedController {
 
     @ApiOperation(value = "내용 및 해시태그 검색 창", notes = "해시태그 검색은 #내용, 내용검색은 내용만 보내면 됨")
     @GetMapping("/search")
-    public ResponseEntity<List<String>> getSearchList(@RequestParam("content") String content){
+    public ResponseEntity<FeedSearch> getSearchList(@PageableDefault(size = 30,sort = "createdDate",
+                                                            direction = Sort.Direction.DESC) Pageable pageable, @RequestParam("content") String content){
         log.info("getSearchList");
 
-        return ResponseEntity.ok(feedService.getSearchList(content));
+        return ResponseEntity.ok(feedService.getSearchList(pageable,content));
     }
 }

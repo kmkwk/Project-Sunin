@@ -1,34 +1,25 @@
-import {
-  Button,
-  Form,
-  Input,
-  Image,
-  Grid,
-  TextArea,
-  Label,
-} from "semantic-ui-react";
+import { Button, Form, Input, Grid, TextArea, Label } from "semantic-ui-react";
 import { useEffect, useState } from "react";
-import styles from "styles/CreateFeed.module.css";
 import { useRouter } from "next/router";
 
 import Navbar from "src/component/Navbar";
 import userAxios from "src/lib/userAxios";
-import User from "src/class/User";
 import FeedWrite from "src/class/FeedWrite";
+import SwiperMedia from "src/component/Swiper";
 
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 
-export default function Createfeed() {
+import styles from "styles/CreateFeed.module.css";
+
+function Createfeed() {
   const router = useRouter();
 
   const [feed, setFeed]: any = useState(new FeedWrite());
   const [user, setUser]: any = useState();
-
-  const [attachment, setAttachment] = useState();
-  const [createObjectURL, setCreateObjectURL] = useState(null);
+  const [media, setMedia]: any = useState([]);
 
   useEffect(() => {
     userAxios
@@ -70,29 +61,31 @@ export default function Createfeed() {
   };
 
   const uploadFile = (e: any) => {
-    e.stopPropagation(); // 이벤트 전파 방지
     setFeed({
       ...feed,
       filePath: Array.from(e.target.files),
     });
-    const {
-      target: { files },
-    } = e;
-    const theFile = files[0];
-    const reader = new FileReader();
 
-    reader.onloadend = (finishedEvent: any) => {
-      setAttachment(finishedEvent.currentTarget["result"]);
-    };
-    if (theFile) {
-      reader.readAsDataURL(theFile);
-    } else {
-      setAttachment(undefined);
-    }
+    const arr: any = [];
+    Object.entries(e.target.files).map((item: any) => {
+      const url = URL.createObjectURL(item[1]);
+      arr.push(url);
+    });
+    setMedia(arr);
   };
 
   const handleSubmit = (e: any) => {
     e.preventDefault(); // 새로고침 방지
+
+    let flag = false;
+    if (feed.content == "") flag = true;
+    if (feed.filePath.length == 0) flag = true;
+
+    if (flag) {
+      alert("내용을 입력해주세요.");
+      return;
+    }
+
     const body = new FormData();
     body.append("userId", user.user_seq);
     body.append("content", feed.content);
@@ -112,18 +105,11 @@ export default function Createfeed() {
         headers: { "Content-Type": "multipart/form-data" },
       })
       .then(() => {
-        alert("성공");
         router.push("/feed/personal");
       })
       .catch(() => {
-        alert("실패");
+        alert("잠시 후 다시 시도해주세요.");
       });
-  };
-
-  const onClearAttachment = () => {
-    const erase: any = document.getElementsByName("myImage");
-    erase[""] = null;
-    setAttachment(undefined);
   };
 
   return (
@@ -147,27 +133,13 @@ export default function Createfeed() {
               <Form.Field>
                 <div>
                   <h3>이미지 선택</h3>
-                  <Image src={createObjectURL} width="100px" />
-                  <input
+                  <Input
                     type="file"
                     accept="image/*, video/*"
-                    multiple
                     onChange={uploadFile}
+                    multiple
                   />
-                  {attachment && (
-                    <div>
-                      <br />
-                      <img src={attachment} width="80%" height="80%" />
-
-                      <Button
-                        basic
-                        color="grey"
-                        onClick={onClearAttachment}
-                        fluid>
-                        Cancel
-                      </Button>
-                    </div>
-                  )}
+                  {media.length > 0 && <SwiperMedia media={media} />}
                 </div>
               </Form.Field>
               <Form.Field>
@@ -188,21 +160,21 @@ export default function Createfeed() {
                     );
                   })}
               </Form.Field>
-              {/* <Form.Field control={Button} onClick={handleSubmit}>
-                저장하기
-              </Form.Field> */}
-              <Button basic color="black" onClick={handleSubmit} fluid>
-                저장하기
-              </Button>
+              <Form.Field>
+                <Button control={Button} onClick={() => router.back()}>
+                  뒤로가기
+                </Button>
+                <Button control={Button} onClick={handleSubmit}>
+                  저장하기
+                </Button>
+              </Form.Field>
             </Form>
           </Grid.Column>
-          <Grid.Column width={3}></Grid.Column>
+          <Grid.Column width={3} />
         </Grid.Row>
       </Grid>
     </>
   );
 }
 
-function setAttachment(arg0: any) {
-  throw new Error("Function not implemented.");
-}
+export default Createfeed;

@@ -37,7 +37,7 @@ export default function FeedList({ list }: any) {
                         alt={item.user.image}
                         circular
                       />
-                      <Card.Header>{item.user.nickName}</Card.Header>
+                      <Card.Header>{item.user.nick_name}</Card.Header>
                       <Card.Meta>
                         <span>
                           {item.modified_date.slice(0, 10)}{" "}

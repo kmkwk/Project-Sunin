@@ -18,7 +18,23 @@ import allAxios from "src/lib/allAxios";
 
 function EditProfile() {
   const router = useRouter();
-  const [user, setUser] = useState(new User());
+  const [user, setUser]: any = useState({
+    user_seq: -1,
+    user_id: "",
+    username: "",
+    email: "",
+    user_nickname: "",
+    profile_image_url: "",
+    provider_type: "",
+    role_type: "",
+    sunin_days: 0,
+    created_at: "",
+    modified_at: "",
+    follower: [],
+    address: "",
+    introduction: "",
+    phone_number: "",
+  });
   const [attachment, setAttachment] = useState();
   const [filePath, setFilePath]: any = useState();
 
@@ -43,13 +59,19 @@ function EditProfile() {
   };
 
   const uploadToServer = async (event: any) => {
+    console.log(user.phone_number);
+    console.log(user.address);
+    console.log(user.filePath);
+    console.log(user.introduction);
+    console.log(user.user_nickname);
     const body = new FormData();
     body.append("address", user.address);
     body.append("image", filePath);
-    body.append("introduction", user.introduction);
-    body.append("nickName", user.userNickname);
-    body.append("phoneNumber", user.phoneNumber);
-    body.append("userId", JSON.stringify(user.userSeq));
+    body.append("introduction", "안녕하세요");
+    // body.append("introduction", user.introduction);
+    body.append("nickName", user.user_nickname);
+    body.append("phoneNumber", user.phone_number);
+    body.append("userId", user.user_seq);
 
     allAxios
       .put("/api/v1/users", body, {
@@ -65,8 +87,8 @@ function EditProfile() {
 
   const onFileChange = (event: any) => {
     event.stopPropagation(); // 이벤트 전파 방지
-    console.log(event.target.files);
-    setFilePath(event.target.files);
+    console.log(event.target.files[0]);
+    setFilePath(event.target.files[0]);
 
     const {
       target: { files },
@@ -107,7 +129,11 @@ function EditProfile() {
               <Form.Field>
                 <div>
                   <h4>프로필 사진</h4>
-                  <Image src={user.profileImageUrl} width="100px" />
+                  <Image
+                    src={user.profile_image_url}
+                    alt={user.profile_image_url}
+                    width="250px"
+                  />
                   <Input
                     type="file"
                     accept="image/*"
@@ -145,7 +171,7 @@ function EditProfile() {
                   <Input
                     name="user_nickname"
                     placeholder="Nickname"
-                    value={user.userNickname}
+                    value={user.user_nickname}
                     onChange={handleOnChange}
                   />
                 </Form.Group>
@@ -156,7 +182,7 @@ function EditProfile() {
                   <Input
                     name="phone_number"
                     placeholder="Tel"
-                    value={user.phoneNumber}
+                    value={user.phone_number}
                     onChange={handleOnChange}
                   />
                 </Form.Group>

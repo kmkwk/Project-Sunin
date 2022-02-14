@@ -73,7 +73,7 @@ function Personal() {
             <Menubar />
           </Grid.Column>
           <Grid.Column width={10}>
-            <Menu text>
+            {/* <Menu text>
               <Menu.Item header>Sort By</Menu.Item>
               <Menu.Item
                 name="Latest"
@@ -85,7 +85,7 @@ function Personal() {
                 active={activeItem === "like"}
                 onClick={handleItemClick}
               />
-            </Menu>
+            </Menu> */}
             {activeItem == "latest" ? (
               <div id="sortByLatest">
                 <InfiniteScroll

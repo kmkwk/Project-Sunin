@@ -17,10 +17,6 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
-</style>;
-
 const Home: NextPage = () => {
   const [list, setList]: any = useState([
     "images/1번.jpg",

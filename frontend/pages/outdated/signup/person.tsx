@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { Image, Form, Grid, Segment, Button } from "semantic-ui-react";
-import "../../styles/signup.module.css";
-import Navbar from "../../src/component/Navbar";
+import "styles/signup.module.css";
+import Navbar from "src/component/Navbar";
 import axios from "axios";
 
 const Signup = () => {

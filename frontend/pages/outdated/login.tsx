@@ -2,7 +2,7 @@ import Navbar from "src/component/Navbar";
 import Link from "next/link";
 import { Button, Form, Grid, Segment, Image, Header } from "semantic-ui-react";
 import { useState } from "react";
-import styles from "../../styles/Login.module.css";
+import styles from "styles/Login.module.css";
 import { useRouter } from "next/router";
 
 export default function Login() {

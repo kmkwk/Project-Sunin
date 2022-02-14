@@ -9,6 +9,7 @@ import com.ssafy.sunin.payload.response.user.UserRank;
 import com.ssafy.sunin.payload.response.user.UserSideProfile;
 import com.ssafy.sunin.payload.response.user.UserUpdateResponse;
 import com.ssafy.sunin.service.UserService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.RequiredArgsConstructor;

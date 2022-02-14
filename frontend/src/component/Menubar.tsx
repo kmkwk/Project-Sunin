@@ -12,12 +12,12 @@ import User from 'src/class/User'
 export default function Menuvar(){
 
   const isLogin = IsLogin
-  const [userInfo, setUserInfo]: any = useState({})
+  const [userInfo, setUserInfo]: any = useState([])
   const router = useRouter()
 
   function goProfile(){
     if (userInfo) {
-      router.push(`/profile/${userInfo['userSeq']}`)
+      router.push(`/profile/${userInfo['user_seq']}`)
     }
   }
 
@@ -28,7 +28,7 @@ export default function Menuvar(){
 
       })
       .then(({ data }) => {
-        setUserInfo(new User(data.body.user))
+        setUserInfo(data.body.user)
       })
       .catch((e: any) => {
         console.log(e)
@@ -36,6 +36,17 @@ export default function Menuvar(){
       });
     }
   }, [])
+
+  let suninImage = "/images/suninimage/씨앗.png"
+
+  if (userInfo['sunin_days']) {
+    suninImage =
+    userInfo['sunin_days']<3?"/images/suninimage/씨앗.png":
+    userInfo['sunin_days']<6?"/images/suninimage/새싹.jpg":
+    userInfo['sunin_days']<9?"/images/suninimage/봉오리.jpg":
+    userInfo['sunin_days']<12?"/images/suninimage/꽃.png":
+    "/images/suninimage/나무.png"
+  }
 
   // let userData = null;
   // const tester = getUserData
@@ -82,19 +93,13 @@ export default function Menuvar(){
               } */}
               {userInfo.username?
               <>
-                <img src={userInfo['profileImageUrl']} alt="프로필사진" width="50px" onClick={goProfile} style={{cursor: "pointer", textShadow:"123"}} title="내 프로필로 이동합니다."/>
+                <img src={userInfo['profile_image_url']} alt="프로필사진" width="50px" onClick={goProfile} style={{cursor: "pointer", textShadow:"123"}} title="내 프로필로 이동합니다."/>
                 <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 {userInfo['username']}
                 <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-                {userInfo['suninDays']}일
+                {userInfo['sunin_days']}일
                 <Image 
-                  src={
-                    userInfo['suninDays']<3?"/images/suninimage/씨앗.png":
-                    userInfo['suninDays']<6?"/images/suninimage/새싹.jpg":
-                    userInfo['suninDays']<9?"/images/suninimage/봉오리.jpg":
-                    userInfo['suninDays']<12?"/images/suninimage/꽃.png":
-                    "/images/suninimage/나무.png"
-                    } width="50px" title="씨앗->새싹->봉오리->꽃->나무"/>
+                  src={suninImage} width="50px" title="씨앗->새싹->봉오리->꽃->나무"/>
                 {/* &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; */}
                 <Link href="/profile/info"><a title="회원정보 수정 페이지로 이동합니다."><Icon name='cog' size='large' color='grey' circular/></a></Link>
               </>
@@ -121,7 +126,7 @@ export default function Menuvar(){
         <Menu.Item
         name='company'
       >
-        <Header as='h4'><Link href={`/profile/${userInfo['userSeq']}`}><a>프로필</a></Link></Header>
+        <Header as='h4'><Link href={`/profile/${userInfo['user_seq']}`}><a>프로필</a></Link></Header>
       </Menu.Item>
         :""}
         

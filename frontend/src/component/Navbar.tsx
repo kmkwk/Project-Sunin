@@ -22,7 +22,7 @@ export default function Navbar() {
 
   const isLogin = IsLogin;
 
-  const [userInfo, setUserInfo]: any = useState({})
+  const [userInfo, setUserInfo]: any = useState([])
 
   useEffect(() => {
     if (isLogin) {
@@ -31,7 +31,7 @@ export default function Navbar() {
 
       })
       .then(({ data }) => {
-        setUserInfo(new User(data.body.user))
+        setUserInfo(data.body.user)
       })
       .catch((e: any) => {
         console.log(e)
@@ -70,7 +70,7 @@ export default function Navbar() {
         
         {userInfo.username?
         <Menu.Item className={styles.item} link>
-          <Link href={`/profile/${userInfo['userSeq']}`}>
+          <Link href={`/profile/${userInfo['user_seq']}`}>
             <a>Profile</a>
           </Link>
         </Menu.Item>

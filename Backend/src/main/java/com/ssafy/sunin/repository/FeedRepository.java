@@ -3,6 +3,7 @@ package com.ssafy.sunin.repository;
 import com.ssafy.sunin.domain.FeedCollections;
 import com.ssafy.sunin.repository.querydsl.FeedRepositoryCustom;
 import org.bson.types.ObjectId;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -26,5 +27,6 @@ public interface FeedRepository extends MongoRepository<FeedCollections, ObjectI
 
     FeedCollections findFeedSortIdByIdAndFlagTrue(ObjectId id, Sort sort);
 
-    List<FeedCollections> findByContentStartsWith(String content);
+    List<FeedCollections> findByContentStartsWith(String content,Pageable pageable);
+
 }

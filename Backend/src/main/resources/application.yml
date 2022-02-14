@@ -6,12 +6,13 @@ spring:
     name: oauth2
   data:
     mongodb:
-      authentication-database: admin
-      username: sunin
-      password: BUKQ@3rbfM=+NY7sGmP^
+      #      authentication-database: admin
+      #      username: sunin
+      #      password: BUKQ@3rbfM=+NY7sGmP^
+      uri: mongodb://localhost:27017
       database: sunin
-      port: 27017
-      host: i6c210.p.ssafy.io
+      #      port: 27017
+      #      host: i6c210.p.ssafy.io
   security:
     user:
       name: ssafy

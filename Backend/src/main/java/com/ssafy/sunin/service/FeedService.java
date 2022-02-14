@@ -1,5 +1,6 @@
 package com.ssafy.sunin.service;
 
+import com.ssafy.sunin.payload.response.feed.FeedSearch;
 import com.ssafy.sunin.payload.response.user.UserDetailProfile;
 import com.ssafy.sunin.payload.request.feed.*;
 import com.ssafy.sunin.payload.response.feed.FeedCommentDto;
@@ -39,6 +40,6 @@ public interface FeedService {
 
     Long feedCount(Long userId);
 
-    List<String> getSearchList(String content);
+    FeedSearch getSearchList(Pageable pageable,String content);
 
 }

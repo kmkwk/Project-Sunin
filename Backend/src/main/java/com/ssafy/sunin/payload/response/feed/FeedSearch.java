@@ -8,20 +8,21 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
+// id, content, hashtags
 public class FeedSearch {
-    private List<FeedCollections> feedCollectionsList;
+    private List<FeedDto> feedDtos;
     private List<String> contentList;
 
-    public static FeedSearch feedSearch(List<FeedCollections> feedCollections, List<String> contentList){
+    public static FeedSearch feedSearch(List<FeedDto> feedDtos, List<String> contentList){
         return FeedSearch.builder()
-                .feedCollectionsList(feedCollections)
+                .feedDtos(feedDtos)
                 .contentList(contentList)
                 .build();
     }
 
     @Builder
-    public FeedSearch(List<FeedCollections> feedCollectionsList, List<String> contentList) {
-        this.feedCollectionsList = feedCollectionsList;
+    public FeedSearch(List<FeedDto> feedDtos, List<String> contentList) {
+        this.feedDtos = feedDtos;
         this.contentList = contentList;
     }
 }

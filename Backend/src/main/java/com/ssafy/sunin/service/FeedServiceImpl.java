@@ -8,10 +8,8 @@ import com.ssafy.sunin.domain.FeedCollections;
 import com.ssafy.sunin.domain.user.User;
 import com.ssafy.sunin.payload.request.feed.*;
 import com.ssafy.sunin.payload.response.comment.CommentDto;
-import com.ssafy.sunin.payload.response.feed.FeedSearch;
+import com.ssafy.sunin.payload.response.feed.*;
 import com.ssafy.sunin.payload.response.user.UserDetailProfile;
-import com.ssafy.sunin.payload.response.feed.FeedCommentDto;
-import com.ssafy.sunin.payload.response.feed.FeedDto;
 import com.ssafy.sunin.repository.FeedRepository;
 import com.ssafy.sunin.repository.FollowerRepository;
 import com.ssafy.sunin.repository.UserRepository;
@@ -30,6 +28,7 @@ import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.Map.Entry;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -143,24 +142,12 @@ public class FeedServiceImpl implements FeedService {
         FeedCollections feedCollections = feedRepository.findByIdAndFlagTrue(new ObjectId(String.valueOf(id)));
         User user = userRepository.findProfileByUserSeq(feedCollections.getUserId());
 
-        // 댓글쓴 사람 프로필정보까지 같이 보내줘야함
-        // 우선 댓글에 대한 전체 정보를 가져와서
-        List<Sort.Order> orders = new ArrayList<>();
-        orders.add(new Sort.Order(Sort.Direction.ASC, "writeDate"));
-        orders.add(new Sort.Order(Sort.Direction.ASC, "group"));
-        orders.add(new Sort.Order(Sort.Direction.ASC, "order"));
-        // 해당 피드의 전체 댓글
-        Map<Object, Comment> commentsMap = feedRepository.findFeedSortIdByIdAndFlagTrue(feedCollections.getId(), Sort.by(orders)).getComments();
-
-        List<Comment> commentsList = new ArrayList<>();
-        List<Object> commentKey = new ArrayList<>();
-        // Comment key값
-        commentKey.addAll(commentsMap.keySet());
-        // Comment value값
-        commentsList.addAll(commentsMap.values());
+        Map<Object, Comment> commentsMap = feedRepository.findFeedSortIdByIdAndFlagTrue(feedCollections.getId()).getComments();
+        List<Comment> commentList = new ArrayList<>();
+        commentList.addAll(commentsMap.values());
 
         // 아이디 중복 처리
-        Set<Long> setUser = commentsList.stream()
+        Set<Long> setUser = commentList.stream()
                 .map(Comment::getWriter)
                 .collect(Collectors.toSet());
 
@@ -170,46 +157,14 @@ public class FeedServiceImpl implements FeedService {
                         User::getUserSeq,
                         o -> o
                 ));
-        // 댓글 유저 프로필 정보랑 댓글 조합
-        List<CommentDto> comments = CommentDto.mapCommentDto(commentsList,userMap);
-        Map<Object,CommentDto> commentMap = new HashMap<>();
 
-        for (int i = 0; i < comments.size(); i++) {
-            commentMap.put(commentKey.get(i),comments.get(i));
-        }
-
-//        commentMap.values().stream().sorted(Comparator.comparing(CommentDto::getGroup)
-//                .thenComparing(CommentDto::getDepth));
-//        LinkedHashMap<Object,CommentDto> linkedHashMap = new LinkedHashMap<>();
-//        for (int i = 0; i < comments.size(); i++) {
-//            linkedHashMap.put(commentKey.get(i),comments.get(i));
-//        }
-
-
-//        linkedHashMap.values().stream().sorted(Comparator.comparing(CommentDto::getGroup)
-//                .thenComparing(CommentDto::getDepth));
-//        System.out.println();
-        // 댓글 최신순 정렬
-//        List<Entry<Object,CommentDto>> entryList = new ArrayList<Entry<Object,CommentDto>>(commentMap.entrySet());
-//        entryList.sort(Comparator.comparing(CommentDto::getGroup)
-//                .thenComparing(CommentDto::getDepth));
-
-//        entryList.sort(Comparator.comparing(o -> o.getValue().getDepth()));
-//        System.out.println();
-//        entryList.sort(Comparator.comparing(o -> o.getValue().getGroup().getTimestamp()));
-
-        // 댓글 최신순 정렬
-        List<Entry<Object,CommentDto>> entryList = new ArrayList<Entry<Object,CommentDto>>(commentMap.entrySet());
-        entryList.sort(
-                Comparator.comparing(o -> o.getValue().getWriteDate())
-
-        );
-
+        commentList.sort(Comparator.comparing(Comment::getGroup)
+                .thenComparing(Comment::getDepth));
+        List<CommentDto> comments = CommentDto.mapCommentDto(commentList,userMap);
         LinkedHashMap<Object,CommentDto> linkedHashMap = new LinkedHashMap<>();
-        for (int i = 0; i < entryList.size(); i++) {
-            linkedHashMap.put(entryList.get(i).getKey(),entryList.get(i).getValue());
+        for (int i = 0; i < comments.size(); i++) {
+            linkedHashMap.put(comments.get(i).getId(),comments.get(i));
         }
-//        linkedHashMap.(Comparator.comparing(o -> o.getValue().getDepth()));
 
         return FeedCommentDto.feedCommentDto(feedCollections, user, linkedHashMap);
     }

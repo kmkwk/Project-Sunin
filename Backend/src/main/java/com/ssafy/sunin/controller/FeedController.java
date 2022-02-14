@@ -19,7 +19,6 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,7 +28,6 @@ import java.util.Set;
 public class FeedController {
 
     private final FeedServiceImpl feedService;
-//    private final SimpMessagingTemplate simpMessagingTemplate;
 
     @ApiOperation(value = "Feed 작성", notes = "다중 파일 업로드 가능")
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
@@ -50,7 +48,6 @@ public class FeedController {
         return ResponseEntity.ok(feedService.downloadFileFeed(fileName));
     }
 
-    // Todo : 프론트에서 encodeURI로 감싸서 보내는거 테스트해봐야함
     @ApiOperation(value = "피드 사진 삭제", notes = "사진 여러장 삭제 가능")
     @PutMapping("/file")
     public ResponseEntity<FeedDto> updateFile(@RequestBody @Valid FileUpdate fileUpdate) {

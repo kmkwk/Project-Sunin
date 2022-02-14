@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 
 @Getter
 public class CommentDto {
+    private String id;
     @ApiModelProperty(value = "내용")
     private String content;
 
@@ -50,6 +51,7 @@ public class CommentDto {
     public static List<CommentDto> mapCommentDto(List<Comment> comments, Map<Long, User> userMap){
         return comments.stream()
                 .map(comment -> CommentDto.builder()
+                        .id(comment.getId())
                         .writer(comment.getWriter())
                         .content(comment.getContent())
                         .likes(comment.getLikes())
@@ -65,7 +67,8 @@ public class CommentDto {
     }
 
     @Builder
-    public CommentDto(String content, Long writer, int likes, LocalDateTime writeDate, LocalDateTime modifiedDate, boolean modified, boolean deleted, ObjectId group, int depth, User user) {
+    public CommentDto(String id ,String content, Long writer, int likes, LocalDateTime writeDate, LocalDateTime modifiedDate, boolean modified, boolean deleted, ObjectId group, int depth, User user) {
+        this.id = id;
         this.content = content;
         this.writer = writer;
         this.likes = likes;

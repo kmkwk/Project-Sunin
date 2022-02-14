@@ -51,7 +51,7 @@ export default function Alarm(){
       (error: any) => {
         console.log("소켓 연결 실패", error); 
         stompClient.connected = false;
-      }
+      } 
     );
   }
 

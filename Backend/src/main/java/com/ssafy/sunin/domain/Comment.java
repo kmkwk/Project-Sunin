@@ -22,6 +22,8 @@ import java.util.Map;
 @ToString
 public class Comment {
 
+    private String id;
+
     @ApiModelProperty(value = "내용")
     private String content;
 
@@ -57,6 +59,7 @@ public class Comment {
 
     public static Comment commentWriter(CommentWrite commentWrite, ObjectId objectId){
         return Comment.builder()
+                .id(objectId.toString())
                 .writer(commentWrite.getWriter())
                 .content(commentWrite.getContent())
                 .deleted(false)
@@ -70,8 +73,9 @@ public class Comment {
                 .build();
     }
 
-    public static Comment commentReply(CommentReply commentReply){
+    public static Comment commentReply(ObjectId objectId, CommentReply commentReply){
         return Comment.builder()
+                .id(objectId.toString())
                 .writer(commentReply.getWriter())
                 .content(commentReply.getContent())
                 .deleted(false)
@@ -108,7 +112,8 @@ public class Comment {
     }
 
     @Builder
-    public Comment(String content, Long writer, int likes, LocalDateTime writeDate, LocalDateTime modifiedDate, boolean modified, boolean deleted, ObjectId group, int depth, User user, Map<Long,Object> likeUser) {
+    public Comment(String id, String content, Long writer, int likes, LocalDateTime writeDate, LocalDateTime modifiedDate, boolean modified, boolean deleted, ObjectId group, int depth, User user, Map<Long,Object> likeUser) {
+        this.id = id;
         this.content = content;
         this.writer = writer;
         this.likes = likes;

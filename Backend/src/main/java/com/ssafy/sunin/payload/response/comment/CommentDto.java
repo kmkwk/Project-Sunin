@@ -59,6 +59,7 @@ public class CommentDto {
                         .deleted(comment.isDeleted())
                         .group(comment.getGroup())
                         .user(userMap.get(comment.getWriter()))
+                        .depth(comment.getDepth())
                         .build())
                 .collect(Collectors.toList());
     }

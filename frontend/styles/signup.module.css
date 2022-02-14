@@ -1,3 +1,15 @@
+<<<<<<< HEAD
+=======
+@import url('https://fonts.googleapis.com/css2?family=Gamja+Flower&family=Jua&family=Nanum+Gothic+Coding&display=swap');
+
+.con{
+    /* font-family: 'Nanum Gothic Coding', monospace; */
+    font-family: 'Jua', sans-serif;
+    /* font-family: 'Gamja Flower', cursive; */
+    font-size: larger;
+}
+
+>>>>>>> 14b1e885ece0a42e282001fe8855d652103da18b
 .login_content h3 {
     margin-top: 12%;
     text-align: center;
@@ -27,6 +39,10 @@
 
 .buttonalign {
     text-align: center;
+}
+
+.head{
+    font-size: 50px;
 }
 
 

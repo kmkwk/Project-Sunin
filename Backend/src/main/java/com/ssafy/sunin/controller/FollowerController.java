@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.util.ObjectUtils;
@@ -26,13 +27,16 @@ public class FollowerController {
 
     @ApiOperation(value = "팔로워 추가", notes = "userId: 현재 로그인중인 유저 id, follower_member: 팔로워할 멤버 id")
     @PostMapping
-    public ResponseEntity<Long> addFollower(@RequestBody @Valid FollowerUser followerUser){
+    public ResponseEntity<String> addFollower(@RequestBody @Valid FollowerUser followerUser){
         log.info("addFollower");
         if(ObjectUtils.isEmpty(followerUser)){
             return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.ok(followerService.addFollower(followerUser));
+        Long result = followerService.addFollower(followerUser);
+        System.out.println(result);
+        if(result == 1) return new ResponseEntity<>("등록 실패", HttpStatus.INTERNAL_SERVER_ERROR);
+        else return new ResponseEntity<>("등록 성공", HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "팔로워 삭제", notes = "userId: 현재 로그인중인 유저 id, follower_member: 팔로워할 멤버 id")
@@ -42,8 +46,11 @@ public class FollowerController {
         if(ObjectUtils.isEmpty(followerUser)){
             return ResponseEntity.notFound().build();
         }
-        followerService.deleteFollower(followerUser);
-        return ResponseEntity.ok("성공");
+
+        Long result = followerService.deleteFollower(followerUser);
+        System.out.println(result);
+        if(result == null) return new ResponseEntity<>("등록 실패", HttpStatus.INTERNAL_SERVER_ERROR);
+        else return new ResponseEntity<>("등록 성공", HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "팔로워 수 조회", notes = "userId: 현재 로그인중인 유저 id, 팔로워 수 조회")

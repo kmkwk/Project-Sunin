@@ -21,7 +21,7 @@ public class FeedDto {
     private LocalDateTime modifiedDate;
     private List<String> filePath;
     private Map<Long, Object> likeUser;
-    private Map<Object, Comment> comments;
+    private int commentCount;
 //    @JsonUnwrapped
     private FeedUserDto user;
 
@@ -36,7 +36,7 @@ public class FeedDto {
                 .likeUser(feed.getLikeUser())
                 .filePath(feed.getFilePath())
                 .user(user)
-                .comments(feed.getComments())
+                .commentCount(feed.getComments().size())
                 .build();
     }
 
@@ -51,12 +51,13 @@ public class FeedDto {
                         .modifiedDate(feedCollections.getModifiedDate())
                         .likeUser(feedCollections.getLikeUser())
                         .filePath(feedCollections.getFilePath())
+                        .commentCount(feedCollections.getComments().size())
                         .user(userMap.get(feedCollections.getUserId()))
                         .build())
                 .collect(Collectors.toList());
     }
 
-    public static List<FeedDto> personFeedDto(List<FeedCollections> feedCollection,User user) {
+    public static List<FeedDto> personFeedDto(List<FeedCollections> feedCollection, User user) {
         return feedCollection.stream()
                 .map(feedCollections -> FeedDto.builder()
                         .id(feedCollections.getId().toString())
@@ -67,13 +68,14 @@ public class FeedDto {
                         .modifiedDate(feedCollections.getModifiedDate())
                         .likeUser(feedCollections.getLikeUser())
                         .filePath(feedCollections.getFilePath())
+                        .commentCount(feedCollections.getComments().size())
                         .user(user)
                         .build())
                 .collect(Collectors.toList());
     }
 
     @Builder
-    public FeedDto(String id, String content, List<String> hashtags, int likes, LocalDateTime createdDate, LocalDateTime modifiedDate, List<String> filePath, Map<Long, Object> likeUser, Map<Object, Comment> comments, User user) {
+    public FeedDto(String id, String content, List<String> hashtags, int likes, LocalDateTime createdDate, LocalDateTime modifiedDate, List<String> filePath, Map<Long, Object> likeUser, int commentCount, User user) {
         this.id = id;
         this.content = content;
         this.hashtags = hashtags;
@@ -82,7 +84,7 @@ public class FeedDto {
         this.modifiedDate = modifiedDate;
         this.filePath = filePath;
         this.likeUser = likeUser;
-        this.comments = comments;
+        this.commentCount = commentCount;
         this.user = FeedUserDto.fromUser(user);
     }
 

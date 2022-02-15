@@ -7,18 +7,24 @@ import FeedList from "src/component/feed/FeedList";
 import Menubar from "src/component/Menubar";
 import Navbar from "src/component/Navbar";
 import allAxios from "src/lib/allAxios";
+import userAxios from "src/lib/userAxios";
 
 function Personal() {
   const [list, setList]: any = useState([]);
-  const [page, setPage1] = useState(0);
+  const [id, setId] = useState(0);
+  const [page, setPage] = useState(0);
 
   useEffect(() => {
+    userAxios.get("/api/v1/users").then(({ data }) => {
+      setId(data.body.user.user_seq);
+      console.log(id);
+    });
     loadList();
   }, []);
 
   const loadList = () => {
     allAxios
-      .get(`/feed/latest`, {
+      .get(`/feed/followerLike/${id}`, {
         params: {
           size: 4,
           page: page,
@@ -27,7 +33,7 @@ function Personal() {
       .then(({ data }) => {
         setList([...list, ...data]);
       });
-    setPage1(page + 1);
+    setPage(page + 1);
   };
 
   return (

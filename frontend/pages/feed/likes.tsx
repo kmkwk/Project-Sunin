@@ -18,7 +18,7 @@ function Personal() {
 
   const loadList = () => {
     allAxios
-      .get(`/feed/latest`, {
+      .get(`/feed/like`, {
         params: {
           size: 4,
           page: page,

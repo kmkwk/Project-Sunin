@@ -8,8 +8,6 @@ import com.ssafy.sunin.repository.FeedRepository;
 import com.ssafy.sunin.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
-import org.springframework.data.domain.Sort.Order;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -21,9 +19,6 @@ public class CommentService {
     private final FeedRepository feedRepository;
     private final UserRepository userRepository;
 
-    /*
-     * 댓글 작성하기
-     * */
     public FeedCollections writeComment(CommentWrite commentWrite) {
         ObjectId objectId = new ObjectId();
 
@@ -37,14 +32,9 @@ public class CommentService {
         return feedRepository.save(feedCollections);
     }
 
-    /*
-     * 댓글 수정하기
-     * */
     public Comment updateComment(CommentUpdate commentUpdate) {
-        // 피드가져오기
         FeedCollections feedCollections = feedRepository.findFeedIdByIdAndFlagTrue(new ObjectId(commentUpdate.getFeedId()));
         if(feedCollections.getComments().get(commentUpdate.getCommentId()).getWriter().equals(commentUpdate.getWriter())){
-            // 변경하고자하는 해당 댓글
             feedCollections.getComments().get(commentUpdate.getCommentId()).setCommentModified(commentUpdate.getContent());
             feedRepository.save(feedCollections);
             return feedCollections.getComments().get(commentUpdate.getCommentId());
@@ -52,9 +42,6 @@ public class CommentService {
         return null;
     }
 
-    /*
-     * 댓글 삭제하기
-     * */
     public Comment deleteComment(CommentDelete commentDelete) {
         FeedCollections feedCollections = feedRepository.findFeedIdByIdAndFlagTrue(new ObjectId(commentDelete.getFeedId()));
         if(feedCollections.getComments().get(commentDelete.getCommentId()).getWriter().equals(commentDelete.getWriter())) {
@@ -66,9 +53,6 @@ public class CommentService {
         return null;
     }
 
-    /*
-     * 대댓글 작성하기
-     * */
     public Comment writeReply(CommentReply commentReply) {
         ObjectId objectId = new ObjectId();
         Comment comment = Comment.commentReply(objectId,commentReply);
@@ -79,26 +63,6 @@ public class CommentService {
         feedCollections.setCommentWrite(comments);
         feedRepository.save(feedCollections);
         return comment;
-    }
-
-    /*
-     * 피드에 달린 댓글 리스트
-     * */
-    public Map<Object,Comment> findCommentsByFeed(String feedId) {
-//        List<Order> orders = new ArrayList<>();
-//        orders.add(new Order(Direction.ASC, "group"));
-//        orders.add(new Order(Direction.ASC, "order"));
-//        return feedRepository.findFeedSortIdByIdAndFlagTrue(new ObjectId(feedId), Sort.by(orders)).getComments();
-        return null;
-    }
-
-    /*
-     * 피드에 달린 댓글 갯수
-     * */
-    public int countCommentsByFeed(String feedId) {
-        FeedCollections feedCollections = feedRepository.findFeedIdByIdAndFlagTrue(new ObjectId(feedId));
-
-        return feedCollections.getComments().size();
     }
 
     public void likeComment(CommentLike commentLike){
@@ -135,25 +99,5 @@ public class CommentService {
                         .nickName(user.getUserNickname())
                         .image(user.getProfileImageUrl())
                         .build()).collect(Collectors.toList());
-    }
-
-    /*
-     * 개발용
-     * */
-    public List<String> loadAllComment() {
-        List<Order> orders = new ArrayList<>();
-        orders.add(new Order(Direction.ASC, "group"));
-        orders.add(new Order(Direction.ASC, "order"));
-//        List<Comment> list = commentRepository.findAll(Sort.by(orders));
-
-        List<String> result = new ArrayList<>();
-//        for(Comment now : list) result.add(now.toString());
-//        return result;
-        return null;
-    }
-
-    public void resetComments() {
-
-//        commentRepository.deleteAll();
     }
 }

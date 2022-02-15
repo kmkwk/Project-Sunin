@@ -64,52 +64,6 @@ public class FeedServiceImpl implements FeedService {
         userRepository.save(user);
     }
 
-    @Override
-    public List<String> downloadFileFeed(String fileNames) {
-        ObjectListing objectListing = amazonS3.listObjects(bucket);
-        List<String> arrayKeyList = new ArrayList<>();
-        List<Date> arrayModTimeList = new ArrayList<>();
-        List<String> fileNameList = new ArrayList<>();
-        for (S3ObjectSummary s : objectListing.getObjectSummaries()) {
-            arrayKeyList.add(s.getKey());
-            arrayModTimeList.add(s.getLastModified());
-        }
-        Date max = Collections.max(arrayModTimeList);
-        String fileName = arrayKeyList.get(arrayModTimeList.indexOf(max));
-
-        fileNameList.add(String.format(url + "/%s", fileNames));
-        return fileNameList;
-    }
-
-    @Override
-    public FeedCollections updateFile(FileUpdate fileUpdate) {
-        Optional<FeedCollections> feed = feedRepository.findByIdAndUserId(new ObjectId(fileUpdate.getId()), fileUpdate.getUserId());
-        if (feed.isPresent()) {
-            fileUpdate.getFiles().forEach(file -> {
-                amazonS3.deleteObject(new DeleteObjectRequest(bucket, file));
-                feed.get().getFilePath().remove(file);
-            });
-
-            User user = userRepository.findProfileByUserSeq(fileUpdate.getUserId());
-            feed.get().setFileModified(feed.get().getFilePath());
-            return feedRepository.save(feed.get());
-        }
-
-        return null;
-    }
-
-    @Override
-    public FeedCollections addFile(FeedFile feedFile) {
-        Optional<FeedCollections> feed = feedRepository.findByIdAndUserId(new ObjectId(feedFile.getId()), feedFile.getUserId());
-        if (feed.isPresent()) {
-            List<String> fileList = AwsFile(feedFile.getFiles(), feed.get().getFilePath());
-            feed.get().setFileModified(fileList);
-            return feedRepository.save(feed.get());
-        }
-
-        return null;
-    }
-
     private List<String> AwsFile(List<MultipartFile> files, List<String> list) {
         files.forEach(file -> {
             String fileName = createFileName(file.getOriginalFilename());
@@ -179,7 +133,7 @@ public class FeedServiceImpl implements FeedService {
         feedCollections.setFeedDelete();
         return feedRepository.save(feedCollections);
     }
-    // 나의 팔로워 최신순
+
     @Override
     public List<FeedDto> getFollowerLatestFeed(Long userId) {
         // TODO :  1. 시간 구하는 쿼리 (startDate ,endDate)
@@ -200,12 +154,9 @@ public class FeedServiceImpl implements FeedService {
         return FeedDto.mapFeedDto(feedCollections,userMap);
     }
 
-    // 나의 팔로워 좋아요 순
     @Override
     public List<FeedDto> getFollowerLikeFeed(Long userId) {
-        // 나의 팔로워
         List<Long> followers = followerRepository.getFollowingList(userId);
-        // 유저 전체 정보
         Map<Long, User> userMap = userRepository.findAllListByUserSeqIn(followers).stream()
                 .collect(Collectors.toMap(
                         User::getUserSeq,
@@ -216,7 +167,6 @@ public class FeedServiceImpl implements FeedService {
         return FeedDto.mapFeedDto(feedCollections,userMap);
     }
 
-    // 나의 피드 프로필용
     @Override
     public List<FeedDto> getPersonalFeed(Long userId) {
         List<FeedCollections> feedCollections = feedRepository.getPersonalFeed(userId);
@@ -225,7 +175,6 @@ public class FeedServiceImpl implements FeedService {
         return FeedDto.personFeedDto(feedCollections,user);
     }
 
-    // 전체 최신순
     @Override
     public List<FeedDto> getLatestFeed(Pageable pageable) {
          List<FeedCollections> feedCollection = feedRepository.findAllByFlagTrue(pageable);
@@ -243,7 +192,6 @@ public class FeedServiceImpl implements FeedService {
          return FeedDto.mapFeedDto(feedCollection,userMap);
     }
 
-    // 전체 좋아요 순
     @Override
     public List<FeedDto> getLikeFeed(Pageable pageable) {
         List<FeedCollections> feedCollection = feedRepository.findAllByFlagTrue(pageable);

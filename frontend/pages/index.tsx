@@ -41,8 +41,10 @@ const Home: NextPage = () => {
               <Grid.Column>
                 {/* <br /><br /> */}
                 <br/>
+                <div  className={styles.title}>
                 선한 영향력 프로젝트 썬인🌍🌞입니다.
-                <br /><br />
+                </div>
+                <br />
                 우리 함께 SunIn해봐요!
               </Grid.Column>
             </Grid.Row>

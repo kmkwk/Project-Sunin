@@ -1,22 +1,19 @@
 import type { NextPage } from "next";
-// import Head from 'next/head'
-// import Image from 'next/image'
+
 import styles from "styles/mainpage.module.css";
 import Navbar from "../src/component/Navbar";
 import { useEffect, useState } from "react";
-// import { Container, Grid, Image } from "semantic-ui-react";
 import { Grid, Image } from "semantic-ui-react";
 
 import _ from "lodash";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Navigation, Pagination, Autoplay } from "swiper";
-import SwiperMedia from "src/component/SwiperMain";
 
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
-import GetUserData from "src/lib/getUserData";
+
 
 const Home: NextPage = () => {
   const [list, setList]: any = useState([
@@ -28,8 +25,24 @@ const Home: NextPage = () => {
   return (
     <>
       <Navbar />
-
-      <SwiperMedia media={list} />
+      
+      <Swiper
+      // install Swiper modules
+        style={{ width:"auto", height: "auto"}}
+        autoplay={{ delay: 3000 }} 
+        modules={[Navigation, Pagination, Autoplay]}
+        spaceBetween={0}
+        slidesPerView={1}
+        navigation
+        pagination={{ clickable: true }}
+        scrollbar={{ draggable: true }}
+        onSwiper={(swiper) => console.log(swiper)}
+        onSlideChange={() => console.log('slide change')}
+      >
+        <SwiperSlide><img src="images/1번.jpg" width={"100%"} height={"100%"}/></SwiperSlide>
+        <SwiperSlide><a href="http://localhost:3000/feed"><img src="images/2번.png" width={"100%"} height={"100%"}/></a></SwiperSlide>
+        <SwiperSlide><a href="https://www.youtube.com/" target="_blank"><img src="images/3번.jpg" width={"100%"} height={"100%"}/></a></SwiperSlide>
+      </Swiper>
 
       <body>
         <div className={styles.mainzero}>
@@ -52,10 +65,10 @@ const Home: NextPage = () => {
         </div>
         {/* <div className={styles.container}> */}
         <div className={styles.mainfirst}>
-           
+          
           <br />
           {/* <br /> */}
- 
+
           <div  className={styles.title}>
           선한 영향력을 행사하셨나요?
           </div>
@@ -64,7 +77,7 @@ const Home: NextPage = () => {
           <div  className={styles.content}>
           자신의 피드에 사진, 태그와 함께
           <br/>
-           피드에 기록을 남겨보세요
+          피드에 기록을 남겨보세요
           </div>
         
           {/* </div> */}

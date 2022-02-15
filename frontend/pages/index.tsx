@@ -4,7 +4,7 @@ import styles from "styles/mainpage.module.css";
 import Navbar from "../src/component/Navbar";
 import { useEffect, useState } from "react";
 import { Grid, Image } from "semantic-ui-react";
-
+import TypingText from '../src/component/fontmove/TypingText';
 import _ from "lodash";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Navigation, Pagination, Autoplay } from "swiper";
@@ -63,7 +63,8 @@ const Home: NextPage = () => {
                 {/* <br /><br /> */}
                 <br />
                 <div className={styles.title}>
-                  선한 영향력 프로젝트 썬인🌍🌞입니다.
+                <TypingText text="선한 영향력 프로젝트 썬인🌍🌞입니다." speed={60} fontSize="1.75rem" color="green" />
+                
                 </div>
                 <br />
                 우리 함께 SunIn해봐요!

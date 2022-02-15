@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid, Divider, Icon, Item, Label, Container } from "semantic-ui-react";
+import { Grid, Divider, Icon, Item, Label, Container, Button } from "semantic-ui-react";
 import Navbar from "src/component/Navbar";
 import Menubar from "src/component/Menubar";
 import { useEffect, useState } from "react";
@@ -8,9 +8,18 @@ import allAxios from "src/lib/allAxios";
 import { useRouter } from "next/router";
 import InfiniteScroll from "react-infinite-scroll-component";
 import FeedList from "src/component/feed/FeedList";
+import IsLogin from "src/lib/customIsLogin";
+import userAxios from "src/lib/userAxios";
 
 function Profiles({ id }: any) {
   const router = useRouter();
+
+  // 로그인 유저
+  const isLogin = IsLogin
+  const [nowUser, setNowUser] = useState({
+    id: 0,
+  })
+  const [isFollowing, setIsFollowing] = useState(false)
 
   // 프로필 유저
   const [user, setUser] = useState({
@@ -32,7 +41,6 @@ function Profiles({ id }: any) {
     allAxios
       .get(`/api/v1/users/profile/${id}`)
       .then(({ data }) => {
-        console.log(data);
         setUser({
           intro: data.introduction,
           feedCount: data.feed_count,
@@ -51,10 +59,85 @@ function Profiles({ id }: any) {
     allAxios.get(`/feed/person/${id}`).then(({ data }) => {
       setList(data);
     });
+
+    if (isLogin) {
+      userAxios
+        .get(`/api/v1/users`, {})
+        .then(({ data }) => {
+          setNowUser({
+            id: data.body.user.user_seq,
+          })
+          getFollowingUsers()
+        })
+        .catch((e: any) => {
+          alert('서버 에러가 발생했습니다.')
+        });
+    }
+    
   }, []);
 
   function loadFeed() {
     setPage(pages + 1);
+  }
+
+  function getFollowingUsers() {
+    if (nowUser) {
+      allAxios
+      .get(`/follower/followingList/${nowUser.id}`, {
+        params: {
+          userId: nowUser.id
+        }
+      })
+      .then(({ data }) => {
+        data.map((followingusers: Number)=> {
+          if (followingusers === Number(id)) {
+            setIsFollowing(true)
+          }
+        })
+      })
+      .catch((e: any) => {
+        alert('서버 에러가 발생했습니다.')
+      });
+    }
+  }
+
+  function goFollowing() {
+    if (nowUser.id) {
+      const body: any = new FormData()
+      body.append("followerMember", `${Number(id)}`)
+      body.append("userId", `${nowUser.id}`)
+      allAxios
+      .post(`/follower`, 
+        body
+      )
+      .then(() => {
+        getFollowingUsers()
+      })
+      .catch((e: any) => {
+        alert("잠시 후 다시 시도해주세요.");
+        router.push("/");
+      });
+    }
+  }
+
+  function goUnfollowing() {
+    if (nowUser.id) {
+      allAxios
+      .delete(`/follower`, {
+        params: {
+          followerMember: Number(id),
+          userId: nowUser.id
+        }
+      })
+      .then(() => {
+        getFollowingUsers()
+        router.reload()
+      })
+      .catch((e: any) => {
+        alert("잠시 후 다시 시도해주세요.");
+        router.push("/");
+      });
+    }
   }
 
   return (
@@ -77,6 +160,13 @@ function Profiles({ id }: any) {
                       <span> | </span>
                       <Icon name="lemon outline" />
                       <span className="cinema">{user.sunin}</span>
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      {nowUser.id === Number(id) || !nowUser.id?
+                      "":
+                      isFollowing?
+                      <Button color="green" onClick={goUnfollowing}>UnFollow</Button>
+                      :<Button onClick={goFollowing}>Follow</Button>
+                      }
                     </Item.Header>
                     <Item.Description>
                       <span>{user.intro}</span>

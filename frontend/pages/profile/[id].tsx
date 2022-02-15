@@ -70,7 +70,7 @@ function Profiles({ id }: any) {
           getFollowingUsers()
         })
         .catch((e: any) => {
-          alert('서버 에러가 발생했습니다.')
+          alert('잠시 후 다시 시도해주세요')
         });
     }
     
@@ -96,7 +96,7 @@ function Profiles({ id }: any) {
         })
       })
       .catch((e: any) => {
-        alert('서버 에러가 발생했습니다.')
+        alert('잠시 후 다시 시도해주세요')
       });
     }
   }
@@ -114,8 +114,8 @@ function Profiles({ id }: any) {
         getFollowingUsers()
       })
       .catch((e: any) => {
+        getFollowingUsers()
         alert("잠시 후 다시 시도해주세요.");
-        router.push("/");
       });
     }
   }
@@ -134,8 +134,8 @@ function Profiles({ id }: any) {
         router.reload()
       })
       .catch((e: any) => {
+        getFollowingUsers()
         alert("잠시 후 다시 시도해주세요.");
-        router.push("/");
       });
     }
   }

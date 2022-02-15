@@ -32,10 +32,17 @@ export default function Navbar() {
         })
         .catch((e: any) => {
           console.log(e);
-          // alert("잘못된 접근입니다.");
+          alert('로그인 시간이 만료되었습니다.')
+          autoLogout()
         });
     }
   }, []);
+
+  function autoLogout() {
+    if (isLogin && !userInfo.username) {
+      goLogout()
+    }
+  }
 
   return (
     <div className={styles.fixed}>

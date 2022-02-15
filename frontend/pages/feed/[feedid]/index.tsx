@@ -7,6 +7,8 @@ import {
   Header,
   Button,
   Label,
+  Image,
+  List
 } from "semantic-ui-react";
 
 import Navbar from "src/component/Navbar";
@@ -20,6 +22,7 @@ import SwiperMedia from "src/component/Swiper";
 import styles from "styles/feed.module.css";
 import SockJS from "sockjs-client";
 import Stomp from "webstomp-client";
+import Link from "next/link";
 
 function Detail({ feedid }: any) {
   const router = useRouter();
@@ -72,11 +75,11 @@ function Detail({ feedid }: any) {
       });
   };
 
-  const showNickname = (object: any) => {
-    return Object.entries(object).map(
-      (obj: any) => obj[0] == "nickName" && <Header as="h2">{obj[1]}</Header>
-    );
-  };
+  // const showNickname = (object: any) => {
+  //   return Object.entries(object).map(
+  //     (obj: any) => obj[0] == "nickName" && <span>{obj[1]}</span>
+  //   );
+  // };
 
   const likeFeed = () => {
     console.log(feed.feedId);
@@ -108,7 +111,6 @@ function Detail({ feedid }: any) {
   return (
     <>
       <Navbar />
-
       <Grid padded className={styles.con}>
         <Grid.Row>
           <Grid.Column width={3}>
@@ -121,11 +123,19 @@ function Detail({ feedid }: any) {
           </Grid.Column>
           <Grid.Column width={3}>
             <Container>
-              <Header as="h2">{showNickname(feed.userInfo)}</Header>
-              <Label onClick={likeFeed}>
+            
+            <List divided verticalAlign='middle'>
+            <List.Item>
+              <List.Content floated='right'>
+                <Label onClick={likeFeed}>
                 <Icon name="like" />
                 <span>Like {feed.likes == 0 ? 0 : feed.likes}</span>
               </Label>
+              </List.Content>
+            <Image avatar src={feed.userInfo.image} />
+              <List.Content>{feed.userInfo.nick_name}</List.Content>
+            </List.Item>
+            </List>
               {/* <Label>
                 <Icon name="sign-in" />
                 <span>Follower</span>
@@ -142,7 +152,7 @@ function Detail({ feedid }: any) {
             <br />
             <br />
             <Container>
-              <Header as="h1">
+              <Header as="h2">
                 <Icon name="tags" />
                 <Header.Content>Tags</Header.Content>
               </Header>
@@ -156,7 +166,7 @@ function Detail({ feedid }: any) {
             </Container>
             <Container>
               <br />
-              <Header as="h1">
+              <Header as="h2">
                 <Icon name="comments" />
                 <Header.Content>Comments</Header.Content>
               </Header>

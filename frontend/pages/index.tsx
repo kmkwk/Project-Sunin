@@ -38,7 +38,8 @@ const Home: NextPage = () => {
                 <Image src="" />
               </Grid.Column>
               <Grid.Column>
-                <br /><br />
+                {/* <br /><br /> */}
+                <br/>
                 선한 영향력 프로젝트 썬인🌍🌞입니다.
                 <br /><br />
                 우리 함께 SunIn해봐요!
@@ -49,7 +50,7 @@ const Home: NextPage = () => {
         {/* <div className={styles.container}> */}
         <div className={styles.container}>
           <br />
-          <br />
+          {/* <br /> */}
           선한 영향력을 행사하셨나요?
           <br />
           <br />
@@ -58,7 +59,7 @@ const Home: NextPage = () => {
         </div>
         <div className={styles.mainsecond}>
           <br />
-          <br />
+          {/* <br /> */}
           SunIn 아이콘을 성장시켜보세요
           <br />
           <br />
@@ -66,7 +67,7 @@ const Home: NextPage = () => {
         </div>
         <div className={styles.mainthird}>
           <br />
-          <br />
+          {/* <br /> */}
           함께 SunIn할 친구를 찾으시나요?
           <br />
           <br />

@@ -52,7 +52,7 @@ export default function Menuvar() {
         : userInfo["sunin_days"] < 6
         ? "/images/suninimage/새싹.png"
         : userInfo["sunin_days"] < 9
-        ? "/images/suninimage/튤립.png"
+        ? "/images/suninimage/꽃.png"
         : userInfo["sunin_days"] < 12
         ? "/images/suninimage/나무.png"
         : "/images/suninimage/큰나무.png";
@@ -75,8 +75,8 @@ export default function Menuvar() {
 
   return (
     <>
-      <Menu vertical>
-        <MenuItem>
+      <Menu vertical >
+        <MenuItem className={styles.con}>
           <Grid>
             <GridRow>
               {/* {userInfo?
@@ -114,14 +114,14 @@ export default function Menuvar() {
                   <br />
 
                 
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  <span><br/> <span style={{fontSize: "20px"}}>{userInfo["username"]} </span> <br/> {userInfo["sunin_days"]}일</span>
+                  &nbsp;&nbsp;&nbsp;&nbsp;
+                  <span><br/> <span style={{fontSize: "20px"}}>{userInfo["username"]} </span> <br/>&nbsp;&nbsp; {userInfo["sunin_days"]}일</span>
                   {/* {userInfo["username"]} */}
                   <br/>
                   {/* &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; */}
                   {/* <span>{userInfo["sunin_days"]}일</span> */}
                   {/* {userInfo["sunin_days"]}일 */}
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   <Image
                     src={suninImage}
                     width="50px" height="50px"
@@ -151,14 +151,14 @@ export default function Menuvar() {
 
 
         {userInfo.username ? (
-          <Menu.Item name="profile">
+          <Menu.Item name="profile" className={styles.con} >
             
-            <Header className={styles.setting}  as="h4">
+            <div className={styles.setting} >
               <Link href={`/profile/${userInfo["user_seq"]}`}>
-                <a>프로필</a>
+                <a className={styles.title}> 프로필</a>
               </Link>
 
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               <Link href="/profile/info">
                     <a title="회원정보 수정 페이지로 이동합니다.">
                     <Icon className={styles.setting} name="cog" size="small" color="grey" circular />
@@ -166,37 +166,37 @@ export default function Menuvar() {
             </Link>
             
             
-            </Header>
+            </div>
            
           </Menu.Item>
         ) : (
           ""
         )}
 
-        <Menu.Item name="personal">
-          <Header as="h4">
+        <Menu.Item className={styles.setting} name="personal" link>
+          <div className={styles.title} >
             <Link href="/feed">
-              <a>피드</a>
+              <a className={styles.title}>피드</a>
             </Link>
-          </Header>
+          </div>
         </Menu.Item>
 
         
 
         <Menu.Item name="rank">
-          <Header as="h4">
+          <div>
             <Link href="/rank">
-              <a>랭킹</a>
+              <a className={styles.title}>랭킹</a>
             </Link>
-          </Header>
+          </div>
         </Menu.Item>
         {isLogin ? (
           <Menu.Item name="createfeed">
-            <Header as="h4">
+            <div>
               <Link href="/feed/create">
-                <a>피드 작성하기</a>
+                <a className={styles.title}>피드 작성하기</a>
               </Link>
-            </Header>
+            </div>
           </Menu.Item>
         ) : (
           ""
@@ -204,7 +204,7 @@ export default function Menuvar() {
 
         {isLogin ? (
           <Menu.Item name="chat">
-            <Header as="h4">채팅</Header>
+            <div className={styles.title}>채팅</div><br/>
             <ChatModal />
           </Menu.Item>
         ) : (

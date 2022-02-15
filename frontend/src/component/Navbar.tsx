@@ -1,4 +1,4 @@
-import { Menu } from "semantic-ui-react";
+import { Dropdown, Menu } from "semantic-ui-react";
 import Link from "next/link";
 import styles from "../../styles/Navbar.module.css";
 import Alarm from "./Alarm";
@@ -6,13 +6,12 @@ import Searchbar from "./Searchbar";
 import IsLogin from "../lib/customIsLogin";
 import { useRouter } from "next/router";
 import LoginModal from "./login/loginModal";
-import { createRef, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import userAxios from "src/lib/userAxios";
 import User from "src/class/User";
 
 export default function Navbar() {
-  const contextRef = createRef();
   const router = useRouter();
 
   function goLogout() {
@@ -27,7 +26,7 @@ export default function Navbar() {
   useEffect(() => {
     if (isLogin) {
       userAxios
-        .get(`/api/v1/users`, {})
+        .get(`/api/v1/users`)
         .then(({ data }) => {
           setUserInfo(data.body.user);
         })
@@ -54,13 +53,47 @@ export default function Navbar() {
           </Link>
         </Menu.Item>
 
-        {/* <Menu.Item name="home">
-          <Link href="/">
-            <a>Home</a>
-          </Link>
-        </Menu.Item> */}
-
         <Menu.Item className={styles.item} link>
+          <Dropdown className={styles.item} text="Feed" icon={null} simple>
+            <Dropdown.Menu>
+              <Dropdown.Item
+                onClick={() => {
+                  router.push("/feed/");
+                }}>
+                Latest
+              </Dropdown.Item>
+              <Dropdown.Item
+                onClick={() => {
+                  router.push("/feed/likes");
+                }}>
+                Likes
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        </Menu.Item>
+
+        {userInfo.username && (
+          <Menu.Item className={styles.item} link>
+            <Dropdown className={styles.item} text="Follow" icon={null} simple>
+              <Dropdown.Menu>
+                <Dropdown.Item
+                  onClick={() => {
+                    router.push(`/feed/flatest`);
+                  }}>
+                  Latest
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={() => {
+                    router.push("/feed/flikes");
+                  }}>
+                  Likes
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          </Menu.Item>
+        )}
+
+        {/* <Menu.Item className={styles.item} link>
           <Link href="/feed">
             <a>Feed</a>
           </Link>
@@ -70,7 +103,7 @@ export default function Navbar() {
           <Link href="/follow">
             <a>Follow</a>
           </Link>
-        </Menu.Item>
+        </Menu.Item> */}
 
         {userInfo.username ? (
           <Menu.Item className={styles.item} link>

@@ -9,7 +9,7 @@ import IsLogin from 'src/lib/customIsLogin'
 import User from "src/class/User";
 
 function Chatting() {
-  const SERVER_URL = "http://localhost:8080/stomp";
+  const SERVER_URL = "http://i6c210.p.ssafy.io:8080/stomp";
   // const stompClient = Stomp.over(new SockJS(SERVER_URL));
   const [userInfo, setUserInfo]: any = useState([])
   const isLogin = IsLogin

@@ -86,7 +86,7 @@ public class UserService{
         User user = userRepository.findProfileByUserSeq(imageUpdate.getId());
         String file = profileUpload(imageUpdate.getImage());
         user.setUserProfileImageModified(file);
-
+        userRepository.save(user);
         return UserDetailProfile.userProfile(user);
     }
 
@@ -124,55 +124,4 @@ public class UserService{
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "잘못된 형식의 파일(" + fileName + ") 입니다.");
         }
     }
-
-//    public String signup(UserRequest request){
-//        UserRepository.save(User.builder()
-//                .userId(request.getUserId())
-//                .user_password(request.getUser_password())
-//                .user_name(request.getUser_name())
-//                .user_nickname(request.getUser_nickname())
-//                .user_tel(request.getUser_tel())
-//                .user_address(request.getUser_address())
-//                .build());
-//        return "Success";
-//    }
-//
-//    public User login(String userId, String user_password) {
-//        Optional<User> userfind = UserRepository.findByUserId(userId);
-//
-//        if(userfind.get().getUser_password().equals(user_password)) {
-//            User user = UserRepository.findByUserId(userId).orElseThrow();
-//            return user;
-//        }
-//        return null;
-//    }
-//
-//    public String deleteUser(String userId) {
-//        UserRepository.delete(UserRepository.findByUserId(userId).orElseThrow(RuntimeException::new));
-//        return "Success";
-//    }
-//
-//    public List<User> listUser() throws Exception {
-//        return UserRepository.findAll();
-//    }
-//
-//    public User detailUser(String userId) {
-//        User user = UserRepository.findByUserId(userId).orElseThrow();
-//        return user;
-//    }
-//
-//    public String updateUser(UserRequest request) {
-//        Optional<User> user = UserRepository.findByUserId(request.getUserId());
-//        user.ifPresent(selectUser->{
-//            selectUser.setUser_password(request.getUser_password());
-//            selectUser.setUser_name(request.getUser_name());
-//            selectUser.setUser_nickname(request.getUser_nickname());
-//            selectUser.setUser_address(request.getUser_address());
-//            selectUser.setUser_tel(request.getUser_tel());
-//            UserRepository.save(selectUser);
-//        });
-//        return "Success";
-//    }
-
 }
-

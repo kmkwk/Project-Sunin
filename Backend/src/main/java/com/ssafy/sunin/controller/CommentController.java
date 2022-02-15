@@ -17,7 +17,6 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Map;
 
 @RestControllerAdvice(annotations = RestController.class)
 @RestController
@@ -71,20 +70,6 @@ public class CommentController {
         else return new ResponseEntity<>("삭제 성공", HttpStatus.OK);
     }
 
-    @GetMapping("/all/{feedId}")
-    @ApiOperation(value = "피드에 달린 댓글 전체 조회", notes = "피드ID로 해당 피드의 댓글 컬렉션을 조회합니다.")
-    @ApiImplicitParam(name = "feedId", value = "피드 ObjectId", required = true)
-    public ResponseEntity<Map<Object,Comment>> findCommentsByFeed(@PathVariable("feedId") String feedId) {
-        return new ResponseEntity<>(commentService.findCommentsByFeed(feedId), HttpStatus.OK);
-    }
-
-    @GetMapping("/count/{feedId}")
-    @ApiOperation(value = "피드에 달린 댓글 갯수 조회", notes = "피드ID로 해당 피드에 달린 댓글의 갯수를 조회합니다.")
-    @ApiImplicitParam(name = "feedId", value = "피드 ObjectId", required = true)
-    public ResponseEntity<Integer> countCommentsByFeed(@PathVariable("feedId") String feedId) {
-        return new ResponseEntity<>(commentService.countCommentsByFeed(feedId), HttpStatus.OK);
-    }
-
     @PostMapping("/reply")
     @ApiOperation(value = "대댓글 작성하기", notes = "대댓글을 작성합니다.")
     @ApiImplicitParams({
@@ -94,23 +79,6 @@ public class CommentController {
     })
     public ResponseEntity<Comment> writeReply(@RequestBody @Valid CommentReply commentReply) {
         return new ResponseEntity<>(commentService.writeReply(commentReply), HttpStatus.OK);
-    }
-
-    @PutMapping("/reply")
-    @ApiOperation(value="대댓글 수정하기")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "commentId", value = "수정할 대댓글 ObjectID", required = true),
-            @ApiImplicitParam(name = "content", value = "내용", required = true)
-    })
-    public ResponseEntity<Comment> updateReply(@RequestBody @Valid CommentUpdate commentUpdate) {
-        return new ResponseEntity<>(commentService.updateComment(commentUpdate), HttpStatus.OK);
-    }
-
-    @DeleteMapping("/reply")
-    @ApiOperation(value="대댓글 삭제하기")
-    @ApiImplicitParam(name = "commentId", value = "삭제할 대댓글 ObjectID", required = true)
-    public ResponseEntity<Comment> deleteReply(CommentDelete commentDelete) {
-        return new ResponseEntity<>(commentService.deleteComment(commentDelete), HttpStatus.OK);
     }
 
     @ApiOperation(value = "좋아요 등록 취소")

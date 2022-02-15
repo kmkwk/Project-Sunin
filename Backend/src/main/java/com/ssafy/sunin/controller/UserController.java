@@ -6,7 +6,6 @@ import com.ssafy.sunin.payload.request.feed.ImageUpdate;
 import com.ssafy.sunin.payload.request.user.UserUpdateRequest;
 import com.ssafy.sunin.payload.response.user.*;
 import com.ssafy.sunin.service.UserService;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +20,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
+@RestControllerAdvice(annotations = RestController.class)
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 public class UserController {
@@ -83,7 +83,7 @@ public class UserController {
         return ResponseEntity.ok(userService.updateUserImage(imageUpdate));
     }
 
-    @ApiOperation(value = "유저 프로필 사진만 삭제")
+    @ApiOperation(value = "유저 프로필 사진만 삭제, 구현 안됨 해야되면 말해주세요")
     @DeleteMapping("image/{userId}")
     public ResponseEntity<UserDetailProfile> deleteUserImage(@PathVariable("userId") Long userId){
         log.info("deleteUserImage");
@@ -92,60 +92,4 @@ public class UserController {
         }
         return ResponseEntity.ok(userService.delteUserImage(userId));
     }
-
-//    @PostMapping("/signup")
-//    @ApiOperation(value="회원가입", notes="가입성공 여부에 따라 http상태로 반환해서 알려줌")
-//    public ResponseEntity<String> signup(@RequestBody UserRequest request) {
-//        if(userService.signup(request).equals("Success")) {
-//            return new ResponseEntity<>("회원가입 성공", HttpStatus.CREATED);
-//        }
-//        return new ResponseEntity<>("회원가입 실패", HttpStatus.OK);
-//    }
-//
-//    @PostMapping("/login")
-//    @ApiOperation(value="로그인", notes = "이메일과 비밀번호로 로그인을 시도합니다.")
-//    public ResponseEntity<User> login(@RequestBody UserRequest request) {
-//            User loginuser = userService.login(request.getUserId(), request.getUser_password());
-//
-//            if(loginuser != null) return new ResponseEntity<>(loginuser, HttpStatus.OK);
-//            return new ResponseEntity<>(null, HttpStatus.OK);
-//    }
-//
-//    @GetMapping("/logout")
-//    public Map<String, Object> logout(HttpSession session){
-//        session.invalidate();
-//        Map<String, Object> resultMap = new HashMap<>();
-//
-//        resultMap.put("status", true);
-//        resultMap.put("msg", "로그아웃 성공");
-//        return resultMap;
-//
-//    }
-//
-//    @DeleteMapping("/delete/{userId}")
-//    @ApiOperation(value="회원탈퇴")
-//    public ResponseEntity deleteUser(@PathVariable String userId) {
-//        return new ResponseEntity<>(userService.deleteUser(userId), HttpStatus.OK);
-//    }
-//
-//    @GetMapping("/searchAll")
-//    @ApiOperation(value="모든 회원 정보 조회")
-//    public ResponseEntity<List<User>> listuser() throws Exception{
-//        return new ResponseEntity<>(userService.listUser(), HttpStatus.OK);
-//    }
-//
-//    @GetMapping("/{userId}")
-//    @ApiOperation(value="회원정보를 가져온다")
-//    public ResponseEntity<User> detailUser(@PathVariable String userId) {
-//        return new ResponseEntity<>(userService.detailUser(userId), HttpStatus.OK);
-//    }
-//
-//    @PutMapping
-//    @ApiOperation(value="회원정보 수정")
-//    public ResponseEntity updateUser(@RequestBody UserRequest request) {
-//        if(userService.updateUser(request).equals("Success")) {
-//            return new ResponseEntity(HttpStatus.OK);
-//        }
-//        return new ResponseEntity(HttpStatus.BAD_REQUEST);
-//    }
 }

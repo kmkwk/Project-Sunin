@@ -45,38 +45,6 @@ public class FeedController {
         else return new ResponseEntity<>("등록 성공", HttpStatus.CREATED);
     }
 
-    @ApiOperation(value = "file 다운로드")
-    @GetMapping("/download")
-    public ResponseEntity<List<String>> downloadFiles(@RequestParam("fileName") String fileName){
-        log.info("downloadFiles");
-        return ResponseEntity.ok(feedService.downloadFileFeed(fileName));
-    }
-
-    @ApiOperation(value = "피드 사진 삭제", notes = "사진 여러장 삭제 가능")
-    @PutMapping("/file")
-    public ResponseEntity<String> updateFile(@RequestBody @Valid FileUpdate fileUpdate) {
-        log.info("updateFile");
-        if(ObjectUtils.isEmpty(fileUpdate)){
-            return ResponseEntity.notFound().build();
-        }
-        FeedCollections result = feedService.updateFile(fileUpdate);
-        if(result == null) return new ResponseEntity<>("등록 실패", HttpStatus.INTERNAL_SERVER_ERROR);
-        else return new ResponseEntity<>("등록 성공", HttpStatus.CREATED);
-    }
-
-    @ApiOperation(value = "피드 사진 추가", notes = "사진 여러장 추가 가능")
-    @PutMapping(value = "/addFile",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<String> addFile(@RequestBody @Valid FeedFile feedFile) {
-        log.info("addFile");
-        if(ObjectUtils.isEmpty(feedFile)){
-            return ResponseEntity.notFound().build();
-        }
-
-        FeedCollections result = feedService.addFile(feedFile);
-        if(result == null) return new ResponseEntity<>("등록 실패", HttpStatus.INTERNAL_SERVER_ERROR);
-        else return new ResponseEntity<>("등록 성공", HttpStatus.CREATED);
-    }
-
     @ApiOperation(value = "피드 상세 페이지")
     @GetMapping("/detail/{id}")
     public ResponseEntity<FeedCommentDto> getDetailFeed(@PathVariable("id") String id) {

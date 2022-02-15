@@ -16,6 +16,7 @@ export default function Navbar() {
 
   function goLogout() {
     localStorage.removeItem("token");
+    localStorage.removeItem("userId");
     router.reload();
   }
 

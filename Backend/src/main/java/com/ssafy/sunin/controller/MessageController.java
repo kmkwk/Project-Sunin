@@ -24,9 +24,9 @@ public class MessageController {
     public void message(@DestinationVariable("toUserId") Long toUserId,
 //                        @DestinationVariable("fromUserId") Long fromUserId
                         @DestinationVariable("messages") String messages) {
-        User userId = alarmService.getUserId(toUserId);
+//        User userId = alarmService.getUserId(toUserId);
 //       List<String> messages = alarmService.getMessage(fromUserId,toUserId);
-        simpMessagingTemplate.convertAndSend("/sub/" + toUserId, messages);
+        simpMessagingTemplate.convertAndSend("/sub/"+toUserId, messages);
 
     }
 }

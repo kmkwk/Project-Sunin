@@ -70,7 +70,7 @@ function Profiles({ id }: any) {
           getFollowingUsers()
         })
         .catch((e: any) => {
-          alert('잠시 후 다시 시도해주세요')
+          alert('잠시 후 다시 시도해주세요...')
         });
     }
     
@@ -96,7 +96,7 @@ function Profiles({ id }: any) {
         })
       })
       .catch((e: any) => {
-        alert('잠시 후 다시 시도해주세요')
+        alert('잠시 후 다시 시도해주세요...')
       });
     }
   }

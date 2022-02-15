@@ -112,7 +112,7 @@ function Profiles({ id }: any) {
       // 보내는 사람
       const fromUserId = localStorage.getItem("userId");
       const messages = fromUserId+"가 팔로워를 하였습니다."
-      const socket = new SockJS('http://localhost:8080/stomp');
+      const socket = new SockJS('http://i6c210.p.ssafy.io:8080/stomp');
       const stompClient = Stomp.over(socket);
 
       allAxios
@@ -120,7 +120,7 @@ function Profiles({ id }: any) {
         body
       )
       .then(() => {
-        stompClient.send(`/send/`+`${Number(id)}`+`/`+messages);
+        stompClient.send(`/send/`+fromUserId+`/`+`${Number(id)}`+`/`+messages);
         getFollowingUsers()
       })
       .catch((e: any) => {

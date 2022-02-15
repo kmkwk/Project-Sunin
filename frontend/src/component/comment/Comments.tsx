@@ -26,14 +26,14 @@ function Comments({feedWriter, list, userSeq, feedId }: any) {
     // 보내는 사람
     const fromUserId = localStorage.getItem("userId");
     const messages = fromUserId+"가 게시글에 댓글을 작성하였습니다!"
-    const socket = new SockJS('http://localhost:8080/stomp');
+    const socket = new SockJS('http://i6c210.p.ssafy.io:8080/stomp');
     const stompClient = Stomp.over(socket);
 
     allAxios
       .post(`/comment`, body)
       .then(() => {
         // 메시지 전달
-        // stompClient.send(`/send/`+feedWriter+`/`+messages);
+        // stompClient.send(`/send/`+fromUserId+`/`+feedWriter+`/`+messages);
         Router.reload();
       })
       .catch(() => {

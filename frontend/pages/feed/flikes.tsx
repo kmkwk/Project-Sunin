@@ -1,8 +1,6 @@
 import { Container, Grid } from "semantic-ui-react";
 import { useEffect, useState } from "react";
 
-import InfiniteScroll from "react-infinite-scroll-component";
-
 import FeedList from "src/component/feed/FeedList";
 import Menubar from "src/component/Menubar";
 import Navbar from "src/component/Navbar";
@@ -11,29 +9,16 @@ import userAxios from "src/lib/userAxios";
 
 function Personal() {
   const [list, setList]: any = useState([]);
-  const [id, setId] = useState(0);
-  const [page, setPage] = useState(0);
 
   useEffect(() => {
     userAxios.get("/api/v1/users").then(({ data }) => {
-      setId(data.body.user.user_seq);
+      allAxios
+        .get(`/feed/followerLike/${data.body.user.user_seq}`)
+        .then(({ data }) => {
+          setList(data);
+        });
     });
-    loadList();
   }, []);
-
-  const loadList = () => {
-    allAxios
-      .get(`/feed/followerLike/${id}`, {
-        params: {
-          size: 4,
-          page: page,
-        },
-      })
-      .then(({ data }) => {
-        setList([...list, ...data]);
-      });
-    setPage(page + 1);
-  };
 
   return (
     <>
@@ -44,14 +29,7 @@ function Personal() {
             <Menubar />
           </Grid.Column>
           <Grid.Column width={10}>
-            <InfiniteScroll
-              style={{ overflow: "hidden" }}
-              dataLength={list.length}
-              next={loadList}
-              hasMore={true}
-              loader={undefined}>
-              <FeedList list={list} />
-            </InfiniteScroll>
+            <FeedList list={list} />
           </Grid.Column>
           <Grid.Column width={2} />
         </Grid>

@@ -10,6 +10,8 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import FeedList from "src/component/feed/FeedList";
 import IsLogin from "src/lib/customIsLogin";
 import userAxios from "src/lib/userAxios";
+import SockJS from "sockjs-client";
+import Stomp from "webstomp-client";
 
 function Profiles({ id }: any) {
   const router = useRouter();
@@ -106,11 +108,19 @@ function Profiles({ id }: any) {
       const body: any = new FormData()
       body.append("followerMember", `${Number(id)}`)
       body.append("userId", `${nowUser.id}`)
+
+      // 보내는 사람
+      const fromUserId = localStorage.getItem("userId");
+      const messages = fromUserId+"가 팔로워를 하였습니다."
+      const socket = new SockJS('http://localhost:8080/stomp');
+      const stompClient = Stomp.over(socket);
+
       allAxios
       .post(`/follower`, 
         body
       )
       .then(() => {
+        stompClient.send(`/send/`+`${Number(id)}`+`/`+messages);
         getFollowingUsers()
       })
       .catch((e: any) => {

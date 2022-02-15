@@ -313,7 +313,7 @@ public class FeedServiceImpl implements FeedService {
         }else if(content.contains("#") && 2 <= content.length()) {
             content = content.substring(1);
             // 현재는 모든 피드 검색
-            List<FeedCollections> feedList = feedRepository.findAll();
+            List<FeedCollections> feedList = feedRepository.findAllByFlagTrue();
 
             boolean[] check = new boolean[feedList.size()];
             // 해당 해시태그만 포함하는 피드만 가져와야함

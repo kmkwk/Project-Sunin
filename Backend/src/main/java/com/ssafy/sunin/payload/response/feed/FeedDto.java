@@ -1,8 +1,11 @@
 package com.ssafy.sunin.payload.response.feed;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ssafy.sunin.domain.FeedCollections;
 import com.ssafy.sunin.domain.user.User;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;

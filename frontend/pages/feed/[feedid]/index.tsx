@@ -108,6 +108,10 @@ function Detail({ feedid }: any) {
       });
   };
 
+  function goProfile() {
+    router.push(`/profile/${feed.userInfo.user_id}`)
+  }
+
   return (
     <>
       <Navbar />
@@ -129,11 +133,11 @@ function Detail({ feedid }: any) {
               <List.Content floated='right'>
                 <Label onClick={likeFeed}>
                 <Icon name="like" />
-                <span>Like {feed.likes == 0 ? 0 : feed.likes}</span>
+                <span style={{ cursor: "pointer", textShadow: "좋아요" }}>Like {feed.likes == 0 ? 0 : feed.likes}</span>
               </Label>
               </List.Content>
-            <Image avatar src={feed.userInfo.image} />
-              <List.Content>{feed.userInfo.nick_name}</List.Content>
+            <Image avatar onClick={goProfile} title="작성자 프로필로 이동" style={{ cursor: "pointer", textShadow: "작성자 프로필로 이동" }} src={feed.userInfo.image} />
+              <List.Content onClick={goProfile} title="작성자 프로필로 이동" style={{ cursor: "pointer", textShadow: "작성자 프로필로 이동" }}>{feed.userInfo.nick_name}</List.Content>
             </List.Item>
             </List>
               {/* <Label>

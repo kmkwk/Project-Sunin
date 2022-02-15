@@ -37,7 +37,7 @@ export default function Authentication() {
 
   function connect() {
     const userId = localStorage.getItem("userId");
-    const socket = new SockJS('http://localhost:8080/stomp');
+    const socket = new SockJS('http://i6c210.p.ssafy.io:8080/stomp');
     const stompClient = Stomp.over(socket);
 
     stompClient.connect(

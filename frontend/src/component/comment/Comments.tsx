@@ -41,7 +41,8 @@ function Comments({feedWriter, list, userSeq, feedId }: any) {
       });
     setComment("");
   };
-  console.log(userSeq);
+
+  console.log(list);
 
   return (
     <>

@@ -1,6 +1,5 @@
 package com.ssafy.sunin.payload.response.feed;
 
-import com.ssafy.sunin.domain.Comment;
 import com.ssafy.sunin.domain.FeedCollections;
 import com.ssafy.sunin.domain.user.User;
 import lombok.*;

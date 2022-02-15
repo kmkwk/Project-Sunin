@@ -58,7 +58,7 @@ export default function Navbar() {
             <Dropdown.Menu>
               <Dropdown.Item
                 onClick={() => {
-                  router.push("/feed/");
+                  router.push("/feed");
                 }}>
                 Latest
               </Dropdown.Item>
@@ -78,13 +78,13 @@ export default function Navbar() {
               <Dropdown.Menu>
                 <Dropdown.Item
                   onClick={() => {
-                    router.push(`/feed/flatest`);
+                    router.push(`/feed/flatest`, undefined, { shallow: true });
                   }}>
                   Latest
                 </Dropdown.Item>
                 <Dropdown.Item
                   onClick={() => {
-                    router.push("/feed/flikes");
+                    router.push("/feed/flikes", undefined, { shallow: true });
                   }}>
                   Likes
                 </Dropdown.Item>

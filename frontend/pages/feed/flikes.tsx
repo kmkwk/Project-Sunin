@@ -17,7 +17,6 @@ function Personal() {
   useEffect(() => {
     userAxios.get("/api/v1/users").then(({ data }) => {
       setId(data.body.user.user_seq);
-      console.log(id);
     });
     loadList();
   }, []);

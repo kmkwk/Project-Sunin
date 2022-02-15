@@ -116,23 +116,23 @@ function Createfeed() {
     <>
       <Navbar />
 
-      <Grid>
+      <Grid className={styles.con}>
         <Grid.Row>
           <Grid.Column width={3}></Grid.Column>
           <Grid.Column width={10}>
             <Form className={styles.form}>
               <Form.Field>
-                <h3>피드 내용</h3>
+                <h3 className={styles.con}>피드 내용</h3>
                 <TextArea
                   name="content"
-                  rows={10}
-                  placeholder="내용을 작성하세요..."
+                  rows={25}
+                  placeholder="내용을 작성하세요"
                   onChange={handleOnChange}
                 />
               </Form.Field>
               <Form.Field>
                 <div>
-                  <h3>이미지 선택</h3>
+                  <h3 className={styles.con}>이미지 선택</h3>
                   <Input
                     type="file"
                     accept="image/*, video/*"
@@ -161,10 +161,10 @@ function Createfeed() {
                   })}
               </Form.Field>
               <Form.Field>
-                <Button control={Button} onClick={() => router.back()}>
+                <Button color="grey" control={Button} onClick={() => router.back()}>
                   뒤로가기
                 </Button>
-                <Button control={Button} onClick={handleSubmit}>
+                <Button color="black" control={Button} onClick={handleSubmit}>
                   저장하기
                 </Button>
               </Form.Field>

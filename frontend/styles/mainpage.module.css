@@ -14,19 +14,23 @@
     color: blue;
 }
 .mainzero{
-    padding-left: 7%;
-    height: 150px;
-    font-family: 'Gamja Flower', cursive;
-  font-size: 30px;
+  padding-left: 7%;
+  height: 250px;
+  font-family: 'Gamja Flower', cursive;
+  font-size: 3vw;
+  padding-top: 50px;
+  line-height: 30px;
   color: rgb(0, 0, 0);
 }
 
 .container{
-    padding-left: 7%;
-    height: 150px;
-    background-color: #DDECCA;
-    font-family: 'Gamja Flower', cursive;
-  font-size: 30px;
+  padding-left: 7%;
+  line-height: 30px;
+  height: 250px;
+  padding-top: 50px;
+  background-color: #EFF6E6;
+  font-family: 'Gamja Flower', cursive;
+  font-size: 3vw;
   color: rgb(0, 0, 0);
 }
 /* 
@@ -37,25 +41,26 @@
     background-color: lightsalmon;
     
 } */
-.mainfirst2{
-   
-    
-}
+
 
 .mainsecond{
     padding-left: 7%;
-    height: 150px;
-    background-color: #CEE8CE;
+    height: 250px;
+    padding-top: 50px;
+    line-height: 30px;
+    background-color: #DDECCB;
     font-family: 'Gamja Flower', cursive;
-  font-size: 30px;
+  font-size: 3vw;
   color: rgb(0, 0, 0);
 }
 
 .mainthird{
     padding-left: 7%;
-    height: 150px;
-    background-color: #B8D9C0;
+    padding-top: 50px;
+    height: 250px;
+    line-height: 30px;
+    background-color: #9ED4A2;
     font-family: 'Gamja Flower', cursive;
-  font-size: 30px;
+  font-size: 3vw;
   color: rgb(0, 0, 0);
 }

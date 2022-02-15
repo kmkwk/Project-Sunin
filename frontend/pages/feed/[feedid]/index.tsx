@@ -94,9 +94,8 @@ function Detail({ feedid }: any) {
   return (
     <>
       <Navbar />
-    <div></div>
-
-      <Grid padded>
+      
+      <Grid padded className={styles.con}>
         <Grid.Row>
           <Grid.Column width={3}>
             <Menubar />

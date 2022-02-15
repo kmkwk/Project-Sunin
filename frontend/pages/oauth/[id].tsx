@@ -6,10 +6,11 @@ export default function Authentication() {
 
   useEffect(() => {
     console.log(router);
-    router.push("http://localhost:3000/");
+    router.push("/");
   }, []);
 
   if (typeof window !== "undefined") {
+    localStorage.removeItem("token");
     localStorage.setItem("token", String(router.query.token));
   }
 

@@ -7,33 +7,35 @@ import FeedList from "src/component/feed/FeedList";
 import Menubar from "src/component/Menubar";
 import Navbar from "src/component/Navbar";
 import allAxios from "src/lib/allAxios";
+import styles from "styles/feed.module.css";
 
-function Personal() {
+function FeedLikes() {
   const [list, setList]: any = useState([]);
-  const [page, setPage1] = useState(0);
+  const [page, setPage] = useState(0);
 
   useEffect(() => {
+    setPage(0);
     loadList();
   }, []);
 
-  const loadList = () => {
-    allAxios
+  const loadList = async () => {
+    await allAxios
       .get(`/feed/like`, {
         params: {
-          size: 4,
+          size: 5,
           page: page,
         },
       })
       .then(({ data }) => {
         setList([...list, ...data]);
       });
-    setPage1(page + 1);
+    setPage(page + 1);
   };
 
   return (
     <>
       <Navbar />
-      <Container>
+      <Container className={styles.con}>
         <Grid padded stackable>
           <Grid.Column width={4}>
             <Menubar />
@@ -55,4 +57,4 @@ function Personal() {
   );
 }
 
-export default Personal;
+export default FeedLikes;

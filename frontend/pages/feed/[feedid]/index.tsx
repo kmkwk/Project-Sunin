@@ -77,9 +77,13 @@ function Detail({ feedid }: any) {
   };
 
   const likeFeed = () => {
+    console.log(feed.feedId);
+    console.log(user.user_seq);
+    console.log(user.userSeq);
+
     const body = new FormData();
     body.append("id", feed.feedId);
-    body.append("userId", user.userSeq);
+    body.append("userId", user.user_seq);
 
     userAxios
       .put(`/feed/addLike`, body)
@@ -94,7 +98,7 @@ function Detail({ feedid }: any) {
   return (
     <>
       <Navbar />
-      
+
       <Grid padded className={styles.con}>
         <Grid.Row>
           <Grid.Column width={3}>
@@ -102,7 +106,7 @@ function Detail({ feedid }: any) {
           </Grid.Column>
           <Grid.Column width={9}>
             <div className={styles.height}>
-            <SwiperMedia media={feed.filePath} />
+              <SwiperMedia media={feed.filePath} />
             </div>
           </Grid.Column>
           <Grid.Column width={3}>
@@ -112,65 +116,66 @@ function Detail({ feedid }: any) {
                 <Icon name="like" />
                 <span>Like {feed.likes == 0 ? 0 : feed.likes}</span>
               </Label>
-              <Label>
+              {/* <Label>
                 <Icon name="sign-in" />
                 <span>Follower</span>
               </Label>
               <Label>
                 <Icon name="sign-out" />
                 <span>Following</span>
-              </Label>
+              </Label> */}
             </Container>
             <br />
             <Container>
               <p className="content">{feed.content}</p>
             </Container>
-            <br /><br />
+            <br />
+            <br />
             <Container>
-            <Header as="h1">
-              <Icon name="tags" />
-              <Header.Content>Tags</Header.Content>
-            </Header>
-              {/* {feed.hashtags} */}
-              {/* {feed.hashtags.map((item: any, index: any) => {
-                <p>{item}123</p>
-              })} */}
+              <Header as="h1">
+                <Icon name="tags" />
+                <Header.Content>Tags</Header.Content>
+              </Header>
               {feed.hashtags.map((data: any, key: any) => {
                 return (
-                  <div key={key}>
-                    <Label>{data}</Label>
-                  </div>
+                  <Label key={key} color="green" size="large">
+                    {data}
+                  </Label>
                 );
               })}
-              
             </Container>
             <Container>
               <br />
-            <Header as="h1">
-              <Icon name="comments" />
-              <Header.Content>Comments</Header.Content>
-            </Header>
-            <Comments
-              list={feed.comments}
-              userSeq={user.user_seq}
-              feedId={feed.feedId}
-              onChange={feed.comments}
-            />
+              <Header as="h1">
+                <Icon name="comments" />
+                <Header.Content>Comments</Header.Content>
+              </Header>
+              <Comments
+                list={feed.comments}
+                userSeq={user.user_seq}
+                feedId={feed.feedId}
+                onChange={feed.comments}
+              />
             </Container>
           </Grid.Column>
         </Grid.Row>
 
         <Grid.Row>
-          <Grid.Column width={12}>
-          </Grid.Column>
+          <Grid.Column width={12}></Grid.Column>
           <Grid.Column width={3}>
-            <Button onClick={() => router.push("/feed")} color="grey">뒤로</Button>
+            <Button onClick={() => router.push("/feed")} color="grey">
+              뒤로
+            </Button>
             {feed.userInfo.user_id == user.user_seq && (
               <>
-                <Button onClick={() => router.push(`/feed/edit/${feedid}`)} color="grey">
+                <Button
+                  onClick={() => router.push(`/feed/edit/${feedid}`)}
+                  color="grey">
                   수정
                 </Button>
-                <Button onClick={deleteFeed} color="black">삭제</Button>
+                <Button onClick={deleteFeed} color="black">
+                  삭제
+                </Button>
               </>
             )}
           </Grid.Column>

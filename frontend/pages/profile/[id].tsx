@@ -79,7 +79,7 @@ function Profiles({ id }: any) {
                       <span className="cinema">{user.sunin}</span>
                     </Item.Header>
                     <Item.Description>
-                      <span>{user.intro} ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ</span>
+                      <span>{user.intro}</span>
                     </Item.Description>
                     <Item.Extra>
                       <Label>

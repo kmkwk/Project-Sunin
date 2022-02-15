@@ -24,7 +24,6 @@ const SwiperMedia = ({ media }: any) => {
           return (
             <SwiperSlide key={index}>
               <Image src={item} alt={item} />
-              {/* <Image src={item} alt={item} style={{ height: "350px" ,width: "auto" }} /> */}
             </SwiperSlide>
           );
         })}

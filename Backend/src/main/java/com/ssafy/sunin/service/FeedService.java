@@ -15,7 +15,7 @@ import java.util.Set;
 public interface FeedService {
     FeedCollections updateFile(FileUpdate fileUpdate);
 
-    FeedCollections writeImageFeed(FeedWrite feedWrite,List<MultipartFile> multipartFiles);
+    FeedCollections writeImageFeed(FeedWrite feedWrite);
 
     List<String> downloadFileFeed(String fileNames);
 

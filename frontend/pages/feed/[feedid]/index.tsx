@@ -96,6 +96,7 @@ function Detail({ feedid }: any) {
     userAxios
       .put(`/feed/addLike`, body)
       .then(() => {
+        console.log(feed.userInfo.user_id,"dfadsfdsffds");
         stompClient.send(`/send/`+feed.userInfo.user_id+`/`+messages);
         router.reload();
       })

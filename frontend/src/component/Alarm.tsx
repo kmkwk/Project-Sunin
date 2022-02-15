@@ -44,7 +44,7 @@ export default function Alarm(){
         // 로컬스토리지에 상태관리가 
         // 메세지 받는 사람 - 게시글 작성한 사람
         // 게시글을 작성한사람의 채널을 열어놓음
-        stompClient.subscribe(`/sub/1`, (res: any) => {
+        stompClient.subscribe(`/sub/`+toUserId, (res: any) => {
           console.log("구독으로 받은 메시지 입니다.", res.body);
         });
       },
@@ -56,7 +56,7 @@ export default function Alarm(){
   }
 
   function send() {
-    stompClient.send(`/app/send/`+ 1+`/`+messages)
+    stompClient.send(`/app/send/`+ toUserId+`/`+messages)
   }
   
   // subscribe 현재 게시글의 좋아요를 누른사람의 정보가 들어가있다. /sub/보내는사람의 localstorage에서 가져온 userId

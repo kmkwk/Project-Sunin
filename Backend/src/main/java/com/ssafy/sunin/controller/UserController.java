@@ -4,10 +4,7 @@ import com.ssafy.sunin.common.ApiResponse;
 import com.ssafy.sunin.domain.user.User;
 import com.ssafy.sunin.payload.request.feed.ImageUpdate;
 import com.ssafy.sunin.payload.request.user.UserUpdateRequest;
-import com.ssafy.sunin.payload.response.user.UserDetailProfile;
-import com.ssafy.sunin.payload.response.user.UserRank;
-import com.ssafy.sunin.payload.response.user.UserSideProfile;
-import com.ssafy.sunin.payload.response.user.UserUpdateResponse;
+import com.ssafy.sunin.payload.response.user.*;
 import com.ssafy.sunin.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -25,7 +22,7 @@ import java.util.List;
 @Slf4j
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
-    @RequestMapping("/api/v1/users")
+@RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -36,7 +33,9 @@ public class UserController {
     public ApiResponse getUser() {
         org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userService.getUser(principal.getUsername());
-        return ApiResponse.success("user", user);
+        UserDto userDto = UserDto.userDto(user);
+
+        return ApiResponse.success("user", userDto);
     }
 
     @ApiOperation(value = "유저 디테일 프로필 조회", notes = "사진, 닉네임, 소개, 팔로워 수, 팔로잉 수, 개인 피드 수, 썬인 수")

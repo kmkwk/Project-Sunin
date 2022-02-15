@@ -18,6 +18,8 @@ import FeedDetail from "src/class/FeedDetail";
 import Comments from "src/component/comment/Comments";
 import SwiperMedia from "src/component/Swiper";
 import styles from "styles/feed.module.css";
+import SockJS from "sockjs-client";
+import Stomp from "webstomp-client";
 
 function Detail({ feedid }: any) {
   const router = useRouter();
@@ -85,9 +87,16 @@ function Detail({ feedid }: any) {
     body.append("id", feed.feedId);
     body.append("userId", user.user_seq);
 
+    // 보내는 사람
+    const fromUserId = localStorage.getItem("userId");
+    const messages = fromUserId+"가 게시글에 좋아요를 눌렀습니다!"
+    const socket = new SockJS('http://localhost:8080/stomp');
+    const stompClient = Stomp.over(socket);
+    
     userAxios
       .put(`/feed/addLike`, body)
       .then(() => {
+        stompClient.send(`/send/`+feed.userInfo.user_id+`/`+messages);
         router.reload();
       })
       .catch(() => {

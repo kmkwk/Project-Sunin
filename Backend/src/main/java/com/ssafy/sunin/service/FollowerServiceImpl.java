@@ -20,11 +20,13 @@ public class FollowerServiceImpl implements FollowerService{
 
     @Override
     public Long addFollower(FollowerUser followerUser) {
+        // 보내는 유저 체크
         Optional<User> user = userRepository.findById(followerUser.getUserId());
         Long count = user.stream().count();
         User users = user.get();
+        // 팔로워 받는 유저 체크
         User followerMember = userRepository.findFollowerByUserSeq(followerUser.getFollowerMember());
-
+        // 팔로워
         if(followerRepository.getUser(followerUser) == null){
             Follower follower = Follower.builder()
                     .user(users)

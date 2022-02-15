@@ -26,7 +26,9 @@ public class MessageController {
                         @DestinationVariable("messages") String messages) {
         User userId = alarmService.getUserId(toUserId);
 //       List<String> messages = alarmService.getMessage(fromUserId,toUserId);
-        simpMessagingTemplate.convertAndSend("/sub/" + userId.getUserId(), messages);
+        simpMessagingTemplate.convertAndSend("/sub/" + toUserId, messages);
 
     }
 }
+
+// 1번을 구독해놓으면 서버에서

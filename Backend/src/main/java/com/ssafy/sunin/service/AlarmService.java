@@ -59,10 +59,6 @@ public class AlarmService {
 
     }
 
-    public void deleteMessage(Long id){
-        alarmRepository.deleteById(id);
-    }
-
     public boolean getLikeUser(Long fromUserId,String feedId){
         FeedCollections feedCollections = feedRepository.findById(new ObjectId(feedId)).get();
         if(feedCollections.getLikeUser().containsKey(fromUserId)){

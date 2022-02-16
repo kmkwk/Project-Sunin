@@ -7,6 +7,7 @@ import com.ssafy.sunin.domain.Follower;
 import com.ssafy.sunin.domain.user.User;
 import com.ssafy.sunin.payload.request.follower.FollowerUser;
 import com.ssafy.sunin.payload.response.alarm.AlarmResponse;
+import com.ssafy.sunin.payload.response.user.UserSideProfile;
 import com.ssafy.sunin.repository.AlarmRepository;
 import com.ssafy.sunin.repository.FeedRepository;
 import com.ssafy.sunin.repository.FollowerRepository;
@@ -30,9 +31,13 @@ public class AlarmService {
     private final FeedRepository feedRepository;
     private final FollowerRepository followerRepository;
 
-    public Alarm writeMessage(Long fromUserId, Long toUserId, String message){
+    public String writeMessage(Long fromUserId, Long toUserId, String message){
+        User user = userRepository.findById(fromUserId).get();
+        message = user.getUserNickname()+message;
         Alarm alarm = Alarm.alarm(fromUserId,toUserId,message);
-        return alarmRepository.save(alarm);
+
+        alarmRepository.save(alarm);
+        return message;
     }
 
     public List<AlarmResponse> getMessage(Long toUserId) {

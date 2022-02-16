@@ -2,11 +2,17 @@ package com.ssafy.sunin.service;
 
 import com.ssafy.sunin.domain.Alarm;
 import com.ssafy.sunin.domain.Comment;
+import com.ssafy.sunin.domain.FeedCollections;
+import com.ssafy.sunin.domain.Follower;
 import com.ssafy.sunin.domain.user.User;
+import com.ssafy.sunin.payload.request.follower.FollowerUser;
 import com.ssafy.sunin.payload.response.alarm.AlarmResponse;
 import com.ssafy.sunin.repository.AlarmRepository;
+import com.ssafy.sunin.repository.FeedRepository;
+import com.ssafy.sunin.repository.FollowerRepository;
 import com.ssafy.sunin.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,6 +27,8 @@ public class AlarmService {
 
     private final AlarmRepository alarmRepository;
     private final UserRepository userRepository;
+    private final FeedRepository feedRepository;
+    private final FollowerRepository followerRepository;
 
     public Alarm writeMessage(Long fromUserId, Long toUserId, String message){
         Alarm alarm = Alarm.alarm(fromUserId,toUserId,message);
@@ -48,4 +56,16 @@ public class AlarmService {
         alarmRepository.deleteById(id);
     }
 
+    public boolean getLikeUser(Long fromUserId,String feedId){
+        FeedCollections feedCollections = feedRepository.findById(new ObjectId(feedId)).get();
+        if(feedCollections.getLikeUser().containsKey(fromUserId)){
+            return false;
+        }
+        return true;
+    }
+
+    public Follower getFollower(Long fromUserId, Long toUserId){
+        FollowerUser followerUser = new FollowerUser(fromUserId,toUserId);
+        return followerRepository.getUser(followerUser);
+    }
 }

@@ -95,11 +95,11 @@ function Detail({ feedid }: any) {
     const socket = new SockJS('http://i6c210.p.ssafy.io:8080/stomp');
     const stompClient = Stomp.over(socket);
     
-    
     userAxios
       .put(`/feed/addLike`, body)
       .then(() => {
-        stompClient.send(`/send/`+fromUserId+`/`+feed.userInfo.user_id+`/`+messages);
+        stompClient.send(`/send/`+fromUserId+`/`+feed.userInfo.user_id+`/`+messages+`/`+feed.feedId);
+        // stompClient.send(`/send/`+feed.userInfo.user_id+`/`+messages);
         router.reload();
       })
       .catch(() => {

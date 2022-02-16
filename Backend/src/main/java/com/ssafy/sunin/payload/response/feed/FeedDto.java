@@ -1,11 +1,8 @@
 package com.ssafy.sunin.payload.response.feed;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ssafy.sunin.domain.FeedCollections;
 import com.ssafy.sunin.domain.user.User;
 import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -27,21 +24,6 @@ public class FeedDto {
 //    @JsonUnwrapped
     private FeedUserDto user;
 
-    public static FeedDto feedDto(FeedCollections feed, User user) {
-        return FeedDto.builder()
-                .id(feed.getId().toString())
-                .content(feed.getContent())
-                .hashtags(feed.getHashtags())
-                .likes(feed.getLikes())
-                .createdDate(feed.getCreatedDate())
-                .modifiedDate(feed.getModifiedDate())
-                .likeUser(feed.getLikeUser())
-                .filePath(feed.getFilePath())
-                .user(user)
-                .commentCount(feed.getComments().size())
-                .build();
-    }
-
     public static List<FeedDto> mapFeedDto(List<FeedCollections> feedCollection, Map<Long,User> userMap){
         return feedCollection.stream()
                 .map(feedCollections -> FeedDto.builder()
@@ -49,8 +31,8 @@ public class FeedDto {
                         .content(feedCollections.getContent())
                         .hashtags(feedCollections.getHashtags())
                         .likes(feedCollections.getLikes())
-                        .createdDate(feedCollections.getCreatedDate())
-                        .modifiedDate(feedCollections.getModifiedDate())
+                        .createdDate(feedCollections.getCreatedDate().plusHours(9))
+                        .modifiedDate(feedCollections.getModifiedDate().plusHours(9))
                         .likeUser(feedCollections.getLikeUser())
                         .filePath(feedCollections.getFilePath())
                         .commentCount(feedCollections.getComments().size())
@@ -66,8 +48,8 @@ public class FeedDto {
                         .content(feedCollections.getContent())
                         .hashtags(feedCollections.getHashtags())
                         .likes(feedCollections.getLikes())
-                        .createdDate(feedCollections.getCreatedDate())
-                        .modifiedDate(feedCollections.getModifiedDate())
+                        .createdDate(feedCollections.getCreatedDate().plusHours(9))
+                        .modifiedDate(feedCollections.getModifiedDate().plusHours(9))
                         .likeUser(feedCollections.getLikeUser())
                         .filePath(feedCollections.getFilePath())
                         .commentCount(feedCollections.getComments().size())

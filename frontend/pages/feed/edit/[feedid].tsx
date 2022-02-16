@@ -1,4 +1,12 @@
-import { Button, Form, Input, Grid, TextArea, Label } from "semantic-ui-react";
+import {
+  Button,
+  Form,
+  Input,
+  Grid,
+  TextArea,
+  Label,
+  Container,
+} from "semantic-ui-react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
@@ -13,6 +21,7 @@ import "swiper/css/scrollbar";
 
 import styles from "styles/CreateFeed.module.css";
 import allAxios from "src/lib/allAxios";
+import ByteLength from "src/component/ByteLength";
 
 function Modifyfeed({ feedid }: any) {
   const router = useRouter();
@@ -43,6 +52,7 @@ function Modifyfeed({ feedid }: any) {
   });
 
   const [media, setMedia]: any = useState([]);
+  const [length, setLength] = useState(0); // 글자수 바이트 카운트
 
   useEffect(() => {
     allAxios.get(`feed/detail/${feedid}`).then(({ data }) => {
@@ -52,6 +62,8 @@ function Modifyfeed({ feedid }: any) {
         filePath: data.file_path,
         hashtags: data.hashtags,
       });
+
+      setLength(ByteLength(data.content));
     });
 
     userAxios
@@ -67,10 +79,15 @@ function Modifyfeed({ feedid }: any) {
 
   const handleOnChange = (e: any) => {
     const { value, name } = e.target;
+
     setFeed({
       ...feed,
       [name]: value,
     });
+
+    if (e.target.name == "content") {
+      setLength(ByteLength(e.target.value));
+    }
   };
 
   const handleKeyPress = (e: any) => {
@@ -89,7 +106,7 @@ function Modifyfeed({ feedid }: any) {
     const index = feed.hashtags.indexOf(data.content);
     feed.hashtags.splice(index, 1);
     const result = feed.hashtags.filter((word: any) => word != data.content);
-    setFeed({ hashtags: result });
+    setFeed({ ...feed, hashtags: result });
   };
 
   const uploadFile = (e: any) => {
@@ -118,6 +135,11 @@ function Modifyfeed({ feedid }: any) {
       return;
     }
 
+    if (length > 200) {
+      alert("내용을 확인해주세요.");
+      return;
+    }
+
     const body = new FormData();
     body.append("userId", user.user_seq);
     body.append("id", feedid);
@@ -133,13 +155,15 @@ function Modifyfeed({ feedid }: any) {
     //   body.append("hashtags", each);
     // });
 
-    {feed.hashtags.map((data: any, key: any) => {
-      return (
-        <div key={key}>
-          <Label>data</Label>
-        </div>
-      );
-    })}
+    {
+      feed.hashtags.map((data: any, key: any) => {
+        return (
+          <div key={key}>
+            <Label>data</Label>
+          </div>
+        );
+      });
+    }
 
     allAxios
       .put("/feed", body)
@@ -152,16 +176,22 @@ function Modifyfeed({ feedid }: any) {
   };
 
   return (
-    <>
+    <Container>
       <Navbar />
 
       <Grid>
         <Grid.Row>
-          <Grid.Column width={3}></Grid.Column>
+          <Grid.Column width={3} />
           <Grid.Column width={10}>
             <Form className={styles.form}>
               <Form.Field>
                 <h3>피드 내용</h3>
+                {length > 200 ? (
+                  <span style={{ color: "red" }}>{length}</span>
+                ) : (
+                  <span>{length}</span>
+                )}
+                <span> / 200</span>
                 <TextArea
                   name="content"
                   rows={10}
@@ -213,7 +243,7 @@ function Modifyfeed({ feedid }: any) {
           <Grid.Column width={3} />
         </Grid.Row>
       </Grid>
-    </>
+    </Container>
   );
 }
 

@@ -8,7 +8,7 @@ import {
   Button,
   Label,
   Image,
-  List
+  List,
 } from "semantic-ui-react";
 
 import Navbar from "src/component/Navbar";
@@ -22,13 +22,13 @@ import SwiperMedia from "src/component/Swiper";
 import styles from "styles/feed.module.css";
 import SockJS from "sockjs-client";
 import Stomp from "webstomp-client";
-import Link from "next/link";
 
 function Detail({ feedid }: any) {
   const router = useRouter();
 
   // 로그인 유저 정보
   const [user, setUser]: any = useState(new User());
+  const [isLike, setisLike] = useState(false);
 
   // 피드 정보
   const [feed, setFeed]: any = useState({
@@ -44,12 +44,23 @@ function Detail({ feedid }: any) {
     modifiedDate: "", // 수정일
   });
 
+  const getLikeUsers = async (inputId: any) => {
+    await allAxios
+      .get(`/feed/likeUser/${feedid}`)
+      .then(({ data }) => {
+        data.map((now: any) => {
+          if (now.id == inputId) setisLike(true);
+        });
+      })
+      .catch(() => {});
+  };
+
   useEffect(() => {
-    console.log(feedid);
     userAxios
       .get("/api/v1/users")
       .then(({ data }) => {
         setUser(data.body.user);
+        getLikeUsers(data.body.user.user_seq);
       })
       .catch(() => {});
 
@@ -75,13 +86,9 @@ function Detail({ feedid }: any) {
       });
   };
 
-  // const showNickname = (object: any) => {
-  //   return Object.entries(object).map(
-  //     (obj: any) => obj[0] == "nickName" && <span>{obj[1]}</span>
-  //   );
-  // };
-
   const likeFeed = () => {
+    setisLike(!isLike);
+
     console.log(feed.feedId);
     console.log(user.user_seq);
     console.log(user.userSeq);
@@ -91,16 +98,20 @@ function Detail({ feedid }: any) {
     body.append("userId", user.user_seq);
     // 보내는 사람
     const fromUserId = localStorage.getItem("userId");
-    const messages = fromUserId+"가 게시글에 좋아요를 눌렀습니다!"
-    const socket = new SockJS('http://i6c210.p.ssafy.io:8080/stomp');
+    const messages = fromUserId + "가 게시글에 좋아요를 눌렀습니다!";
+    const socket = new SockJS("http://i6c210.p.ssafy.io:8080/stomp");
     const stompClient = Stomp.over(socket);
-    
+
     userAxios
       .put(`/feed/addLike`, body)
       .then(() => {
-        setTimeout(() => (stompClient.send(`/send/`+fromUserId+`/`+feed.userInfo.user_id+`/`+messages+`/`+feed.feedId),600));
-        // stompClient.send(`/send/`+feed.userInfo.user_id+`/`+messages);
-        router.reload();
+        setTimeout(() => {
+          stompClient.send(
+            `/send/${fromUserId}/${feed.userInfo.user_id}/${messages}/${feed.feedId}`
+          );
+        }, 300);
+        if (!isLike) setFeed({ ...feed, likes: feed.likes + 1 });
+        else setFeed({ ...feed, likes: feed.likes - 1 });
       })
       .catch(() => {
         alert("잠시 후 다시 시도해주세요.");
@@ -108,7 +119,7 @@ function Detail({ feedid }: any) {
   };
   
   function goProfile() {
-    router.push(`/profile/${feed.userInfo.user_id}`)
+    router.push(`/profile/${feed.userInfo.user_id}`);
   }
 
   return (
@@ -126,19 +137,57 @@ function Detail({ feedid }: any) {
           </Grid.Column>
           <Grid.Column width={3}>
             <Container>
-            
-            <List divided verticalAlign='middle'>
-            <List.Item>
-              <List.Content floated='right'>
-                <Label onClick={likeFeed}>
-                <Icon name="like" />
-                <span style={{ cursor: "pointer", textShadow: "좋아요" }}>Like {feed.likes == 0 ? 0 : feed.likes}</span>
-              </Label>
-              </List.Content>
-            <Image avatar onClick={goProfile} title="작성자 프로필로 이동" style={{ cursor: "pointer", textShadow: "작성자 프로필로 이동" }} src={feed.userInfo.image} />
-              <List.Content onClick={goProfile} title="작성자 프로필로 이동" style={{ cursor: "pointer", textShadow: "작성자 프로필로 이동" }}>{feed.userInfo.nick_name}</List.Content>
-            </List.Item>
-            </List>
+              <List divided verticalAlign="middle">
+                <List.Item>
+                  <List.Content floated="right">
+                    {user.user_seq > 0 ? (
+                      <Label
+                        onClick={likeFeed}
+                        style={{
+                          cursor: "pointer",
+                          textShadow: "좋아요",
+                        }}>
+                        {!isLike && (
+                          <>
+                            <Icon name="like" />
+                            <span>Like {feed.likes == 0 ? 0 : feed.likes}</span>
+                          </>
+                        )}
+                        {isLike && (
+                          <>
+                            <Icon name="like" color="red" />
+                            <span>Like {feed.likes}</span>
+                          </>
+                        )}
+                      </Label>
+                    ) : (
+                      <Label>
+                        <Icon name="like" />
+                        <span>Like {feed.likes == 0 ? 0 : feed.likes}</span>
+                      </Label>
+                    )}
+                  </List.Content>
+                  <Image
+                    avatar
+                    onClick={goProfile}
+                    title="작성자 프로필로 이동"
+                    style={{
+                      cursor: "pointer",
+                      textShadow: "작성자 프로필로 이동",
+                    }}
+                    src={feed.userInfo.image}
+                  />
+                  <List.Content
+                    onClick={goProfile}
+                    title="작성자 프로필로 이동"
+                    style={{
+                      cursor: "pointer",
+                      textShadow: "작성자 프로필로 이동",
+                    }}>
+                    {feed.userInfo.nick_name}
+                  </List.Content>
+                </List.Item>
+              </List>
               {/* <Label>
                 <Icon name="sign-in" />
                 <span>Follower</span>

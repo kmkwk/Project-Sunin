@@ -122,17 +122,18 @@ function Profiles({ id }: any) {
       // 보내는 사람
       const fromUserId = localStorage.getItem("userId");
       const messages = fromUserId + "가 팔로워를 하였습니다.";
-      
+      const socket = new SockJS("http://i6c210.p.ssafy.io:8080/stomp");
+      const stompClient = Stomp.over(socket);
 
       allAxios
         .post(`/follower`, body)
         .then(() => {
-          setIsFollowing(true);
           stompClient.send(
             `/send/` + fromUserId + `/` + `${Number(id)}` + `/` + messages
           );
+          setIsFollowing(true);
         })
-        .catch((e) => {
+        .catch((e: any) => {
           alert("잠시 후 다시 시도해주세요.");
         });
     }

@@ -42,9 +42,11 @@ export default function Rank() {
         <Grid>
           <Grid.Row>
             <Grid.Column width={3}>
+              <br/>
               <Menubar />
             </Grid.Column>
-            <Grid.Column width={10}>
+            <Grid.Column width={1}></Grid.Column>
+            <Grid.Column width={9}>
               <br />
               <Header
                 as="h1"

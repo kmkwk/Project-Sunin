@@ -17,16 +17,21 @@
 
 ## Front-end
 
+- HTML5
+- CSS3
+- JavaScript(ES6)
 - React
-- JavaScript
 - TypeScript
+- Next.js
+- Semantic UI React
 
 ## Back-end
 
 - Spring Boot
-- Gradle
 - JPA
+- Gradle
 - Swagger
+- QueryDSL
 
 ## CI/CD
 
@@ -36,6 +41,7 @@
 
 - Docker
 - AWS
+- AWS S3
 
 ## DB
 

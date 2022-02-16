@@ -40,48 +40,46 @@
 
 - 프로젝트명 : 써닌(SUN-IN)
 
+
+  - 노션 : https://tinted-bird-b78.notion.site/SUN-IN-PROJECT-d48e838e9740415ab87f2cb9c3f5985b
+
 - 서비스 특징
-  
-  - 일생생활 속 선한 영향력을 끼칠 수 있는 일들을 한 후 서로 공유하고 함께 참여할 수 있도록 이끄는 서비스
+
+  - 선한 영향력 프로젝트 썬인🌏☀입니다. 
+  - 환경 보호, 기부 ,봉사 활동 등 일상생활 속 선한 영향력을 함께 실천하고 서로 공유할 수 있는 공간으로 여러분을 초대합니다.
 
 - 기간 : 2022.01.04 ~ 2022.02.18
 
 - 주요 기능
-  
+
   | 기능         | 내용                                     |
   | ---------- | -------------------------------------- |
   | SNS 기능     | 개인과 기업들의 활동이 담긴 게시물 공유                 |
   | 써닌(SUN-IN) | 사회 공헌 활동 참여일수에 따라 자신이 노력한 결과를 시각화하여 제공 |
-  
+
   - 상세기능
     
-    - 로그인 및 회원가입
+    - 소셜 로그인
     - 회원 관리
     - 검색기능
-      - 회원, 해시태그 검색
+      - 내용 해시태그 검색
     - 피드 기능
+      - 유저들이 활동이 담긴 게시물 공유
       - 게시글, 댓글 CRUD(Create, Read, Update, Delete)
     - 좋아요, 팔로우 기능
     - 알림 기능
-      - 좋아요, 댓글, 팔로우, 채팅 시 실시간 알림
     - 실시간 채팅 기능
-    - 게시글 신고 기능 및 블랙리스트 회원 관리
     - 프로필 옆 상단에 써닌(SUN-IN) 표시로 참여일수 시각화
 
 - 주요 기술
-  
+
   - Single Page Application
-  - CSS, SASS
+  - CSS
   - REST API
 
-- 참조 리소스
-  
-  - sass-loader: scss 로드 및 컴파일
-
 - 배포 환경
-  
+
   - URL : // 웹 서비스, 랜딩 페이지, 프로젝트 소개 등의 배포 URL 기입
-  - 테스트 계정 : // 로그인이 필요한 경우, 사용 가능한 테스트 계정(ID/PW) 기입
 
 <!-- 자유 양식 -->
 
@@ -100,21 +98,21 @@
 
 ### **Front-end**
 
-| <img src="https://profilinator.rishav.dev/skills-assets/react-original-wordmark.svg" alt="React.js" width="50px" height="50px" /> | <img src="https://profilinator.rishav.dev/skills-assets/bootstrap-plain.svg" alt="Bootstrap" width="50px" height="50px" /> | <img src="https://profilinator.rishav.dev/skills-assets/html5-original-wordmark.svg" alt="HTML5" width="50px" height="50px" /> | <img src="https://profilinator.rishav.dev/skills-assets/css3-original-wordmark.svg" alt="CSS3" width="50px" height="50px" /> | <img src="https://profilinator.rishav.dev/skills-assets/javascript-original.svg" alt="JavaScript" width="50px" height="50px" /> | <img src="md-images/next.js.png" width="50" height="50" > | <img src="md-images/typescript.png" width="50" height="50" > |
-| :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: | :-------------------------------------------------------: | :----------------------------------------------------------: |
-|                           React.js                           |                          Bootstrap                           |                            HTML5                             |                             CSS3                             |                       JavaScript(ES6)                        |                          NEXT.js                          |                          TypeScript                          |
+| <img src="https://profilinator.rishav.dev/skills-assets/html5-original-wordmark.svg" alt="HTML5" width="50px" height="50px" /> | <img src="md-images/css3-original-wordmark-16449801385756.svg" alt="CSS3" width="50px" height="50px" /> | <img src="https://profilinator.rishav.dev/skills-assets/javascript-original.svg" alt="JavaScript" width="50px" height="50px" /> | <img src="md-images/react-original-wordmark-16449800839963.svg" alt="React.js" width="50px" height="50px" /> | <img src="md-images/next.js.png" width="50" height="50" > | <img src="md-images/typescript.png" width="50" height="50" > | <img src="md-images/semantic UI react.png" width="50" height="50" > |
+| :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: | :-------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
+|                            HTML5                             |                             CSS3                             |                       JavaScript(ES6)                        |                           React.js                           |                          NEXT.js                          |                          TypeScript                          |                      Semantic UI React                       |
 
 ### **Back-end**
 
-| <img src="md-images/springboot.png" width="50" height="50"/> | <img src="md-images/jpa.png" width="50" height="50"/> | <img src="md-images/gradle.png" width="50" height="50"/> | <img src="md-images/swagger.png" width="50" height="50"/> |
-|:------------------------------------------------------------:|:-----------------------------------------------------:|:--------------------------------------------------------:|:---------------------------------------------------------:|
-| Springboot                                                   | JPA                                                   | Gradle                                                   | Swagger                                                   |
+| <img src="md-images/springboot.png" width="50" height="50"/> | <img src="md-images/jpa.png" width="50" height="50"/> | <img src="md-images/gradle.png" width="50" height="50"/> | <img src="md-images/swagger.png" width="50" height="50"/> | <img src="md-images/querydsl.png" width="50" height="50" > |
+| :----------------------------------------------------------: | :---------------------------------------------------: | :------------------------------------------------------: | :-------------------------------------------------------: | :--------------------------------------------------------: |
+|                          Springboot                          |                          JPA                          |                          Gradle                          |                          Swagger                          |                          QueryDSL                          |
 
 ### **Server**
 
-| <img src="md-images/docker.png" width="50" height="50"/> | <img src="md-images/aws.png" width="50" height="50"/> |
-|:--------------------------------------------------------:|:-----------------------------------------------------:|
-| Docker                                                   | aws                                                   |
+| <img src="md-images/docker.png" width="50" height="50"/> | <img src="md-images/aws.png" width="50" height="50"/> | <img src="md-images/awss3.png" width="50" height="50" > |
+| :------------------------------------------------------: | :---------------------------------------------------: | :-----------------------------------------------------: |
+|                          Docker                          |                          aws                          |                         aws s3                          |
 
 ### **DB**
 
@@ -173,4 +171,4 @@
 
 - 목표 : 웹 큐레이션 SNS 완성
 
-- 진행상황  
+  

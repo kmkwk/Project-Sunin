@@ -98,7 +98,7 @@ function Detail({ feedid }: any) {
     body.append("userId", user.user_seq);
     // 보내는 사람
     const fromUserId = localStorage.getItem("userId");
-    const messages = fromUserId + "가 게시글에 좋아요를 눌렀습니다!";
+    const messages = "가 게시글에 좋아요를 눌렀습니다!";
     const socket = new SockJS("http://i6c210.p.ssafy.io:8080/stomp");
     const stompClient = Stomp.over(socket);
 

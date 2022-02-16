@@ -40,3 +40,14 @@
 .head {
   font-size: 50px;
 }
+
+
+.imagefile{
+  /* position: absolute;
+  top: 100px;
+  left: 100px; */
+  display: block;
+  vertical-align: bottom;
+ 
+}
+                 

@@ -21,6 +21,7 @@ import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 
 import styles from "styles/CreateFeed.module.css";
+import ByteLength from "src/component/ByteLength";
 
 function Createfeed() {
   const router = useRouter();
@@ -51,17 +52,9 @@ function Createfeed() {
     });
 
     if (e.target.name == "content") {
-      setLength(getByteLength(e.target.value));
+      setLength(ByteLength(e.target.value));
     }
   };
-
-  // 글자수 바이트로 환산하는 정규식
-  function getByteLength(str: String) {
-    return str
-      .split("")
-      .map((s: any) => s.charCodeAt(0))
-      .reduce((prev: any, c: any) => prev + (c === 10 ? 2 : c >> 7 ? 2 : 1), 0);
-  }
 
   const handleKeyPress = (e: any) => {
     if (e.key === " ") {

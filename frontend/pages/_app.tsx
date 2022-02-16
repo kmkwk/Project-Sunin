@@ -7,8 +7,6 @@ import Head from "next/head";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import styles from "/styles/Swiper.module.css";
-
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>

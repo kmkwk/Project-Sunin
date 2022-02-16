@@ -32,16 +32,15 @@ export default function Navbar() {
           setUserInfo(data.body.user);
         })
         .catch((e: any) => {
-          console.log(e);
-          alert('로그인 시간이 만료되었습니다.')
-          autoLogout()
+          alert("로그인 시간이 만료되었습니다.");
+          autoLogout();
         });
     }
   }, []);
 
   function autoLogout() {
     if (isLogin && !userInfo.username) {
-      goLogout()
+      goLogout();
     }
   }
 
@@ -133,7 +132,7 @@ export default function Navbar() {
             <Alarm />
           </Menu.Item>
         ) : (
-         ""
+          ""
         )}
 
         {isLogin ? (

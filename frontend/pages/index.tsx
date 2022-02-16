@@ -1,10 +1,9 @@
 import type { NextPage } from "next";
-
 import styles from "styles/mainpage.module.css";
 import Navbar from "../src/component/Navbar";
 import { useEffect, useState } from "react";
 import { Grid, Image } from "semantic-ui-react";
-import TypingText from '../src/component/fontmove/TypingText';
+import TypingText from "../src/component/fontmove/TypingText";
 import _ from "lodash";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Navigation, Pagination, Autoplay } from "swiper";
@@ -35,13 +34,12 @@ const Home: NextPage = () => {
         navigation
         pagination={{ clickable: true }}
         scrollbar={{ draggable: true }}
-        onSwiper={(swiper) => console.log(swiper)}
-        onSlideChange={() => console.log("slide change")}>
+        loop>
         <SwiperSlide>
           <img src="images/1번.jpg" width={"100%"} height={"100%"} />
         </SwiperSlide>
         <SwiperSlide>
-          <a href="http://localhost:3000/feed">
+          <a href="http://i6c210.p.ssafy.io/feed">
             <img src="images/2번.png" width={"100%"} height={"100%"} />
           </a>
         </SwiperSlide>
@@ -63,8 +61,12 @@ const Home: NextPage = () => {
                 {/* <br /><br /> */}
                 <br />
                 <div className={styles.title}>
-                <TypingText text="선한 영향력 프로젝트 썬인🌍🌞입니다." speed={60} fontSize="1.75rem" color="green" />
-                
+                  <TypingText
+                    text="선한 영향력 프로젝트 썬인🌍🌞입니다."
+                    speed={60}
+                    fontSize="1.75rem"
+                    color="green"
+                  />
                 </div>
                 <br />
                 우리 함께 SunIn해봐요!

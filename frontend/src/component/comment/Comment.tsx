@@ -5,11 +5,11 @@ import allAxios from "src/lib/allAxios";
 import SockJS from "sockjs-client";
 import Stomp from "webstomp-client";
 
-function Comment({nickName, item, userSeq, feedId }: any) {
+function Comment({ nickName, item, userSeq, feedId }: any) {
   const [comment, setComment] = useState("");
   const [editable, setEditable] = useState(false); // 테스트
   const [replyable, setReplyable] = useState(false); // 테스트
-  
+
   const writeDate = (date: any) => {
     return date.split("T")[0];
   };
@@ -81,7 +81,6 @@ function Comment({nickName, item, userSeq, feedId }: any) {
   };
 
   const replyButton = (e: any) => {
-    console.log("대댓글 작성");
     setReplyable(!replyable);
   };
 
@@ -94,21 +93,22 @@ function Comment({nickName, item, userSeq, feedId }: any) {
 
     // 보내는 사람
     const fromUserId = localStorage.getItem("userId");
-    const messages = nickName+"님이 대댓글을 작성하였습니다"
-    const socket = new SockJS('http://i6c210.p.ssafy.io:8080/stomp');
+    const messages = nickName + "님이 대댓글을 작성하였습니다";
+    const socket = new SockJS("http://i6c210.p.ssafy.io:8080/stomp");
     const stompClient = Stomp.over(socket);
 
     allAxios
       .post(`/comment/reply`, body)
       .then(() => {
         setTimeout(() => {
-          stompClient.send(`/send/`+fromUserId+`/`+item[1].writer+`/`+messages
-         );
-       }, 300);
+          stompClient.send(
+            `/send/` + fromUserId + `/` + item[1].writer + `/` + messages
+          );
+        }, 300);
 
-       setTimeout(() => {
-        Router.reload()
-      },1000);
+        setTimeout(() => {
+          Router.reload();
+        }, 1000);
       })
       .catch(() => {
         alert("잠시 후 다시 시도해주세요.");

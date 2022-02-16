@@ -16,7 +16,7 @@ import userAxios from "src/lib/userAxios";
 import { useRouter } from "next/router";
 import ChatModal from "./chat/chatModal";
 import User from "src/class/User";
-import styles from "../../styles/menubar.module.css"
+import styles from "../../styles/menubar.module.css";
 
 export default function Menuvar() {
   const isLogin = IsLogin;
@@ -36,10 +36,7 @@ export default function Menuvar() {
         .then(({ data }) => {
           setUserInfo(data.body.user);
         })
-        .catch((e: any) => {
-          console.log(e);
-          // alert("잘못된 접근입니다.");
-        });
+        .catch(() => {});
     }
   }, []);
 
@@ -75,7 +72,7 @@ export default function Menuvar() {
 
   return (
     <>
-      <Menu vertical >
+      <Menu vertical>
         <MenuItem className={styles.con}>
           <Grid>
             <GridRow>
@@ -112,24 +109,30 @@ export default function Menuvar() {
                     title="내 프로필로 이동합니다."
                   />
                   <br />
-
-                
                   &nbsp;&nbsp;&nbsp;&nbsp;
-                  <span><br/> <span style={{fontSize: "20px"}}>{userInfo["username"]} </span> <br/>&nbsp;&nbsp; {userInfo["sunin_days"]}일</span>
+                  <span>
+                    <br />{" "}
+                    <span style={{ fontSize: "20px" }}>
+                      {userInfo["username"]}{" "}
+                    </span>{" "}
+                    <br />
+                    &nbsp;&nbsp; {userInfo["sunin_days"]}일
+                  </span>
                   {/* {userInfo["username"]} */}
-                  <br/>
+                  <br />
                   {/* &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; */}
                   {/* <span>{userInfo["sunin_days"]}일</span> */}
                   {/* {userInfo["sunin_days"]}일 */}
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   <Image
                     src={suninImage}
-                    width="50px" height="50px"
+                    width="50px"
+                    height="50px"
                     title="씨앗->새싹->꽃->작은 나무->큰 나무"
                   />
-                  &nbsp;&nbsp;&nbsp;&nbsp;<br/>
+                  &nbsp;&nbsp;&nbsp;&nbsp;
+                  <br />
                   {/* &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; */}
-                  
                 </>
               ) : (
                 <>
@@ -148,40 +151,37 @@ export default function Menuvar() {
           </Grid>
         </MenuItem>
 
-
-
         {userInfo.username ? (
-          <Menu.Item name="profile" className={styles.con} >
-            
-            <div className={styles.setting} >
+          <Menu.Item name="profile" className={styles.con}>
+            <div className={styles.setting}>
               <Link href={`/profile/${userInfo["user_seq"]}`}>
                 <a className={styles.title}> 프로필</a>
               </Link>
-
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               <Link href="/profile/info">
-                    <a title="회원정보 수정 페이지로 이동합니다.">
-                    <Icon className={styles.setting} name="cog" size="small" color="grey" circular />
-                    </a>
-            </Link>
-            
-            
+                <a title="회원정보 수정 페이지로 이동합니다.">
+                  <Icon
+                    className={styles.setting}
+                    name="cog"
+                    size="small"
+                    color="grey"
+                    circular
+                  />
+                </a>
+              </Link>
             </div>
-           
           </Menu.Item>
         ) : (
           ""
         )}
 
         <Menu.Item className={styles.setting} name="personal" link>
-          <div className={styles.title} >
+          <div className={styles.title}>
             <Link href="/feed">
               <a className={styles.title}>피드</a>
             </Link>
           </div>
         </Menu.Item>
-
-        
 
         <Menu.Item name="rank">
           <div>
@@ -204,7 +204,8 @@ export default function Menuvar() {
 
         {isLogin ? (
           <Menu.Item name="chat">
-            <div className={styles.title}>채팅</div><br/>
+            <div className={styles.title}>채팅</div>
+            <br />
             <ChatModal />
           </Menu.Item>
         ) : (

@@ -7,8 +7,6 @@ export default function FeedList({ list }: any) {
     return list.length;
   }
 
-  console.log(list);
-
   return (
     <>
       <Grid columns={1} stackable>

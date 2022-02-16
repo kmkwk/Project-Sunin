@@ -9,7 +9,6 @@ import "swiper/css/scrollbar";
 
 const SwiperMedia = ({ media }: any) => {
   SwiperCore.use([Navigation, Pagination, Autoplay]);
-  console.log(media);
   return (
     <>
       <Swiper

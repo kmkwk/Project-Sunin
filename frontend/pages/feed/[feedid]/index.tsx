@@ -89,16 +89,12 @@ function Detail({ feedid }: any) {
   const likeFeed = () => {
     setisLike(!isLike);
 
-    console.log(feed.feedId);
-    console.log(user.user_seq);
-    console.log(user.userSeq);
-
     const body = new FormData();
     body.append("id", feed.feedId);
     body.append("userId", user.user_seq);
     // 보내는 사람
     const fromUserId = localStorage.getItem("userId");
-    const messages = user.user_nickname+"님이 게시글에 좋아요를 눌렀습니다";
+    const messages = user.user_nickname + "님이 게시글에 좋아요를 눌렀습니다";
     const socket = new SockJS("http://i6c210.p.ssafy.io:8080/stomp");
     const stompClient = Stomp.over(socket);
 
@@ -117,7 +113,7 @@ function Detail({ feedid }: any) {
         alert("잠시 후 다시 시도해주세요.");
       });
   };
-  
+
   function goProfile() {
     router.push(`/profile/${feed.userInfo.user_id}`);
   }

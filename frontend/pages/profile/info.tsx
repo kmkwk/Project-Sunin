@@ -61,15 +61,10 @@ function EditProfile() {
   };
 
   const uploadToServer = async (event: any) => {
-    console.log(user.phone_number);
-    console.log(user.address);
-    console.log(user.filePath);
-    console.log(user.introduction);
-    console.log(user.user_nickname);
     const body = new FormData();
     body.append("address", user.address);
     body.append("image", filePath);
-    body.append("introduction",user.introduction);
+    body.append("introduction", user.introduction);
     body.append("nickName", user.user_nickname);
     body.append("phoneNumber", user.phone_number);
     body.append("userId", user.user_seq);
@@ -78,18 +73,14 @@ function EditProfile() {
       .put("/api/v1/users", body, {
         headers: { "Content-Type": "multipart/form-data" },
       })
-      .then(({ data }) => {
-        console.log("성공");
+      .then(() => {
         Router.reload();
       })
-      .then(() => {
-        console.log("실패");
-      });
+      .then(() => {});
   };
 
   const onFileChange = (event: any) => {
     event.stopPropagation(); // 이벤트 전파 방지
-    console.log(event.target.files[0]);
     setFilePath(event.target.files[0]);
 
     const {

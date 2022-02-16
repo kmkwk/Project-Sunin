@@ -20,7 +20,6 @@ export default function Searchbar() {
         if (data.feed_dtos) {
           let newFeedList: any = [];
           data.feed_dtos.map((feed: any) => {
-            console.log("feed", feed);
             newFeedList.push({
               key: feed.created_date,
               title: feed.content.slice(0, 20),

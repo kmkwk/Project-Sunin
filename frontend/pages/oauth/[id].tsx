@@ -14,7 +14,6 @@ export default function Authentication() {
   }
 
   useEffect(() => {
-    console.log(router);
     router.push("/");
     setTimeout(userA, 3000);
   }, []);
@@ -45,14 +44,11 @@ export default function Authentication() {
       {},
       (frame: any) => {
         stompClient.connected = true;
-        console.log("소켓 연결 성공", frame);
         stompClient.subscribe(`/sub/` + userId, (res: any) => {
-          console.log(res.body);
           ToastMessage(res.body);
         });
       },
       (error: any) => {
-        console.log("소켓 연결 실패", error);
         stompClient.connected = false;
       }
     );

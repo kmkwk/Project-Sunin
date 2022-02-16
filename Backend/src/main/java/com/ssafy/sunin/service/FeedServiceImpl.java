@@ -131,6 +131,9 @@ public class FeedServiceImpl implements FeedService {
     public FeedCollections deleteFeed(String id, Long userId) {
         FeedCollections feedCollections = feedRepository.findByIdAndUserIdAndFlagTrue(new ObjectId(id), userId);
         feedCollections.setFeedDelete();
+        User user = userRepository.findById(feedCollections.getUserId()).get();
+        user.setSunindDaysDecrease(user);
+        userRepository.save(user);
         return feedRepository.save(feedCollections);
     }
 

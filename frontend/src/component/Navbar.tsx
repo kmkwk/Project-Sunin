@@ -133,11 +133,7 @@ export default function Navbar() {
             <Alarm />
           </Menu.Item>
         ) : (
-          <Menu.Item name="signup">
-            <Link href="/signup">
-              <a>Signup</a>
-            </Link>
-          </Menu.Item>
+         ""
         )}
 
         {isLogin ? (

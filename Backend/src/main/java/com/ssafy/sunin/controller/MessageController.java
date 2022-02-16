@@ -25,8 +25,9 @@ public class MessageController {
             @DestinationVariable("fromUserId") Long fromUserId,
                         @DestinationVariable("toUserId") Long toUserId,
                         @DestinationVariable("messages") String messages,
-                        @DestinationVariable("feedId") String feedId) {
+                        @DestinationVariable("feedId") String feedId) throws InterruptedException {
 
+        Thread.sleep(5000);
         if(!fromUserId.equals(toUserId)) {
             //좋아요를 누른사람한테는 메시지를 보내면 안됨
             if (!alarmService.getLikeUser(fromUserId, feedId)) {

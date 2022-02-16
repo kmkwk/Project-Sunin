@@ -16,10 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,13 +28,9 @@ public class AlarmService {
     private final FeedRepository feedRepository;
     private final FollowerRepository followerRepository;
 
-    public String writeMessage(Long fromUserId, Long toUserId, String message){
-        User user = userRepository.findById(fromUserId).get();
-        message = user.getUserNickname()+message;
+    public void addMessage(Long fromUserId, Long toUserId, String message){
         Alarm alarm = Alarm.alarm(fromUserId,toUserId,message);
-
         alarmRepository.save(alarm);
-        return message;
     }
 
     public List<AlarmResponse> getMessage(Long toUserId) {
@@ -54,7 +47,16 @@ public class AlarmService {
                         o -> o
                 ));
 
-        return AlarmResponse.alarmResponseList(messages,userMap);
+        List<AlarmResponse> alarmResponseList = AlarmResponse.alarmResponseList(messages,userMap);
+        alarmResponseList.sort(Comparator.comparing(AlarmResponse::getLocalDateTime).reversed());
+        if(alarmResponseList.size() < 20){
+            alarmResponseList = alarmResponseList.subList(0,alarmResponseList.size()-1);
+        }else{
+            alarmResponseList = alarmResponseList.subList(0,20);
+        }
+        return alarmResponseList;
+
+
     }
 
     public void deleteMessage(Long id){

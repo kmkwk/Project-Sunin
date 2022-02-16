@@ -2,8 +2,10 @@ import Router from "next/router";
 import { useState } from "react";
 import { List, Image, Icon, Label, Input } from "semantic-ui-react";
 import allAxios from "src/lib/allAxios";
+import SockJS from "sockjs-client";
+import Stomp from "webstomp-client";
 
-function Comment({ item, userSeq, feedId }: any) {
+function Comment({nickName, item, userSeq, feedId }: any) {
   const [comment, setComment] = useState("");
   const [editable, setEditable] = useState(false); // 테스트
   const [replyable, setReplyable] = useState(false); // 테스트
@@ -90,9 +92,20 @@ function Comment({ item, userSeq, feedId }: any) {
     body.append("feedId", feedId);
     body.append("writer", userSeq);
 
+    // 보내는 사람
+    const fromUserId = localStorage.getItem("userId");
+    const messages = nickName+"님이 대댓글을 작성하였습니다"
+    const socket = new SockJS('http://i6c210.p.ssafy.io:8080/stomp');
+    const stompClient = Stomp.over(socket);
+
     allAxios
       .post(`/comment/reply`, body)
       .then(() => {
+        setTimeout(() => {
+          stompClient.send(`/send/`+fromUserId+`/`+userSeq+`/`+messages
+         );
+       }, 300);
+
         Router.reload();
       })
       .catch(() => {

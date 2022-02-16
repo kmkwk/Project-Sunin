@@ -6,6 +6,7 @@ import Menubar from "src/component/Menubar";
 import Navbar from "src/component/Navbar";
 import allAxios from "src/lib/allAxios";
 import userAxios from "src/lib/userAxios";
+import styles from "styles/feed.module.css";
 
 function Personal() {
   const [list, setList]: any = useState([]);
@@ -23,7 +24,7 @@ function Personal() {
   return (
     <>
       <Navbar />
-      <Container>
+      <Container className={styles.con}>
         <Grid padded stackable>
           <Grid.Column width={4}>
             <Menubar />

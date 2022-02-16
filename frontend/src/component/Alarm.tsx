@@ -5,7 +5,6 @@ import { Button, Header, Icon, Segment, TransitionablePortal } from "semantic-ui
 import styles from '../../styles/alarm.module.css'
 import SockJS from "sockjs-client";
 import Stomp from "webstomp-client";
-import { List } from 'semantic-ui-react'
 
 export default function Alarm(){
 

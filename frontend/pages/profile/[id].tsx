@@ -7,6 +7,7 @@ import {
   Label,
   Container,
   Button,
+  Image
 } from "semantic-ui-react";
 import Navbar from "src/component/Navbar";
 import Menubar from "src/component/Menubar";
@@ -147,6 +148,23 @@ function Profiles({ id }: any) {
     }
   }
 
+  const [userInfo, setUserInfo]: any = useState([]);
+
+  let suninImage = "/images/suninimage/씨앗.png";
+
+  if (userInfo["sunin_days"]) {
+    suninImage =
+      userInfo["sunin_days"] < 3
+        ? "/images/suninimage/씨앗.png"
+        : userInfo["sunin_days"] < 6
+        ? "/images/suninimage/새싹.png"
+        : userInfo["sunin_days"] < 9
+        ? "/images/suninimage/꽃.png"
+        : userInfo["sunin_days"] < 12
+        ? "/images/suninimage/나무.png"
+        : "/images/suninimage/큰나무.png";
+  }
+
   return (
     <>
       <Navbar />
@@ -165,7 +183,15 @@ function Profiles({ id }: any) {
                     <Item.Header>
                       <span>{user.nickName}</span>
                       <span> | </span>
-                      <Icon name="lemon outline" />
+                     {/* <div className={styles.imagefile}> */}
+                        <Image
+                        className={styles.imagefile}
+                       src={suninImage}
+                       width="40px" height="40px"
+                        inline
+                        />
+                     {/* </div> */}
+                      {/* <Icon name="lemon outline" /> */}
                       <span className="cinema">{user.sunin}</span>
                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                       {nowUser.id === Number(id) || !nowUser.id ? (

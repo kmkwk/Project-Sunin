@@ -6,7 +6,7 @@ import Comment from "./Comment";
 import SockJS from "sockjs-client";
 import Stomp from "webstomp-client";
 
-function Comments({feedWriter, list, userSeq, feedId }: any) {
+function Comments({feedWriter, nickName ,list, userSeq, feedId }: any) {
   const [comment, setComment] = useState("");
 
   const handleComment = (e: any) => {
@@ -25,7 +25,7 @@ function Comments({feedWriter, list, userSeq, feedId }: any) {
 
     // 보내는 사람
     const fromUserId = localStorage.getItem("userId");
-    const messages = fromUserId+"가 게시글에 댓글을 작성하였습니다!"
+    const messages = nickName+"님이 게시글에 댓글을 작성하였습니다"
     const socket = new SockJS('http://i6c210.p.ssafy.io:8080/stomp');
     const stompClient = Stomp.over(socket);
 
@@ -33,7 +33,11 @@ function Comments({feedWriter, list, userSeq, feedId }: any) {
       .post(`/comment`, body)
       .then(() => {
         // 메시지 전달
-        // stompClient.send(`/send/`+fromUserId+`/`+feedWriter+`/`+messages);
+        setTimeout(() => {
+           stompClient.send(`/send/`+fromUserId+`/`+feedWriter+`/`+messages
+          );
+        }, 300);
+
         Router.reload();
       })
       .catch(() => {
@@ -66,7 +70,7 @@ function Comments({feedWriter, list, userSeq, feedId }: any) {
         {Object.entries(list).map((object: any) => {
           return (
             <List.Item key={object}>
-              <Comment item={object} userSeq={userSeq} feedId={feedId} />
+              <Comment nickName={nickName} item={object} userSeq={userSeq} feedId={feedId} />
             </List.Item>
           );
         })}

@@ -26,12 +26,12 @@ public class MessageController {
                         @DestinationVariable("toUserId") Long toUserId,
                         @DestinationVariable("messages") String messages,
                         @DestinationVariable("feedId") String feedId) {
-
+        System.out.println(messages);
         if(!fromUserId.equals(toUserId)) {
             //좋아요를 누른사람한테는 메시지를 보내면 안됨
             if (!alarmService.getLikeUser(fromUserId, feedId)) {
                 // 유저마다 닉네임을 달아줘야함
-                messages = alarmService.writeMessage(fromUserId, toUserId, messages);
+                alarmService.addMessage(fromUserId, toUserId, messages);
                 simpMessagingTemplate.convertAndSend("/sub/" + toUserId, messages);
             }
         }
@@ -42,40 +42,25 @@ public class MessageController {
             @DestinationVariable("fromUserId") Long fromUserId,
             @DestinationVariable("toUserId") Long toUserId,
             @DestinationVariable("messages") String messages) {
-
+        System.out.println(messages);
         if(!fromUserId.equals(toUserId)) {
-            //이미 팔로워가 되있으면 메시지를 보내면 안됨
-            if (alarmService.getFollower(fromUserId, toUserId) == null) {
-                alarmService.writeMessage(fromUserId, toUserId, messages);
+            if(messages.contains("댓글")){
+                alarmService.addMessage(fromUserId, toUserId, messages);
                 simpMessagingTemplate.convertAndSend("/sub/" + toUserId, messages);
+            }else{
+                //이미 팔로워가 되있으면 메시지를 보내면 안됨
+                if (alarmService.getFollower(fromUserId, toUserId) == null) {
+                    alarmService.addMessage(fromUserId, toUserId, messages);
+                    simpMessagingTemplate.convertAndSend("/sub/" + toUserId, messages);
+                }
             }
         }
     }
-
-//    @MessageMapping("/send/{fromUserId}/{toUserId}/{messages}/{feedId}")
-//    public void messageComment(
-//            @DestinationVariable("fromUserId") Long fromUserId,
-//            @DestinationVariable("toUserId") Long toUserId,
-//            @DestinationVariable("messages") String messages,
-//            @DestinationVariable("feedId") String feedId) {
-//
-//        if(!fromUserId.equals(toUserId)) {
-//            alarmService.writeMessage(fromUserId, toUserId, messages);
-//            simpMessagingTemplate.convertAndSend("/sub/" + toUserId, messages);
-//        }
-//    }
 
     @GetMapping("/{toUserId}")
     public ResponseEntity<List<AlarmResponse>> getMessage(@PathVariable("toUserId") Long toUserId){
         log.info("getMessage");
         System.out.println(toUserId);
         return ResponseEntity.ok(alarmService.getMessage(toUserId));
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteMessage(@PathVariable("id") Long id){
-        log.info("deleteMessage");
-        alarmService.deleteMessage(id);
-        return ResponseEntity.ok("success");
     }
 }

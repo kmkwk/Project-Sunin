@@ -29,6 +29,7 @@ function Profiles({ id }: any) {
   const isLogin = IsLogin;
   const [nowUser, setNowUser] = useState({
     id: 0,
+    nickName: "",
   });
   const [isFollowing, setIsFollowing] = useState(false);
 
@@ -77,6 +78,7 @@ function Profiles({ id }: any) {
         .then(({ data }) => {
           setNowUser({
             id: data.body.user.user_seq,
+            nickName: data.body.user.user_nickname,
           });
           getFollowingUsers(data.body.user.user_seq);
         })
@@ -117,12 +119,22 @@ function Profiles({ id }: any) {
       body.append("followerMember", `${Number(id)}`);
       body.append("userId", `${nowUser.id}`);
 
+      const fromUserId = localStorage.getItem("userId");
+      const messages = `${nowUser.nickName}님이 팔로워를 하였습니다.`;
+
+      const socket = new SockJS("http://i6c210.p.ssafy.io:8080/stomp");
+      const stompClient = Stomp.over(socket);
       allAxios
         .post(`/follower`, body)
         .then(() => {
           setIsFollowing(true);
-          StompSend(id, user.nickName);
+
+          setTimeout(() => {
+            stompClient.send(`/send/${fromUserId}/${nowUser.id}/${messages}`);
+          }, 300);
+          // StompSend(id, nowUser.nickName);
         })
+        
         .catch(() => {
           alert("잠시 후 다시 시도해주세요.");
         });

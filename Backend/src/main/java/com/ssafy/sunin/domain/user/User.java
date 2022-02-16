@@ -140,6 +140,6 @@ public class User {
     }
 
     public void setSunindDaysDecrease(User user){
-        this.suninDays = user.suninDays--;
+        this.suninDays = --user.suninDays;
     }
 }

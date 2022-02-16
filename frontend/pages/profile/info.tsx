@@ -16,6 +16,7 @@ import userAxios from "src/lib/userAxios";
 import { useRouter } from "next/router";
 import User from "src/class/User";
 import allAxios from "src/lib/allAxios";
+import Router from "next/router";
 
 function EditProfile() {
   const router = useRouter();
@@ -68,8 +69,7 @@ function EditProfile() {
     const body = new FormData();
     body.append("address", user.address);
     body.append("image", filePath);
-    body.append("introduction", "안녕하세요");
-    // body.append("introduction", user.introduction);
+    body.append("introduction",user.introduction);
     body.append("nickName", user.user_nickname);
     body.append("phoneNumber", user.phone_number);
     body.append("userId", user.user_seq);
@@ -80,6 +80,7 @@ function EditProfile() {
       })
       .then(({ data }) => {
         console.log("성공");
+        Router.reload();
       })
       .then(() => {
         console.log("실패");
@@ -195,6 +196,17 @@ function EditProfile() {
                       name="address"
                       placeholder="Address"
                       value={user.address}
+                      onChange={handleOnChange}
+                    />
+                  </Form.Group>
+                </Form.Field>
+                <Form.Field>
+                  <label>소개</label>
+                  <Form.Group inline>
+                    <Input
+                      name="introduction"
+                      placeholder="Introduction"
+                      value={user.introduction}
                       onChange={handleOnChange}
                     />
                   </Form.Group>

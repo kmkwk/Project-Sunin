@@ -89,7 +89,6 @@ function Detail({ feedid }: any) {
     const body = new FormData();
     body.append("id", feed.feedId);
     body.append("userId", user.user_seq);
-
     // 보내는 사람
     const fromUserId = localStorage.getItem("userId");
     const messages = fromUserId+"가 게시글에 좋아요를 눌렀습니다!"
@@ -99,8 +98,8 @@ function Detail({ feedid }: any) {
     userAxios
       .put(`/feed/addLike`, body)
       .then(() => {
-        console.log(feed.userInfo.user_id,"dfadsfdsffds");
-        stompClient.send(`/send/`+feed.userInfo.user_id+`/`+messages);
+        stompClient.send(`/send/`+fromUserId+`/`+feed.userInfo.user_id+`/`+messages+`/`+feed.feedId);
+        // stompClient.send(`/send/`+feed.userInfo.user_id+`/`+messages);
         router.reload();
       })
       .catch(() => {

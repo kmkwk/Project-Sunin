@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
@@ -19,11 +18,9 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RestControllerAdvice(annotations = RestController.class)
-@CrossOrigin("*")
 public class FollowerController {
 
     private final FollowerService followerService;
-    private final SimpMessagingTemplate simpMessagingTemplate;
 
     @ApiOperation(value = "팔로워 추가", notes = "userId: 현재 로그인중인 유저 id, follower_member: 팔로워할 멤버 id")
     @PostMapping

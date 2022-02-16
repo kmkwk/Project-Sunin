@@ -5,6 +5,7 @@ import { Button, Header, Icon, Segment, TransitionablePortal } from "semantic-ui
 import styles from '../../styles/alarm.module.css'
 import SockJS from "sockjs-client";
 import Stomp from "webstomp-client";
+import { List } from 'semantic-ui-react'
 
 export default function Alarm(){
 
@@ -14,6 +15,7 @@ export default function Alarm(){
 
   function handleClick() {
     setOpen(true)
+    alram();
   }
   function handleClose() {
     setOpen(false)
@@ -22,29 +24,29 @@ export default function Alarm(){
   const toUserId = 1;
   const listUser = [FromUserId,toUserId];
   const message = "";
-
   useEffect(() => {
     // connect()
   })
   
-  // useEffect(() => {
-    // function follower(){
-    //   axios
-    //   // 메시지를 받아야함
-    //   .get(`http://localhost:8080/follower/follower/`+ 19,{})
-    //   .then(({ data }) => {
-    //     stompClient.send(`/send/`+19+`/`+messages)
 
-    //     console.log(data);
-    //     // console.log(localStorage.getItem('token'));
-    //     // connect();
-    //     // send()
-    //   })
-    //   .catch((e: any) => {
-    //     console.log(e)
-    //   });
-    // }
-  // }, [])
+    function alram(){
+
+      // 보내는 사람
+      const toUserId = localStorage.getItem("userId");
+      const socket = new SockJS('http://i6c210.p.ssafy.io:8080/stomp');
+      const stompClient = Stomp.over(socket);
+      
+      axios
+      // 메시지를 받아야함
+      .get(`http://i6c210.p.ssafy.io:8080/alram/`+ toUserId)
+      .then(({ data }) => {
+        console.log(data);
+      })
+      .catch((e: any) => {
+        console.log(e)
+      });
+    }
+
 
 
   return (
@@ -78,7 +80,7 @@ export default function Alarm(){
           // negative={open}
           // positive={!open}
           positive={true}
-          // onClick={follower}
+          onClick={handleClick}
         />
         <TransitionablePortal onClose={handleClose} open={open}>
           <Segment

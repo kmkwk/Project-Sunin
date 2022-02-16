@@ -98,7 +98,7 @@ function Detail({ feedid }: any) {
     userAxios
       .put(`/feed/addLike`, body)
       .then(() => {
-        stompClient.send(`/send/`+fromUserId+`/`+feed.userInfo.user_id+`/`+messages+`/`+feed.feedId);
+        setTimeout(() => (stompClient.send(`/send/`+fromUserId+`/`+feed.userInfo.user_id+`/`+messages+`/`+feed.feedId),600));
         // stompClient.send(`/send/`+feed.userInfo.user_id+`/`+messages);
         router.reload();
       })
@@ -106,7 +106,7 @@ function Detail({ feedid }: any) {
         alert("잠시 후 다시 시도해주세요.");
       });
   };
-
+  
   function goProfile() {
     router.push(`/profile/${feed.userInfo.user_id}`)
   }

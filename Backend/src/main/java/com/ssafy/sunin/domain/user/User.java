@@ -138,4 +138,8 @@ public class User {
     public void setUserNameModified(String userName){
         this.username = userName;
     }
+
+    public void setSunindDaysDecrease(User user){
+        this.suninDays = user.suninDays--;
+    }
 }

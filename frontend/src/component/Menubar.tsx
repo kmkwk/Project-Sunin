@@ -47,13 +47,13 @@ export default function Menuvar() {
 
   if (userInfo["sunin_days"]) {
     suninImage =
-      userInfo["sunin_days"] < 3
+      userInfo["sunin_days"] < 1
         ? "/images/suninimage/씨앗.png"
-        : userInfo["sunin_days"] < 6
+        : userInfo["sunin_days"] < 10
         ? "/images/suninimage/새싹.png"
-        : userInfo["sunin_days"] < 9
-        ? "/images/suninimage/꽃.png"
-        : userInfo["sunin_days"] < 12
+        : userInfo["sunin_days"] < 30
+        ? "/images/suninimage/튤립.png"
+        : userInfo["sunin_days"] < 50
         ? "/images/suninimage/나무.png"
         : "/images/suninimage/큰나무.png";
   }

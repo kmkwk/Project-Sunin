@@ -31,7 +31,7 @@ export default function ChatModal(){
         }
       >
         <Segment
-          style={{ left: '0%', position: 'fixed', top: '40%', zIndex: 1000 }}
+          style={{ left: '0%', position: 'fixed', bottom: '0%', zIndex: 1000 }}
         >
           {/* <Header>여기에 채팅장 넣을 예정...</Header> */}
           <Chatting />

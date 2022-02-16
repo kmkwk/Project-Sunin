@@ -30,7 +30,8 @@ public class MessageController {
         if(!fromUserId.equals(toUserId)) {
             //좋아요를 누른사람한테는 메시지를 보내면 안됨
             if (!alarmService.getLikeUser(fromUserId, feedId)) {
-                alarmService.writeMessage(fromUserId, toUserId, messages);
+                // 유저마다 닉네임을 달아줘야함
+                messages = alarmService.writeMessage(fromUserId, toUserId, messages);
                 simpMessagingTemplate.convertAndSend("/sub/" + toUserId, messages);
             }
         }

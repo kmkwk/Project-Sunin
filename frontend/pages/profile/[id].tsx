@@ -131,7 +131,7 @@ function Profiles({ id }: any) {
           setIsFollowing(true);
 
           setTimeout(() => {
-            stompClient.send(`/send/${fromUserId}/${nowUser.id}/${messages}`);
+            stompClient.send(`/send/${fromUserId}/${Number(id)}/${messages}`);
           }, 300);
           // StompSend(id, nowUser.nickName);
         })

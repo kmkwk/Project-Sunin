@@ -38,7 +38,9 @@ function Comments({feedWriter, nickName ,list, userSeq, feedId }: any) {
           );
         }, 300);
 
-        Router.reload();
+        setTimeout(() => {
+          Router.reload()
+        },1000);
       })
       .catch(() => {
         alert("잠시 후 다시 시도해주세요.");

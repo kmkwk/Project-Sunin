@@ -9,7 +9,7 @@ function Comment({nickName, item, userSeq, feedId }: any) {
   const [comment, setComment] = useState("");
   const [editable, setEditable] = useState(false); // 테스트
   const [replyable, setReplyable] = useState(false); // 테스트
-
+  
   const writeDate = (date: any) => {
     return date.split("T")[0];
   };
@@ -102,11 +102,13 @@ function Comment({nickName, item, userSeq, feedId }: any) {
       .post(`/comment/reply`, body)
       .then(() => {
         setTimeout(() => {
-          stompClient.send(`/send/`+fromUserId+`/`+userSeq+`/`+messages
+          stompClient.send(`/send/`+fromUserId+`/`+item[1].writer+`/`+messages
          );
        }, 300);
 
-        Router.reload();
+       setTimeout(() => {
+        Router.reload()
+      },1000);
       })
       .catch(() => {
         alert("잠시 후 다시 시도해주세요.");

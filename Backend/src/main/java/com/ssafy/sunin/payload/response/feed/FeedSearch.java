@@ -1,6 +1,5 @@
 package com.ssafy.sunin.payload.response.feed;
 
-import com.ssafy.sunin.domain.FeedCollections;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,5 +1,13 @@
 import React from "react";
-import { Grid, Divider, Icon, Item, Label, Container, Button } from "semantic-ui-react";
+import {
+  Grid,
+  Divider,
+  Icon,
+  Item,
+  Label,
+  Container,
+  Button,
+} from "semantic-ui-react";
 import Navbar from "src/component/Navbar";
 import Menubar from "src/component/Menubar";
 import { useEffect, useState } from "react";
@@ -17,11 +25,11 @@ function Profiles({ id }: any) {
   const router = useRouter();
 
   // 로그인 유저
-  const isLogin = IsLogin
+  const isLogin = IsLogin;
   const [nowUser, setNowUser] = useState({
     id: 0,
-  })
-  const [isFollowing, setIsFollowing] = useState(false)
+  });
+  const [isFollowing, setIsFollowing] = useState(false);
 
   // 프로필 유저
   const [user, setUser] = useState({
@@ -64,89 +72,85 @@ function Profiles({ id }: any) {
 
     if (isLogin) {
       userAxios
-        .get(`/api/v1/users`, {})
+        .get(`/api/v1/users`)
         .then(({ data }) => {
           setNowUser({
             id: data.body.user.user_seq,
-          })
-          getFollowingUsers()
+          });
+          getFollowingUsers(data.body.user.user_seq);
         })
-        .catch((e: any) => {
-          alert('잠시 후 다시 시도해주세요...')
+        .catch(() => {
+          alert("잠시 후 다시 시도해주세요...");
         });
     }
-    
   }, []);
 
   function loadFeed() {
     setPage(pages + 1);
   }
 
-  function getFollowingUsers() {
+  const getFollowingUsers = async (inputId: any) => {
     if (nowUser) {
-      allAxios
-      .get(`/follower/followingList/${nowUser.id}`, {
-        params: {
-          userId: nowUser.id
-        }
-      })
-      .then(({ data }) => {
-        data.map((followingusers: Number)=> {
-          if (followingusers === Number(id)) {
-            setIsFollowing(true)
-          }
+      await allAxios
+        .get(`/follower/followingList/${inputId}`, {
+          params: {
+            userId: inputId,
+          },
         })
-      })
-      .catch((e: any) => {
-        alert('잠시 후 다시 시도해주세요...')
-      });
+        .then(({ data }) => {
+          data.map((followingusers: Number) => {
+            if (followingusers === Number(id)) {
+              setIsFollowing(true);
+            }
+          });
+        })
+        .catch(() => {
+          alert("잠시 후 다시 시도해주세요...");
+        });
     }
-  }
+  };
 
   function goFollowing() {
     if (nowUser.id) {
-      const body: any = new FormData()
-      body.append("followerMember", `${Number(id)}`)
-      body.append("userId", `${nowUser.id}`)
+      const body: any = new FormData();
+      body.append("followerMember", `${Number(id)}`);
+      body.append("userId", `${nowUser.id}`);
 
       // 보내는 사람
       const fromUserId = localStorage.getItem("userId");
-      const messages = fromUserId+"가 팔로워를 하였습니다."
-      const socket = new SockJS('http://i6c210.p.ssafy.io:8080/stomp');
+      const messages = fromUserId + "가 팔로워를 하였습니다.";
+      const socket = new SockJS("http://i6c210.p.ssafy.io:8080/stomp");
       const stompClient = Stomp.over(socket);
 
       allAxios
-      .post(`/follower`, 
-        body
-      )
-      .then(() => {
-        stompClient.send(`/send/`+fromUserId+`/`+`${Number(id)}`+`/`+messages);
-        getFollowingUsers()
-      })
-      .catch((e: any) => {
-        getFollowingUsers()
-        alert("잠시 후 다시 시도해주세요.");
-      });
+        .post(`/follower`, body)
+        .then(() => {
+          setIsFollowing(true);
+          stompClient.send(
+            `/send/` + fromUserId + `/` + `${Number(id)}` + `/` + messages
+          );
+        })
+        .catch((e: any) => {
+          alert("잠시 후 다시 시도해주세요.");
+        });
     }
   }
 
   function goUnfollowing() {
     if (nowUser.id) {
       allAxios
-      .delete(`/follower`, {
-        params: {
-          followerMember: Number(id),
-          userId: nowUser.id
-        }
-      })
-      .then(() => {
-        getFollowingUsers()
-        router.reload()
-      })
-      .catch((e: any) => {
-        getFollowingUsers()
-        alert("잠시 후 다시 시도해주세요.");
-      });
+        .delete(`/follower`, {
+          params: {
+            followerMember: Number(id),
+            userId: nowUser.id,
+          },
+        })
+        .then(() => {
+          setIsFollowing(false);
+        })
+        .catch((e: any) => {
+          alert("잠시 후 다시 시도해주세요.");
+        });
     }
   }
 
@@ -171,12 +175,15 @@ function Profiles({ id }: any) {
                       <Icon name="lemon outline" />
                       <span className="cinema">{user.sunin}</span>
                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                      {nowUser.id === Number(id) || !nowUser.id?
-                      "":
-                      isFollowing?
-                      <Button color="green" onClick={goUnfollowing}>UnFollow</Button>
-                      :<Button onClick={goFollowing}>Follow</Button>
-                      }
+                      {nowUser.id === Number(id) || !nowUser.id ? (
+                        ""
+                      ) : isFollowing ? (
+                        <Button color="green" onClick={goUnfollowing}>
+                          UnFollow
+                        </Button>
+                      ) : (
+                        <Button onClick={goFollowing}>Follow</Button>
+                      )}
                     </Item.Header>
                     <Item.Description>
                       <span>{user.intro}</span>
@@ -217,6 +224,7 @@ function Profiles({ id }: any) {
 }
 export async function getServerSideProps(context: any) {
   const id = context.params.id;
+
   return { props: { id } };
 }
 export default Profiles;

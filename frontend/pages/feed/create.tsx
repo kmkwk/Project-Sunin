@@ -1,4 +1,12 @@
-import { Button, Form, Input, Grid, TextArea, Label } from "semantic-ui-react";
+import {
+  Button,
+  Form,
+  Input,
+  Grid,
+  TextArea,
+  Label,
+  Container,
+} from "semantic-ui-react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
@@ -13,13 +21,15 @@ import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 
 import styles from "styles/CreateFeed.module.css";
+import ByteLength from "src/component/ByteLength";
 
 function Createfeed() {
   const router = useRouter();
 
   const [feed, setFeed]: any = useState(new FeedWrite());
-  const [user, setUser]: any = useState();
-  const [media, setMedia]: any = useState([]);
+  const [user, setUser]: any = useState(); // 유저정보
+  const [media, setMedia]: any = useState([]); // 파일업로드용
+  const [length, setLength] = useState(0); // 글자수 바이트 카운트
 
   useEffect(() => {
     userAxios
@@ -35,10 +45,15 @@ function Createfeed() {
 
   const handleOnChange = (e: any) => {
     const { value, name } = e.target;
+
     setFeed({
       ...feed,
       [name]: value,
     });
+
+    if (e.target.name == "content") {
+      setLength(ByteLength(e.target.value));
+    }
   };
 
   const handleKeyPress = (e: any) => {
@@ -57,7 +72,7 @@ function Createfeed() {
     const index = feed.hashtags.indexOf(data.content);
     feed.hashtags.splice(index, 1);
     const result = feed.hashtags.filter((word: any) => word != data.content);
-    setFeed({ hashtags: result });
+    setFeed({ ...feed, hashtags: result });
   };
 
   const uploadFile = (e: any) => {
@@ -83,6 +98,10 @@ function Createfeed() {
 
     if (flag) {
       alert("내용을 입력해주세요.");
+      return;
+    }
+    if (length > 200) {
+      alert("내용을 확인해주세요.");
       return;
     }
 
@@ -113,19 +132,26 @@ function Createfeed() {
   };
 
   return (
-    <>
+    <Container>
       <Navbar />
 
       <Grid className={styles.con}>
         <Grid.Row>
-          <Grid.Column width={3}></Grid.Column>
+          <Grid.Column width={3} />
           <Grid.Column width={10}>
             <Form className={styles.form}>
               <Form.Field>
                 <h3 className={styles.con}>피드 내용</h3>
+                {length > 200 ? (
+                  <span style={{ color: "red" }}>{length}</span>
+                ) : (
+                  <span>{length}</span>
+                )}
+                <span> / 200</span>
                 <TextArea
                   name="content"
-                  rows={25}
+                  rows={10}
+                  value={feed.content}
                   placeholder="내용을 작성하세요"
                   onChange={handleOnChange}
                 />
@@ -161,7 +187,10 @@ function Createfeed() {
                   })}
               </Form.Field>
               <Form.Field>
-                <Button color="grey" control={Button} onClick={() => router.back()}>
+                <Button
+                  color="grey"
+                  control={Button}
+                  onClick={() => router.back()}>
                   뒤로가기
                 </Button>
                 <Button color="black" control={Button} onClick={handleSubmit}>
@@ -173,7 +202,7 @@ function Createfeed() {
           <Grid.Column width={3} />
         </Grid.Row>
       </Grid>
-    </>
+    </Container>
   );
 }
 

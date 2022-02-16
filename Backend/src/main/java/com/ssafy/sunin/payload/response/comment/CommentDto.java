@@ -10,6 +10,8 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -55,8 +57,8 @@ public class CommentDto {
                         .writer(comment.getWriter())
                         .content(comment.getContent())
                         .likes(comment.getLikes())
-                        .writeDate(comment.getWriteDate())
-                        .modifiedDate(comment.getModifiedDate())
+                        .writeDate(comment.getWriteDate().plusHours(9))
+                        .modifiedDate(comment.getModifiedDate().plusHours(9))
                         .modified(comment.isModified())
                         .deleted(comment.isDeleted())
                         .group(comment.getGroup())

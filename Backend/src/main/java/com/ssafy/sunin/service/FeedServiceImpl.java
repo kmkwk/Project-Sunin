@@ -295,7 +295,7 @@ public class FeedServiceImpl implements FeedService {
                 }
             }
         }else {
-            feedCollections = feedRepository.findByContentStartsWith(content,pageable);
+            feedCollections = feedRepository.findByContentStartsWithAndFlagTrue(content,pageable);
 
             for (int i = 0; i < feedCollections.size(); i++) {
                 set.add(feedCollections.get(i).getContent());

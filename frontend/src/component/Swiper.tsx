@@ -13,13 +13,14 @@ const SwiperMedia = ({ media }: any) => {
   return (
     <>
       <Swiper
-        style={{ height: "800px"}}
-        spaceBetween={200}
-        slidesPerView={1}
+        spaceBetween={10}
+        slidesPerView={1.6}
         navigation
+        speed={500}
         pagination={{ clickable: true }}
         loop={true}
-        autoplay={{ delay: 3000 }}>
+        autoplay={{ delay: 3000 }}
+        centeredSlides={true}>
         {media.map((item: any, index: any) => {
           return (
             <SwiperSlide key={index}>

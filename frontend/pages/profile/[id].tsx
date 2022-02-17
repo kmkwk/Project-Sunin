@@ -129,10 +129,10 @@ function Profiles({ id }: any) {
         .post(`/follower`, body)
         .then(() => {
           setIsFollowing(true);
-
-          setTimeout(() => {
-            stompClient.send(`/send/${fromUserId}/${Number(id)}/${messages}`);
-          }, 300);
+          console.log(fromUserId,Number(id),messages);
+          // setTimeout(() => {
+            stompClient.send(`/send/`+fromUserId+`/`+Number(id)+`/`+messages);
+          // }, );
           // StompSend(id, nowUser.nickName);
         })
         

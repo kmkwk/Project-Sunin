@@ -21,7 +21,6 @@ public class CommentService {
 
     public FeedCollections writeComment(CommentWrite commentWrite) {
         ObjectId objectId = new ObjectId();
-
         Comment comment = Comment.commentWriter(commentWrite,objectId);
         FeedCollections feedCollections = feedRepository.findFeedIdByIdAndFlagTrue(new ObjectId(commentWrite.getFeedId()));
         Map<Object,Comment> comments = feedCollections.getComments();

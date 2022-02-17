@@ -25,7 +25,7 @@ public interface FeedRepository extends MongoRepository<FeedCollections, ObjectI
 
     FeedCollections findFeedSortIdByIdAndFlagTrue(ObjectId id);
 
-    List<FeedCollections> findByContentStartsWithAndFlagTrue(String content,Pageable pageable);
+    List<FeedCollections> findByContentContainsAndFlagTrue(String content,Pageable pageable);
 
     List<FeedCollections> findAllByFlagTrue();
 

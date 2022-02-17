@@ -1,31 +1,40 @@
 package com.ssafy.sunin.service;
 
-import com.ssafy.sunin.dto.*;
+import com.ssafy.sunin.domain.FeedCollections;
+import com.ssafy.sunin.payload.response.feed.FeedSearch;
+import com.ssafy.sunin.payload.response.user.UserDetailProfile;
+import com.ssafy.sunin.payload.request.feed.*;
+import com.ssafy.sunin.payload.response.feed.FeedCommentDto;
+import com.ssafy.sunin.payload.response.feed.FeedDto;
 import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface FeedService {
-    void deleteFile(String fileName);
 
-    FeedDto writeImageFeed(FeedVO feedVO);
+    FeedCollections writeImageFeed(FeedWrite feedWrite);
 
-    List<String> downloadFileFeed(String fileNames);
+    FeedCommentDto getDetailFeed(String id);
 
-    FeedDto getDetailFeed(String id);
+    FeedCollections updateFeed(FeedUpdate feedUpdate);
 
-    FeedDto updateFeed(FeedUpdate feedUpdate);
+    FeedCollections deleteFeed(String id, Long userId);
 
-    void deleteFeed(String id);
+    List<FeedDto> getFollowerLatestFeed(Long userId);
 
-    List<FeedDto> getFollowerFeed(Long id);
+    List<FeedDto> getFollowerLikeFeed(Long userId);
 
-    List<FeedDto> getLatestFeed(FeedList feedList);
+    List<FeedDto> getPersonalFeed(Long userId);
 
-    List<FeedDto> getPageLatestFeed(Pageable pageable);
+    List<FeedDto> getLatestFeed(Pageable pageable);
 
-    List<FeedDto> getLikeFeed(FeedList feedList);
+    List<FeedDto> getLikeFeed(Pageable pageable);
 
-    List<FeedDto> getPageLikeFeed(FeedPage feedPage);
+    FeedCollections likeFeed(FeedLike feedLike);
 
-    FeedDto likeFeed(FeedLike feedLike);
+    List<UserDetailProfile> getLikeUserList(String id);
+
+    Long feedCount(Long userId);
+
+    FeedSearch getSearchList(Pageable pageable,String content);
+
 }

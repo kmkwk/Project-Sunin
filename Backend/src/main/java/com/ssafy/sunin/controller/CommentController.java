@@ -1,46 +1,44 @@
 package com.ssafy.sunin.controller;
 
 import com.ssafy.sunin.domain.Comment;
+import com.ssafy.sunin.domain.FeedCollections;
+import com.ssafy.sunin.payload.request.comment.*;
+import com.ssafy.sunin.payload.response.comment.CommentProfile;
 import com.ssafy.sunin.service.CommentService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
-
+import javax.validation.Valid;
 import java.util.List;
 
-//@CrossOrigin("*")
+@RestControllerAdvice(annotations = RestController.class)
 @RestController
-//@RestControllerAdvice
-@RequestMapping(value = "/comment")
+@RequestMapping("/comment")
 @RequiredArgsConstructor
+@Slf4j
 public class CommentController {
 
     private final CommentService commentService;
 
-    /*
-    * feedId 현재 Integer로 받고 있는데
-    * 이거 ObjectId로 바꿔야함 !!!
-    * */
-
-//    @ExceptionHandler(value = {IllegalArgumentException.class})
-//    public ResponseEntity<String> IllegalArgumentException() {
-//        String msg = "예외 발생 !! (IllegalArgumentException)";
-//        return new ResponseEntity<>(msg, HttpStatus.INTERNAL_SERVER_ERROR);
-//    }
-
-    @PostMapping
     @ApiOperation(value = "댓글 작성하기", notes = "피드와 상호작용할 댓글을 입력합니다.")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "feedId", value = "피드 ObjectId", required = true),
             @ApiImplicitParam(name = "writer", value = "작성자", required = true),
             @ApiImplicitParam(name = "content", value = "내용", required = true)
     })
-    public ResponseEntity<String> writeComment(String feedId, String writer, String content) {
-        Comment result = commentService.writeComment(feedId, writer, content);
+    @PostMapping
+    public ResponseEntity<String> writeComment(@RequestBody CommentWrite commentWrite) {
+        if(ObjectUtils.isEmpty(commentWrite)){
+            return ResponseEntity.notFound().build();
+        }
+        FeedCollections result = commentService.writeComment(commentWrite);
         if(result == null) return new ResponseEntity<>("등록 실패", HttpStatus.INTERNAL_SERVER_ERROR);
         else return new ResponseEntity<>("등록 성공", HttpStatus.CREATED);
     }
@@ -51,8 +49,11 @@ public class CommentController {
             @ApiImplicitParam(name = "commentId", value = "수정할 댓글 ObjectID", required = true),
             @ApiImplicitParam(name = "content", value = "내용", required = true)
     })
-    public ResponseEntity<String> updateComment(String commentId, String content) {
-        Comment result = commentService.updateComment(commentId, content);
+    public ResponseEntity<String> updateComment(@RequestBody @Valid CommentUpdate commentUpdate) {
+        if(ObjectUtils.isEmpty(commentUpdate)){
+            return ResponseEntity.notFound().build();
+        }
+        Comment result = commentService.updateComment(commentUpdate);
         if(result == null) return new ResponseEntity<>("수정 실패", HttpStatus.INTERNAL_SERVER_ERROR);
         else return new ResponseEntity<>("수정 성공", HttpStatus.OK);
     }
@@ -60,24 +61,13 @@ public class CommentController {
     @DeleteMapping
     @ApiOperation(value="댓글 삭제하기", notes = "작성한 댓글을 삭제합니다.")
     @ApiImplicitParam(name = "commentId", value = "삭제할 댓글 ObjectID", required = true)
-    public ResponseEntity<String> deleteComment(String commentId) {
-        Comment result = commentService.deleteComment(commentId);
+    public ResponseEntity<String> deleteComment(CommentDelete commentDelete) {
+        if(ObjectUtils.isEmpty(commentDelete)){
+            return ResponseEntity.notFound().build();
+        }
+        Comment result = commentService.deleteComment(commentDelete);
         if(result == null) return new ResponseEntity<>("삭제 실패", HttpStatus.INTERNAL_SERVER_ERROR);
         else return new ResponseEntity<>("삭제 성공", HttpStatus.OK);
-    }
-
-    @GetMapping("/all")
-    @ApiOperation(value = "피드에 달린 댓글 전체 조회", notes = "피드ID로 해당 피드의 댓글 컬렉션을 조회합니다.")
-    @ApiImplicitParam(name = "feedId", value = "피드 ObjectId", required = true)
-    public ResponseEntity<List<Comment>> findCommentsByFeed(String feedId) {
-        return new ResponseEntity<>(commentService.findCommentsByFeed(feedId), HttpStatus.OK);
-    }
-
-    @GetMapping("/count")
-    @ApiOperation(value = "피드에 달린 댓글 갯수 조회", notes = "피드ID로 해당 피드에 달린 댓글의 갯수를 조회합니다.")
-    @ApiImplicitParam(name = "feedId", value = "피드 ObjectId", required = true)
-    public ResponseEntity<Long> countCommentsByFeed(String feedId) {
-        return new ResponseEntity<>(commentService.countCommentsByFeed(feedId), HttpStatus.OK);
     }
 
     @PostMapping("/reply")
@@ -87,25 +77,27 @@ public class CommentController {
             @ApiImplicitParam(name = "writer", value = "작성자", required = true),
             @ApiImplicitParam(name = "content", value = "내용", required = true)
     })
-    public ResponseEntity<Comment> writeReply(String commentId, String writer, String content) {
-        return new ResponseEntity<>(commentService.writeReply(commentId, writer, content), HttpStatus.OK);
+    public ResponseEntity<Comment> writeReply(@RequestBody @Valid CommentReply commentReply) {
+        return new ResponseEntity<>(commentService.writeReply(commentReply), HttpStatus.OK);
     }
 
-    @PutMapping("/reply")
-    @ApiOperation(value="대댓글 수정하기")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "commentId", value = "수정할 대댓글 ObjectID", required = true),
-            @ApiImplicitParam(name = "content", value = "내용", required = true)
-    })
-    public ResponseEntity<Comment> updateReply(String commentId, String content) {
-        return new ResponseEntity<>(commentService.updateComment(commentId, content), HttpStatus.OK);
+    @ApiOperation(value = "좋아요 등록 취소")
+    @PutMapping("/addLike")
+    public ResponseEntity<String> likeFeed(@RequestBody @Valid CommentLike commentLike){
+        log.info("likeFeed");
+        if(ObjectUtils.isEmpty(commentLike)){
+            return ResponseEntity.notFound().build();
+        }
+        commentService.likeComment(commentLike);
+        return ResponseEntity.ok("success");
     }
 
-    @DeleteMapping("/reply")
-    @ApiOperation(value="대댓글 삭제하기")
-    @ApiImplicitParam(name = "commentId", value = "삭제할 대댓글 ObjectID", required = true)
-    public ResponseEntity<Comment> deleteReply(String commentId) {
-        return new ResponseEntity<>(commentService.deleteComment(commentId), HttpStatus.OK);
+    @ApiOperation(value = "댓글의 좋아요를 누른 유저들의 프로필, 피드 id")
+    @GetMapping("/likeUser/{feedId}/{commentId}")
+    public ResponseEntity<List<CommentProfile>> getLikeUserList(@PathVariable("feedId") String feedId,
+                                                                @PathVariable("commentId") String commentId){
+        log.info("likeUserList");
+        return ResponseEntity.ok(commentService.getLikeUserList(feedId,commentId));
     }
 
 }

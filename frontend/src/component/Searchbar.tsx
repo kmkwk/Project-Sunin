@@ -1,95 +1,83 @@
-import _ from 'lodash'
-import React from 'react'
-import { Search, Button } from 'semantic-ui-react'
-import Axios from "axios"
-import Link from 'next/link';
-import styles from '../../styles/Searchbar.module.css'
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { Dropdown, Input, Search } from "semantic-ui-react";
+import allAxios from "../lib/allAxios";
 
-var source8: any
+export default function Searchbar() {
+  const [feedList, setFeedList]: any = useState([]);
+  const router = useRouter();
 
-const source5 = Axios.get('http://makeup-api.herokuapp.com/api/v1/products.json?brand=maybelline')
-.then(({data}) => {
-  const source2 =  data.map( (content: any) => ({
-    title: String(content.description),
-    price: String(content.id),
-    description: '#tag',
-  }))
-  source8 = source2
-  return source2
-})
-
-const initialState = {
-  loading: false,
-  results: [],
-  value: '',
-}
-
-function exampleReducer(state: any, action: { type: any; query: any; results: any; selection: any; }) {
-  switch (action.type) {
-    case 'CLEAN_QUERY':
-      return initialState
-    case 'START_SEARCH':
-      return { ...state, loading: true, value: action.query }
-    case 'FINISH_SEARCH':
-      return { ...state, loading: false, results: action.results }
-    case 'UPDATE_SELECTION':
-      return { ...state, value: action.selection }
-
-    default:
-      throw new Error()
-  }
-}
-
-function SearchExampleStandard() {
-  
-  const [state, dispatch] = React.useReducer(exampleReducer, initialState)
-  const { loading, results, value } = state
-
-  const timeoutRef = React.useRef()
-  const handleSearchChange = React.useCallback((e, data) => {
-    clearTimeout(timeoutRef.current)
-    dispatch({ type: 'START_SEARCH', query: data.value })
-
-    timeoutRef.current = setTimeout(() => {
-      if (data.value.length === 0) {
-        dispatch({ type: 'CLEAN_QUERY' })
-        return
-      }
-
-      const re = new RegExp(_.escapeRegExp(data.value), 'i')
-      const isMatch = (result: any) => re.test(result.title)
-
-      dispatch({
-        type: 'FINISH_SEARCH',
-        results: _.filter(source8, isMatch),
+  function getSearchValue(e: any) {
+    // if (e.target.value[0] === '#'){
+    allAxios
+      .get(`/feed/search`, {
+        params: {
+          content: e.target.value,
+        },
       })
-    }, 300)
-  }, [])
-  React.useEffect(() => {
-    return () => {
-      clearTimeout(timeoutRef.current)
+      .then(({ data }) => {
+        if (data.feed_dtos) {
+          let newFeedList: any = [];
+          data.feed_dtos.map((feed: any) => {
+            newFeedList.push({
+              key: feed.created_date,
+              title: feed.content.slice(0, 20),
+              id: feed.id,
+            });
+          });
+          setFeedList(newFeedList);
+        }
+      });
+    //   } else {
+    //   allAxios
+    //   .get(`/feed/latest`, {
+    //     params: {
+    //       size: 100,
+    //     },
+    //   })
+    //   .then(({ data }) => {
+    //     let newList: any = []
+    //     data.map((feed: any) => {
+    //       if (feed.content.indexOf(e.target.value) != '-1'){
+    //         newList.push({key: feed.createdDate, title: feed.content.slice(0, 20), id: feed.id})
+    //       }
+    //     })
+    //     setFeedList(newList)
+    //   });
+    // }
+  }
+  function goReloading() {
+    router.reload();
+  }
+
+  function getSelectedValue(e: any) {
+    if (e.type === "click") {
+      feedList.filter((feed: any) => {
+        if (feed.title === e.target.outerText) {
+          router.push(`/feed/${feed.id}`);
+          setTimeout(goReloading, 1500);
+        }
+      });
+    } else {
+      feedList.filter((feed: any) => {
+        if (feed.title === e.target.value) {
+          router.push(`/feed/${feed.id}`);
+          setTimeout(goReloading, 1500);
+        }
+      });
     }
-  }, [])
+  }
 
   return (
     <>
-        <Search
-          loading={loading}
-          onResultSelect={(e, data) =>
-            dispatch({ type: 'UPDATE_SELECTION', selection: data.result.price })
-          }
-          onSearchChange={handleSearchChange}
-          results={results}
-          value={value}
-          className={styles.search_location}
-        />
-        <div className={styles.button_style}>
-          <Button><Link href={`/feed/personal/${value}`}><a>검색</a></Link></Button>
-        </div>
-        
+      <Search
+        onResultSelect={getSelectedValue}
+        results={feedList}
+        onKeyUp={getSearchValue}
+        placeholder="#tag / 피드내용 입력"
+        name="searchInput"
+      />
     </>
-
-  )
+  );
 }
-
-export default SearchExampleStandard

@@ -2,16 +2,19 @@ package com.ssafy.sunin.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;
+import com.ssafy.sunin.domain.Comment;
 import com.ssafy.sunin.domain.FeedCollections;
 import com.ssafy.sunin.domain.user.User;
-import com.ssafy.sunin.dto.*;
+import com.ssafy.sunin.payload.request.feed.*;
+import com.ssafy.sunin.payload.response.comment.CommentDto;
+import com.ssafy.sunin.payload.response.feed.*;
+import com.ssafy.sunin.payload.response.user.UserDetailProfile;
 import com.ssafy.sunin.repository.FeedRepository;
 import com.ssafy.sunin.repository.FollowerRepository;
-import com.ssafy.sunin.user.UserRepository;
+import com.ssafy.sunin.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -19,7 +22,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -40,242 +42,285 @@ public class FeedServiceImpl implements FeedService {
     private final AmazonS3 amazonS3;
 
     @Override
-    public FeedDto writeImageFeed(FeedVO feedVO) {
-        List<String> fileNameList = new ArrayList<>();
-        List<MultipartFile> files = feedVO.getFiles();
-        if(files != null){
-            feedVO.getFiles().forEach(file -> {
-                String fileName = createFileName(file.getOriginalFilename());
-                ObjectMetadata objectMetadata = new ObjectMetadata();
-                objectMetadata.setContentLength(file.getSize());
-                objectMetadata.setContentType(file.getContentType());
-
-                try(InputStream inputStream = file.getInputStream()) {
-                    amazonS3.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
-                            .withCannedAcl(CannedAccessControlList.PublicRead));
-                } catch(IOException e) {
-                    throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패했습니다.");
-                }
-
-                fileNameList.add(String.format(url+"/%s",fileName));
-            });
+    public FeedCollections writeImageFeed(FeedWrite feedWrite) {
+        List<String> fileList = new ArrayList<>();
+        List<MultipartFile> files = feedWrite.getFiles();
+        if (files != null) {
+            AwsFile(feedWrite.getFiles(), fileList);
         }
 
-        FeedCollections feedCollections = FeedCollections.builder()
-                .userId(feedVO.getUserId())
-                .content(feedVO.getContent())
-                .hashtags(feedVO.getHashtags())
-                .likes(0)
-                .createdDate(LocalDateTime.now())
-                .lastModifiedDate(LocalDateTime.now())
-                .flag(true)
-                .likeUser(new HashMap<>())
-                .filePath(fileNameList)
-                .build();
+//        User user = userRepository.findProfileByUserSeq(feedWrite.getUserId());
+        FeedCollections feedCollections = FeedCollections.setFeedCollection(feedWrite,fileList);
 
-        ObjectId id = feedRepository.save(feedCollections).getId();
-        suninDays(feedVO.getUserId());
+        FeedCollections feedCollection = feedRepository.save(feedCollections);
+        suninDays(feedWrite.getUserId());
 
-        return FeedDto.builder()
-                .id(id.toString())
-                .userId(feedCollections.getUserId())
-                .content(feedCollections.getContent())
-                .likes(feedCollections.getLikes())
-                .hashtags(feedCollections.getHashtags())
-                .createdDate(feedCollections.getCreatedDate())
-                .modifiedDate(feedCollections.getLastModifiedDate())
-                .filePath(feedCollections.getFilePath())
-                .likeUser(feedCollections.getLikeUser())
-                .build();
+        return feedCollection;
     }
 
-    @Override
-    public List<String> downloadFileFeed(String fileNames) {
-        ObjectListing objectListing = amazonS3.listObjects(bucket);
-        List<String> arrayKeyList = new ArrayList<>();
-        List<Date> arrayModTimeList = new ArrayList<>();
-        List<String> fileNameList = new ArrayList<>();
-        for (S3ObjectSummary s : objectListing.getObjectSummaries()) {
-            arrayKeyList.add(s.getKey());
-            arrayModTimeList.add(s.getLastModified());
-        }
-        Date max = Collections.max(arrayModTimeList);
-        String fileName = arrayKeyList.get(arrayModTimeList.indexOf(max));
-
-        fileNameList.add(String.format(url+"/%s",fileNames));
-        return fileNameList;
-    }
-
-    private void suninDays(String userNickname){
-        User user = userRepository.getUser(userNickname);
-        int sunin = user.getSuninDays();
-        sunin++;
-        user.setSuninDays(sunin);
+    private void suninDays(Long userId) {
+        User user = userRepository.findProfileByUserSeq(userId);
+        user.setSuninDayIncrease();
         userRepository.save(user);
     }
 
-    @Override
-    public FeedDto getDetailFeed(String id) {
-        FeedCollections feedCollections =  feedRepository.findByIdAndFlagTrue(new ObjectId(String.valueOf(id)));
+    private List<String> AwsFile(List<MultipartFile> files, List<String> list) {
+        files.forEach(file -> {
+            String fileName = createFileName(file.getOriginalFilename());
+            ObjectMetadata objectMetadata = new ObjectMetadata();
+            objectMetadata.setContentLength(file.getSize());
+            objectMetadata.setContentType(file.getContentType());
 
-        return FeedDto.builder()
-                .id(feedCollections.getId().toString())
-                .userId(feedCollections.getUserId())
-                .hashtags(feedCollections.getHashtags())
-                .likes(feedCollections.getLikes())
-                .createdDate(feedCollections.getCreatedDate())
-                .modifiedDate(feedCollections.getLastModifiedDate())
-                .filePath(feedCollections.getFilePath())
-                .content(feedCollections.getContent())
-                .likeUser(feedCollections.getLikeUser())
-                .build();
+            try (InputStream inputStream = file.getInputStream()) {
+                amazonS3.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
+                        .withCannedAcl(CannedAccessControlList.PublicRead));
+            } catch (IOException e) {
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패했습니다.");
+            }
+            list.add(String.format(url + "/%s", fileName));
+        });
+
+        return list;
     }
 
     @Override
-    public FeedDto updateFeed(FeedUpdate feedUpdate) {
-        FeedCollections feedCollections  = feedRepository.findByIdAndFlagTrue(new ObjectId(feedUpdate.getId()));
-        LocalDateTime time = LocalDateTime.now();
-        feedCollections.setContent(feedUpdate.getContent());
-        feedCollections.setHashtags(feedUpdate.getHashtags());
-        feedCollections.setLastModifiedDate(time);
-        feedCollections.setFilePath(feedCollections.getFilePath());
-        feedRepository.save(feedCollections);
+    public FeedCommentDto getDetailFeed(String id) {
+        FeedCollections feedCollections = feedRepository.findByIdAndFlagTrue(new ObjectId(String.valueOf(id)));
+        User user = userRepository.findProfileByUserSeq(feedCollections.getUserId());
 
-        return FeedDto.builder()
-                .id(feedCollections.getId().toString())
-                .userId(feedCollections.getUserId())
-                .hashtags(feedCollections.getHashtags())
-                .likes(feedCollections.getLikes())
-                .content(feedUpdate.getContent())
-                .createdDate(feedCollections.getCreatedDate())
-                .modifiedDate(time)
-                .likeUser(feedCollections.getLikeUser())
-                .filePath(feedCollections.getFilePath())
-                .build();
-    }
+        Map<Object, Comment> commentsMap = feedRepository.findFeedSortIdByIdAndFlagTrue(feedCollections.getId()).getComments();
+        List<Comment> commentList = new ArrayList<>();
+        commentList.addAll(commentsMap.values());
 
-    @Override
-    public void deleteFeed(String id) {
-        FeedCollections feedCollections = feedRepository.findByIdAndFlagTrue(new ObjectId(id));
-        feedCollections.setFlag(false);
-        feedCollections.setLastModifiedDate(LocalDateTime.now());
-        feedRepository.save(feedCollections);
-    }
+        // 아이디 중복 처리
+        Set<Long> setUser = commentList.stream()
+                .map(Comment::getWriter)
+                .collect(Collectors.toSet());
 
-    @Override
-    public List<FeedDto> getFollowerFeed(Long id) {
-        List<String> followers = followerRepository.getFollowingList(id);
-        return feedRepository.getFollowerFeed(followers)
-                .stream()
-                .map(feedCollections -> FeedDto.builder()
-                        .id(feedCollections.getId().toString())
-                        .userId(feedCollections.getUserId())
-                        .content(feedCollections.getContent())
-                        .hashtags(feedCollections.getHashtags())
-                        .likes(feedCollections.getLikes())
-                        .createdDate(feedCollections.getCreatedDate())
-                        .modifiedDate(feedCollections.getLastModifiedDate())
-                        .likeUser(feedCollections.getLikeUser())
-                        .filePath(feedCollections.getFilePath())
-                        .build()).collect(Collectors.toList());
-    }
+        // 댓글의 유저의 프로필 정보
+        Map<Long, User> userMap = userRepository.findAllSetByUserSeqIn(setUser).stream()
+                .collect(Collectors.toMap(
+                        User::getUserSeq,
+                        o -> o
+                ));
 
-    @Override
-    public List<FeedDto> getLatestFeed(FeedList feedList) {
-        List<FeedCollections> feed = feedRepository.getLatestFeed(feedList);
-        return feed.stream()
-                .map(feedCollections -> FeedDto.builder()
-                        .id(feedCollections.getId().toString())
-                        .userId(feedCollections.getUserId())
-                        .content(feedCollections.getContent())
-                        .likes(feedCollections.getLikes())
-                        .filePath(feedCollections.getFilePath())
-                        .hashtags(feedCollections.getHashtags())
-                        .createdDate(feedCollections.getCreatedDate())
-                        .modifiedDate(feedCollections.getLastModifiedDate())
-                        .likeUser(feedCollections.getLikeUser())
-                        .build()).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<FeedDto> getPageLatestFeed(Pageable pageable) {
-        Page<FeedCollections> feed = feedRepository.findAll(pageable);
-        return feed.stream()
-                .map(feedCollections -> FeedDto.builder()
-                        .id(feedCollections.getId().toString())
-                        .userId(feedCollections.getUserId())
-                        .content(feedCollections.getContent())
-                        .likes(feedCollections.getLikes())
-                        .filePath(feedCollections.getFilePath())
-                        .hashtags(feedCollections.getHashtags())
-                        .createdDate(feedCollections.getCreatedDate())
-                        .modifiedDate(feedCollections.getLastModifiedDate())
-                        .likeUser(feedCollections.getLikeUser())
-                        .build()).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<FeedDto> getLikeFeed(FeedList feedList) {
-        List<FeedCollections> feed = feedRepository.getLikeFeed(feedList);
-        return feed.stream()
-                .map(feedCollections -> FeedDto.builder()
-                        .id(feedCollections.getId().toString())
-                        .userId(feedCollections.getUserId())
-                        .content(feedCollections.getContent())
-                        .likes(feedCollections.getLikes())
-                        .filePath(feedCollections.getFilePath())
-                        .hashtags(feedCollections.getHashtags())
-                        .createdDate(feedCollections.getCreatedDate())
-                        .modifiedDate(feedCollections.getLastModifiedDate())
-                        .likeUser(feedCollections.getLikeUser())
-                        .build()).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<FeedDto> getPageLikeFeed(FeedPage feedPage) {
-        Page<FeedCollections> feed = feedRepository.findAll(feedPage.getPageable());
-        return feed.stream()
-                .map(feedCollections -> FeedDto.builder()
-                        .id(feedCollections.getId().toString())
-                        .userId(feedCollections.getUserId())
-                        .content(feedCollections.getContent())
-                        .likes(feedCollections.getLikes())
-                        .filePath(feedCollections.getFilePath())
-                        .hashtags(feedCollections.getHashtags())
-                        .createdDate(feedCollections.getCreatedDate())
-                        .modifiedDate(feedCollections.getLastModifiedDate())
-                        .likeUser(feedCollections.getLikeUser())
-                        .build()).collect(Collectors.toList());
-    }
-
-    @Override
-    public FeedDto likeFeed(FeedLike feedLike) {
-        FeedCollections feedCollections = feedRepository.findByIdAndFlagTrue(new ObjectId(feedLike.getId()));
-        Map<String,Object> users = new HashMap<>();
-        users.putAll(feedCollections.getLikeUser());
-
-        int like = feedCollections.getLikes();
-        // 좋아요 누른상태
-        if(users.containsKey(feedLike.getUser())){
-            users.remove(feedLike.getUser());
-            feedCollections.setLikes(--like);
-        }else{
-            users.put(feedLike.getUser(),true);
-            feedCollections.setLikes(++like);
+        commentList.sort(Comparator.comparing(Comment::getGroup)
+                .thenComparing(Comment::getDepth));
+        List<CommentDto> comments = CommentDto.mapCommentDto(commentList,userMap);
+        LinkedHashMap<Object,CommentDto> linkedHashMap = new LinkedHashMap<>();
+        for (int i = 0; i < comments.size(); i++) {
+            linkedHashMap.put(comments.get(i).getId(),comments.get(i));
         }
 
-        feedCollections.setLikeUser(users);
-        feedRepository.save(feedCollections);
-        return FeedDto.builder()
-                .id(feedLike.getId())
-                .userId(feedLike.getUser())
-                .likeUser(users)
-                .likes(like).build();
+        return FeedCommentDto.feedCommentDto(feedCollections, user, linkedHashMap);
     }
 
     @Override
-    public void deleteFile(String fileName) {
-        amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName));
+    public FeedCollections updateFeed(FeedUpdate feedUpdate) {
+        FeedCollections feedCollections = feedRepository.findByIdAndUserIdAndFlagTrue(new ObjectId(feedUpdate.getId()), feedUpdate.getUserId());
+        List<String> fileNames = new ArrayList<>();
+        // Todo : aws에선 중복 파일은 제거하던가, 안올려야함
+        AwsFile(feedUpdate.getFiles(),fileNames);
+        feedCollections.setFileModified(fileNames);
+        feedCollections.setFeedModified(feedUpdate);
+
+        return feedRepository.save(feedCollections);
+    }
+
+    @Override
+    public FeedCollections deleteFeed(String id, Long userId) {
+        FeedCollections feedCollections = feedRepository.findByIdAndUserIdAndFlagTrue(new ObjectId(id), userId);
+        feedCollections.setFeedDelete();
+        User user = userRepository.findById(feedCollections.getUserId()).get();
+        user.setSunindDaysDecrease(user);
+        userRepository.save(user);
+        return feedRepository.save(feedCollections);
+    }
+
+    @Override
+    public List<FeedDto> getFollowerLatestFeed(Long userId) {
+        // TODO :  1. 시간 구하는 쿼리 (startDate ,endDate)
+        //  로그인시 로그인시간을 로깅하는 테이블을 만든다. - mysql
+        //  내가 처음에 로그인 했을때 로깅 테이블에서 로그인한 시간 최신순 두개의 시간을 가져온다.
+        //  ex) 로깅 테이블에 저장된 시간이 오전 12시,오후 1시, 오후 2시, 오후 5시라면 오후2시 오후 5시를 가져온다.
+        //  나의 유저의 팔로워 리스트를 구한다.
+        //  몽고에서 나의 유저 팔로워들의 오후 2시 오후 5시 사이의 피드를 가져온다.
+
+        List<Long> followers = followerRepository.getFollowingList(userId);
+        Map<Long, User> userMap = userRepository.findAllListByUserSeqIn(followers).stream()
+                .collect(Collectors.toMap(
+                        User::getUserSeq,
+                        o -> o
+                ));
+
+        List<FeedCollections> feedCollections = feedRepository.getFollowerLatesFeed(followers);
+        return FeedDto.mapFeedDto(feedCollections,userMap);
+    }
+
+    @Override
+    public List<FeedDto> getFollowerLikeFeed(Long userId) {
+        List<Long> followers = followerRepository.getFollowingList(userId);
+        Map<Long, User> userMap = userRepository.findAllListByUserSeqIn(followers).stream()
+                .collect(Collectors.toMap(
+                        User::getUserSeq,
+                        o -> o
+                ));
+
+        List<FeedCollections> feedCollections = feedRepository.getFollowerLikeFeed(followers);
+        return FeedDto.mapFeedDto(feedCollections,userMap);
+    }
+
+    @Override
+    public List<FeedDto> getPersonalFeed(Long userId) {
+        List<FeedCollections> feedCollections = feedRepository.getPersonalFeed(userId);
+        User user = userRepository.findProfileByUserSeq(userId);
+
+        return FeedDto.personFeedDto(feedCollections,user);
+    }
+
+    @Override
+    public List<FeedDto> getLatestFeed(Pageable pageable) {
+         List<FeedCollections> feedCollection = feedRepository.findAllByFlagTrue(pageable);
+
+         Set<Long> users = feedCollection.stream()
+                 .map(FeedCollections::getUserId)
+                 .collect(Collectors.toSet());
+
+         Map<Long, User> userMap = userRepository.findAllSetByUserSeqIn(users).stream()
+                 .collect(Collectors.toMap(
+                         User::getUserSeq,
+                         o -> o
+                 ));
+
+         return FeedDto.mapFeedDto(feedCollection,userMap);
+    }
+
+    @Override
+    public List<FeedDto> getLikeFeed(Pageable pageable) {
+        List<FeedCollections> feedCollection = feedRepository.findAllByFlagTrue(pageable);
+
+         Set<Long> users = feedCollection.stream()
+                 .map(FeedCollections::getUserId)
+                 .collect(Collectors.toSet());
+
+         Map<Long, User> userMap = userRepository.findAllSetByUserSeqIn(users).stream()
+                 .collect(Collectors.toMap(
+                         User::getUserSeq,
+                         o -> o
+                 ));
+         return FeedDto.mapFeedDto(feedCollection,userMap);
+    }
+
+    @Override
+    public FeedCollections likeFeed(FeedLike feedLike) {
+        FeedCollections feedCollections = feedRepository.findByIdAndFlagTrue(new ObjectId(feedLike.getId()));
+        Map<Long, Object> users = new HashMap<>(feedCollections.getLikeUser());
+
+        int like = feedCollections.getLikes();
+
+        if (users.containsKey(feedLike.getUserId())) {
+            users.remove(feedLike.getUserId());
+            like--;
+        } else {
+            users.put(feedLike.getUserId(), true);
+            like++;
+        }
+
+        feedCollections.setLikeModified(like, users);
+
+        return feedRepository.save(feedCollections);
+    }
+
+    @Override
+    public List<UserDetailProfile> getLikeUserList(String id) {
+        FeedCollections feedCollections = feedRepository.findByIdAndFlagTrue(new ObjectId(id));
+        Set<Long> list = feedCollections.getLikeUser().keySet();
+
+        return userRepository.findFollowerSetByUserSeqIn(list)
+                .stream()
+                .map(user -> UserDetailProfile.builder()
+                        .id(user.getUserSeq())
+                        .nickName(user.getUserNickname())
+                        .image(user.getProfileImageUrl())
+                        .build()).collect(Collectors.toList());
+
+    }
+
+    @Override
+    public Long feedCount(Long userId) {
+        return feedRepository.getFeedCount(userId);
+    }
+
+    @Override
+    public FeedSearch getSearchList(Pageable pageable,String content) {
+        List<String> contentList = new ArrayList<>();
+        Set<String> set = new HashSet<>();
+        List<FeedCollections> feedCollections = new ArrayList<>();
+        Map<Object,FeedCollections> map = new HashMap<>();
+        List<Integer> idx = new ArrayList<>();
+
+        if(content.length() == 0){
+            return null;
+        }else if(content.contains("#") && 2 <= content.length()) {
+            content = content.substring(1);
+            // 현재는 모든 피드 검색
+            List<FeedCollections> feedList = feedRepository.findAllByFlagTrue();
+
+            boolean[] check = new boolean[feedList.size()];
+            // 해당 해시태그만 포함하는 피드만 가져와야함
+            for (int i = 0; i < feedList.size(); i++) {
+                // 해당 해시태그 가져오기
+                List<String> hashtags = feedList.get(i).getHashtags();
+                if (!hashtags.isEmpty()) {
+                    // 배열에 들어간 해시태그 돌아서
+                    for (int j = 0; j < hashtags.size(); j++) {
+                        if (check[i]) continue;
+                        // 해시태그의 첫글자가 content로 시작한다면
+                        if (hashtags.get(j).startsWith(content)) {
+                            // 중복제거를위해 set에 넣고
+                            set.add(hashtags.get(j));
+                            check[i] = true;
+                            // 해당 피드 넣고
+                            map.put(i,feedList.get(i));
+                            idx.add(i);
+                        }
+                    }
+                }
+            }
+
+            if(30 <= idx.size()){
+                for (int i = idx.size()-1; i > idx.size()-30 ; i--) {
+                    feedCollections.add(map.get(idx.get(i)));
+                }
+            }else{
+                for (int i = idx.size()-1; i >=0; i--) {
+                    feedCollections.add(map.get(idx.get(i)));
+                }
+            }
+        }else {
+            feedCollections = feedRepository.findByContentContainsAndFlagTrue(content,pageable);
+
+            for (int i = 0; i < feedCollections.size(); i++) {
+                set.add(feedCollections.get(i).getContent());
+            }
+        }
+
+        contentList.addAll(set);
+        Collections.sort(contentList);
+
+        Set<Long> users = feedCollections.stream()
+                .map(FeedCollections::getUserId)
+                .collect(Collectors.toSet());
+
+        Map<Long, User> userMap = userRepository.findAllSetByUserSeqIn(users).stream()
+                .collect(Collectors.toMap(
+                        User::getUserSeq,
+                        o -> o
+                ));
+
+        List<FeedDto> feedDtos = FeedDto.mapFeedDto(feedCollections,userMap);
+        return FeedSearch.feedSearch(feedDtos,contentList);
+
     }
 
     private String createFileName(String fileName) {

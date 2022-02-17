@@ -1,103 +1,108 @@
 package com.ssafy.sunin.domain;
 
+import com.ssafy.sunin.payload.request.feed.FeedUpdate;
+import com.ssafy.sunin.payload.request.feed.FeedWrite;
 import io.swagger.annotations.ApiModel;
 import lombok.*;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
-import javax.persistence.Column;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Document("feed")
-@ApiModel(value = "피드", description = "피드 정보 클래스")
+@ApiModel(value = "피드", description = "피드 콜렉션")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class FeedCollections{
 
     @Id
-    @Column(name = "_id")
     private ObjectId id;
 
-    @Column(name = "userId")
-    private String userId;
+    private Long userId;
 
     private String content;
 
     private List<String> hashtags = new ArrayList<>();
 
-    @Column(name = "likes")
     private int likes;
 
     @NotNull
-    private Map<String,Object> likeUser;
+    private Map<Long,Object> likeUser = new HashMap<>();
 
     @CreatedDate
-    private LocalDateTime createdDate;
+    private LocalDateTime createdDate = LocalDateTime.now();
 
     @LastModifiedDate
-    private LocalDateTime lastModifiedDate;
+    private LocalDateTime modifiedDate = LocalDateTime.now();
 
-    private List<String> filePath;
+    private List<String> filePath = new ArrayList<>();
 
-    private boolean flag;
+    private boolean flag = true;
 
-    public void setFilePath(List<String> filePath) {
-        this.filePath = filePath;
+    private Map<Object,Comment> comments = new HashMap<>();
+
+    public void setFeedModified(FeedUpdate feedUpdate){
+        this.content = feedUpdate.getContent();;
+        this.hashtags = feedUpdate.getHashtags();
+        this.modifiedDate = LocalDateTime.now();
+    };
+
+    public void setFeedDelete(){
+        this.flag = false;
+        this.modifiedDate = LocalDateTime.now();
     }
 
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public void setHashtags(List<String> hashtags) {
-        this.hashtags = hashtags;
-    }
-
-    public void setFlag(boolean flag) {
-        this.flag = flag;
-    }
-
-    public FeedCollections(LocalDateTime lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
-    }
-
-    public void setLikes(int likes) {
+    public void setLikeModified(int likes, Map<Long, Object> likeUser){
         this.likes = likes;
-    }
-
-    public void setLikeUser(Map<String, Object> likeUser) {
         this.likeUser = likeUser;
     }
 
-    public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
+    public void setFileModified(List<String> filePath){
+        this.filePath = filePath;
+    }
+
+    public void setCommentWrite(Map<Object,Comment> comments){
+        this.comments = comments;
+    }
+
+    public void setCommentLikeUsers(Map<Object,Comment> comments){
+        this.comments = comments;
+    }
+
+    public static FeedCollections setFeedCollection(FeedWrite feedWrite, List<String> fileList){
+        return  FeedCollections.builder()
+                .userId(feedWrite.getUserId())
+                .content(feedWrite.getContent())
+                .hashtags(feedWrite.getHashtags())
+                .likes(0)
+                .createdDate(LocalDateTime.now())
+                .modifiedDate(LocalDateTime.now())
+                .flag(true)
+                .likeUser(new HashMap<>())
+                .filePath(fileList)
+                .comments(new HashMap<>())
+                .build();
     }
 
     @Builder
-    public FeedCollections(String userId, String content, List<String> hashtags, int likes, Map<String, Object> likeUser, LocalDateTime createdDate, LocalDateTime lastModifiedDate, List<String> filePath, boolean flag) {
+    public FeedCollections(ObjectId id, Long userId, String content, List<String> hashtags, int likes, Map<Long,Object> likeUser, LocalDateTime createdDate, LocalDateTime modifiedDate, List<String> filePath, boolean flag, Map<Object,Comment> comments) {
+        this.id = id;
         this.userId = userId;
         this.content = content;
         this.hashtags = hashtags;
         this.likes = likes;
         this.likeUser = likeUser;
         this.createdDate = createdDate;
-        this.lastModifiedDate = lastModifiedDate;
+        this.modifiedDate = modifiedDate;
         this.filePath = filePath;
         this.flag = flag;
-    }
-
-    @Builder
-    public FeedCollections(ObjectId id, String userId, String content, List<String> hashtags, int likes) {
-        this.id = id;
-        this.userId = userId;
-        this.content = content;
-        this.hashtags = hashtags;
-        this.likes = likes;
+        this.comments = comments;
     }
 }

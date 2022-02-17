@@ -1,13 +1,17 @@
 package com.ssafy.sunin.service;
 
-import com.ssafy.sunin.dto.FollowerVO;
+import com.ssafy.sunin.payload.request.follower.FollowerUser;
+import java.util.List;
 
 public interface FollowerService {
-    Long addFollower(FollowerVO followerVO);
 
-    void deleteFollower(FollowerVO followerVO);
+    Long addFollower(FollowerUser followerUser);
 
-    Long countFollower(Long id);
+    Long deleteFollower(FollowerUser followerUser);
 
-    Long countFollowing(Long followerMember);
+    int countFollower(Long userId);
+
+    int countFollowing(Long followerMember);
+
+    List<Long> getFollwingList(Long userId);
 }

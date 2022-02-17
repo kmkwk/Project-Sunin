@@ -1,82 +1,95 @@
 package com.ssafy.sunin.controller;
 
+import com.ssafy.sunin.common.ApiResponse;
 import com.ssafy.sunin.domain.user.User;
-import com.ssafy.sunin.user.UserRequest;
-import com.ssafy.sunin.user.UserService;
+import com.ssafy.sunin.payload.request.feed.ImageUpdate;
+import com.ssafy.sunin.payload.request.user.UserUpdateRequest;
+import com.ssafy.sunin.payload.response.user.*;
+import com.ssafy.sunin.service.UserService;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpSession;
-import java.util.HashMap;
+import javax.validation.Valid;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
-@RequestMapping("user")
+@RestControllerAdvice(annotations = RestController.class)
+@RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/signup")
-    @ApiOperation(value="회원가입", notes="가입성공 여부에 따라 http상태로 반환해서 알려줌")
-    public ResponseEntity<String> signup(@RequestBody UserRequest request) {
-        if(userService.signup(request).equals("Success")) {
-            return new ResponseEntity<>("회원가입 성공", HttpStatus.CREATED);
+    @ApiOperation(value="user 반환")
+    @GetMapping
+    public ApiResponse getUser() {
+        org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userService.getUser(principal.getUsername());
+        UserDto userDto = UserDto.userDto(user);
+
+        return ApiResponse.success("user", userDto);
+    }
+
+    @ApiOperation(value = "유저 디테일 프로필 조회", notes = "사진, 닉네임, 소개, 팔로워 수, 팔로잉 수, 개인 피드 수, 썬인 수")
+    @GetMapping("/profile/{userId}")
+    public ResponseEntity<UserDetailProfile> getUserDetailProfile(@PathVariable("userId") Long userId){
+        log.info("getUserProfile");
+        if(ObjectUtils.isEmpty(userId)){
+            return ResponseEntity.notFound().build();
         }
-        return new ResponseEntity<>("회원가입 실패", HttpStatus.OK);
+        return ResponseEntity.ok(userService.getUserDetailProfile(userId));
     }
 
-    @PostMapping("/login")
-    @ApiOperation(value="로그인", notes = "이메일과 비밀번호로 로그인을 시도합니다.")
-    public ResponseEntity<User> login(@RequestBody UserRequest request) {
-            User loginuser = userService.login(request.getUserId(), request.getUserPassword());
-
-            if(loginuser != null) return new ResponseEntity<>(loginuser, HttpStatus.OK);
-            return new ResponseEntity<>(null, HttpStatus.OK);
-    }
-
-    @GetMapping("/logout")
-    public Map<String, Object> logout(HttpSession session){
-        session.invalidate();
-        Map<String, Object> resultMap = new HashMap<>();
-
-        resultMap.put("status", true);
-        resultMap.put("msg", "로그아웃 성공");
-        return resultMap;
-
-    }
-
-    @DeleteMapping("/delete/{userId}")
-    @ApiOperation(value="회원탈퇴")
-    public ResponseEntity deleteUser(@PathVariable String userId) {
-        return new ResponseEntity<>(userService.deleteUser(userId), HttpStatus.OK);
-    }
-
-    @GetMapping("/searchAll")
-    @ApiOperation(value="모든 회원 정보 조회")
-    public ResponseEntity<List<User>> listuser() throws Exception{
-        return new ResponseEntity<>(userService.listUser(), HttpStatus.OK);
-    }
-
-    @GetMapping("/{userId}")
-    @ApiOperation(value="회원정보를 가져온다")
-    public ResponseEntity<User> detailUser(@PathVariable String userId) {
-        return new ResponseEntity<>(userService.detailUser(userId), HttpStatus.OK);
-    }
-
-    @PutMapping
-    @ApiOperation(value="회원정보 수정")
-    public ResponseEntity updateUser(@RequestBody UserRequest request) {
-        if(userService.updateUser(request).equals("Success")) {
-            return new ResponseEntity(HttpStatus.OK);
+    @ApiOperation(value = "유저 사이드바 프로필 조회", notes = "사이드바 사진, 닉네임, 썬인 수")
+    @GetMapping("/profileSide/{userId}")
+    public ResponseEntity<UserSideProfile> getUserProfile(@PathVariable("userId") Long userId){
+        log.info("getUserProfile");
+        if(ObjectUtils.isEmpty(userId)){
+            return ResponseEntity.notFound().build();
         }
-        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        return ResponseEntity.ok(userService.getUserSideProfile(userId));
+    }
+
+    @ApiOperation(value = "유저 썬인 랭크")
+    @GetMapping("/rank")
+    public ResponseEntity<List<UserRank>> getUserLank(){
+        log.info("getUserRank");
+
+        return ResponseEntity.ok(userService.getUserListLank());
+    }
+
+    @ApiOperation(value = "유저 프로필 수정")
+    @PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<UserUpdateResponse> updateUser(@RequestBody @Valid UserUpdateRequest userUpdateRequest) {
+        log.info("updateUser");
+
+        return ResponseEntity.ok(userService.updateUser(userUpdateRequest));
+    }
+
+    @ApiOperation(value = "유저 프로필 사진만 수정")
+    @PutMapping("/image")
+    public ResponseEntity<UserDetailProfile> updateUserImage(@RequestBody @Valid ImageUpdate imageUpdate){
+        log.info("updateUserImage");
+        if(ObjectUtils.isEmpty(imageUpdate)){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(userService.updateUserImage(imageUpdate));
+    }
+
+    @ApiOperation(value = "유저 프로필 사진만 삭제, 구현 안됨 해야되면 말해주세요")
+    @DeleteMapping("image/{userId}")
+    public ResponseEntity<UserDetailProfile> deleteUserImage(@PathVariable("userId") Long userId){
+        log.info("deleteUserImage");
+        if(ObjectUtils.isEmpty(userId)){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(userService.delteUserImage(userId));
     }
 }

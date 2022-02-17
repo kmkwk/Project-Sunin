@@ -68,17 +68,32 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-validation
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '2.6.2'
 
-	//jwt
-	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+	implementation 'org.springframework.boot:spring-boot-starter-log4j2'
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
+	implementation 'jakarta.xml.bind:jakarta.xml.bind-api:2.3.2'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2'
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.2'
+
+
+	//WebSocket
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+	compile group: 'org.webjars', name: 'sockjs-client', version: '1.1.2'
+	compile group: 'org.webjars', name: 'stomp-websocket', version: '2.3.3-1'
+
+	//jasypt
+	implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.3'
+
 }
 
 test {
 	useJUnitPlatform()
+	systemProperty "jasypt.encryptor.password", project.getProperties().get("jasypt.encryptor.password")
 }
 
 /*
  * Querydsl 설정
  * */
+//def querydslSrcDir = "src/main/generated"
 def querydslSrcDir = "$buildDir/generated/querydsl"
 
 querydsl {
@@ -94,6 +109,9 @@ compileQuerydsl {
 
 configurations {
 	querydsl.extendsFrom compileClasspath
+
+	all*.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+	all*.exclude group: 'org.springframework.boot', module: 'logback-classic'
 }
 
 sourceSets {

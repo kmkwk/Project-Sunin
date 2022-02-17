@@ -62,11 +62,11 @@ function EditProfile() {
 
   const uploadToServer = async (event: any) => {
     const body = new FormData();
-    body.append("address", user.address);
+    body.append("address", "대한민국");
     body.append("image", filePath);
     body.append("introduction", user.introduction);
     body.append("nickName", user.user_nickname);
-    body.append("phoneNumber", user.phone_number);
+    body.append("phoneNumber", "111-1111");
     body.append("userId", user.user_seq);
 
     allAxios
@@ -169,7 +169,8 @@ function EditProfile() {
                     />
                   </Form.Group>
                 </Form.Field>
-                <Form.Field>
+
+                {/* <Form.Field>
                   <label>전화번호</label>
                   <Form.Group inline>
                     <Input
@@ -180,6 +181,7 @@ function EditProfile() {
                     />
                   </Form.Group>
                 </Form.Field>
+
                 <Form.Field>
                   <label>주소</label>
                   <Form.Group inline>
@@ -190,7 +192,8 @@ function EditProfile() {
                       onChange={handleOnChange}
                     />
                   </Form.Group>
-                </Form.Field>
+                </Form.Field> */}
+
                 <Form.Field>
                   <label>소개</label>
                   <Form.Group inline>

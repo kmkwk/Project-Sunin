@@ -4,11 +4,13 @@ import { List, Image, Icon, Label, Input } from "semantic-ui-react";
 import allAxios from "src/lib/allAxios";
 import SockJS from "sockjs-client";
 import Stomp from "webstomp-client";
+import ByteLength from "../ByteLength";
 
 function Comment({ nickName, item, userSeq, feedId }: any) {
   const [comment, setComment] = useState("");
   const [editable, setEditable] = useState(false); // 테스트
   const [replyable, setReplyable] = useState(false); // 테스트
+  const [length, setLength] = useState(0); // 글자수 바이트 카운트
 
   const writeDate = (date: any) => {
     return date.split("T")[0];
@@ -16,6 +18,7 @@ function Comment({ nickName, item, userSeq, feedId }: any) {
 
   const handleComment = (e: any) => {
     setComment(e.target.value);
+    setLength(ByteLength(e.target.value));
   };
 
   const likeComment = (e: any) => {
@@ -85,6 +88,14 @@ function Comment({ nickName, item, userSeq, feedId }: any) {
   };
 
   const replyComment = (e: any) => {
+    let flag = false;
+    if (comment == "" || comment == " ") flag = true;
+
+    if (flag || length > 60) {
+      alert("내용을 확인해주세요.");
+      return;
+    }
+
     const body = new FormData();
     body.append("commentId", item[0]);
     body.append("content", comment);
@@ -119,13 +130,13 @@ function Comment({ nickName, item, userSeq, feedId }: any) {
   return (
     <>
       <List.Content floated="right">
-        {userSeq == 0 && (
+        {userSeq == undefined && (
           <Label>
             <Icon name="like" />
             {item[1].likes}
           </Label>
         )}
-        {userSeq != 0 && !item[1].deleted && (
+        {userSeq != undefined && !item[1].deleted && (
           <>
             <Label as="a" onClick={likeComment}>
               <Icon name="like" />
@@ -175,17 +186,25 @@ function Comment({ nickName, item, userSeq, feedId }: any) {
           {item[1].deleted ? (
             "※ 삭제된 댓글입니다."
           ) : editable ? (
-            <Input
-              placeholder="Comment"
-              icon="comment"
-              iconPosition="left"
-              value={comment}
-              onChange={handleComment}
-              action={{
-                icon: "send",
-                onClick: modifyComment,
-              }}
-            />
+            <>
+              <Input
+                placeholder="Comment"
+                icon="comment"
+                iconPosition="left"
+                value={comment}
+                onChange={handleComment}
+                action={{
+                  icon: "send",
+                  onClick: modifyComment,
+                }}
+              />
+              {length > 60 ? (
+                <span style={{ color: "red" }}>{length}</span>
+              ) : (
+                <span>{length}</span>
+              )}
+              <span> / 60</span>
+            </>
           ) : (
             item[1].content
           )}

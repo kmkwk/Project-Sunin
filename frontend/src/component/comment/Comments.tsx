@@ -5,15 +5,26 @@ import allAxios from "src/lib/allAxios";
 import Comment from "./Comment";
 import SockJS from "sockjs-client";
 import Stomp from "webstomp-client";
+import ByteLength from "../ByteLength";
 
 function Comments({ feedWriter, nickName, list, userSeq, feedId }: any) {
   const [comment, setComment] = useState("");
+  const [length, setLength] = useState(0); // 글자수 바이트 카운트
 
   const handleComment = (e: any) => {
     setComment(e.target.value);
+    setLength(ByteLength(e.target.value));
   };
 
   const writeComment = () => {
+    let flag = false;
+    if (comment == "" || comment == " ") flag = true;
+
+    if (flag || length > 60) {
+      alert("내용을 확인해주세요.");
+      return;
+    }
+
     const body = new FormData();
     body.append("content", comment);
     body.append("feedId", feedId);
@@ -48,19 +59,27 @@ function Comments({ feedWriter, nickName, list, userSeq, feedId }: any) {
   return (
     <>
       {userSeq != undefined && (
-        <Input
-          fluid
-          className="commentInput"
-          placeholder="Comment"
-          icon="comment"
-          iconPosition="left"
-          value={comment}
-          onChange={handleComment}
-          action={{
-            icon: "send",
-            onClick: writeComment,
-          }}
-        />
+        <>
+          <Input
+            fluid
+            className="commentInput"
+            placeholder="Comment"
+            icon="comment"
+            iconPosition="left"
+            value={comment}
+            onChange={handleComment}
+            action={{
+              icon: "send",
+              onClick: writeComment,
+            }}
+          />
+          {length > 60 ? (
+            <span style={{ color: "red" }}>{length}</span>
+          ) : (
+            <span>{length}</span>
+          )}
+          <span> / 60</span>
+        </>
       )}
 
       <List relaxed="very" divided verticalAlign="middle">

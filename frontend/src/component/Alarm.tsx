@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-// import { Icon, Button, Image, Modal } from "semantic-ui-react";
 import {
   Button,
   Header,
@@ -15,7 +14,6 @@ import { List, Image } from "semantic-ui-react";
 import { useRouter } from "next/router";
 
 export default function Alarm() {
-  // const [open, setOpen] = useState(false)
 
   const [open, setOpen] = useState(false);
   const [alarmList, setAlarmList]: any = useState([]);
@@ -57,29 +55,6 @@ export default function Alarm() {
 
   return (
     <>
-      {/* <Modal
-        open={open}
-        onClose={() => setOpen(false)}
-        onOpen={() => setOpen(true)}
-        trigger={<Button><Icon name="bell"/>알림</Button>}
-      >
-        <Modal.Header>알림</Modal.Header>
-        <Modal.Content image>
-          <Modal.Description className={styles.alarm_content}>
-            <h1></h1>
-            <p>댓글 알림</p>
-            <p>좋아요 알림</p>
-            <p>팔로우 알림</p>
-            <p>채팅 알림</p>
-            
-          </Modal.Description>
-        </Modal.Content>
-        <Modal.Actions>
-          <Button primary onClick={() => setOpen(false)}>
-            닫기
-          </Button>
-        </Modal.Actions>
-      </Modal> */}
       <div>
         <Button
           content={
@@ -93,8 +68,6 @@ export default function Alarm() {
               </>
             )
           }
-          // negative={open}
-          // positive={!open}
           positive={true}
           onClick={handleClick}
         />
@@ -106,20 +79,18 @@ export default function Alarm() {
             <List className={styles.alarm_ybar}>
               {alarmList.slice(0, 10).map((alram: any) => {
                 return (
-                  <div key={alram.id}>
-                    <List.Item>
-                      <List.Content>
-                        <List.Header as="a">
-                          <Image src={alram.user.image} size="mini" inline />
-                          &nbsp;&nbsp;&nbsp;{alram.message}&nbsp;&nbsp;&nbsp;
-                        </List.Header>
-                        <List.Description as="a">
-                          Updated {alram.local_date_time.slice(0, 10)}{" "}
-                          {alram.local_date_time.slice(11, 16)}
-                        </List.Description>
-                      </List.Content>
-                    </List.Item>
-                  </div>
+                  <List.Item key={alram.id}>
+                    <List.Content>
+                      <List.Header as="a">
+                        <Image src={alram.user.image} size="mini" inline />
+                        &nbsp;&nbsp;&nbsp;{alram.message}&nbsp;&nbsp;&nbsp;
+                      </List.Header>
+                      <List.Description as="a">
+                        Updated {alram.local_date_time.slice(0, 10)}{" "}
+                        {alram.local_date_time.slice(11, 16)}
+                      </List.Description>
+                    </List.Content>
+                  </List.Item>
                 );
               })}
             </List>

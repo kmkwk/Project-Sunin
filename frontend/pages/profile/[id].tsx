@@ -68,10 +68,6 @@ function Profiles({ id }: any) {
         alert("잠시 후 다시 시도해주세요.");
         router.push("/");
       });
-
-    allAxios.get(`/feed/person/${id}`).then(({ data }) => {
-      setList(data);
-    });
   }
 
   useEffect(() => {

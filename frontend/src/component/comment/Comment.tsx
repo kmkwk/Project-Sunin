@@ -119,13 +119,13 @@ function Comment({ nickName, item, userSeq, feedId }: any) {
   return (
     <>
       <List.Content floated="right">
-        {userSeq == 0 && (
+        {userSeq == undefined && (
           <Label>
             <Icon name="like" />
             {item[1].likes}
           </Label>
         )}
-        {userSeq != 0 && !item[1].deleted && (
+        {userSeq != undefined && !item[1].deleted && (
           <>
             <Label as="a" onClick={likeComment}>
               <Icon name="like" />

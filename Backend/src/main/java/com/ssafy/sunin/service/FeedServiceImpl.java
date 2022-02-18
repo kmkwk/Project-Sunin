@@ -49,7 +49,6 @@ public class FeedServiceImpl implements FeedService {
             AwsFile(feedWrite.getFiles(), fileList);
         }
 
-//        User user = userRepository.findProfileByUserSeq(feedWrite.getUserId());
         FeedCollections feedCollections = FeedCollections.setFeedCollection(feedWrite,fileList);
 
         FeedCollections feedCollection = feedRepository.save(feedCollections);
@@ -119,7 +118,6 @@ public class FeedServiceImpl implements FeedService {
     public FeedCollections updateFeed(FeedUpdate feedUpdate) {
         FeedCollections feedCollections = feedRepository.findByIdAndUserIdAndFlagTrue(new ObjectId(feedUpdate.getId()), feedUpdate.getUserId());
         List<String> fileNames = new ArrayList<>();
-        // Todo : aws에선 중복 파일은 제거하던가, 안올려야함
         AwsFile(feedUpdate.getFiles(),fileNames);
         feedCollections.setFileModified(fileNames);
         feedCollections.setFeedModified(feedUpdate);
@@ -139,13 +137,6 @@ public class FeedServiceImpl implements FeedService {
 
     @Override
     public List<FeedDto> getFollowerLatestFeed(Long userId) {
-        // TODO :  1. 시간 구하는 쿼리 (startDate ,endDate)
-        //  로그인시 로그인시간을 로깅하는 테이블을 만든다. - mysql
-        //  내가 처음에 로그인 했을때 로깅 테이블에서 로그인한 시간 최신순 두개의 시간을 가져온다.
-        //  ex) 로깅 테이블에 저장된 시간이 오전 12시,오후 1시, 오후 2시, 오후 5시라면 오후2시 오후 5시를 가져온다.
-        //  나의 유저의 팔로워 리스트를 구한다.
-        //  몽고에서 나의 유저 팔로워들의 오후 2시 오후 5시 사이의 피드를 가져온다.
-
         List<Long> followers = followerRepository.getFollowingList(userId);
         Map<Long, User> userMap = userRepository.findAllListByUserSeqIn(followers).stream()
                 .collect(Collectors.toMap(

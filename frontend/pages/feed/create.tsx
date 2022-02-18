@@ -120,8 +120,11 @@ function Createfeed() {
     });
 
     userAxios
-      .post("/feed", body, {
-        headers: { "Content-Type": "multipart/form-data" },
+      .post("/feed", {
+        userId: user.user_seq,
+        content: feed.content,
+        files: feed.filePath,
+        hashtags: feed.hashtags,
       })
       .then(() => {
         router.push("/feed");

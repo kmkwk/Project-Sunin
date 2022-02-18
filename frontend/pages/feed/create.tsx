@@ -106,8 +106,8 @@ function Createfeed() {
     }
 
     const body = new FormData();
-    // body.append("userId", user.user_seq);
-    // body.append("content", feed.content);
+    body.append("userId", user.user_seq);
+    body.append("content", feed.content);
 
     if (feed.filePath != null) {
       feed.filePath.map((each: any) => {
@@ -115,18 +115,13 @@ function Createfeed() {
       });
     }
 
-    // feed.hashtags.map((each: any) => {
-    //   body.append("hashtags", each);
-    // });
+    feed.hashtags.map((each: any) => {
+      body.append("hashtags", each);
+    });
 
     userAxios
-      .post("/feed", {
-        feedWrite: {
-          userId: user.user_seq,
-          content: feed.content,
-          hashtags: feed.hashtags,
-        },
-        files: body,
+      .post("/feed", body, {
+        headers: { "Content-Type": "multipart/form-data" },
       })
       .then(() => {
         router.push("/feed");

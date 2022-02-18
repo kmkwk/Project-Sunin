@@ -50,7 +50,6 @@ public class FeedServiceImpl implements FeedService {
         }
 
         FeedCollections feedCollections = FeedCollections.setFeedCollection(feedWrite,fileList);
-
         FeedCollections feedCollection = feedRepository.save(feedCollections);
         suninDays(feedWrite.getUserId());
 

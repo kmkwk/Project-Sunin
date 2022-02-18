@@ -208,6 +208,7 @@ public class FeedServiceImpl implements FeedService {
                          User::getUserSeq,
                          o -> o
                  ));
+
          return FeedDto.mapFeedDto(feedCollection,userMap);
     }
 

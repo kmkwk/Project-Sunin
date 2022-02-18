@@ -56,7 +56,7 @@ export default function Rank() {
               />
               <br />
               <div>
-                <Image src="/images/goldmedal.png" size="tiny" inline />
+                <Image src="/images/1등.png" size="tiny" inline />
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <Header
                   as="h2"
@@ -83,7 +83,7 @@ export default function Rank() {
               </div>
               <br />
               <div>
-                <Image src="/images/silvermedal.png" size="tiny" inline />
+                <Image src="/images/2등.png" size="tiny" inline />
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <Header
                   as="h2"
@@ -110,7 +110,7 @@ export default function Rank() {
               </div>
               <br />
               <div>
-                <Image src="/images/bronzemedal.png" size="tiny" inline />
+                <Image src="/images/3등.png" size="tiny" inline />
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <Header
                   as="h2"

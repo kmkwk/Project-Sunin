@@ -44,9 +44,7 @@ const Home: NextPage = () => {
           </a>
         </SwiperSlide>
         <SwiperSlide>
-          <a href="https://www.youtube.com/">
-            <img src="images/3번.jpg" width={"100%"} height={"100%"} />
-          </a>
+          <img src="images/3번.jpg" width={"100%"} height={"100%"} />
         </SwiperSlide>
       </Swiper>
 

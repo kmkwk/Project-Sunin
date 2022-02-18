@@ -4,6 +4,7 @@ import styles from "styles/Login.module.css";
 
 export default function LoginModal() {
   const [open, setOpen] = useState(false);
+  const REDIRECT_URI = "http://i6c210.p.ssafy.io";
 
   return (
     <>
@@ -27,7 +28,7 @@ export default function LoginModal() {
             <Image
               src="/images/btnG_완성형.png"
               width="500px"
-              href="http://i6c210.p.ssafy.io:8080/oauth2/authorization/naver?redirect_uri=http://i6c210.p.ssafy.io/oauth/redirect"
+              href={`http://i6c210.p.ssafy.io:8080/oauth2/authorization/naver?redirect_uri=${REDIRECT_URI}/oauth/redirect`}
               alt="네이버로그인"
               className={styles.social_login_button}
             />{" "}
@@ -37,7 +38,7 @@ export default function LoginModal() {
               src="/images/btn_google_signin_light_normal_web@2x.png"
               // size="medium"
               width="500px"
-              href="http://i6c210.p.ssafy.io:8080/oauth2/authorization/google?redirect_uri=http://i6c210.p.ssafy.io/oauth/redirect"
+              href={`http://i6c210.p.ssafy.io:8080/oauth2/authorization/google?redirect_uri=${REDIRECT_URI}/oauth/redirect`}
               alt="구글로그인"
               className={styles.social_login_button}
             />{" "}
@@ -47,7 +48,7 @@ export default function LoginModal() {
               src="/images/kakao_login_large_narrow.png"
               // size="medium"
               width="500px"
-              href="http://i6c210.p.ssafy.io:8080/oauth2/authorization/kakao?redirect_uri=http://i6c210.p.ssafy.io/oauth/redirect"
+              href={`http://i6c210.p.ssafy.io:8080/oauth2/authorization/kakao?redirect_uri=${REDIRECT_URI}/oauth/redirect`}
               alt="카카오로그인"
               className={styles.social_login_button}
             />

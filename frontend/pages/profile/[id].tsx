@@ -150,15 +150,15 @@ function Profiles({ id }: any) {
         .then(() => {
           setIsFollowing(true);
           getUser()
-          console.log(fromUserId,Number(id),messages);
+
           setTimeout(() => {
             stompClient.send(`/send/`+fromUserId+`/`+Number(id)+`/`+messages);
-          }, 500);
-          // StompSend(id, nowUser.nickName);
+          }, 1000);
+
         })
         
         .catch(() => {
-          alert("잠시 후 다시 시도해주세요.");
+          // alert("잠시 후 다시 시도해주세요.");
         });
     }
   }

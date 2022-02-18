@@ -44,7 +44,7 @@ const SwiperMedia = ({ media }: any) => {
       onOpen={() => setOpen(true)}
       open={open}
     >
-      <Modal.Content image style={{ backgroundColor: "dimgrey"}} onClick={openModal}>
+      <Modal.Content image style={{ backgroundColor: "dimgrey"}}>
         <Image src={showImage} alt="" style={{margin: "auto"}} fluid/>
       </Modal.Content>
     </Modal>

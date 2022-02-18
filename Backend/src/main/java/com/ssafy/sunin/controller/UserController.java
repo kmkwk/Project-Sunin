@@ -7,6 +7,7 @@ import com.ssafy.sunin.payload.request.user.UserUpdateRequest;
 import com.ssafy.sunin.payload.response.user.*;
 import com.ssafy.sunin.service.UserService;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;

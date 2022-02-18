@@ -42,11 +42,11 @@ public class FeedServiceImpl implements FeedService {
     private final AmazonS3 amazonS3;
 
     @Override
-    public FeedCollections writeImageFeed(FeedWrite feedWrite) {
+    public FeedCollections writeImageFeed(FeedWrite feedWrite, List<MultipartFile> files) {
         List<String> fileList = new ArrayList<>();
-        List<MultipartFile> files = feedWrite.getFiles();
+//        List<MultipartFile> files = feedWrite.getFiles();
         if (files != null) {
-            AwsFile(feedWrite.getFiles(), fileList);
+            AwsFile(files, fileList);
         }
 
         FeedCollections feedCollections = FeedCollections.setFeedCollection(feedWrite,fileList);

@@ -50,6 +50,26 @@ function Profiles({ id }: any) {
 
   const [pages, setPage] = useState(0); // 넌 보류
 
+  function getUser() {
+    allAxios
+      .get(`/api/v1/users/profile/${id}`)
+      .then(({ data }) => {
+        setUser({
+          intro: data.introduction,
+          feedCount: data.feed_count,
+          follower: data.follwer_count,
+          following: data.follwing_count,
+          image: data.image,
+          nickName: data.nick_name,
+          sunin: data.sunin_days,
+        });
+      })
+      .catch(() => {
+        alert("잠시 후 다시 시도해주세요.");
+        router.push("/");
+      });
+  }
+
   useEffect(() => {
     allAxios
       .get(`/api/v1/users/profile/${id}`)
@@ -129,10 +149,11 @@ function Profiles({ id }: any) {
         .post(`/follower`, body)
         .then(() => {
           setIsFollowing(true);
+          getUser()
           console.log(fromUserId,Number(id),messages);
-          // setTimeout(() => {
+          setTimeout(() => {
             stompClient.send(`/send/`+fromUserId+`/`+Number(id)+`/`+messages);
-          // }, );
+          }, 500);
           // StompSend(id, nowUser.nickName);
         })
         
@@ -153,6 +174,7 @@ function Profiles({ id }: any) {
         })
         .then(() => {
           setIsFollowing(false);
+          getUser()
         })
         .catch((e: any) => {
           alert("잠시 후 다시 시도해주세요.");

@@ -8,6 +8,7 @@ import com.ssafy.sunin.payload.response.feed.FeedCommentDto;
 import com.ssafy.sunin.payload.response.feed.FeedDto;
 import com.ssafy.sunin.service.FeedServiceImpl;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;

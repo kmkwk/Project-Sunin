@@ -7,11 +7,13 @@ import com.ssafy.sunin.payload.request.feed.*;
 import com.ssafy.sunin.payload.response.feed.FeedCommentDto;
 import com.ssafy.sunin.payload.response.feed.FeedDto;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 
 public interface FeedService {
 
-    FeedCollections writeImageFeed(FeedWrite feedWrite);
+    FeedCollections writeImageFeed(FeedWrite feedWrite, List<MultipartFile> files);
 
     FeedCommentDto getDetailFeed(String id);
 

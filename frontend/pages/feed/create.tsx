@@ -126,7 +126,7 @@ function Createfeed() {
           content: feed.content,
           hashtags: feed.hashtags,
         },
-        body,
+        files: body,
       })
       .then(() => {
         router.push("/feed");

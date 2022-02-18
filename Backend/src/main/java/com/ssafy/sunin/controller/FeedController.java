@@ -19,8 +19,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
 import javax.validation.Valid;
 import java.util.List;
 
@@ -34,17 +32,15 @@ public class FeedController {
     private final FeedServiceImpl feedService;
 
     @ApiOperation(value = "Feed 작성", notes = "다중 파일 업로드 가능")
-//    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    @PostMapping
-    public ResponseEntity<String> writeImageFeed(@RequestPart @Valid FeedWrite feedWrite,
-                                                 @RequestPart(required = false) List<MultipartFile> files){
+    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<String> writeImageFeed(@RequestBody @Valid FeedWrite feedWrite){
         log.info("writerImageFeed");
 
         if(ObjectUtils.isEmpty(feedWrite)){
             return ResponseEntity.notFound().build();
         }
 
-        FeedCollections result = feedService.writeImageFeed(feedWrite,files);
+        FeedCollections result = feedService.writeImageFeed(feedWrite);
         if(result == null) return new ResponseEntity<>("등록 실패", HttpStatus.INTERNAL_SERVER_ERROR);
         else return new ResponseEntity<>("등록 성공", HttpStatus.CREATED);
     }

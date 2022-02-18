@@ -42,11 +42,11 @@ public class FeedServiceImpl implements FeedService {
     private final AmazonS3 amazonS3;
 
     @Override
-    public FeedCollections writeImageFeed(FeedWrite feedWrite, List<MultipartFile> files) {
+    public FeedCollections writeImageFeed(FeedWrite feedWrite) {
         List<String> fileList = new ArrayList<>();
-//        List<MultipartFile> files = feedWrite.getFiles();
+        List<MultipartFile> files = feedWrite.getFiles();
         if (files != null) {
-            AwsFile(files, fileList);
+            AwsFile(feedWrite.getFiles(), fileList);
         }
 
         FeedCollections feedCollections = FeedCollections.setFeedCollection(feedWrite,fileList);
@@ -55,6 +55,7 @@ public class FeedServiceImpl implements FeedService {
 
         return feedCollection;
     }
+
 
     private void suninDays(Long userId) {
         User user = userRepository.findProfileByUserSeq(userId);

@@ -13,5 +13,5 @@ public class FeedWrite {
     private Long userId;
     private String content;
     private List<String> hashtags;
-//    private List<MultipartFile> files;
+    private List<MultipartFile> files;
 }

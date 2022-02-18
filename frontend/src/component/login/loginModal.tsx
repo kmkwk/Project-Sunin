@@ -4,7 +4,7 @@ import styles from "styles/Login.module.css";
 
 export default function LoginModal() {
   const [open, setOpen] = useState(false);
-  const REDIRECT_URI = "http://localhost:3000";
+  const REDIRECT_URI = "http://i6c210.p.ssafy.io";
 
   return (
     <>

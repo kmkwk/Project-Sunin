@@ -7,7 +7,7 @@ public interface FollowerService {
 
     Long addFollower(FollowerUser followerUser);
 
-    Long deleteFollower(FollowerUser followerUser);
+    Long deleteFollower(Long userId, Long followerMember);
 
     int countFollower(Long userId);
 

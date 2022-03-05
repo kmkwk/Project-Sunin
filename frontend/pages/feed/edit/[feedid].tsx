@@ -141,20 +141,19 @@ function Modifyfeed({ feedid }: any) {
     }
 
     const body = new FormData();
-    body.append("userId", user.user_seq);
-    body.append("id", feedid);
-    body.append("content", feed.content);
+
+    let feedUpdate: {id:String,content:String, user_id:Number,hashtags: Array<String>} = {
+      id: feedid,
+      content: feed.content,
+      user_id : user.user_seq,
+      hashtags: feed.hashtags
+    }
 
     if (feed.filePath != null) {
       feed.filePath.map((each: any) => {
         body.append("files", each);
       });
     }
-
-    // feed.hashtags.map((each: any) => {
-    //   body.append("hashtags", each);
-    // });
-
     {
       feed.hashtags.map((data: any, key: any) => {
         return (
@@ -165,8 +164,12 @@ function Modifyfeed({ feedid }: any) {
       });
     }
 
+    body.append("feedUpdate", new Blob([JSON.stringify(feedUpdate)],{type: "application/json"}));
+
     allAxios
-      .put("/feed", body)
+      .put("/feed", body,{
+        headers: { "Content-Type": "multipart/form-data" },
+      })
       .then(() => {
         router.push("/feed");
       })

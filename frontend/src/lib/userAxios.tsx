@@ -7,7 +7,7 @@ let TOKEN_VALUE: any = null;
 if (typeof window !== "undefined") TOKEN_VALUE = localStorage.getItem("token");
 
 const userAxios = Axios.create({
-  baseURL: `${SERVER_API_URL}`,
+  baseURL: `${LOCAL_API_URL}`,
   headers: { Authorization: `Bearer ${TOKEN_VALUE}` },
 });
 

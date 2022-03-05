@@ -8,7 +8,6 @@ import com.ssafy.sunin.service.CommentService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -58,14 +57,13 @@ public class CommentController {
         else return new ResponseEntity<>("수정 성공", HttpStatus.OK);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{feedId}/{commentId}/{writer}")
     @ApiOperation(value="댓글 삭제하기", notes = "작성한 댓글을 삭제합니다.")
     @ApiImplicitParam(name = "commentId", value = "삭제할 댓글 ObjectID", required = true)
-    public ResponseEntity<String> deleteComment(CommentDelete commentDelete) {
-        if(ObjectUtils.isEmpty(commentDelete)){
-            return ResponseEntity.notFound().build();
-        }
-        Comment result = commentService.deleteComment(commentDelete);
+    public ResponseEntity<String> deleteComment(@PathVariable("feedId") String feedId,
+                                                @PathVariable("commentId") String commentId,
+                                                @PathVariable("writer") Long writer) {
+        Comment result = commentService.deleteComment(feedId,commentId,writer);
         if(result == null) return new ResponseEntity<>("삭제 실패", HttpStatus.INTERNAL_SERVER_ERROR);
         else return new ResponseEntity<>("삭제 성공", HttpStatus.OK);
     }

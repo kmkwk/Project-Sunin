@@ -25,19 +25,20 @@ function Comments({ feedWriter, nickName, list, userSeq, feedId }: any) {
       return;
     }
 
-    const body = new FormData();
-    body.append("content", comment);
-    body.append("feedId", feedId);
-    body.append("writer", userSeq);
-
     // 보내는 사람
     const fromUserId = localStorage.getItem("userId");
     const messages = nickName + "님이 게시글에 댓글을 작성하였습니다";
     const socket = new SockJS("http://i6c210.p.ssafy.io:8080/stomp");
     const stompClient = Stomp.over(socket);
 
+    let commentWrite: {feed_id:String, writer:Number, content:String} = {
+      feed_id: feedId,
+      writer : userSeq,
+      content: comment,
+    }
+
     allAxios
-      .post(`/comment`, body)
+      .post(`/comment`, commentWrite)
       .then(() => {
         // 메시지 전달
         setTimeout(() => {

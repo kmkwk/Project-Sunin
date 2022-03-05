@@ -62,15 +62,21 @@ function EditProfile() {
 
   const uploadToServer = async (event: any) => {
     const body = new FormData();
-    body.append("address", "대한민국");
-    body.append("image", filePath);
-    body.append("introduction", user.introduction);
-    body.append("nickName", user.user_nickname);
-    body.append("phoneNumber", "111-1111");
-    body.append("userId", user.user_seq);
+
+    let UserUpdateRequest: {address:String, introduction:String,
+                    nick_name:String, phone_number:String, user_id:Number} = {
+      address: "대한민국",
+      introduction: user.introduction,
+      nick_name: user.user_nickname,
+      phone_number: "111-1111",
+      user_id: user.user_seq,
+    }
+    
+    body.append("image",filePath)
+    body.append("userUpdateRequest", new Blob([JSON.stringify(UserUpdateRequest)],{type: "application/json"}));
 
     allAxios
-      .put("/api/v1/users", body, {
+      .put("/api/v1/users",body, {
         headers: { "Content-Type": "multipart/form-data" },
       })
       .then(() => {

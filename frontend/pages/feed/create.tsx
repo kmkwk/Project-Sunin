@@ -105,19 +105,20 @@ function Createfeed() {
       return;
     }
 
-    const body = new FormData();
-    body.append("userId", user.user_seq);
-    body.append("content", feed.content);
+    let feedWrite: {user_id:Number, content:String, hashtags: Array<String>} = {
+      user_id : user.user_seq,
+      content: feed.content,
+      hashtags: feed.hashtags
+    }
 
+    const body = new FormData();
+    body.append("feedWrite", new Blob([JSON.stringify(feedWrite)],{type: "application/json"}));
+    
     if (feed.filePath != null) {
       feed.filePath.map((each: any) => {
         body.append("files", each);
       });
     }
-
-    feed.hashtags.map((each: any) => {
-      body.append("hashtags", each);
-    });
 
     userAxios
       .post("/feed", body, {

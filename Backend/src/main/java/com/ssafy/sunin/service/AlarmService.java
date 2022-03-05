@@ -68,7 +68,6 @@ public class AlarmService {
     }
 
     public Follower getFollower(Long fromUserId, Long toUserId){
-        FollowerUser followerUser = new FollowerUser(fromUserId,toUserId);
-        return followerRepository.getUser(followerUser);
+        return followerRepository.getUser(toUserId, fromUserId);
     }
 }

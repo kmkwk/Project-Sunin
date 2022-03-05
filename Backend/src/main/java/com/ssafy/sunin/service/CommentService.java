@@ -41,12 +41,12 @@ public class CommentService {
         return null;
     }
 
-    public Comment deleteComment(CommentDelete commentDelete) {
-        FeedCollections feedCollections = feedRepository.findFeedIdByIdAndFlagTrue(new ObjectId(commentDelete.getFeedId()));
-        if(feedCollections.getComments().get(commentDelete.getCommentId()).getWriter().equals(commentDelete.getWriter())) {
-            feedCollections.getComments().get(commentDelete.getCommentId()).setCommentDeleted();
+    public Comment deleteComment(String feedId, String commentId, Long writer) {
+        FeedCollections feedCollections = feedRepository.findFeedIdByIdAndFlagTrue(new ObjectId(feedId));
+        if(feedCollections.getComments().get(commentId).getWriter().equals(writer)) {
+            feedCollections.getComments().get(commentId).setCommentDeleted();
             feedRepository.save(feedCollections);
-            return feedCollections.getComments().get(commentDelete.getCommentId());
+            return feedCollections.getComments().get(commentId);
         }
 
         return null;

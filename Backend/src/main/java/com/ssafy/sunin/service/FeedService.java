@@ -13,11 +13,11 @@ import java.util.List;
 
 public interface FeedService {
 
-    FeedCollections writeImageFeed(FeedWrite feedWrite);
+    FeedCollections writeImageFeed(FeedWrite feedWrite, List<MultipartFile> files);
 
     FeedCommentDto getDetailFeed(String id);
 
-    FeedCollections updateFeed(FeedUpdate feedUpdate);
+    FeedCollections updateFeed(FeedUpdate feedUpdate, List<MultipartFile> files);
 
     FeedCollections deleteFeed(String id, Long userId);
 

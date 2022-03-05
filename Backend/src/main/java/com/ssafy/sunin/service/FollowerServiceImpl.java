@@ -27,7 +27,7 @@ public class FollowerServiceImpl implements FollowerService{
         // 팔로워 받는 유저 체크
         User followerMember = userRepository.findFollowerByUserSeq(followerUser.getFollowerMember());
         // 팔로워
-        if(followerRepository.getUser(followerUser) == null){
+        if(followerRepository.getUser(followerUser.getUserId(),followerUser.getFollowerMember()) == null){
             Follower follower = Follower.builder()
                     .user(users)
                     .followerMember(followerMember)
@@ -41,8 +41,8 @@ public class FollowerServiceImpl implements FollowerService{
     }
 
     @Override
-    public Long deleteFollower(FollowerUser followerUser) {
-        Follower follower = followerRepository.getUser(followerUser);
+    public Long deleteFollower(Long userId, Long followerMember) {
+        Follower follower = followerRepository.getUser(userId, followerMember);
         return followerRepository.deleteFollower(follower);
     }
 

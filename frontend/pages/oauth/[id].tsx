@@ -22,7 +22,7 @@ export default function Authentication() {
     const token = localStorage.getItem("token");
 
     axios
-      .get("http://i6c210.p.ssafy.io:8080/api/v1/users", {
+      .get("http://localhost:8080/api/v1/users", {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then(({ data }) => {

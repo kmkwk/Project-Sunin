@@ -5,7 +5,6 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.ssafy.sunin.domain.user.User;
-import com.ssafy.sunin.payload.request.feed.ImageUpdate;
 import com.ssafy.sunin.payload.request.user.UserUpdateRequest;
 import com.ssafy.sunin.payload.response.user.*;
 import com.ssafy.sunin.repository.UserRepository;
@@ -73,18 +72,18 @@ public class UserService{
                 .collect(Collectors.toList());
     }
 
-    public UserUpdateResponse updateUser(UserUpdateRequest userUpdateRequest) {
+    public UserUpdateResponse updateUser(UserUpdateRequest userUpdateRequest,MultipartFile image) {
         User user = userRepository.findById(userUpdateRequest.getUserId()).get();
-        String image = profileUpload(userUpdateRequest.getImage());
-        user.setUserProfileModifed(userUpdateRequest,image);
+        String images = profileUpload(image);
+        user.setUserProfileModifed(userUpdateRequest,images);
 
         userRepository.save(user);
         return UserUpdateResponse.userUpdate(user);
     }
 
-    public UserDetailProfile updateUserImage(ImageUpdate imageUpdate){
-        User user = userRepository.findProfileByUserSeq(imageUpdate.getId());
-        String file = profileUpload(imageUpdate.getImage());
+    public UserDetailProfile updateUserImage(Long id, MultipartFile image){
+        User user = userRepository.findProfileByUserSeq(id);
+        String file = profileUpload(image);
         user.setUserProfileImageModified(file);
         userRepository.save(user);
         return UserDetailProfile.userProfile(user);

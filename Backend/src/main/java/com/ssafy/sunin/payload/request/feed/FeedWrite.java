@@ -8,10 +8,10 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class FeedWrite {
     @NotNull
     private Long userId;
     private String content;
     private List<String> hashtags;
-    private List<MultipartFile> files;
 }

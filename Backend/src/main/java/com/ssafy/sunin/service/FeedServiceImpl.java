@@ -42,11 +42,10 @@ public class FeedServiceImpl implements FeedService {
     private final AmazonS3 amazonS3;
 
     @Override
-    public FeedCollections writeImageFeed(FeedWrite feedWrite) {
+    public FeedCollections writeImageFeed(FeedWrite feedWrite, List<MultipartFile> files) {
         List<String> fileList = new ArrayList<>();
-        List<MultipartFile> files = feedWrite.getFiles();
         if (files != null) {
-            AwsFile(feedWrite.getFiles(), fileList);
+            AwsFile(files, fileList);
         }
 
         FeedCollections feedCollections = FeedCollections.setFeedCollection(feedWrite,fileList);
@@ -115,10 +114,10 @@ public class FeedServiceImpl implements FeedService {
     }
 
     @Override
-    public FeedCollections updateFeed(FeedUpdate feedUpdate) {
+    public FeedCollections updateFeed(FeedUpdate feedUpdate, List<MultipartFile> files) {
         FeedCollections feedCollections = feedRepository.findByIdAndUserIdAndFlagTrue(new ObjectId(feedUpdate.getId()), feedUpdate.getUserId());
         List<String> fileNames = new ArrayList<>();
-        AwsFile(feedUpdate.getFiles(),fileNames);
+        AwsFile(files,fileNames);
         feedCollections.setFileModified(fileNames);
         feedCollections.setFeedModified(feedUpdate);
 

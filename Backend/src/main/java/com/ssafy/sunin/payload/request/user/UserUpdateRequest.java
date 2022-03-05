@@ -8,10 +8,10 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public class UserUpdateRequest {
     @NotNull
     private Long userId;
-    private MultipartFile image;
     private String nickName;
     private String introduction;
     private String phoneNumber;

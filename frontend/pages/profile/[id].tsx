@@ -136,17 +136,19 @@ function Profiles({ id }: any) {
 
   function goFollowing() {
     if (nowUser.id) {
-      const body: any = new FormData();
-      body.append("followerMember", `${Number(id)}`);
-      body.append("userId", `${nowUser.id}`);
-
       const fromUserId = localStorage.getItem("userId");
       const messages = `${nowUser.nickName}님이 팔로워를 하였습니다.`;
 
       const socket = new SockJS("http://i6c210.p.ssafy.io:8080/stomp");
       const stompClient = Stomp.over(socket);
+
+      let followerUser: {user_id:String, follower_member:String} = {
+        user_id : `${nowUser.id}`,
+        follower_member: `${Number(id)}`,
+      }
+
       allAxios
-        .post(`/follower`, body)
+        .post(`/follower`, followerUser)
         .then(() => {
           setIsFollowing(true);
           getUser()
@@ -154,11 +156,9 @@ function Profiles({ id }: any) {
           setTimeout(() => {
             stompClient.send(`/send/`+fromUserId+`/`+Number(id)+`/`+messages);
           }, 1000);
-
-        })
-        
+        })   
         .catch(() => {
-          // alert("잠시 후 다시 시도해주세요.");
+          alert("잠시 후 다시 시도해주세요.");
         });
     }
   }
@@ -166,12 +166,7 @@ function Profiles({ id }: any) {
   function goUnfollowing() {
     if (nowUser.id) {
       allAxios
-        .delete(`/follower`, {
-          params: {
-            followerMember: Number(id),
-            userId: nowUser.id,
-          },
-        })
+        .delete(`/follower/${nowUser.id}/${Number(id)}`)
         .then(() => {
           setIsFollowing(false);
           getUser()

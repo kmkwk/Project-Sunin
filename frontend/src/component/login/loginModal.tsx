@@ -4,7 +4,7 @@ import styles from "styles/Login.module.css";
 
 export default function LoginModal() {
   const [open, setOpen] = useState(false);
-  const REDIRECT_URI = "http://i6c210.p.ssafy.io";
+  const REDIRECT_URI = "http://localhost:3000";
 
   return (
     <>
@@ -48,7 +48,7 @@ export default function LoginModal() {
               src="/images/kakao_login_large_narrow.png"
               // size="medium"
               width="500px"
-              href={`http://i6c210.p.ssafy.io:8080/oauth2/authorization/kakao?redirect_uri=${REDIRECT_URI}/oauth/redirect`}
+              href={`http://localhost:8080/oauth2/authorization/kakao?redirect_uri=${REDIRECT_URI}/oauth/redirect`}
               alt="카카오로그인"
               className={styles.social_login_button}
             />

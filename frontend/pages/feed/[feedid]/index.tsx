@@ -89,17 +89,19 @@ function Detail({ feedid }: any) {
   const likeFeed = () => {
     setisLike(!isLike);
 
-    const body = new FormData();
-    body.append("id", feed.feedId);
-    body.append("userId", user.user_seq);
     // 보내는 사람
     const fromUserId = localStorage.getItem("userId");
     const messages = user.user_nickname + "님이 게시글에 좋아요를 눌렀습니다";
     const socket = new SockJS("http://i6c210.p.ssafy.io:8080/stomp");
     const stompClient = Stomp.over(socket);
 
+    let feedLike: {id:String, user_id:Number} = {
+      id: feed.feedId,
+      user_id : user.user_seq,
+    }
+
     userAxios
-      .put(`/feed/addLike`, body)
+      .put(`/feed/addLike`, feedLike)
       .then(() => {
         setTimeout(() => {
           stompClient.send(
@@ -250,28 +252,6 @@ function Detail({ feedid }: any) {
             )}
           </Grid.Column>
         </Grid.Row>
-
-        {/* <Grid.Row>
-          <Grid.Column width={3} />
-          <Grid.Column width={10}>
-            <Header as="h1">
-              <Icon name="comments" />
-              <Header.Content>Comments</Header.Content>
-            </Header>
-          </Grid.Column>
-        </Grid.Row>
-
-        <Grid.Row>
-          <Grid.Column width={3} />
-          <Grid.Column width={12}>
-            <Comments
-              list={feed.comments}
-              userSeq={user.user_seq}
-              feedId={feed.feedId}
-              onChange={feed.comments}
-            />
-          </Grid.Column>
-        </Grid.Row> */}
       </Grid>
     </>
   );

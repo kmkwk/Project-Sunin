@@ -3,7 +3,6 @@ package com.ssafy.sunin.controller;
 import com.ssafy.sunin.payload.request.follower.FollowerUser;
 import com.ssafy.sunin.service.FollowerService;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -37,15 +36,12 @@ public class FollowerController {
     }
 
     @ApiOperation(value = "팔로워 삭제", notes = "userId: 현재 로그인중인 유저 id, follower_member: 팔로워할 멤버 id")
-    @DeleteMapping
-    public ResponseEntity<String> deleteFollower(@Valid FollowerUser followerUser){
+    @DeleteMapping("/{userId}/{followerMember}")
+    public ResponseEntity<String> deleteFollower(@PathVariable(value = "userId") Long userId,
+                                                 @PathVariable(value = "followerMember") Long followerMember){
         log.info("deleteFollower");
-        if(ObjectUtils.isEmpty(followerUser)){
-            return ResponseEntity.notFound().build();
-        }
 
-        Long result = followerService.deleteFollower(followerUser);
-        System.out.println(result);
+        Long result = followerService.deleteFollower(userId,followerMember);
         if(result == null) return new ResponseEntity<>("등록 실패", HttpStatus.INTERNAL_SERVER_ERROR);
         else return new ResponseEntity<>("등록 성공", HttpStatus.CREATED);
     }

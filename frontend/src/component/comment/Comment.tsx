@@ -22,13 +22,14 @@ function Comment({ nickName, item, userSeq, feedId }: any) {
   };
 
   const likeComment = (e: any) => {
-    const body = new FormData();
-    body.append("commentId", item[0]);
-    body.append("feedId", feedId);
-    body.append("userId", userSeq);
+    let addLike: {feed_id:String, user_id:Number, comment_id:String} = {
+      feed_id: feedId,
+      user_id: userSeq,
+      comment_id: item[0],
+    }
 
     allAxios
-      .put(`/comment/addLike`, body)
+      .put(`/comment/addLike`, addLike)
       .then(() => {
         Router.reload();
       })
@@ -44,14 +45,15 @@ function Comment({ nickName, item, userSeq, feedId }: any) {
   const modifyComment = () => {
     setEditable(false);
 
-    const body = new FormData();
-    body.append("commentId", item[0]);
-    body.append("content", comment);
-    body.append("feedId", feedId);
-    body.append("writer", userSeq);
+    let commentUpdate: {feed_id:String, writer:Number,content:String, comment_id:String} = {
+      feed_id: feedId,
+      writer: userSeq,
+      content: comment,
+      comment_id: item[0],
+    }
 
     allAxios
-      .put(`/comment`, body)
+      .put(`/comment`, commentUpdate)
       .then(() => {
         Router.reload();
       })
@@ -62,19 +64,9 @@ function Comment({ nickName, item, userSeq, feedId }: any) {
   };
 
   const deleteButton = (e: any) => {
-    const body: any = new FormData();
-    body.append("commentId", e.target.name);
-    body.append("feedId", feedId);
-    body.append("writer", userSeq);
-
+    
     allAxios
-      .delete("/comment", {
-        params: {
-          commentId: e.target.name,
-          feedId: feedId,
-          writer: userSeq,
-        },
-      })
+      .delete(`/comment/${feedId}/${e.target.name}/${userSeq}`)
       .then(() => {
         Router.reload();
       })
@@ -96,20 +88,21 @@ function Comment({ nickName, item, userSeq, feedId }: any) {
       return;
     }
 
-    const body = new FormData();
-    body.append("commentId", item[0]);
-    body.append("content", comment);
-    body.append("feedId", feedId);
-    body.append("writer", userSeq);
-
     // 보내는 사람
     const fromUserId = localStorage.getItem("userId");
     const messages = nickName + "님이 대댓글을 작성하였습니다";
     const socket = new SockJS("http://i6c210.p.ssafy.io:8080/stomp");
     const stompClient = Stomp.over(socket);
 
+    let commentReply: {feed_id:String, writer:Number,content:String, comment_id:String} = {
+      feed_id: feedId,
+      writer : userSeq,
+      content: comment,
+      comment_id: item[0],
+    }
+
     allAxios
-      .post(`/comment/reply`, body)
+      .post(`/comment/reply`, commentReply)
       .then(() => {
         setTimeout(() => {
           stompClient.send(

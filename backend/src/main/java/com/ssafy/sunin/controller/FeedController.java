@@ -23,7 +23,6 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RestControllerAdvice(annotations = RestController.class)
 @RequestMapping("/feed")
 @Slf4j
 public class FeedController {

@@ -18,7 +18,6 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RestControllerAdvice(annotations = RestController.class)
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 public class UserController {

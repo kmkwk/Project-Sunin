@@ -16,7 +16,6 @@ import java.util.List;
 @RequestMapping("/follower")
 @Slf4j
 @RequiredArgsConstructor
-@RestControllerAdvice(annotations = RestController.class)
 public class FollowerController {
 
     private final FollowerService followerService;
